@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" data-scansion="off">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epos - Classical Poetry Reader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script src="js/app.js" type="module" defer></script>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="top-bar">
+  <div class="top-left">
+    <button class="icon-button" id="btn-menu" aria-label="Main menu" aria-expanded="false" data-tip="Main Menu &amp; Settings">
+      <svg class="icon"><use href="assets/icons.svg#i-menu"/></svg>
+    </button>
+    <button class="brand" id="btn-brand" data-tip="Epos - Classical Poetry Reader">
+      <span class="brand-icon"><svg class="icon"><use href="assets/icons.svg#i-logo"/></svg></span>
+      <span class="brand-title" id="brand-title">Epos</span>
+    </button>
+  </div>
+  <nav class="progress" id="progress" aria-label="Books" hidden>
+    <div class="segments" id="segments"></div>
+  </nav>
+  <div class="top-right"></div>
+</header>
+
+<!-- HAMBURGER DRAWER -->
+<div class="popover drawer" id="drawer" role="menu">
+  <button class="drawer-item" data-action="settings" role="menuitem">
+    <span>Settings &amp; Options</span><svg class="icon"><use href="assets/icons.svg#i-gear"/></svg>
+  </button>
+  <button class="drawer-item" id="drawer-palette" data-action="palette" role="menuitem" aria-haspopup="true">
+    <span>Color Palette</span><svg class="icon"><use href="assets/icons.svg#i-chevron-right"/></svg>
+  </button>
+  <button class="drawer-item" data-action="about" role="menuitem">
+    <span>About Epos</span><svg class="icon"><use href="assets/icons.svg#i-info"/></svg>
+  </button>
+</div>
+
+<!-- COLOR PALETTE SUBMENU -->
+<div class="popover submenu" id="palette-menu" role="menu" aria-label="Color palette"></div>
+
+<div class="shell">
+  <!-- LEFT: vertical tabs -->
+  <aside class="sidebar" id="sidebar">
+    <div class="tab-list" id="tab-list" role="tablist" aria-orientation="vertical"></div>
+    <div class="add-split">
+      <button class="add-half collapse-btn" id="btn-collapse-tabs" data-tip="Collapse tabs" aria-label="Collapse tabs" aria-expanded="true">
+        <svg class="icon icon-arrow"><use href="assets/icons.svg#i-arrow-left"/></svg>
+        <svg class="icon icon-list"><use href="assets/icons.svg#i-list"/></svg>
+      </button>
+      <button class="add-half" id="btn-add-notebook" data-tip="Open Notebook" aria-label="Open Notebook">
+        <svg class="icon"><use href="assets/icons.svg#i-book2"/></svg>
+      </button>
+      <button class="add-half" id="btn-add-tab" data-tip="Open new tab" aria-label="Open new tab">
+        <svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CENTER: views -->
+  <div class="main" id="main">
+    <div class="view empty-state" id="view-empty">
+      <h2 class="home-title">Select a Text</h2>
+      <div class="home-carousel" id="home-carousel" role="list" aria-label="Choose a work to read"></div>
+    </div>
+
+    <!-- Every open tab owns a view in here; one or two are shown -->
+    <div class="panes" id="panes" hidden>
+      <div class="pair-divider" id="pair-divider" role="separator" aria-orientation="vertical"
+           data-tip="Drag to resize the two panes (double-click to reset)">
+        <div class="pair-divider-pill"></div>
+      </div>
+      <div class="view view-notebook tab-view" id="view-notebook" hidden>
+        <section class="pane notebook-pane" id="notebook-pane">
+          <header class="nb-header">
+            <div>
+              <h1 class="nb-title">Notebook</h1>
+              <p class="nb-count" id="nb-count">0 notes</p>
+            </div>
+            <button class="btn-new-note" id="btn-new-note"><svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>New Note</button>
+          </header>
+          <div class="note-grid" id="note-grid" hidden></div>
+          <p class="nb-empty" id="nb-empty">No notes yet. Click a word in any text and use the note icon, or add one here.</p>
+        </section>
+      </div>
+    </div>
+    <div class="drop-hint" id="drop-hint">Open in split view</div>
+
+    <div class="view" id="view-settings" hidden>
+      <div class="settings-page">
+        <h1 class="settings-title">Reading &amp; Work Options</h1>
+        <p class="settings-subtitle">Reader configuration, color palette &amp; active classical text</p>
+        <div class="settings-section-title">Active Epic</div>
+        <div class="settings-chips" id="settings-chips"></div>
+        <div class="settings-section-title">Color Palette</div>
+        <div class="settings-chips" id="palette-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: toolbar -->
+  <aside class="toolbar">
+    <div class="tool-bar" id="tool-bar">
+      <button class="tool-toggle" id="btn-tools" data-tip="Show tools" aria-label="Show tools" aria-expanded="false" aria-controls="tool-bar">
+        <svg class="icon icon-open"><use href="assets/icons.svg#i-format-size"/></svg>
+        <svg class="icon icon-close"><use href="assets/icons.svg#i-close"/></svg>
+      </button>
+      <button class="tool-btn" id="btn-split" style="--i: 0" data-tip="Parallel English" aria-label="Toggle parallel translation" aria-pressed="false">
+        <svg class="icon"><use href="assets/icons.svg#i-split"/></svg>
+      </button>
+      <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic scansion" aria-pressed="false">
+        <svg class="icon"><use href="assets/icons.svg#i-meter"/></svg>
+      </button>
+      <button class="tool-btn" id="btn-text" style="--i: 2" data-tip="Text Options" aria-label="Text formatting options" aria-expanded="false">
+        <svg class="icon"><use href="assets/icons.svg#i-text"/></svg>
+      </button>
+      <button class="tool-btn" id="btn-popups" style="--i: 3" data-tip="Edit Popups" aria-label="Edit popups" aria-expanded="false">
+        <svg class="icon"><use href="assets/icons.svg#i-popups"/></svg>
+      </button>
+    </div>
+
+    <div class="popover flyout" id="popups-flyout">
+      <div class="flyout-header">
+        <span>Edit Popups</span>
+        <button class="btn-close" data-close="popups-flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
+      </div>
+      <button class="switch-row" id="sw-words" role="switch" aria-checked="true">
+        <span class="switch-text"><span class="switch-title">Word definitions</span><span class="switch-sub">Show the gloss when you click a word</span></span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
+      <button class="switch-row" id="sw-notes" role="switch" aria-checked="true">
+        <span class="switch-text"><span class="switch-title">Notes in popups</span><span class="switch-sub">Show the note button and saved notes in the gloss</span></span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div class="popover flyout" id="flyout">
+      <div class="flyout-header">
+        <span>Text Appearance</span>
+        <button class="btn-close" data-close="flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
+      </div>
+      <div class="flyout-group">
+        <div class="size-row">
+          <svg class="icon size-icon sm" aria-hidden="true"><use href="assets/icons.svg#i-textsize"/></svg>
+          <div class="m3-slider" id="size-slider" style="--pct:0.5625">
+            <input class="ms-input" id="font-size" type="range" min="1.0" max="1.8" step="0.05" value="1.45" aria-label="Text size">
+            <span class="ms-track ms-left"></span>
+            <span class="ms-track ms-right"></span>
+            <span class="ms-handle"></span>
+          </div>
+          <svg class="icon size-icon lg" aria-hidden="true"><use href="assets/icons.svg#i-textsize"/></svg>
+        </div>
+      </div>
+      <div class="flyout-group">
+        <span class="flyout-label">Font</span>
+        <div class="pill-group" data-var="--reading-font">
+          <button class="pill-opt active" data-value="'Roboto', system-ui, sans-serif" data-tip="Roboto" aria-label="Roboto font"><span class="pill-text" style="font-family: 'Roboto', system-ui, sans-serif">Roboto</span></button>
+          <button class="pill-opt" data-value="'Gentium Plus', Georgia, serif" data-tip="Gentium Plus" aria-label="Gentium Plus font"><span class="pill-text" style="font-family: 'Gentium Plus', Georgia, serif">Gentium Plus</span></button>
+        </div>
+      </div>
+      <div class="flyout-group">
+        <span class="flyout-label">Line Spacing</span>
+        <div class="pill-group" data-var="--reading-line-height">
+          <button class="pill-opt" data-value="1.3" data-tip="Tight" aria-label="Tight line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls1"/></svg></button>
+          <button class="pill-opt active" data-value="1.45" data-tip="Normal" aria-label="Normal line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls2"/></svg></button>
+          <button class="pill-opt" data-value="1.8" data-tip="Relaxed" aria-label="Relaxed line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls3"/></svg></button>
+          <button class="pill-opt" data-value="2.2" data-tip="Loose" aria-label="Loose line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls4"/></svg></button>
+        </div>
+      </div>
+      <div class="flyout-group">
+        <span class="flyout-label">Pane Margins</span>
+        <div class="pill-group" data-var="--reading-padding">
+          <button class="pill-opt" data-value="20px" data-tip="Compact" aria-label="Compact margins"><svg class="icon"><use href="assets/icons.svg#i-mg1"/></svg></button>
+          <button class="pill-opt active" data-value="36px" data-tip="Normal" aria-label="Normal margins"><svg class="icon"><use href="assets/icons.svg#i-mg2"/></svg></button>
+          <button class="pill-opt" data-value="54px" data-tip="Wide" aria-label="Wide margins"><svg class="icon"><use href="assets/icons.svg#i-mg3"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- SWITCH WORK PICKER -->
+<div class="popover picker" id="picker" role="dialog" aria-labelledby="picker-title">
+  <div class="panel-header">
+    <span class="panel-title" id="picker-title">Switch Tab Work</span>
+    <button class="btn-close" data-close="picker" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
+  </div>
+  <div id="work-list"></div>
+  <div class="book-picker" id="book-picker" hidden>
+    <button class="btn-back" id="btn-back"><svg class="icon"><use href="assets/icons.svg#i-chevron-left"/></svg>All Works</button>
+    <div class="books-grid" id="books-grid"></div>
+  </div>
+</div>
+
+<!-- TAB HOVER CARD -->
+<div class="popover hover-card" id="hover-card">
+  <div>
+    <div class="hover-cite" id="hover-cite"></div>
+    <div class="hover-desc" id="hover-desc"></div>
+  </div>
+  <button class="btn-hover-switch" id="btn-hover-switch">
+    <svg class="icon"><use href="assets/icons.svg#i-switch"/></svg><span>Switch Work</span>
+  </button>
+</div>
+
+<!-- WORD DEFINITION CARD -->
+<div class="word-card" id="word-card" role="dialog" aria-live="polite">
+  <button class="card-note" id="card-note" data-tip="Add note" aria-label="Add note" aria-expanded="false">
+    <svg class="icon"><use href="assets/icons.svg#i-note"/></svg>
+  </button>
+  <div class="card-lemma" id="card-lemma"></div>
+  <div class="card-morph" id="card-morph"></div>
+  <div class="card-def" id="card-def"></div>
+  <div class="card-user-note" id="card-user-note" hidden data-tip="Edit note">
+    <svg class="icon"><use href="assets/icons.svg#i-snippet"/></svg>
+    <p id="card-user-note-text"></p>
+  </div>
+</div>
+
+<!-- NOTE BOX -->
+<div class="popover note-box" id="note-box" role="dialog" aria-label="Note">
+  <div class="note-box-title" id="note-title">Note</div>
+  <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span>Tab closed</span>
+  <button class="toast-undo" id="toast-undo">Undo</button>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<!-- One reader is cloned from this for every text tab -->
+<template id="tpl-reader">
+  <div class="view view-reader reader tab-view" data-split="off">
+    <div class="workspace">
+      <section class="pane pane-original">
+        <h1 class="book-title">Book I</h1>
+        <div class="verses passage"></div>
+      </section>
+      <div class="divider" role="separator" aria-orientation="vertical"
+           data-tip="Drag to resize panes (drag right past edge to collapse)">
+        <div class="divider-pill"></div>
+      </div>
+      <section class="pane pane-translation">
+        <h1 class="book-title">Book I</h1>
+        <div class="verses translation"></div>
+      </section>
+    </div>
+  </div>
+</template>
+
+</body>
+</html>
