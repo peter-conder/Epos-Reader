@@ -53,6 +53,8 @@
     --reading-font: 'Roboto', system-ui, sans-serif;
     /* One gap between any two windows (tab split and English side by side) */
     --pane-gap: 16px;
+    /* Widest a lone reading pane gets; the book bar above it is held to the same width */
+    --reader-max: 860px;
 
     --snippet-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5,19H19V9.82L14.18,5H5V19Zm0,2q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H15l6,6V19q0,0.82-0.59,1.41T19,21H5Zm2-4H17V15H7v2Zm0-4H17V11H7v2ZM7,9h7V7H7V9ZM5,19V5V9.82V19Z'/%3E%3C/svg%3E");
   }
@@ -149,8 +151,13 @@
   .brand-icon { width: 32px; height: 32px; display: grid; place-items: center; }
   .brand-title { font-size: 20px; font-weight: 600; letter-spacing: -0.2px; }
 
-  /* Segmented book selector */
-  .progress { flex: 1; max-width: 780px; display: flex; align-items: center; }
+  /* Segmented book selector. It is placed over the reading area by alignProgress() in app.js (same centre, and the
+     same width as the reading pane); the left/width here only hold until the script has measured. */
+  .progress {
+    position: absolute; top: 0; bottom: 0;
+    left: 280px; width: calc(100% - 384px); max-width: var(--reader-max);
+    display: flex; align-items: center;
+  }
   .segments {
     display: flex; align-items: center; gap: 6px;
     width: 100%;
@@ -260,7 +267,8 @@
     transition: width 560ms var(--ease-bouncy);
   }
   .tab-list { display: flex; flex-direction: column; gap: 8px; }
-  .tab-list:not(:empty) + .add-split { margin-top: 10px; }
+  /* The button bar is first in the sidebar, the tabs follow it */
+  .add-split + .tab-list:not(:empty) { margin-top: 10px; }
 
   .tab {
     display: flex; align-items: center; justify-content: space-between;
@@ -326,7 +334,7 @@
     opacity: 0; visibility: hidden; pointer-events: none; height: 0; overflow: hidden;
     transition: opacity 120ms ease, visibility 0s linear 200ms, height 0s linear 200ms;
   }
-  .sidebar.collapsed .tab-list + .add-split { margin-top: 0; }
+  .sidebar.collapsed .add-split + .tab-list { margin-top: 0; }
   .sidebar.collapsed .add-split { gap: 0; }
   .sidebar.collapsed .add-half:not(.collapse-btn) { flex-grow: 0.0001; opacity: 0; pointer-events: none; }
   .sidebar.collapsed .collapse-btn { height: 56px; border-radius: 28px; }
@@ -568,7 +576,9 @@
     position: relative; overflow: hidden;
     flex: 1 1 0; min-width: 0;
     border-radius: 36px;
-    background: var(--card-bg, var(--primary));   /* flat colours until the artwork is added */
+    background: var(--card-bg, var(--primary));   /* flat colour behind the artwork; the image itself is set inline on each card */
+    background-size: cover;
+    background-position: var(--card-pos, center);
     cursor: pointer;
     text-align: left;
     isolation: isolate;
@@ -668,7 +678,11 @@
     transition: padding 180ms ease;
   }
 
-  .pane-original { width: 100%; max-width: 860px; margin: 0 auto; flex-shrink: 0; }
+  .pane-original {
+    width: 100%; max-width: var(--reader-max); margin: 0 auto; flex-shrink: 0;
+    /* max-width eases between its two values when a second tab opens or closes (see the split-tabs rule below) */
+    transition: padding 180ms ease, max-width var(--grow-dur, 520ms) ease;
+  }
   .reader[data-split="on"] .pane-original { max-width: none; min-width: 25%; margin: 0; }
   .workspace.snapping .pane-original { transition: width 320ms var(--ease-spring), padding 180ms ease; }
 
@@ -1070,6 +1084,10 @@
   .panes.instant .tab-view { transition: none !important; }
   .panes[data-count="2"] .tab-view.is-active .pane,
   .panes[data-count="2"] .tab-view.is-active.empty-state { border-color: var(--secondary); }
+  /* Side by side, a reader fills its whole window instead of stopping at the single-window width and sitting
+     centred. That keeps the space between the two windows at exactly one pane-gap however far the divider is
+     dragged (the larger window grows to take up the room). */
+  .panes[data-count="2"] .pane-original { max-width: 100%; }
   .panes[data-count="2"] .book-title, .panes[data-count="2"] .nb-title { cursor: grab; user-select: none; touch-action: none; }
   body.pane-dragging, body.pane-dragging * { cursor: grabbing !important; user-select: none !important; }
 

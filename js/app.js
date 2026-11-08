@@ -22,6 +22,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     menuBtn: $('btn-menu'), brandBtn: $('btn-brand'), brandTitle: $('brand-title'), drawer: $('drawer'), paletteMenu: $('palette-menu'),
     progress: $('progress'), segments: $('segments'),
     sidebar: $('sidebar'), tabList: $('tab-list'), addTab: $('btn-add-tab'), addNotebook: $('btn-add-notebook'),
+    topLeft: document.querySelector('.top-left'), topRight: document.querySelector('.top-right'),
     main: $('main'), panes: $('panes'), dropHint: $('drop-hint'), tplReader: $('tpl-reader'),
     viewEmpty: $('view-empty'), viewSettings: $('view-settings'), viewNotebook: $('view-notebook'),
     notebookPane: $('notebook-pane'), noteGrid: $('note-grid'), nbCount: $('nb-count'), nbEmpty: $('nb-empty'),
@@ -158,7 +159,27 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     });
     lastShown = shown.map((t) => t.id);
     el.progress.hidden = !hasTabs || !isText(tab);
+    alignProgress();
   }
+
+  /* The book bar sits right over the reading area: same centre, and as wide as the reading pane
+     (a lone pane is as wide as the main area, up to --reader-max, and centred in it). Measured from the
+     main area, so it also follows the sidebar while that opens and closes. It stays clear of the menu
+     and name on the left, and of the spacer on the right, by shrinking evenly on both sides. */
+  function alignProgress() {
+    const bar = el.progress;
+    if (bar.hidden) return;
+    const main = el.main.getBoundingClientRect();
+    const max = parseFloat(getComputedStyle(root).getPropertyValue('--reader-max')) || 860;
+    const gap = 24;                                              // the top bar's own gap between its parts
+    const cx = main.left + main.width / 2;
+    const room = Math.min(cx - (el.topLeft.getBoundingClientRect().right + gap),
+                          el.topRight.getBoundingClientRect().left - gap - cx);
+    const half = Math.max(0, Math.min(max / 2, main.width / 2, room));
+    bar.style.left = `${cx - half}px`;
+    bar.style.width = `${half * 2}px`;
+  }
+  new ResizeObserver(alignProgress).observe(el.main);
 
   /* ---- Pane motion helpers ---- */
   const SPRING = 'cubic-bezier(0.3, 0.7, 0.4, 1)';
@@ -1162,15 +1183,21 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
      Clicking a card opens Book I of that work.
      ========================================================== */
   const HOME_WORKS = ['aeneid', 'odyssey', 'iliad'];
-  // Flat colours until the artwork is added
+  // Flat colours show behind the artwork until it has loaded (and if a file is ever missing)
   const HOME_BG = {
     aeneid: 'var(--primary)',
     odyssey: 'var(--secondary)',
     iliad: 'color-mix(in srgb, var(--primary) 55%, var(--secondary))'
   };
+  // Artwork for each card. `pos` is the part of the painting kept in view when a narrow card crops it.
+  const HOME_ART = {
+    aeneid:  { src: 'images/aeneas.jpg',            pos: '45% 50%' },   // Aeneas carrying Anchises
+    odyssey: { src: 'images/ulyssespolyphemus.jpg', pos: '38% 50%' },   // Ulysses' ship
+    iliad:   { src: 'images/priamachilles.jpeg',    pos: '62% 50%' }    // Priam kneeling before Achilles
+  };
 
   const CAROUSEL_HTML = HOME_WORKS.map((key, i) => `
-    <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(WORKS[key].title)}: open Book I" style="--card-bg: ${HOME_BG[key]}">
+    <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(WORKS[key].title)}: open Book I" style="--card-bg: ${HOME_BG[key]}; background-image: url('${HOME_ART[key].src}'); --card-pos: ${HOME_ART[key].pos}">
       <span class="home-card-scrim"></span><span class="home-card-title">${esc(WORKS[key].title)}</span>
     </button>`).join('');
 
@@ -1353,11 +1380,11 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
      COLOR PALETTES (Material 3 Expressive)
      ========================================================== */
   const PALETTES = {
-    green: { name: 'Pale Green', p: '#4E6543', on: '#FFFFFF', c: '#CFEBC0', onc: '#0C2006', s: '#54634D', sc: '#D7E8CE', onsc: '#121F0E' },
-    red: { name: 'Pale Red', p: '#8C4A56', on: '#FFFFFF', c: '#FFD9DF', onc: '#3A0715', s: '#75565B', sc: '#FFD9DF', onsc: '#2B1519' },
-    bluegray: { name: 'Monochrome Blue-Gray', p: '#505F6E', on: '#FFFFFF', c: '#D5E4F7', onc: '#0C1D29', s: '#555F68', sc: '#D9E3ED', onsc: '#121C23' },
-    yellow: { name: 'Pale Yellow', p: '#695F10', on: '#FFFFFF', c: '#F4E489', onc: '#201C00', s: '#635F41', sc: '#EAE3BD', onsc: '#1F1C05' },
-    purple: { name: 'Expressive Purple', p: '#7D33CF', on: '#FFFFFF', c: '#EADDFF', onc: '#24005B', s: '#625B71', sc: '#E8DEF8', onsc: '#1E192B' }
+    green: { name: 'Pine', p: '#4E6543', on: '#FFFFFF', c: '#CFEBC0', onc: '#0C2006', s: '#54634D', sc: '#D7E8CE', onsc: '#121F0E' },
+    red: { name: 'Coral', p: '#8C4A56', on: '#FFFFFF', c: '#FFD9DF', onc: '#3A0715', s: '#75565B', sc: '#FFD9DF', onsc: '#2B1519' },
+    bluegray: { name: 'Slate', p: '#505F6E', on: '#FFFFFF', c: '#D5E4F7', onc: '#0C1D29', s: '#555F68', sc: '#D9E3ED', onsc: '#121C23' },
+    yellow: { name: 'Golden', p: '#695F10', on: '#FFFFFF', c: '#F4E489', onc: '#201C00', s: '#635F41', sc: '#EAE3BD', onsc: '#1F1C05' },
+    purple: { name: 'Lavender', p: '#7D33CF', on: '#FFFFFF', c: '#EADDFF', onc: '#24005B', s: '#625B71', sc: '#E8DEF8', onsc: '#1E192B' }
   };
   const PALETTE_KEY = 'epos.palette.v1';
 

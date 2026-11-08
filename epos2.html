@@ -48,7 +48,7 @@
 <div class="shell">
   <!-- LEFT: vertical tabs -->
   <aside class="sidebar" id="sidebar">
-    <div class="tab-list" id="tab-list" role="tablist" aria-orientation="vertical"></div>
+    <!-- Collapse / notebook / new tab sit above the tabs, so the collapse arrow stays in the same spot as the round button it turns into -->
     <div class="add-split">
       <button class="add-half collapse-btn" id="btn-collapse-tabs" data-tip="Collapse tabs" aria-label="Collapse tabs" aria-expanded="true">
         <svg class="icon icon-arrow"><use href="assets/icons.svg#i-arrow-left"/></svg>
@@ -61,6 +61,7 @@
         <svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>
       </button>
     </div>
+    <div class="tab-list" id="tab-list" role="tablist" aria-orientation="vertical"></div>
   </aside>
 
   <!-- CENTER: views -->
