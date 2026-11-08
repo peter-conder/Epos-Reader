@@ -341,6 +341,20 @@
   .sidebar.collapsed .collapse-btn .icon-arrow { opacity: 0; transform: rotate(90deg) scale(0.5); }
   .sidebar.collapsed .collapse-btn .icon-list { opacity: 1; transform: none; }
 
+  /* Opening the sidebar again: once the button bar has begun to open, the tabs bubble out of it and drop into place.
+     Each tab starts up at the bar (shrunken and transparent) and the lower ones follow a beat later.
+     app.js adds .bubbling (and sets --i) only for that moment, so ordinary re-renders of the list don't replay it. */
+  .add-split { position: relative; z-index: 2; }          /* the tabs slide out from behind the bar */
+  .sidebar.bubbling .tab-list > * {
+    transform-origin: top center;
+    animation: tabBubble 640ms var(--ease-bouncy) backwards;
+    animation-delay: calc(160ms + var(--i, 0) * 60ms);    /* 160ms: the small pause after the bar starts opening */
+  }
+  @keyframes tabBubble {
+    from { opacity: 0; transform: translateY(calc((var(--i, 0) + 1) * -56px)) scale(0.5); }
+    35%  { opacity: 1; }
+  }
+
   /* Tab hover card */
   .hover-card {
     --from: translateX(14px) scale(0.92);

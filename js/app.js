@@ -43,6 +43,47 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   const MIN_FONT = parseFloat(el.fontSlider.min);
 
   /* ==========================================================
+     WORD DATA: one JSON file per book, plus a shared dictionary
+     ========================================================== */
+  const bookCache = new Map();
+  let lexiconPromise = null;
+  let LEX = {};
+
+  function loadLexicon() {
+    lexiconPromise ??= fetch('data/lexicon/latin.json')
+      .then((r) => r.json()).then((lex) => { LEX = lex; }).catch(() => {});
+    return lexiconPromise;
+  }
+
+  /* The book's data, or null when there's no file for it yet (the Greek works, for now) */
+  function loadBook(work, book) {
+    const key = `${work}:${book}`;
+    if (!bookCache.has(key)) {
+      const num = String(ROMANS.indexOf(book) + 1).padStart(2, '0');
+      bookCache.set(key, Promise.all([
+        fetch(`data/${work}/${num}.json`).then((r) => (r.ok ? r.json() : null)),
+        loadLexicon()
+      ]).then(([data]) => {
+        if (data) data.byLine = new Map(data.lines.map((l) => [l.n, l]));
+        return data;
+      }).catch(() => null));
+    }
+    return bookCache.get(key);
+  }
+
+  /* Lemma, grammar and definition for one word */
+  function wordInfo(tab, line, idx) {
+    const parts = tab.bookData?.byLine.get(line)?.w[idx]?.a;
+    if (!parts?.length) return null;
+    const e = parts.map((p) => ({ ...(LEX[p.l] ?? { head: p.l.split(':')[0] }), morph: p.m }));
+    return {
+      lemma: e.map((x) => x.head).join(' + '),
+      morph: e.map((x) => x.morph).join(' + '),
+      def: e.map((x) => x.def ?? (x.pos === 'proper noun' ? 'Proper name.' : 'No definition yet.')).join('  |  ')
+    };
+  }
+
+  /* ==========================================================
      STATE
      Every open tab is { id, kind: 'text' | 'notebook' | 'new', partnerId, view, … }.
      Two tabs that point at each other through partnerId are a split
@@ -480,7 +521,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       passage: rootEl.querySelector('.passage'),
       translation: rootEl.querySelector('.translation'),
       titles: rootEl.querySelectorAll('.book-title'),
-      renderedWork: null
+      renderedKey: null
     };
     el.panes.append(rootEl);
     bindReader(tab);
@@ -579,22 +620,31 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   function renderPassage(tab) {
     const ui = tab.ui;
-    if (ui.renderedWork === tab.work) return;   // the text is per-work, so reuse it
-    ui.renderedWork = tab.work;
+    const key = `${tab.work}:${tab.book}`;
+    if (ui.renderedKey === key) return ui.ready;
+    ui.renderedKey = key;
     if (selectedWord && ui.passage.contains(selectedWord)) hideWordCard();
 
-    const work = WORKS[tab.work];
-    ui.passage.innerHTML = work.lines.map((line, i) => {
-      const n = i + 1;
-      const words = line.trim().split(/\s+/).map((w, j) =>
-        `<span class="word" data-i="${j}">${esc(w)}<span class="scansion" aria-hidden="true">${j % 2 ? METER.shortLong : METER.longShort}</span></span>`
-      ).join('');
-      return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${words}</span></div>`;
-    }).join('');
+    ui.ready = loadBook(tab.work, tab.book).then((data) => {
+      if (ui.renderedKey !== key) return;   // the tab moved on while this loaded
+      tab.bookData = data;
+      const work = WORKS[tab.work];
+      const lines = data
+        ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => w.f) }))
+        : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/) }));
 
-    ui.translation.innerHTML = work.translations.map((t) =>
-      `<div class="translation-line">${esc(t)}</div>`
-    ).join('');
+      ui.passage.innerHTML = lines.map(({ n, words }) => {
+        const html = words.map((w, j) =>
+          `<span class="word" data-i="${j}">${esc(w)}<span class="scansion" aria-hidden="true">${j % 2 ? METER.shortLong : METER.longShort}</span></span>`
+        ).join('');
+        return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
+      }).join('');
+      ui.translation.innerHTML = work.translations.map((t) => `<div class="translation-line">${esc(t)}</div>`).join('');
+      tab.fitModel = null;   // new text, new widths
+      refreshNoteMarks([tab]);
+      scheduleFit(tab);
+    });
+    return ui.ready;
   }
 
   function setBookTitles(tab) {
@@ -621,16 +671,41 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       ui.root.style.setProperty('--reading-trans-font-size', `${(size * 0.86).toFixed(3)}rem`);
     };
     const fits = () => checks.every((c) => c.verses.offsetWidth <= c.pn.clientWidth - c.pad + 1);
-    apply(max);
-    if (fits()) return;
-    apply(min);
-    if (!fits()) return;
-    let lo = min, hi = max;
+
+    // Every size change relays out the whole book, so the size is worked out rather than searched for.
+    // Width grows almost linearly with size (the text scales, word padding doesn't), so the text is
+    // measured at the smallest and largest sizes once per text and font. The widest line is never wider
+    // than the straight line through those two points, so the size it gives always fits.
+    const model = tab.fitModel ??= new Map();
+    if (checks.some((c) => !model.has(c.pn))) {
+      const lo = MIN_FONT * TWO_UP_SCALE, hi = parseFloat(el.fontSlider.max);
+      apply(lo);
+      const wLo = checks.map((c) => c.verses.offsetWidth);
+      apply(hi);
+      checks.forEach((c, i) => {
+        const k = (c.verses.offsetWidth - wLo[i]) / (hi - lo);
+        model.set(c.pn, { k, b: wLo[i] - k * lo });
+      });
+      tab.fitSize = null;
+    }
+    let size = max;
+    for (const c of checks) {
+      const { k, b } = model.get(c.pn);
+      if (k > 0) size = Math.min(size, (c.pn.clientWidth - c.pad + 1 - b) / k);
+    }
+    size = clamp(size, min, max);
+    if (tab.fitSize != null && Math.abs(size - tab.fitSize) < 0.0005) return;   // unchanged: no relayout
+    tab.fitSize = size;
+    apply(size);
+    if (size === min || fits()) return;
+    // Safety net in case the estimate is off (a font still loading, say): search below it as before
+    let lo = min, hi = size;
     for (let i = 0; i < 7; i++) {
       const mid = (lo + hi) / 2;
       apply(mid);
       if (fits()) lo = mid; else hi = mid;
     }
+    tab.fitSize = lo;
     apply(lo);
   }
 
@@ -639,9 +714,16 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     tab.fitRaf = requestAnimationFrame(() => { tab.fitRaf = 0; fitReader(tab); });
   }
 
-  function fitAll() {
-    state.tabs.forEach((t) => { if (isText(t)) scheduleFit(t); });
+  /* remeasure: the font or spacing changed, so the widths measured for each text no longer hold */
+  function fitAll(remeasure = false) {
+    state.tabs.forEach((t) => {
+      if (!isText(t)) return;
+      if (remeasure) t.fitModel = null;
+      scheduleFit(t);
+    });
   }
+  // A web font arriving after the text was measured changes its width
+  document.fonts?.addEventListener('loadingdone', () => fitAll(true));
 
   /* Segmented book bar in the top bar (for the active text tab) */
   function renderSegments() {
@@ -671,6 +753,8 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     });
 
     tab.book = roman;
+    tab.ui.paneOriginal.scrollTop = 0;
+    renderPassage(tab);
     setBookTitles(tab);
     renderTabs();
     refreshNoteMarks([tab]);
@@ -1072,13 +1156,13 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     word.classList.add('selected');
 
     const tab = getTab(word.closest('.tab-view').dataset.tabId);
-    const clean = word.firstChild.textContent.replace(/[.,;:!?·᾽]/g, '').trim();
+    const clean = word.firstChild.textContent.replace(/[.,;:!?·᾽—–]/g, '').trim();
     wordCtx = {
       work: tab.work, book: tab.book,
       line: +word.closest('.verse').dataset.line, wordIdx: +word.dataset.i, word: clean
     };
 
-    const info = LEXICON[clean.toLowerCase()] ?? {
+    const info = wordInfo(tab, wordCtx.line, wordCtx.wordIdx) ?? LEXICON[clean.toLowerCase()] ?? {
       lemma: clean,
       morph: workOf(tab).formLabel,
       def: `Epic gloss and grammatical analysis for “${clean}”.`
@@ -1335,9 +1419,23 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
      This sits after the hover card code because it hides the card. */
   const collapseBtn = $('btn-collapse-tabs');
   const SIDEBAR_KEY = 'epos.sidebar.collapsed';
+  let bubbleTimer = 0;
+  /* Replays the tabs bubbling out of the button bar (the CSS does the motion; --i is each tab's turn) */
+  function bubbleTabs() {
+    [...el.tabList.children].forEach((c, i) => c.style.setProperty('--i', Math.min(i, 8)));
+    el.sidebar.classList.remove('bubbling');
+    void el.sidebar.offsetWidth;   // restart the animation
+    el.sidebar.classList.add('bubbling');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => el.sidebar.classList.remove('bubbling'), 1500);
+  }
+
   function setSidebarCollapsed(collapsed) {
     hideHoverCard();
+    const opening = !collapsed && el.sidebar.classList.contains('collapsed');
     el.sidebar.classList.toggle('collapsed', collapsed);
+    if (opening) bubbleTabs();
+    else if (collapsed) el.sidebar.classList.remove('bubbling');
     const label = collapsed ? 'Expand tabs' : 'Collapse tabs';
     collapseBtn.dataset.tip = label;
     collapseBtn.setAttribute('aria-label', label);
@@ -1544,7 +1642,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     const group = opt.parentElement;
     for (const b of group.children) b.classList.toggle('active', b === opt);
     root.style.setProperty(group.dataset.var, opt.dataset.value);
-    fitAll();   // a different font or spacing changes how wide the lines are
+    fitAll(true);   // a different font or spacing changes how wide the lines are
   });
 
   /* ==========================================================
@@ -1733,9 +1831,10 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   /* Open the note's text in a tab (reusing one already on that book, which keeps
      a split intact), scroll to the line and open the word's gloss. */
-  function jumpToNote(note) {
+  async function jumpToNote(note) {
     let tab = state.tabs.find((t) => isText(t) && t.work === note.work && t.book === note.book);
     if (tab) activateTab(tab.id); else tab = addTab(note.work, note.book);
+    await tab.ui.ready;
 
     const verse = tab.ui.passage.querySelector(`.verse[data-line="${note.line}"]`);
     if (!verse) return;

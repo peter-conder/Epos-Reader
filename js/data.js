@@ -56,7 +56,7 @@
 
 const WORKS = {
     aeneid: {
-      title: 'Aeneid',
+      title: 'The Aeneid',
       poet: 'Vergil',
       language: 'Classical Latin',
       shortLanguage: 'Latin',
@@ -100,7 +100,7 @@ const WORKS = {
       ]
     },
     iliad: {
-      title: 'Iliad',
+      title: 'The Iliad',
       poet: 'Homer',
       language: 'Ancient Greek',
       shortLanguage: 'Greek',
@@ -144,7 +144,7 @@ const WORKS = {
       ]
     },
     odyssey: {
-      title: 'Odyssey',
+      title: 'The Odyssey',
       poet: 'Homer',
       language: 'Ancient Greek',
       shortLanguage: 'Greek',
