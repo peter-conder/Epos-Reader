@@ -1,0 +1,48 @@
+62	Perseus: da, pater, Iliacos Teucris.
+	LASLA:   da pater Iliacos Teucris tum regia Iuno
+105	Perseus: Quandoquidem Ausonios coniungi foedere Teucris
+	LASLA:   quidem quidem Ausonios coniungi foedere Teucris
+182	Perseus: Tercentum adiciunt (mens omnibus una sequendi)
+	LASLA:   ter centum adiciunt mens omnibus una sequendi
+228	Perseus: tum sic ignarum adloquitur: Vigilasne, deum gens,
+	LASLA:   tum sic ignarum adloquitur uigilas ne deum gens
+272	Perseus: non secus ac liquida siquando nocte cometae
+	LASLA:   non secus ac liquida si quando nocte Cometae
+278	Perseus: ultro animos tollit dictis atque increpat ultro
+	LASLA:   
+458	Perseus: ire prior Pallas, siqua fors adiuvet ausum
+	LASLA:   ire prior Pallas si qua fors adiuuet ausum
+710	Perseus: pastus harundinea, postquam inter retia ventum est,
+	LASLA:   pastus harundinea postquam inter retia uentumst
+777	Perseus: iecit; at illa volans clipeo est excussa proculque
+	LASLA:   iecit at illa uolans clipeost excussa proculque
+792	Perseus: siqua fidem tanto est operi latura vetustas,
+	LASLA:   si qua fidem tantost operi latura uetustas
+803	Perseus: Ac velut effusa siquando grandine nimbi
+	LASLA:   ac uelut effusa si quando grandine nimbi
+828	Perseus: manibus et cineri, siqua est ea cura, remitto.
+	LASLA:   Manibus et cineri si qua est ea cura remitto
+861	Perseus: Rhaebe, diu, res siqua diu mortalibus ulla est,
+	LASLA:   Rhaebe diu res si qua diu mortalibus ulla est
+872	Perseus: et furiis agitatus amor et conscia virtus.
+	LASLA:   
+903	Perseus: Unum hoc per siqua est victis venia hostibus oro:
+	LASLA:   unum hoc per si qua est uictis uenia hostibus oro
+
+Lemmas with no definition (add them to EXTRA):
+aetolus:adj
+alpheus:adj
+caeres:adj
+daucius:adj
+euandrius:adj
+exorsa:noun
+hicetaonius:adj
+laetus:noun
+lyrnesius:adj
+mage:adv
+memorandus:adj
+oricius:adj
+satus:noun
+strymonius:adj
+uetitum:noun
+uiuens:noun

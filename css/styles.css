@@ -800,16 +800,32 @@
   }
   .word.selected.has-note::after { background: var(--on-primary); }
 
-  .scansion {
-    display: none;
-    position: absolute; top: -8px; left: 0; right: 0;
-    height: 6px;
-    justify-content: center; align-items: center; gap: 2px;
+  /* Scansion marks are drawn on the word itself (a long bar and a short dot) rather than
+     built as extra elements, so a whole book stays light to lay out */
+  [data-scansion="on"] .word::before {
+    content: '';
+    position: absolute; top: -8px; left: 50%;
+    width: 15.5px; height: 6px;
+    transform: translateX(-50%);
     pointer-events: none;
+    --m-long: linear-gradient(var(--gray-900), var(--gray-900));
+    --m-short: radial-gradient(circle, var(--secondary) 1.6px, transparent 1.9px);
+    background: var(--m-long) left center / 10px 2px no-repeat,
+                var(--m-short) right center / 3.5px 3.5px no-repeat;
   }
-  [data-scansion="on"] .scansion { display: flex; }
-  .m-long  { width: 10px; height: 2px; background: var(--gray-900); border-radius: 2px; }
-  .m-short { width: 3.5px; height: 3.5px; background: var(--secondary); border-radius: 50%; }
+  /* every other word starts short */
+  [data-scansion="on"] .word:nth-child(even)::before {
+    background: var(--m-short) left center / 3.5px 3.5px no-repeat,
+                var(--m-long) right center / 10px 2px no-repeat;
+  }
+
+  /* Off-screen copy of a few lines, used to measure them at other text sizes */
+  .fit-probe {
+    position: absolute; left: 0; top: 0;
+    display: flex; flex-direction: column; width: max-content;
+    visibility: hidden; pointer-events: none;
+    contain: layout style;
+  }
 
   /* Word definition card (the gloss) */
   .word-card {

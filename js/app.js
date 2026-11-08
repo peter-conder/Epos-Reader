@@ -54,6 +54,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       .then((r) => r.json()).then((lex) => { LEX = lex; }).catch(() => {});
     return lexiconPromise;
   }
+  loadLexicon();   // start the big dictionary download now rather than when the first book opens
 
   /* The book's data, or null when there's no file for it yet (the Greek works, for now) */
   function loadBook(work, book) {
@@ -502,11 +503,6 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   /* ==========================================================
      READERS: one per text tab
      ========================================================== */
-  const METER = {
-    longShort: '<span class="m-long"></span><span class="m-short"></span>',
-    shortLong: '<span class="m-short"></span><span class="m-long"></span>'
-  };
-
   function createReader(tab) {
     const rootEl = el.tplReader.content.firstElementChild.cloneNode(true);
     rootEl.dataset.tabId = tab.id;
@@ -525,7 +521,12 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     };
     el.panes.append(rootEl);
     bindReader(tab);
-    tab.ro = new ResizeObserver(() => scheduleFit(tab));
+    // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
+    tab.ro = new ResizeObserver(() => {
+      scheduleFit(tab, false);
+      clearTimeout(tab.fitTimer);
+      tab.fitTimer = setTimeout(() => scheduleFit(tab), 150);
+    });
     tab.ro.observe(tab.ui.paneOriginal);
     tab.ro.observe(tab.ui.paneTranslation);
   }
@@ -635,7 +636,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
       ui.passage.innerHTML = lines.map(({ n, words }) => {
         const html = words.map((w, j) =>
-          `<span class="word" data-i="${j}">${esc(w)}<span class="scansion" aria-hidden="true">${j % 2 ? METER.shortLong : METER.longShort}</span></span>`
+          `<span class="word" data-i="${j}">${esc(w)}</span>`
         ).join('');
         return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
       }).join('');
@@ -653,7 +654,55 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   /* Text shrinks to fit its pane instead of wrapping, never below the smallest size the editor offers */
   const TWO_UP_SCALE = 0.86;
-  function fitReader(tab) {
+  const FIT_CANDIDATES = 12;   // lines measured at the reference sizes
+  const FIT_STEP = 100;        // sizes round down to 1/100 rem, so tiny width changes don't relayout the book
+
+  /* How wide one line's content is (its flex row stretches to the widest line, so the row itself can't say) */
+  function lineWidth(line, padRight) {
+    const left = line.getBoundingClientRect().left;
+    if (line.classList.contains('verse')) {
+      const last = line.lastElementChild?.lastElementChild ?? line.lastElementChild;
+      return last ? last.getBoundingClientRect().right - left : 0;
+    }
+    const r = document.createRange();
+    r.selectNodeContents(line);
+    return r.getBoundingClientRect().right - left + padRight;
+  }
+
+  /* Width grows almost linearly with size (the text scales, word padding doesn't). The widest lines are
+     found in the layout already on screen, then only copies of those are laid out at the smallest and
+     largest sizes, instead of relaying out the whole book twice. Gives each line's { k, b } with width = k·size + b. */
+  function measureFitModel(checks) {
+    const lo = MIN_FONT * TWO_UP_SCALE, hi = parseFloat(el.fontSlider.max);
+    const model = new Map();
+    for (const c of checks) {
+      const lines = [...c.verses.children];
+      const padRight = lines[0] ? parseFloat(getComputedStyle(lines[0]).paddingRight) || 0 : 0;
+      const widest = lines.map((l) => [lineWidth(l, padRight), l])
+        .sort((a, b) => b[0] - a[0]).slice(0, FIT_CANDIDATES).map(([, l]) => l.cloneNode(true));
+      if (!widest.length) { model.set(c.pn, []); continue; }
+      const probe = document.createElement('div');
+      probe.className = 'fit-probe';
+      probe.setAttribute('aria-hidden', 'true');
+      probe.append(...widest);
+      c.pn.append(probe);
+      const at = (size) => {
+        probe.style.setProperty('--reading-font-size', `${size}rem`);
+        probe.style.setProperty('--reading-trans-font-size', `${size * 0.86}rem`);
+        return widest.map((l) => lineWidth(l, padRight));
+      };
+      const wLo = at(lo), wHi = at(hi);
+      probe.remove();
+      model.set(c.pn, wLo.map((w, i) => {
+        const k = (wHi[i] - w) / (hi - lo);
+        return { k, b: w - k * lo };
+      }));
+    }
+    return model;
+  }
+
+  /* verify: also check the result against the real layout (skipped while a pane is being dragged) */
+  function fitReader(tab, verify = true) {
     const ui = tab?.ui;
     if (!ui || !ui.root.isConnected || ui.root.hidden || !ui.paneOriginal.clientWidth) return;
     // Two windows share the width, so the text sits a step smaller than in a single window
@@ -672,31 +721,30 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     };
     const fits = () => checks.every((c) => c.verses.offsetWidth <= c.pn.clientWidth - c.pad + 1);
 
-    // Every size change relays out the whole book, so the size is worked out rather than searched for.
-    // Width grows almost linearly with size (the text scales, word padding doesn't), so the text is
-    // measured at the smallest and largest sizes once per text and font. The widest line is never wider
-    // than the straight line through those two points, so the size it gives always fits.
+    // Every size change relays out the whole book, so the size is worked out rather than searched for,
+    // from widths measured once per text and font (see measureFitModel)
     const model = tab.fitModel ??= new Map();
-    if (checks.some((c) => !model.has(c.pn))) {
-      const lo = MIN_FONT * TWO_UP_SCALE, hi = parseFloat(el.fontSlider.max);
-      apply(lo);
-      const wLo = checks.map((c) => c.verses.offsetWidth);
-      apply(hi);
-      checks.forEach((c, i) => {
-        const k = (c.verses.offsetWidth - wLo[i]) / (hi - lo);
-        model.set(c.pn, { k, b: wLo[i] - k * lo });
-      });
+    const missing = checks.filter((c) => !model.has(c.pn));
+    if (missing.length) {
+      measureFitModel(missing).forEach((lines, pn) => model.set(pn, lines));
       tab.fitSize = null;
     }
     let size = max;
     for (const c of checks) {
-      const { k, b } = model.get(c.pn);
-      if (k > 0) size = Math.min(size, (c.pn.clientWidth - c.pad + 1 - b) / k);
+      const room = c.pn.clientWidth - c.pad + 1;
+      for (const { k, b } of model.get(c.pn)) if (k > 0) size = Math.min(size, (room - b) / k);
     }
+    if (size < max) size = Math.floor(size * FIT_STEP + 1e-9) / FIT_STEP;
     size = clamp(size, min, max);
-    if (tab.fitSize != null && Math.abs(size - tab.fitSize) < 0.0005) return;   // unchanged: no relayout
-    tab.fitSize = size;
-    apply(size);
+    const changed = tab.fitSize == null || Math.abs(size - tab.fitSize) >= 0.0005;
+    if (!changed && (!verify || tab.fitVerified)) return;   // unchanged: no relayout
+    if (changed) {
+      tab.fitSize = size;
+      tab.fitVerified = false;
+      apply(size);
+    }
+    if (!verify) return;
+    tab.fitVerified = true;
     if (size === min || fits()) return;
     // Safety net in case the estimate is off (a font still loading, say): search below it as before
     let lo = min, hi = size;
@@ -709,9 +757,15 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     apply(lo);
   }
 
-  function scheduleFit(tab) {
+  function scheduleFit(tab, verify = true) {
+    tab.fitVerify ||= verify;
     if (tab.fitRaf) return;
-    tab.fitRaf = requestAnimationFrame(() => { tab.fitRaf = 0; fitReader(tab); });
+    tab.fitRaf = requestAnimationFrame(() => {
+      const v = tab.fitVerify;
+      tab.fitRaf = 0;
+      tab.fitVerify = false;
+      fitReader(tab, v);
+    });
   }
 
   /* remeasure: the font or spacing changed, so the widths measured for each text no longer hold */

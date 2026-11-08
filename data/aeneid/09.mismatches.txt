@@ -1,0 +1,52 @@
+29	Perseus: vertitur arma tenens et toto vertice supra est.
+	LASLA:   
+41	Perseus: Aeneas: siqua interea fortuna fuisset,
+	LASLA:   Aeneas si qua interea fortuna fuisset
+44	Perseus: Ergo etsi conferre manum pudor iraque monstrat,
+	LASLA:   ergo si si conferre manum pudor iraque monstrat
+121	Perseus: quot prius aeratae steterant ad litora prorae
+	LASLA:   
+134	Perseus: siqua Phryges prae se iactant, responsa deorum:
+	LASLA:   si qua Phryges prae se iactant responsa deorum
+172	Perseus: quos pater Aeneas, siquando adversa vocarent,
+	LASLA:   quos pater Aeneas si quando aduersa uocarent
+210	Perseus: Sed siquis, quae multa vides discrimine tali,
+	LASLA:   sed si quis quae multa uides discrimine tali
+211	Perseus: siquis in adversum rapiat casusve deusve,
+	LASLA:   si quis in aduersum rapiat casusue deusue
+214	Perseus: mandet humo solita aut siqua id Fortuna vetabit,
+	LASLA:   mandet humo solita aut si qua id Fortuna uetabit
+226	Perseus: ductores Teucrum primi et delecta iuventus
+	LASLA:   ductores Teucrum primi delecta iuuentus
+287	Perseus: Hanc ego nunc ignaram huius quodcumque pericli est
+	LASLA:   hanc ego nunc ignaram huius quodcumque pericli
+370	Perseus: tercentum, scutati omnes, Volcente magistro.
+	LASLA:   ter centum scutati omnes Uolcente magistro
+403	Perseus: suspiciens altam Lunam sic voce precatur:
+	LASLA:   suspiciens altam Lunam et sic uoce precatur
+406	Perseus: Siqua tuis umquam pro me pater Hyrtacus aris
+	LASLA:   si qua tuis umquam pro me pater Hyrtacus aris
+407	Perseus: dona tulit, siqua ipse meis venatibus auxi
+	LASLA:   dona tulit si qua ipse meis uenatibus auxi
+446	Perseus: Fortunati ambo! Siquid mea carmina possunt,
+	LASLA:   fortunati ambo si quid mea carmina possunt
+493	Perseus: Figite me, siqua est pietas, in me omnia tela
+	LASLA:   figite me si qua est pietas in me omnia tela
+512	Perseus: Saxa quoque infesto volvebant pondere, siqua
+	LASLA:   saxa quoque infesto uoluebant pondere si qua
+529	Perseus: et meministis enim, divae, et memorare potestis.
+	LASLA:   
+741	Perseus: Incipe, siqua animo virtus, et consere dextram:
+	LASLA:   incipe si qua animo uirtus et consere dextram
+
+Lemmas with no definition (add them to EXTRA):
+dindymus:adj
+hiberus:adj
+latonius:adj
+magnum:adv
+nereius:adj
+pallanteus:adj
+symaethius:adj
+thebanus:adj
+tiburs:adj
+uenerandus:adj
