@@ -1,0 +1,228 @@
+858	Perseus: et super incumbens cum puppis parte revolsa,
+	LASLA:   et superincumbens cum puppis parte reuolsa
+
+Lemmas with no definition (add them to EXTRA):
+acarnan:adj
+achaicus:adj
+aeolius:adj
+amazonius:adj
+ambo:det
+anchiseus:adj
+arcadius:adj
+argolicus:adj
+ausonius:adj
+bebrycius:adj
+bis:adv
+carpathius:adj
+dardanius:adj
+dardanus:adj
+erycinus:adj
+gaetulus:adj
+gnosius:adj
+hectoreus:adj
+idalius:adj
+imum:noun
+indeprehensus:adj
+ionius:adj
+laeua:adv
+libystis:adj
+lubricum:noun
+meliboeus:adj
+obliquo:verb
+ociter:adv
+pergameus:adj
+quicumque:det
+quisquam:pron
+quisque:det
+quisquis:det
+rhoeteus:adj
+sergius:adj
+sicanus:adj
+sidonius:adj
+tegeaeus:adj
+threicius:adj
+tmarius:adj
+totiens:adv
+trinacrius:adj
+tritonius:adj
+troius:adj
+
+Scansion: 7 unfinished half-lines (feet marked as far as they go): 294, 322, 574, 595, 653, 792, 815
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+29	naves ~ nāvīs
+45	divom ~ dīvum
+56	divom ~ dīvum
+62	naves ~ nāvīs
+62	Penates ~ penātīs
+82	fines ~ fīnīs
+96	bidentes ~ bidentīs
+169	sonantes ~ sonantīs
+191	vires ~ vīrīs
+217	celeres ~ celerīs
+247	naves ~ nāvīs
+253	veloces ~ vēlōcīs
+265	palantes ~ pālantīs
+270	revolsus ~ revulsus
+278	volnere ~ vulnere
+320	proxumus ~ proximus
+406	omnes ~ omnīs
+415	vires ~ vīrīs
+433	volnera ~ vulnera
+436	volnere ~ vulnere
+446	vires ~ vīrīs
+455	vires ~ vīrīs
+466	vires ~ vīrīs
+471	naves ~ nāvīs
+482	tales ~ tālīs
+492	omnes ~ omnīs
+503	volucres ~ volucrīs
+538	monumentum ~ monimentum
+540	omnes ~ omnīs
+552	patentes ~ patentīs
+554	euntes ~ euntīs
+572	monumentum ~ monimentum
+584	orbes ~ orbīs
+626	Septuma ~ septima
+627	omnes ~ omnīs
+634	amnes ~ amnīs
+635	puppes ~ puppīs
+637	ardentes ~ ārdentīs
+649	voltus ~ vultus
+663	puppes ~ puppīs
+665	naves ~ nāvīs
+667	equestres ~ equestrīs
+680	vires ~ vīrīs
+690	tenues ~ tenuīs
+701	ingentes ~ ingentīs
+720	omnes ~ omnīs
+723	tales ~ tālīs
+743	ignes ~ ignīs
+751	egentes ~ egentīs
+782	omnes ~ omnīs
+794	puppes ~ puppīs
+818	omnes ~ omnīs
+828	omnes ~ omnīs
+833	omnes ~ omnīs
+848	voltum ~ vultum
+858	revolsa ~ revulsā
+861	tenues ~ tenuīs
+865	difficiles ~ difficilīs
+
+Scansion: words that could not be matched:
+10	olli caeruleus supra caput adstitit imber,
+	no scansion for: adstitit
+29	quove magis fessas optem demittere naves,
+	no scansion for: demittere
+51	Hunc ego Gaetulis agerem si Syrtibus exsul,
+	no scansion for: exsul,
+73	hoc Elymus facit, hoc aevi maturus Acestes,
+	no scansion for: Elymus
+125	litora, quod tumidis submersum tunditur olim
+	no scansion for: submersum
+135	nudatosque umeros oleo perfilsa nitescit.
+	no scansion for: perfilsa
+136	Considunt transtris, intentaque brachia remis;
+	no scansion for: brachia
+162	Quo tantum mihi dexter abis? Huc dirige gressum;
+	no scansion for: dirige gressum;
+163	litus ama, et laevas stringat sine palmula cautes;
+	no scansion for: laevas
+181	Ilium et labentem Teucri et risere natantem,
+	no scansion for: Ilium
+187	parte prior, partem rostro premit aemula Pristis.
+	no scansion for: partem
+202	Namque furens animi dum proram ad saxa suburguet
+	no scansion for: suburguet
+215	fertur in ana volans, plausumque exterrita pennis
+	no scansion for: ana
+226	quem petit, et summis adnixus viribus urguet.
+	no scansion for: urguet.
+238	porriciam in fluctus et vina liquentia fundam.
+	no scansion for: porriciam
+306	Gnosia bina dabo levato lucida ferro
+	no scansion for: Gnosia
+350	me liceat casus misereri insontis amici.
+	no scansion for: misereri
+359	et clipeum efferri iussit, Didymaonis artem,
+	no scansion for: artem,
+364	adsit, et evinctis attollat brachia palmis.
+	no scansion for: brachia
+377	brachia protendens, et verberat ictibus auras.
+	no scansion for: brachia
+403	ferre manum, duroque intendere brachia tergo.
+	no scansion for: brachia
+427	brachiaque ad superas interritus extulit auras.
+	no scansion for: brachiaque
+442	arte locum, et variis adsultibus inritus urguet.
+	no scansion for: urguet.
+449	aut Ida in magna, radicibus eruta pinus.
+	no scansion for: radicibus
+478	qui donum adstabat pugnae, durosque reducta
+	no scansion for: adstabat
+486	invitat qui forte velint, et praemia ponit,
+	no scansion for: ponit,
+512	illa notos atque alta volans in nubila fugit.
+	no scansion for: alta
+514	tela tenens, fratrem Eurytion in Pota vocavit,
+	no scansion for: Pota
+522	Hic oculis subito obicitur magnoque futurum
+	no scansion for: subito
+544	extremus, volucri qui fixit arundine malum.
+	no scansion for: arundine
+573	Cetera Trinacrii pubes senioris Acestae
+	no scansion for: Trinacrii
+576	Dardanidae, veterumque adgnoscunt ora parentum.
+	no scansion for: adgnoscunt
+591	falleret indeprensus et inremeabilis error;
+	no scansion for: falleret
+595	Carpathium Libycumque secant, luduntque per undas.
+	no scansion for: luduntque per undas.
+604	Hic primum fortuna fidem mutata novavit.
+	no scansion for: Hic
+607	Iliacam ad classem, ventosque adspirat eunti,
+	no scansion for: adspirat
+615	pontum adspectabant flentes. Heu tot vada fessis
+	no scansion for: adspectabant
+626	Septuma post Troiae exscidium iam vertitur aestas,
+	no scansion for: exscidium
+648	ardentesque notate oculos; qui spiritus illi,
+	no scansion for: ardentesque
+652	munere, nec meritos Anchisae inferet honores.
+	no scansion for: inferet
+679	mutatae adgnoscunt, excussaque pectore Iuno est.
+	no scansion for: adgnoscunt,
+680	Sed non idcirco flammae atque incendia vires
+	no scansion for: flammae
+697	implenturque super puppes; semiusta madescunt
+	no scansion for: semiusta
+738	Iamque vale: torquet medios Nox humida cursus,
+	no scansion for: humida
+746	Extemplo socios primumque arcessit Acesten,
+	no scansion for: arcessit
+753	robora navigiis, aptant remosque rudentesque,
+	no scansion for: rudentesque,
+764	creber et adspirans rursus vocat Auster in altum.
+	no scansion for: adspirans
+776	proiicit in fluctus ac vina liquentia fundit.
+	no scansion for: proiicit
+777	Prosequitur surgens a puppi ventus euntes.
+	no scansion for: Prosequitur surgens a puppi ventus euntes.
+778	Certatim socii feriunt mare et aequora verrunt.
+	no scansion for: Certatim socii feriunt mare et aequora verrunt.
+780	adloquitur, talesque effundit pectore questus:
+	no scansion for: talesque
+781	Iunonis gravis ira nec exsaturabile pectus
+	no scansion for: nec
+825	laeva tenent Thetis, et Melite, Panopeaque virgo,
+	no scansion for: tenent
+829	attolli malos, intendi brachia velis.
+	no scansion for: brachia
+835	Iamque fere mediam caeli Nox humida metam
+	no scansion for: humida
+851	et caelo, totiens deceptus fraude sereni?
+	no scansion for: caelo,
+852	Talia dicta dabat, clavumque affixus et haerens
+	no scansion for: affixus
+862	Currit iter tutum non secius aequore classis,
+	no scansion for: secius

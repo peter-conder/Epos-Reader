@@ -1,0 +1,255 @@
+242	Perseus: unde locum Grai dixerunt nomine Aornon.
+	LASLA:   
+495	Perseus: Deiphobum videt et lacerum crudeliter ora,
+	LASLA:   Deiphobum uidit lacerum crudeliter ora
+505	Perseus: Tunc egomet tumulum Rhoeteo litore inanem
+	LASLA:   tunc egomet tumulum Rhoeteo in litore inanem
+517	Perseus: illa, chorum simulans, evantes orgia circum
+	LASLA:   illa chorum simulans euhantis orgia circum ducebat
+518	Perseus: ducebat Phrygias; flammam media ipsa tenebat
+	LASLA:   Phrygias flammam media ipsa tenebat
+719	Perseus: O pater, anne aliquas ad caelum hinc ire putandum est
+	LASLA:   o pater ne ne aliquas ad caelum hinc ire putandum est
+864	Perseus: Filius, anne aliquis magna de stirpe nepotum?
+	LASLA:   filius ne ne aliquis magna de stirpe nepotum
+
+Lemmas with no definition (add them to EXTRA):
+agamemnonius:adj
+albanus:adj
+ambo:det
+amphrysius:adj
+auernus:adj
+ausonius:adj
+berecyntius:adj
+bis:adv
+caspius:adj
+chalcidicus:adj
+cumaeus:adj
+dardanius:adj
+dardanus:adj
+elysius:adj
+euboicus:adj
+futurum:noun
+gnosius:adj
+graius:adj
+graue:adv
+horrendum:adv
+laeua:adv
+lycius:adj
+maeotius:adj
+marpesius:adj
+minoius:adj
+nocte:adv
+nouiens:adv
+obscurum:noun
+opacum:noun
+pergameus:adj
+phoenissus:adj
+quisquam:pron
+quisque:det
+quisquis:det
+rhoeteus:adj
+semel:adv
+subiectus:noun
+tanto:adv
+threicius:adj
+titanius:adj
+torua:adv
+totiens:adv
+troius:adj
+tyrrhenus:adj
+uelinus:adj
+
+Scansion: 2 unfinished half-lines (feet marked as far as they go): 94, 835
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+4	naves ~ nāvīs
+26	monumenta ~ monimenta
+39	bidentes ~ bidentīs.’
+47	voltus ~ vultūs
+56	graves ~ gravīs
+60	gentes ~ gentīs
+72	sortes ~ sortīs
+92	gentes ~ gentīs
+92	urbes ~ urbīs
+113	omnes ~ omnīs
+114	vires ~ vīrīs
+119	Manes ~ mānīs
+125	divom ~ dīvum
+156	voltu ~ vultū
+193	aves ~ avīs
+216	ferales ~ fērālīs
+221	vestes ~ vestīs
+255	lumina ~ līmina
+283	volgo ~ vulgō
+292	tenues ~ tenuīs
+318	volt ~ vult
+333	carentes ~ carentīs
+349	revolsum ~ revulsum
+368	divom ~ dīvum
+378	urbes ~ urbīs
+428	exsortes ~ exsortīs
+434	Proxuma ~ proxima
+446	volnera ~ vulnera
+450	volnere ~ vulnere
+470	voltum ~ vultum
+482	omnes ~ omnīs
+493	hiantes ~ hiantīs
+497	volnere ~ vulnere
+497	nares ~ nārīs
+501	crudeles ~ crūdēlīs
+506	Manes ~ mānīs
+512	monumenta ~ monimenta
+533	divom ~ dīvum
+534	tristes ~ trīstīs
+540	partes ~ partīs
+570	sontes ~ sontīs
+572	angues ~ anguīs
+585	crudeles ~ crūdēlīs
+589	divomque ~ dīvumque
+597	voltur ~ vultur
+651	inanes ~ inānīs
+660	volnera ~ vulnera
+663	artes ~ artīs
+666	Sybilla ~ Sibylla
+667	omnes ~ omnīs
+671	amnes ~ amnīs.’
+743	Manes ~ mānīs
+748	omnes ~ omnīs
+754	omnes ~ omnīs
+761	proxuma ~ proxima
+767	Proxumus ~ proximus
+771	vires ~ vīrīs
+787	omnes ~ omnīs
+787	omnes ~ omnīs
+787	tenentes ~ tenentīs
+799	divom ~ dīvum
+805	tigres ~ tigrīs
+809	crines ~ crīnīs
+819	secures ~ secūrīs
+820	moventes ~ moventīs
+833	vires ~ vīrīs
+845	Maxumus ~ Maximus
+848	voltus ~ vultūs
+856	omnes ~ omnīs
+862	voltu ~ vultū)
+897	ubi ~ ibi
+899	naves ~ nāvīs
+
+Scansion: words that could not be matched:
+11	antrum immane petit, magnum cui mentem animumque
+	no scansion for: magnum
+17	Chalcidicaque levis tandem super adstitit arce.
+	no scansion for: adstitit
+23	Contra elata mari respondet Gnosia tellus:
+	no scansion for: Gnosia
+39	praestiterit, totidem lectas de more bidentes.
+	no scansion for: de
+57	Dardana qui Paridis direxti tela manusque
+	no scansion for: direxti
+119	si potuit Manes arcessere coniugis Orpheus,
+	no scansion for: arcessere
+152	Sedibus hunc refer ante suis et conde sepulchro.
+	no scansion for: sepulchro.
+174	inter saxa virum spumosa inmerserat unda.
+	no scansion for: inmerserat
+177	haud mora, festinant flentes, aramque sepulchri
+	no scansion for: sepulchri
+186	aspectans silvam inmensam, et sic voce precatur:
+	no scansion for: inmensam, voce
+193	maternas agnoscit aves, laetusque precatur:
+	no scansion for: agnoscit
+195	dirigite in lucos, ubi pinguem dives opacat
+	no scansion for: dirigite
+203	sedibus optatis geminae super arbore sidunt,
+	no scansion for: geminae
+242	unde locum Grai dixerunt nomine Aornon.
+	no scansion for: Aornon.
+249	suscipiunt pateris. Ipse atri velleris agnam
+	no scansion for: suscipiunt
+252	Tum Stygio regi nocturnas inchoat aras,
+	no scansion for: inchoat
+254	pingue superque oleum infundens ardentibus extis.
+	no scansion for: superque infundens
+282	In medio ramos annosaque brachia pandit
+	no scansion for: brachia
+303	et ferruginea subvectat corpora cymba,
+	no scansion for: cymba,
+316	ast alios longe submotos arcet harena.
+	no scansion for: submotos
+335	quos, simul ab Troia ventosa per aequora vectos,
+	no scansion for: ab
+345	qui fore te ponto incolumem, finesque canebat
+	no scansion for: finesque
+377	Sed cape dicta memor, duri solatia casus.
+	no scansion for: solatia
+383	corde dolor tristi: gaudet cognomine terrae.
+	no scansion for: terrae.
+407	adgnoscas. Tumida ex ira tum corda residunt.
+	no scansion for: adgnoscas.
+413	ingentem Aenean. Gemuit sub pondere cymba
+	no scansion for: cymba
+433	conciliumque vocat vitasque et crimina discit.
+	no scansion for: conciliumque
+438	Fas obstat, tristisque palus inamabilis undae
+	no scansion for: tristisque
+439	alligat, et noviens Styx interfusa coërcet.
+	no scansion for: noviens
+445	His Phaedram Procrimque locis, maestamque Eriphylen
+	no scansion for: Procrimque
+452	ut primum iuxta stetit adgnovitque per umbras
+	no scansion for: adgnovitque
+475	Nec minus Aeneas, casu concussus iniquo,
+	no scansion for: concussus
+484	tris Antenoridas, Cererique sacrum Polyphoeten,
+	no scansion for: Polyphoeten,
+495	Deiphobum videt et lacerum crudeliter ora,
+	no scansion for: videt et
+498	Vix adeo adgnovit pavitantem et dira tegentem
+	no scansion for: adgnovit et
+517	illa, chorum simulans, evantes orgia circum
+	no scansion for: evantes
+524	amovet, et fidum capiti subduxerat ensem;
+	no scansion for: amovet,
+528	Quid moror? Inrumpunt thalamo; comes additur una
+	no scansion for: additur
+561	urguentur poenis? Quis tantus plangor ad auras?
+	no scansion for: urguentur
+566	Gnosius haec Rhadamanthus habet, durissima regna,
+	no scansion for: Gnosius
+630	adceleremus ait; Cyclopum educta caminis
+	no scansion for: adceleremus
+658	inter odoratum lauri nemus, unde superne
+	no scansion for: lauri
+664	quique sui memores alios fecere merendo,
+	no scansion for: alios
+671	venimus, et magnos Erebi transnavimus amnes.
+	no scansion for: transnavimus
+684	Isque ubi tendentem adversum per gramina videt
+	no scansion for: videt
+700	Ter conatus ibi collo dare brachia circum,
+	no scansion for: brachia
+704	seclusum nemus et virgulta sonantia silvis,
+	no scansion for: silvis,
+707	ac—velut in pratis ubi apes aestate serena
+	no scansion for: velut
+754	et tumulum capit, unde omnes longo ordine possit
+	no scansion for: possit
+806	Et dubitamus adhuc virtute extendere vires,
+	no scansion for: virtute vires,
+810	regis Romani, primus qui legibus urbem
+	no scansion for: primus
+818	ultoris Bruti, fascesque videre receptos?
+	no scansion for: fascesque
+827	concordes animae nunc et dum nocte premuntur,
+	no scansion for: premuntur,
+852	hae tibi erunt artes; pacisque imponere morem,
+	no scansion for: pacisque
+865	Quis strepitus circa comitum! Quantum instar in ipso!
+	no scansion for: Quis
+885	his saltem adcumulem donis, et fungar inani
+	no scansion for: adcumulem
+890	exin bella viro memorat quae deinde gerenda,
+	no scansion for: exin
+900	tum se ad Caietae recto fert litore portum.
+	no scansion for: litore

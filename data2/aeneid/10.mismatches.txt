@@ -1,0 +1,258 @@
+62	Perseus: da, pater, Iliacos Teucris.
+	LASLA:   da pater Iliacos Teucris tum regia Iuno
+105	Perseus: Quandoquidem Ausonios coniungi foedere Teucris
+	LASLA:   quidem quidem Ausonios coniungi foedere Teucris
+182	Perseus: Tercentum adiciunt (mens omnibus una sequendi)
+	LASLA:   ter centum adiciunt mens omnibus una sequendi
+228	Perseus: tum sic ignarum adloquitur: Vigilasne, deum gens,
+	LASLA:   tum sic ignarum adloquitur uigilas ne deum gens
+272	Perseus: non secus ac liquida siquando nocte cometae
+	LASLA:   non secus ac liquida si quando nocte Cometae
+278	Perseus: ultro animos tollit dictis atque increpat ultro
+	LASLA:   
+458	Perseus: ire prior Pallas, siqua fors adiuvet ausum
+	LASLA:   ire prior Pallas si qua fors adiuuet ausum
+710	Perseus: pastus harundinea, postquam inter retia ventum est,
+	LASLA:   pastus harundinea postquam inter retia uentumst
+777	Perseus: iecit; at illa volans clipeo est excussa proculque
+	LASLA:   iecit at illa uolans clipeost excussa proculque
+792	Perseus: siqua fidem tanto est operi latura vetustas,
+	LASLA:   si qua fidem tantost operi latura uetustas
+803	Perseus: Ac velut effusa siquando grandine nimbi
+	LASLA:   ac uelut effusa si quando grandine nimbi
+828	Perseus: manibus et cineri, siqua est ea cura, remitto.
+	LASLA:   Manibus et cineri si qua est ea cura remitto
+861	Perseus: Rhaebe, diu, res siqua diu mortalibus ulla est,
+	LASLA:   Rhaebe diu res si qua diu mortalibus ulla est
+872	Perseus: et furiis agitatus amor et conscia virtus.
+	LASLA:   
+903	Perseus: Unum hoc per siqua est victis venia hostibus oro:
+	LASLA:   unum hoc per si qua est uictis uenia hostibus oro
+
+Lemmas with no definition (add them to EXTRA):
+aetolus:adj
+alpheus:adj
+ambo:det
+arcadius:adj
+argolicus:adj
+auruncus:adj
+ausonius:adj
+caeres:adj
+dardanius:adj
+daucius:adj
+erycinus:adj
+etruscus:adj
+euandrius:adj
+exorsa:noun
+graius:adj
+hicetaonius:adj
+idaeus:adj
+immane:adv
+laetus:noun
+lycius:adj
+lydius:adj
+lyrnesius:adj
+maeonius:adj
+mage:adv
+memorandus:adj
+multa:adv
+neptunius:adj
+ociter:adv
+oricius:adj
+quicumque:det
+quisquam:pron
+quisque:det
+quisquis:det
+rutulus:adj
+satus:noun
+semel:adv
+strymonius:adj
+threicius:adj
+totiens:adv
+troius:adj
+tyrius:adj
+tyrrhenus:adj
+uetitum:noun
+uiuens:noun
+uulcanius:adj
+
+Scansion: 6 unfinished half-lines (feet marked as far as they go): 17, 284, 490, 580, 728, 876
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+2	divom ~ dīvum
+13	Alpes ~ Alpīs
+29	volnera ~ vulnera
+36	classes ~ classīs
+56	ignes ~ ignīs
+64	volgare ~ vulgāre
+65	divomque ~ dīvumque
+140	volnera ~ vulnera
+155	divom ~ dīvum
+175	divomque ~ dīvumque
+253	urbis ~ urbēs
+268	puppes ~ puppīs
+271	ignes ~ ignīs
+350	Tres ~ trīs
+486	volnere ~ vulnere
+488	volnus ~ vulnus
+560	volnera ~ vulnera
+568	enses ~ ēnsīs
+660	avolsamque ~ āvulsamque
+733	volnus ~ vulnus
+743	divom ~ dīvum
+781	volnere ~ vulnere
+821	voltum ~ vultum
+834	volnera ~ vulnera
+842	volnere ~ vulnere
+848	volnera ~ vulnera
+850	volnus ~ vulnus
+857	volnere ~ vulnere
+880	divom ~ dīvum
+885	orbes ~ orbīs
+892	quadrupes ~ quadripēs
+
+Scansion: words that could not be matched:
+4	castraque Dardanidum adspectat populosque Latinos.
+	no scansion for: adspectat
+20	Cernis ut insultent Rutulli Turnusque feratur
+	no scansion for: Rutulli
+24	aggeribus moerorum et inundant sanguine fossas.
+	no scansion for: moerorum fossas.
+36	Quid repetem exustas Erycino in litore classes,
+	no scansion for: repetem
+46	exscidia obtestor, liceat dimittere ab armis
+	no scansion for: exscidia
+49	et, quamcumque viam dederit Fortuna, sequatur:
+	no scansion for: quamcumque
+68	Cassandrae inpulsus furiis: num linquere castra
+	no scansion for: inpulsus
+83	tu potes in totidem classem convertere nymphas:
+	no scansion for: tu
+140	volnera dirigere et calamos armare veneno,
+	no scansion for: dirigere
+144	aggere moerorum sublimem gloria tollit,
+	no scansion for: moerorum
+180	urbs Etrusca solo. Sequitur pulcherrimus Astur,
+	no scansion for: Astur,
+181	Astur equo fidens et versicoloribus armis.
+	no scansion for: Astur
+182	Tercentum adiciunt (mens omnibus una sequendi)
+	no scansion for: Tercentum
+186	transierim, Cinyre, et paucis comitate Cupavo,
+	no scansion for: Cinyre,
+214	subsidio Troiae et campos salis aera secabant.
+	no scansion for: aera
+240	ne castris iungant, certast sententia Turno.
+	no scansion for: certast
+251	Tum breviter super adspectans convexa precatur:
+	no scansion for: super adspectans
+256	Tantum effatus. Et interea revoluta rubebat
+	no scansion for: rubebat
+272	non secus ac liquida siquando nocte cometae
+	no scansion for: siquando
+291	qua vada non sperat nec fracta remurmurat unda,
+	no scansion for: sperat
+307	impediunt, retrahitque pedem simul unda relabens.
+	no scansion for: pedem
+371	Opemque meam, patriae quae nunc subit aemula laudi,
+	no scansion for: Opemque
+378	deest iam terra fugae: pelagus Troiamne petemus?
+	no scansion for: petemus?
+390	Vos etiam, gemini, Rutulis cecidistis in agris,
+	no scansion for: agris,
+401	Ilo namque procul validam direxerat hastam,
+	no scansion for: direxerat
+412	tendit in adversos seque in sua conligit arma.
+	no scansion for: conligit
+458	ire prior Pallas, siqua fors adiuvet ausum
+	no scansion for: siqua
+470	tot nati cecidere deum; quin occidit una
+	no scansion for: nati
+481	Adspice, num mage sit nostrum penetrabile telum.
+	no scansion for: Adspice,
+522	Ille astu subit ac tremibunda supervolat hasta,
+	no scansion for: ac
+525	te precor, hanc animam serves natoque patrique.
+	no scansion for: natoque
+532	natis parce tuis. Belli commercia Turnus
+	no scansion for: natis
+539	totus conlucens veste atque insignibus armis.
+	no scansion for: armis.
+550	Tarquitus exultans contra fulgentibus armis,
+	no scansion for: exultans
+558	condet humi patrioque onerabit membra sepulchro:
+	no scansion for: sepulchro:
+581	Non Diomedis equos nec currum cernis Achillis
+	no scansion for: Achillis
+585	dicta parat contra: iaculum nam torquet in hostem.
+	no scansion for: hostem.
+588	aptet se pugnae, subit oras hasta per imas
+	no scansion for: aptet
+661	Illum autem Aeneas absentem in praelia poscit;
+	no scansion for: Illum autem Aeneas absentem in praelia poscit;
+662	obvia multa virum demittit corpora morti:
+	no scansion for: obvia multa virum demittit corpora morti:
+663	tum levis haud ultra latebras iam quaerit imago,
+	no scansion for: tum levis haud ultra latebras iam quaerit imago,
+664	sed sublime volans nubi se immiscuit atrae.
+	no scansion for: sed sublime volans nubi se immiscuit atrae.
+679	quo neque me Rutuli nec conscia fama sequatur.
+	no scansion for: neque
+704	in lucem genitori Amyco dedit et face praegnans
+	no scansion for: genitori praegnans
+705	Cisseis regina Parin creat: urbe paterna
+	no scansion for: creat:
+709	defendit multosve palus Laurentia, silva
+	no scansion for: multosve
+710	pastus harundinea, postquam inter retia ventum est,
+	no scansion for: pastus
+712	nec cuiquam irasci propiusque accedere virtus,
+	no scansion for: propiusque
+717	ille autem impavidus partis cunctatur in omnis,
+	no scansion for: ille autem impavidus partis cunctatur in omnis,
+718	dentibus infrendens, et tergo decutit hastas.
+	no scansion for: dentibus infrendens, tergo decutit hastas.
+714	haud aliter, iustae quibus est Mezentius irae,
+	no scansion for: haud aliter, iustae quibus est Mezentius irae,
+715	non ulli est animus stricto concurrere ferro;
+	no scansion for: non ulli est animus stricto concurrere ferro;
+716	missilibus longe et vasto clamore lacessunt:
+	no scansion for: missilibus longe et vasto clamore lacessunt:
+727	visceribus super accumbens, lavit inproba taeter
+	no scansion for: accumbens, inproba
+731	tundit humum expirans infractaque tela cruentat.
+	no scansion for: expirans
+742	Ad quae subridens mixta Mezentius ira:
+	no scansion for: quae
+749	Messapus Croniumque Lycaoniumque Erichaeten,
+	no scansion for: Croniumque
+754	insidiis, iaculo et longe fallente sagitta.
+	no scansion for: insidiis,
+785	transit intextum tauris opus imaque sedit
+	no scansion for: transit
+792	siqua fidem tanto est operi latura vetustas,
+	no scansion for: siqua
+796	prorupit iuvenis seseque immiscuit armis
+	no scansion for: prorupit
+801	telaque coniciunt proturbantque eminus hostem
+	no scansion for: proturbantque
+803	Ac velut effusa siquando grandine nimbi
+	no scansion for: siquando
+828	manibus et cineri, siqua est ea cura, remitto.
+	no scansion for: siqua
+835	arboris adclinis trunco. Procul aerea ramis
+	no scansion for: adclinis
+838	colla fovet, fusus propexam in pectore barbam;
+	no scansion for: pectore
+857	se femur et, quamvis dolor alto volnere tardet,
+	no scansion for: quamvis dolor tardet,
+861	Rhaebe, diu, res siqua diu mortalibus ulla est,
+	no scansion for: siqua
+885	Ter circum adstantem laevos equitavit in orbes
+	no scansion for: adstantem
+903	Unum hoc per siqua est victis venia hostibus oro:
+	no scansion for: siqua
+906	et me consortem nati concede sepulchro.
+	no scansion for: sepulchro.
+908	undantique animam diffundit in arva cruore.
+	no scansion for: arva

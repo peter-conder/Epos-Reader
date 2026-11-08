@@ -34,7 +34,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     picker: $('picker'), pickerTitle: $('picker-title'), workList: $('work-list'),
     bookPicker: $('book-picker'), booksGrid: $('books-grid'), backBtn: $('btn-back'),
     hoverCard: $('hover-card'), hoverCite: $('hover-cite'), hoverDesc: $('hover-desc'), hoverSwitch: $('btn-hover-switch'),
-    wordCard: $('word-card'), cardLemma: $('card-lemma'), cardMorph: $('card-morph'), cardDef: $('card-def'),
+    wordCard: $('word-card'), cardLemma: $('card-lemma'), cardMorph: $('card-morph'), cardScan: $('card-scan'), cardDef: $('card-def'),
     cardNote: $('card-note'), cardUserNote: $('card-user-note'), cardUserNoteText: $('card-user-note-text'),
     noteBox: $('note-box'), noteTitle: $('note-title'), noteInput: $('note-input'),
     toast: $('toast')
@@ -45,12 +45,13 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   /* ==========================================================
      WORD DATA: one JSON file per book, plus a shared dictionary
      ========================================================== */
+  const DATA_ROOT = 'data2';   // folder the book and dictionary files are read from
   const bookCache = new Map();
   let lexiconPromise = null;
   let LEX = {};
 
   function loadLexicon() {
-    lexiconPromise ??= fetch('data/lexicon/latin.json')
+    lexiconPromise ??= fetch(`${DATA_ROOT}/lexicon/latin.json`)
       .then((r) => r.json()).then((lex) => { LEX = lex; }).catch(() => {});
     return lexiconPromise;
   }
@@ -62,7 +63,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     if (!bookCache.has(key)) {
       const num = String(ROMANS.indexOf(book) + 1).padStart(2, '0');
       bookCache.set(key, Promise.all([
-        fetch(`data/${work}/${num}.json`).then((r) => (r.ok ? r.json() : null)),
+        fetch(`${DATA_ROOT}/${work}/${num}.json`).then((r) => (r.ok ? r.json() : null)),
         loadLexicon()
       ]).then(([data]) => {
         if (data) data.byLine = new Map(data.lines.map((l) => [l.n, l]));
@@ -631,12 +632,12 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       tab.bookData = data;
       const work = WORKS[tab.work];
       const lines = data
-        ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => w.f) }))
-        : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/) }));
+        ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }))
+        : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/).map((f) => ({ f })) }));
 
       ui.passage.innerHTML = lines.map(({ n, words }) => {
         const html = words.map((w, j) =>
-          `<span class="word" data-i="${j}">${esc(w)}</span>`
+          `<span class="word" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
         ).join('');
         return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
       }).join('');
@@ -646,6 +647,33 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       scheduleFit(tab);
     });
     return ui.ready;
+  }
+
+  /* Scansion: each syllable is [text, quantity, flags?]. Quantity is L long, S short, E elided.
+     Flags: f foot starts here, c caesura after, h hiatus, z synizesis, r consonantal i,
+     d lengthened syllable, m hypermetric (elided into the next line). */
+  const SCAN_NOTES = { h: 'hiatus', z: 'synizesis', r: 'consonantal i', d: 'lengthened syllable', m: 'hypermetric' };
+
+  /* A word's text, split into syllable spans when it has scansion (the spans add no width,
+     so the marks can be shown or hidden without refitting the text) */
+  function wordHtml(w) {
+    const s = w.s;
+    if (!s?.length || s.map((x) => x[0]).join('') !== w.f) return esc(w.f);
+    return s.map(([text, q, x = '']) => {
+      const notes = [...x].map((c) => SCAN_NOTES[c]).filter(Boolean).join(', ');
+      return `<span class="syl" data-q="${q}"${x ? ` data-x="${x}"` : ''}${notes ? ` title="${notes}"` : ''}>${esc(text)}</span>`;
+    }).join('');
+  }
+
+  /* A word's scansion for the word card, e.g. "vi · rum · que   ⏑ – ⏑" (elided syllables in brackets) */
+  function scanText(s) {
+    if (!s?.length) return '';
+    const sylls = s.map(([t, q]) => {
+      const bare = t.replace(/[.,;:!?·᾽—–]/g, '');
+      return q === 'E' ? `(${bare})` : bare;
+    }).join(' · ');
+    const marks = s.filter(([, q]) => q !== 'E').map(([, q]) => (q === 'L' ? '–' : '⏑')).join(' ');
+    return marks ? `${sylls}   ${marks}` : sylls;
   }
 
   function setBookTitles(tab) {
@@ -1210,7 +1238,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     word.classList.add('selected');
 
     const tab = getTab(word.closest('.tab-view').dataset.tabId);
-    const clean = word.firstChild.textContent.replace(/[.,;:!?·᾽—–]/g, '').trim();
+    const clean = word.textContent.replace(/[.,;:!?·᾽—–]/g, '').trim();
     wordCtx = {
       work: tab.work, book: tab.book,
       line: +word.closest('.verse').dataset.line, wordIdx: +word.dataset.i, word: clean
@@ -1224,6 +1252,9 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     el.cardLemma.textContent = info.lemma;
     el.cardMorph.textContent = info.morph;
     el.cardDef.textContent = info.def;
+    const scan = scanText(tab.bookData?.byLine.get(wordCtx.line)?.w[wordCtx.wordIdx]?.s);
+    el.cardScan.hidden = !scan;
+    el.cardScan.textContent = scan;
 
     syncCardNote();
     positionWordCard(word);
@@ -1329,9 +1360,9 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   };
   // Artwork for each card. `pos` is the part of the painting kept in view when a narrow card crops it.
   const HOME_ART = {
-    aeneid:  { src: 'images/aeneas.jpg',            pos: '45% 50%' },   // Aeneas carrying Anchises
-    odyssey: { src: 'images/ulyssespolyphemus.jpg', pos: '38% 50%' },   // Ulysses' ship
-    iliad:   { src: 'images/priamachilles.jpeg',    pos: '62% 50%' }    // Priam kneeling before Achilles
+    aeneid:  { src: 'assets/images/aeneas.jpg',            pos: '45% 50%' },   // Aeneas carrying Anchises
+    odyssey: { src: 'assets/images/ulyssespolyphemus.jpg', pos: '38% 50%' },   // Ulysses' ship
+    iliad:   { src: 'assets/images/priamachilles.jpeg',    pos: '62% 50%' }    // Priam kneeling before Achilles
   };
 
   const CAROUSEL_HTML = HOME_WORKS.map((key, i) => `

@@ -1,0 +1,225 @@
+4	Perseus: Hesperia in magna, siqua est ea gloria, signat.
+	LASLA:   Hesperia in magna si qua est ea gloria signat
+45	Perseus: maius opus moveo.Rex arva Latinus et urbes
+	LASLA:   maius opus moueo rex arua Latinus et urbis
+116	Perseus: Heus ! etiam mensas consumimus, inquit Iulus,
+	LASLA:   heus etiam mensas consumimus inquit Iulus
+197	Perseus: quid petitis ? Quae causa rates aut cuius egentis
+	LASLA:   quid petitis quae causa rates aut cuius egentis
+225	Perseus: audiit et siquem tellus extrema refuso
+	LASLA:   audiit et si quem tellus extrema refuso
+226	Perseus: summovet oceano et siquem extenta plagarum
+	LASLA:   summouet Oceano et si quem extenta plagarum
+263	Perseus: Ipse modo Aeneas, nostri si tanta cupido est,
+	LASLA:   ipse modo Aeneas nostri si tanta cupidost
+266	Perseus: illi pacis erit dextram tetigisse tyranni.
+	LASLA:   pars mihi pacis erit dextram tetigisse tyranni
+273	Perseus: et reor et, siquid veri mens augurat, opto.
+	LASLA:   et reor et si quid ueri mens augurat opto
+294	Perseus: fata Phrygum ! Num Sigeis occumbere campis,
+	LASLA:   fata Phrygum num Sigeis occumbere campis
+296	Perseus: Troia viros ? Medias acies mediosque per ignis
+	LASLA:   Troia uiros medias acies mediosque per ignis
+300	Perseus: ausa sequi et profugis toto me opponere ponto !
+	LASLA:   ausa sequi et profugis toto me opponere ponto
+360	Perseus: O genitor, nec te miseret gnataeque tuique ?
+	LASLA:   o genitor nec te miseret gnataeque tuique
+364	Perseus: Ledaeamque Helenam Troianas vexit ad urbes ?
+	LASLA:   Ledaeamque Helenam Troianas uexit ad urbis
+401	Perseus: Siqua piis animis manet infelicis Amatae
+	LASLA:   si qua piis animis manet infelicis Amatae
+552	Perseus: Tum contra Iuno; Terrorum et fraudis abunde est;
+	LASLA:   tum contra Iuno terrorum et fraudis abundest
+559	Perseus: cede locis; ego, siqua super fortuna laborum est,
+	LASLA:   cede locis ego si qua super fortuna laborum est
+
+Lemmas with no definition (add them to EXTRA):
+acrisioneus:adj
+aequiculus:adj
+aetnaeus:adj
+agamemnonius:adj
+agyllinus:adj
+albanus:adj
+ambo:det
+amiternus:adj
+anxurus:adj
+arabus:adj
+argiuus:adj
+auernus:adj
+auruncus:adj
+ausonius:adj
+capenus:adj
+cocytius:adj
+dardanius:adj
+dardanus:adj
+fescenninus:adj
+flauinius:adj
+gabinus:adj
+gorgoneus:adj
+herculeus:adj
+herilis:adj
+hernicus:adj
+hyrcanus:adj
+iberus:adj
+idaeus:adj
+immane:adv
+imum:noun
+inachius:adj
+iniquus:noun
+internecto:verb
+laomedontius:adj
+ledaeus:adj
+lycius:adj
+marruuius:adj
+multa:adv
+neptunius:adj
+oenotrius:adj
+ornatus:noun
+ortinus:adj
+phryx:adj
+priameius:adj
+quirinalis:adj
+quisquam:pron
+quisque:det
+raster:noun
+rutulus:adj
+sabellus:adj
+sidicinus:adj
+sigeus:adj
+sulfureus:adj
+teutonicus:adj
+threicius:adj
+tiburtius:adj
+tirynthius:adj
+totiens:adv
+troius:adj
+tyrrhenus:adj
+
+Scansion: 6 unfinished half-lines (feet marked as far as they go): 129, 248, 439, 455, 702, 760
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+20	voltus ~ vultūs
+50	divom ~ dīvum
+173	fasces ~ fascīs
+182	volnera ~ vulnera
+192	divom ~ dīvum
+265	voltus ~ vultūs
+347	intuma ~ intima
+349	vestes ~ vestīs
+384	feroces ~ ferōcīs
+443	divom ~ dīvum
+500	quadrupes ~ quadripēs
+533	volnus ~ vulnus
+622	postes ~ postīs
+627	secures ~ secūrīs
+636	enses ~ ēnsīs
+648	divom ~ dīvum
+658	angues ~ anguīs
+666	tegumen ~ tegimen
+757	volnera ~ vulnera
+776	aevom ~ aevum
+798	colles ~ collīs
+
+Scansion: words that could not be matched:
+4	Hesperia in magna, siqua est ea gloria, signat.
+	no scansion for: siqua
+8	Adspirant aurae in noctem nec candida cursus
+	no scansion for: Adspirant
+17	saetigerique sues atque in praesaepibus ursi
+	no scansion for: praesaepibus
+31	verticibus rapidis et multa flavus arena
+	no scansion for: arena
+45	maius opus moveo.Rex arva Latinus et urbes
+	no scansion for: moveo.Rex
+66	obsedere apicem, ex pedibus per mutua nexis
+	no scansion for: ex
+72	et iuxta genitorem adstat Lavinia virgo,
+	no scansion for: adstat
+116	Heus ! etiam mensas consumimus, inquit Iulus,
+	no scansion for: !
+129	exiliis positura modum.
+	no scansion for: exiliis
+197	quid petitis ? Quae causa rates aut cuius egentis
+	no scansion for: ?
+207	Dardanus Idaeas Phrygiae penetravit ad urbes
+	no scansion for: penetravit
+214	atra subegit hiemps vestris succedere terris
+	no scansion for: hiemps
+225	audiit et siquem tellus extrema refuso
+	no scansion for: siquem
+226	summovet oceano et siquem extenta plagarum
+	no scansion for: siquem
+241	huc repetit iussisque ingentibus urguet Apollo
+	no scansion for: urguet
+266	illi pacis erit dextram tetigisse tyranni.
+	no scansion for: illi
+273	et reor et, siquid veri mens augurat, opto.
+	no scansion for: siquid
+275	(stabant ter centum nitidi in praesaepibus altis):
+	no scansion for: praesaepibus
+294	fata Phrygum ! Num Sigeis occumbere campis,
+	no scansion for: !
+296	Troia viros ? Medias acies mediosque per ignis
+	no scansion for: ?
+300	ausa sequi et profugis toto me opponere ponto !
+	no scansion for: !
+307	quod scelus aut Lapithis tantum aut Calydona merentem?
+	no scansion for: Lapithis
+320	Cisseis praegnans ignis enixa iugalis
+	no scansion for: praegnans
+340	arma velit poscatque simul rapiatque inventus.
+	no scansion for: inventus.
+341	Exin Gorgoneis Allecto infecta venenis
+	no scansion for: Exin
+358	multa super nata lacrimans Phrygiisque hymenaeis:
+	no scansion for: nata
+359	Exsulibusne datur ducenda Lavinia Teucris,
+	no scansion for: Exsulibusne
+360	O genitor, nec te miseret gnataeque tuique ?
+	no scansion for: gnataeque ?
+363	An non sic Phrygius penetrat Lacedaemona pastor
+	no scansion for: An
+364	Ledaeamque Helenam Troianas vexit ad urbes ?
+	no scansion for: ?
+382	inpubesque manus, mirata volubile buxum;
+	no scansion for: inpubesque
+401	Siqua piis animis manet infelicis Amatae
+	no scansion for: Siqua
+439	inmemor est nostri.
+	no scansion for: inmemor
+497	Ascanius curvo direxit spicula cornu;
+	no scansion for: direxit
+506	inprovisi adsunt, hic torre armatus obusto,
+	no scansion for: inprovisi
+517	sulfurea Nar albus aqua fontesque Velini,
+	no scansion for: sulfurea
+523	Direxere acies. Non iam certamine agresti,
+	no scansion for: Direxere
+543	deserit Hesperiam et caeli convexa per auras
+	no scansion for: convexa
+547	Quando quidem Ausonio respersi sanguine Teucros,
+	no scansion for: Quando quidem
+551	undique ut auxilio veniunt; spargam arma per agros.
+	no scansion for: veniunt;
+559	cede locis; ego, siqua super fortuna laborum est,
+	no scansion for: siqua
+565	Amsancti valles: densis hunc frondibus atrum
+	no scansion for: Amsancti
+566	urguet utrimque latus nemoris, medioque fragosus
+	no scansion for: urguet
+586	Ille velut pelagi rupes immota resistit,
+	no scansion for: pelagi
+638	Hic galeam tectis trepidus rapit, ille frementis
+	no scansion for: frementis
+662	Geryone extincto Tirynthius attigit arva
+	no scansion for: extincto
+684	Hernica saxa colunt, quos dives Anagnia pascit,
+	no scansion for: pascit,
+703	Nec quisquam aeratas acies ex agmine tanto
+	no scansion for: ex agmine
+705	urgueri volucrum raucarum ad litora nubem.
+	no scansion for: urgueri
+716	Nursia, et Hortinae classes populique Latini,
+	no scansion for: Hortinae
+811	ferret iter celeris nec tingueret aequore plantas.
+	no scansion for: tingueret

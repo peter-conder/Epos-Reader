@@ -1,0 +1,162 @@
+12	Perseus: quamquam animus meminisse horret, luctuque refugit,
+	LASLA:   quamquam animus meminisse horret luctuque refugit incipiam
+76	Perseus: Ille haec, deposita tandem formidine, fatur:
+	LASLA:   
+218	Perseus: bis medium amplexi, bis collo squamea circum
+	LASLA:   bis medium amplexi bis collo squamea
+219	Perseus: terga dati, superant capite et cervicibus altis.
+	LASLA:   circum terga dati superant capite et ceruicibus altis
+572	Perseus: et poenas Danaum et deserti coniugis iras
+	LASLA:   et Danaum poenam et deserti coniugis iras
+583	Perseus: Non ita: namque etsi nullum memorabile nomen
+	LASLA:   non ita namque si si nullum memorabile nomen
+584	Perseus: feminea in poena est, nec habet victoria laudem,
+	LASLA:   feminea in poena est habet haec uictoria laudem
+775	Perseus: Tum sic adfari et curas his demere dictis :
+	LASLA:   tum sic adfari et curas his demere dictis
+778	Perseus: eveniunt; nec te hinc comitem asportare Creüsam
+	LASLA:   eueniunt nec te comitem hinc portare Creusam
+
+Lemmas with no definition (add them to EXTRA):
+achaicus:adj
+ambo:det
+argiuus:adj
+argolicus:adj
+bis:adv
+dardanides:adj
+dardanis:adj
+dardanius:adj
+dardanus:adj
+diuersum:noun
+graius:adj
+hectoreus:adj
+idaeus:adj
+imum:noun
+larisaeus:adj
+lydius:adj
+neptunius:adj
+opacum:noun
+pelasgus:adj
+pelopeus:adj
+priameius:adj
+quicumque:det
+quisquam:pron
+quisque:det
+quisquis:det
+sata:noun
+scyrius:adj
+sigeus:adj
+supremum:adv
+totiens:adv
+tritonius:adj
+troius:adj
+
+Scansion: 10 unfinished half-lines (feet marked as far as they go): 66, 233, 346, 468, 614, 623, 640, 720, 767, 787
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+39	volgus ~ vulgus
+66	omnes ~ omnīs
+99	volgum ~ vulgum
+119	Volgi ~ vulgī
+123	divom ~ dīvum
+223	quales ~ quālis
+241	divom ~ dīvum
+269	divom ~ dīvum
+278	volneraque ~ vulneraque
+286	voltus ~ vultūs
+286	volnera ~ vulnera
+311	proxumus ~ proximus
+318	Achivom ~ Achīvum
+336	divom ~ dīvum
+436	volnere ~ vulnere
+507	convolsaque ~ convulsaque
+517	divom ~ dīvum
+529	volnere ~ vulnere
+539	voltus ~ vultūs
+558	avolsumque ~ āvulsumque
+561	volnere ~ vulnere
+579	patres ~ patris
+598	omnes ~ omnīs
+602	divom ~ dīvum
+602	divom ~ dīvum
+608	avolsaque ~ āvulsaque
+630	volneribus ~ vulneribus
+631	avolsa ~ āvulsa
+648	divom ~ dīvum
+777	divom ~ dīvum
+798	volgus ~ vulgus
+804	montes ~ montīs
+
+Scansion: words that could not be matched:
+13	incipiam.Fracti bello fatisque repulsi
+	no scansion for: incipiam.Fracti
+49	Quicquid id est, timeo Danaos et dona ferentis.
+	no scansion for: Quicquid
+56	Troiaque, nunc stares, Priamique arx alta, maneres.
+	no scansion for: stares,
+89	consiliis, et nos aliquod nomenque decusque
+	no scansion for: consiliis,
+111	interclusit hiemps, et terruit Auster euntis.
+	no scansion for: hiemps,
+187	ne recipi portis, aut duci in moenia possit,
+	no scansion for: possit,
+244	instamus tamen inmemores caecique furore,
+	no scansion for: inmemores
+303	ascensu supero, atque arrectis auribus adsto:
+	no scansion for: adsto:
+317	praecipitant, pulchrumque mori succurrit in armis.
+	no scansion for: praecipitant,
+328	Arduus armatos mediis in moenibus adstans
+	no scansion for: adstans
+333	oppositi; stat ferri acies mucrone corusco
+	no scansion for: oppositi;
+379	inprovisum aspris veluti qui sentibus anguem
+	no scansion for: inprovisum
+385	sternimus: adspirat primo fortuna labori.
+	no scansion for: adspirat
+388	monstrat iter, quoque ostendit se dextra, sequamur
+	no scansion for: quoque
+423	adgnoscunt, atque ora sono discordia signant.
+	no scansion for: adgnoscunt,
+462	et Danaum solitae naves et Achaia castra,
+	no scansion for: Achaia
+483	Adparet domus intus, et atria longa patescunt;
+	no scansion for: Adparet
+484	adparent Priami et veterum penetralia regum,
+	no scansion for: adparent
+491	Instat vi patria Pyrrhus; nec claustra, neque ipsi
+	no scansion for: neque
+542	supplicis erubuit, corpusque exsangue sepulchro
+	no scansion for: sepulchro
+546	e summo clipei nequiquam umbone pependit.
+	no scansion for: e
+569	Tyndarida aspicio: dant clara incendia lucem
+	no scansion for: clara
+572	et poenas Danaum et deserti coniugis iras
+	no scansion for: poenas
+584	feminea in poena est, nec habet victoria laudem,
+	no scansion for: nec
+585	extinxisse nefas tamen et sumpsisse merentis
+	no scansion for: extinxisse
+617	Ipse pater Danais animos viresque secundas
+	no scansion for: viresque
+622	Adparent dirae facies inimicaque Troiae
+	no scansion for: Adparent
+643	vidimus exscidia et captae superavimus urbi.
+	no scansion for: exscidia
+653	cuncta pater fatoque urguenti incumbere vellet.
+	no scansion for: urguenti
+698	dat lucem, et late circum loca sulphure fumant.
+	no scansion for: sulphure
+727	tela neque adverso glomerati ex agmine Grai,
+	no scansion for: ex agmine
+739	substitit, erravitne via, seu lassa resedit,
+	no scansion for: lassa
+741	Nec prius amissam respexi animumque reflexi,
+	no scansion for: animumque
+775	Tum sic adfari et curas his demere dictis :
+	no scansion for: :
+778	eveniunt; nec te hinc comitem asportare Creüsam
+	no scansion for: asportare
+786	aspiciam, aut Graiis servitum matribus ibo,
+	no scansion for: Graiis

@@ -1,0 +1,136 @@
+257	Perseus: litus harenosum Libyae ventosque secabat
+	LASLA:   litus harenosum ad Libyae uentosque secabat
+273	Perseus: nec super ipse tua moliris laude laborem,
+	LASLA:   
+497	Perseus: quo perii, superimponas: abolere nefandi
+	LASLA:   quo perii super imponant abolere nefandi
+528	Perseus: lenibant curas, et corda oblita laborum.
+	LASLA:   
+
+Lemmas with no definition (add them to EXTRA):
+agamemnonius:adj
+ambo:det
+auernus:adj
+ausonius:adj
+bis:adv
+cresius:adj
+cyllenius:adj
+dardanius:adj
+futurum:noun
+gaetulus:adj
+garamantis:adj
+gryneus:adj
+horrifico:verb
+hyrcanus:adj
+laomedonteus:adj
+lauinius:adj
+lenaeus:adj
+lycius:adj
+maeonius:adj
+magalia:noun
+massylus:adj
+maurusius:adj
+nocte:adv
+ociter:adv
+persentio:verb
+phoebeus:adj
+phoenissus:adj
+quicumque:det
+quisquam:pron
+quisquis:det
+sidonius:adj
+subnitor:verb
+sychaeus:adj
+totiens:adv
+tyrius:adj
+
+Scansion: 5 unfinished half-lines (feet marked as far as they go): 44, 361, 400, 503, 516
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+2	volnus ~ vulnus
+4	voltus ~ vultūs
+67	volnus ~ vulnus
+94	numen ~ nōmen)
+95	divom ~ dīvum
+183	aures ~ aurīs
+201	divom ~ dīvum
+204	divom ~ dīvum
+221	amantes ~ amantīs
+291	optuma ~ optima
+356	divom ~ dīvum
+371	maxuma ~ maxima
+378	divom ~ dīvum
+396	divom ~ dīvum
+398	naves ~ nāvīs
+477	voltu ~ vultū
+481	maxumus ~ maximus
+493	artes ~ artīs
+498	monumenta ~ monimenta
+509	crines ~ crīnīs
+515	revolsus ~ revulsus
+520	amantes ~ amantīs
+537	classes ~ classīs
+543	ovantes ~ ovantīs
+551	tales ~ tālīs
+556	voltu ~ vultū
+573	Praecipites ~ praecipitīs
+575	funes ~ fūnīs
+581	omnes ~ omnīs
+598	Penates ~ penātīs
+648	vestes ~ vestīs
+683	volnera ~ vulnera
+688	graves ~ gravīs
+
+Scansion: words that could not be matched:
+23	impulit: adgnosco veteris vestigia flammae.
+	no scansion for: adgnosco
+26	pallentis umbras Erebi noctemque profundam,
+	no scansion for: Erebi
+29	abstulit; ille habeat secum servetque sepulchro.
+	no scansion for: sepulchro.
+52	dum pelago desaevit hiemps et aquosus Orion,
+	no scansion for: hiemps
+54	His dictis incensum animum inflammavit amore,
+	no scansion for: incensum inflammavit
+73	Dictaeos; haeret lateri letalis arundo.
+	no scansion for: arundo.
+175	mobilitate viget, viresque adquirit eundo,
+	no scansion for: viresque
+269	regnator, caelum ac terras qui numine torquet;
+	no scansion for: ac
+276	debentur. Tali Cyllenius ore locutus
+	no scansion for: debentur.
+295	imperio laeti parent ac iussa facessunt.
+	no scansion for: ac
+312	ignotas peteres, sed Troia antiqua maneret,
+	no scansion for: sed
+414	cogitur, et supplex animos submittere amori,
+	no scansion for: submittere
+427	nec patris Anchisae cineres Manisve revelli,
+	no scansion for: cineres
+428	cur mea dicta neget duras demittere in auris.
+	no scansion for: neget
+482	axem humero torquet stellis ardentibus aptum:
+	no scansion for: humero
+497	quo perii, superimponas: abolere nefandi
+	no scansion for: superimponas:
+529	At non infelix animi Phoenissa, nec umquam
+	no scansion for: nec
+561	nec, quae te circum stent deinde pericula, cernis,
+	no scansion for: circum stent
+564	certa mori, varioque irarum fluctuat aestu.
+	no scansion for: varioque fluctuat aestu.
+576	ecce iterum stimulat. Sequimur te, sancte deorum,
+	no scansion for: stimulat.
+590	flaventesque abscissa comas, Pro Iuppiter, ibit
+	no scansion for: flaventesque
+593	deripientque rates alii navalibus? Ite,
+	no scansion for: deripientque
+594	ferte citi flammas, date vela, impellite remos!—
+	no scansion for: vela,
+606	cum genere extinxem, memet super ipsa dedissem.
+	no scansion for: extinxem,
+651	Dulces exuviae, dum fata deusque sinebant,
+	no scansion for: sinebant,
+702	devolat, et supra caput adstitit: Hunc ego Diti
+	no scansion for: adstitit:

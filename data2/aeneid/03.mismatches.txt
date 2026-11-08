@@ -1,0 +1,182 @@
+230	Perseus: arboribus clausi circum atque horrentibus umbris,
+	LASLA:   
+338	Perseus: Aut quisnam ignarum nostris deus adpulit oris?
+	LASLA:   aut nam nam ignarum nostris deus appulit oris
+634	Perseus: numina sortitique vices, una undique circum
+	LASLA:   numina sortitique uices una undique circum fundimur
+635	Perseus: fundimur, et telo lumen terebramus acuto,—
+	LASLA:   et telo lumen terebramus acuto
+
+Lemmas with no definition (add them to EXTRA):
+aeaeus:adj
+aegaeus:adj
+aetnaeus:adj
+agamemnonius:adj
+argiuus:adj
+argolicus:adj
+ausonius:adj
+bis:adv
+chaonius:adj
+corybantius:adj
+cumaeus:adj
+danaus:adj
+dardanius:adj
+dionaeus:adj
+diuersum:noun
+dodonaeus:adj
+ecquis:pron
+geticus:adj
+gnosius:adj
+graius:adj
+hectoreus:adj
+herculeus:adj
+idaeus:adj
+ionius:adj
+lacedaemonius:adj
+lacinius:adj
+laertius:adj
+ledaeus:adj
+lilybeius:adj
+lyctius:adj
+megarus:adj
+meliboeus:adj
+narycius:adj
+neptunius:adj
+oenotrus:adj
+pergameus:adj
+phineius:adj
+phoebeus:adj
+priameius:adj
+quicumque:det
+quisque:det
+rhoeteus:adj
+sata:noun
+semel:adv
+sicanius:adj
+subnitor:verb
+supremum:adv
+threicius:adj
+thymbraeus:adj
+trinacrius:adj
+troius:adj
+
+Scansion: 7 unfinished half-lines (feet marked as far as they go): 218, 316, 340, 470, 527, 640, 661
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+5	divom ~ dīvum
+102	monumenta ~ monimenta
+114	divom ~ dīvum
+148	divom ~ dīvum
+173	voltus ~ vultūs
+180	parentes ~ parentīs
+216	voltus ~ vultūs
+237	enses ~ ēnsīs
+241	volucres ~ volucrīs
+242	volnera ~ vulnera
+252	maxuma ~ maxima
+267	rudentes ~ rudentīs
+295	urbes ~ urbīs
+359	divom ~ dīvum
+370	divom ~ dīvum
+397	proxuma ~ proxima
+414	convolsa ~ convulsa
+483	vestes ~ vestīs
+486	monumenta ~ monimenta
+542	quadrupedes ~ quadripedēs
+575	avolsaque ~ āvulsaque
+594	tegumen ~ tegimen
+643	volgo ~ vulgō
+650	volsis ~ vulsīs
+682	Praecipites ~ praecipitīs
+703	maxuma ~ maxima
+708	actis ~ āctus
+710	optume ~ optime
+717	divom ~ dīvum
+
+Scansion: words that could not be matched:
+11	et campos, ubi Troia fuit: feror exsul in altum
+	no scansion for: exsul
+67	sanguinis et sacri pateras, animamque sepulchro
+	no scansion for: sepulchro
+82	occurrit; veterem Anchisen adgnovit amicum.
+	no scansion for: adgnovit
+93	Submissi petimus terram, et vox fertur ad auris:
+	no scansion for: Submissi
+115	placemus ventos et Gnosia regna petamus.
+	no scansion for: Gnosia
+123	hoste vacare domos, sedesque adstare relictas.
+	no scansion for: domos, adstare
+125	bacchatamque iugis Naxon viridemque Donysam,
+	no scansion for: Donysam,
+150	extuleram, visi ante oculos adstare iacentis
+	no scansion for: adstare
+173	nec sopor illud erat, sed coram adgnoscere voltus
+	no scansion for: adgnoscere
+180	Adgnovit prolem ambiguam geminosque parentes,
+	no scansion for: Adgnovit
+193	adparent terrae, caelum undique et undique pontus,
+	no scansion for: adparent
+194	tum mihi caeruleus supra caput adstitit imber,
+	no scansion for: adstitit
+210	accipiunt; Strophades Graio stant nomine dictae,
+	no scansion for: accipiunt;
+230	arboribus clausi circum atque horrentibus umbris,
+	no scansion for: clausi
+270	Iam medio adparet fluctu nemorosa Zacynthos
+	no scansion for: adparet
+285	et glacialis hiemps aquilonibus asperat undas.
+	no scansion for: hiemps
+319	Hectoris Andromachen? Pyrrhin’ conubia servas?
+	no scansion for: Andromachen?
+324	nec victoris eri tetigit captiva cubile!
+	no scansion for: eri
+330	Ast illum, ereptae magno inflammatus amore
+	no scansion for: inflammatus
+338	Aut quisnam ignarum nostris deus adpulit oris?
+	no scansion for: adpulit
+347	adgnoscitque suos, laetusque ad limina ducit,
+	no scansion for: adgnoscitque
+351	adgnosco, Scaeaeque amplector limina portae.
+	no scansion for: adgnosco,
+362	fare age—namque omnem cursum mihi prospera dixit
+	no scansion for: omnem
+427	pube tenus, postrema immani corpore pristis,
+	no scansion for: pristis,
+464	dona dehinc auro gravia sectoque elephanto
+	no scansion for: sectoque
+475	Coniugio, Anchise, Veneris dignate superbo,
+	no scansion for: Anchise,
+499	auspiciis, et quae fuerit minus obvia Graiis.
+	no scansion for: Graiis.
+503	Epiro, Hesperia, quibus idem Dardanus auctor
+	no scansion for: Hesperia,
+531	iam propior, templumque adparet in arce Minervae.
+	no scansion for: adparet
+534	obiectae salsa spumant aspargine cautes;
+	no scansion for: aspargine
+549	cornua velatarum obvertimus antemarum,
+	no scansion for: antemarum,
+558	Et pater Anchises: Nimirum haec illa Charybdis:
+	no scansion for: haec
+579	urgueri mole hac, ingentemque insuper Aetnam
+	no scansion for: urgueri
+593	Respicimus: dira inluvies inmissaque barba,
+	no scansion for: inmissaque
+605	spargite me in fluctus, vastoque inmergite ponto.
+	no scansion for: inmergite
+617	inmemores socii vasto Cyclopis in antro
+	no scansion for: inmemores
+659	Trunca manu pinus regit et vestigia firmat;
+	no scansion for: manu
+673	contremuere undae, penitusque exterrita tellus
+	no scansion for: contremuere
+677	Cernimus adstantis nequiquam lumine torvo
+	no scansion for: adstantis
+684	Contra iussa monent Heleni Scyllam atque Charybdin
+	no scansion for: Scyllam atque Charybdin
+686	ni teneant cursus; certum est dare lintea retro.
+	no scansion for: teneant
+701	adparet Camerina procul campique Geloi,
+	no scansion for: adparet
+715	Hinc me digressum vestris deus adpulit oris.
+	no scansion for: adpulit

@@ -1,0 +1,129 @@
+
+
+Lemmas with no definition (add them to EXTRA):
+achiuus:adj
+albanus:adj
+ambo:det
+argiuus:adj
+bis:adv
+cyclopius:adj
+dardanius:adj
+hectoreus:adj
+illyricus:adj
+iunonius:adj
+lauinius:adj
+magalia:noun
+mirandus:adj
+oenotrus:adj
+ornatus:noun
+pelasgus:adj
+phoenissus:adj
+quicumque:det
+quisquam:pron
+quisquis:det
+sabaeus:adj
+scyllaeus:adj
+sidonius:adj
+totiens:adv
+trinacrius:adj
+troius:adj
+typhoeus:adj
+tyrius:adj
+tyrrhenus:adj
+
+Scansion: 3 unfinished half-lines (feet marked as far as they go): 534, 560, 636
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+36	volnus ~ vulnus
+46	divom ~ dīvum
+53	luctantes ~ luctantīs
+65	divom ~ dīvum
+68	Penates ~ Penātīs
+69	puppes ~ puppīs
+79	divom ~ dīvum
+149	volgus ~ vulgus
+190	volgus ~ vulgus
+194	omnes ~ omnīs
+209	voltu ~ vultū
+214	vires ~ vīrīs
+255	voltu ~ vultū
+263	feroces ~ ferōcīs
+327	voltus ~ vultus
+347	omnes ~ omnīs
+355	crudeles ~ crūdēlīs
+365	cernis ~ cernēs
+378	Penates ~ Penātīs
+383	convolsae ~ convulsae
+411	gradientes ~ gradientīs
+435	ignavom ~ ignāvum
+457	volgata ~ vulgāta
+465	voltum ~ vultum
+521	maxumus ~ maximus
+555	optume ~ optime
+556	Lybiae ~ Libyae
+561	voltum ~ vultum
+572	Voltis ~ Vultis
+596	Lybicis ~ Libycīs
+632	divom ~ dīvum
+656	naves ~ nāvīs
+657	artes ~ artīs
+684	voltus ~ vultūs
+710	voltus ~ vultūs
+
+Scansion: words that could not be matched:
+44	illum expirantem transfixo pectore flammas
+	no scansion for: expirantem
+48	bella gero! Et quisquam numen Iunonis adoret
+	no scansion for: adoret
+70	aut age diversos et disiice corpora ponto.
+	no scansion for: disiice
+111	in brevia et Syrtis urguet, miserabile visu,
+	no scansion for: urguet,
+118	Adparent rari nantes in gurgite vasto,
+	no scansion for: Adparent
+120	Iam validam Ilionei navem, iam fortis Achati,
+	no scansion for: Achati,
+201	accestis scopulos, vos et Cyclopea saxa
+	no scansion for: Cyclopea
+236	qui mare, qui terras omni dicione tenerent,
+	no scansion for: omni
+284	cum domus Assaraci Phthiam clarasque Mycenas
+	no scansion for: Phthiam
+337	purpureoque alte suras vincire cothurno.
+	no scansion for: cothurno.
+374	ante diem clauso componat Vesper Olympo.
+	no scansion for: componat
+377	forte sua Libycis tempestas adpulit oris.
+	no scansion for: adpulit
+401	Perge modo, et, qua te ducit via, dirige gressum.
+	no scansion for: dirige
+406	adgnovit, tali fugientem est voce secutus:
+	no scansion for: adgnovit,
+420	imminet, adversasque adspectat desuper arces.
+	no scansion for: adspectat
+441	Lucus in urbe fuit media, laetissimus umbra,
+	no scansion for: umbra,
+467	hac fugerent Graii, premeret Troiana iuventus,
+	no scansion for: Graii,
+470	adgnoscit lacrimans, primo quae prodita somno
+	no scansion for: adgnoscit
+488	Se quoque principibus permixtum adgnovit Achivis,
+	no scansion for: adgnovit
+513	Obstipuit simul ipse simul perculsus Achates
+	no scansion for: perculsus
+550	arvaque, Troianoque a sanguine clarus Acestes.
+	no scansion for: arvaque,
+567	Non obtusa adeo gestamus pectora Poeni,
+	no scansion for: obtusa
+601	non opis est nostrae, Dido, nec quicquid ubique est
+	no scansion for: quicquid
+626	seque ortum antiqua Teucrorum ab stirpe volebat.
+	no scansion for: ab
+656	Haec celerans ita ad naves tendebat Achates.
+	no scansion for: ita
+668	litora iactetur odiis Iunonis iniquae,
+	no scansion for: iniquae,
+670	Hunc Phoenissa tenet Dido blandisque moratur
+	no scansion for: Hunc
+745	quid tantum Oceano properent se tinguere soles
+	no scansion for: tinguere

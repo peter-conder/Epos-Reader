@@ -1,0 +1,155 @@
+46	Perseus: Hic locus urbis erit, requies ea certa laborum
+	LASLA:   
+71	Perseus: Nymphae, Laurentes nymphae, genus amnibus unde est,
+	LASLA:   nymphae Laurentes nymphae genus amnibus undest
+205	Perseus: At furiis Caci mens effera, nequid inausum
+	LASLA:   at furiis Caci mens effera ne quid inausum
+209	Perseus: atque hos, nequa forent pedibus vestigia rectis,
+	LASLA:   atque hos ne qua forent pedibus uestigia rectis
+243	Perseus: non secus ac siqua penitus vi terra dehiscens
+	LASLA:   non secus ac si qua penitus ui terra dehiscens
+528	Perseus: arma inter nubem caeli regione serena
+	LASLA:   arma inter nubem caeli in regione serena
+716	Perseus: maxuma tercentum totam delubra per urbem.
+	LASLA:   maxima ter centum totam delubra per urbem
+
+Lemmas with no definition (add them to EXTRA):
+aeolius:adj
+aetnaeus:adj
+agyllinus:adj
+albanus:adj
+ambo:det
+arcadius:adj
+argolicus:adj
+ausonius:adj
+bis:adv
+carmentalis:adj
+cresius:adj
+dardanius:adj
+daunius:adj
+etruscus:adj
+futurum:noun
+herculeus:adj
+herilis:adj
+improuiso:adv
+imum:noun
+inaccedo:verb
+incertum:noun
+laomedontius:adj
+lemnius:adj
+lernaeus:adj
+libystis:adj
+liquidum:noun
+lycaeus:adj
+lycius:adj
+lydius:adj
+manifeste:adv
+neptunius:adj
+ociter:adv
+parrhasius:adj
+pinarius:adj
+quicumque:det
+quisquam:pron
+quisque:det
+quisquis:det
+quiuis:det
+rutulus:adj
+sabellus:adj
+sicanius:adj
+sicanus:adj
+tarpeius:adj
+tegeaeus:adj
+tirynthius:adj
+tithonius:adj
+troius:adj
+tyrrhenus:adj
+uulcanius:adj
+
+Scansion: 3 unfinished half-lines (feet marked as far as they go): 41, 469, 536
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+84	maxuma ~ maxima
+127	Optume ~ ‘optime
+131	divom ~ dīvum
+136	maxumus ~ maximus
+137	orbes ~ orbīs
+156	voltumque ~ vultumque
+214	Amphytrioniades ~ Amphitryōniadēs
+238	avolsam ~ āvulsam
+262	revolsis ~ revulsīs
+266	voltum ~ vultum
+271	maxuma ~ maxima
+272	maxuma ~ maxima
+289	angues ~ anguīs
+323	tutis ~ tūtus
+410	ignes ~ ignīs
+430	rutili ~ rutulī
+434	urbes ~ urbīs
+446	volnificusque ~ vulnificusque
+448	orbes ~ orbīs
+470	Maxume ~ ‘maxime
+504	divom ~ dīvum
+554	volgata ~ vulgāta
+572	divom ~ dīvum
+572	maxume ~ maxime
+583	volneret ~ vulneret.’
+594	proxuma ~ proxima
+596	quadrupedante ~ quadripedante
+690	convolsum ~ convulsum
+691	revolsas ~ revulsās
+
+Scansion: words that could not be matched:
+25	erigitur summique ferit lacuaria tecti.
+	no scansion for: lacuaria
+108	adlabi nemus et tacitis incumbere remis,
+	no scansion for: tacitis
+188	inposuit: saevis, hospes Troiane, periclis
+	no scansion for: inposuit:
+205	At furiis Caci mens effera, nequid inausum
+	no scansion for: nequid
+209	atque hos, nequa forent pedibus vestigia rectis,
+	no scansion for: nequa
+236	Hanc, ut prona iugo laevum incumbebat in amnem,
+	no scansion for: in
+239	inpulit, inpulsu quo maximus intonat aether
+	no scansion for: inpulit, inpulsu
+243	non secus ac siqua penitus vi terra dehiscens
+	no scansion for: siqua
+246	cernatur, trepident inmisso lumine manes.
+	no scansion for: inmisso
+267	pectora semiferi atque extinctos faucibus ignis.
+	no scansion for: extinctos
+294	Hylaeeumque Pholumque, manu, tu Cresia mactas
+	no scansion for: Hylaeeumque
+320	arma Iovis fugiens et regnis exsul ademptis.
+	no scansion for: exsul
+373	incipit et dictis divinum adspirat amorem:
+	no scansion for: adspirat
+386	ferrum acuant portis in me exscidiumque meorum.
+	no scansion for: exscidiumque
+425	Brontesque Steropesque et nudus membra Pyragmon.
+	no scansion for: Pyragmon.
+428	deicit in terras, pars inperfecta manebat.
+	no scansion for: inperfecta
+431	fulgores nunc horrificos sonitumque metumque
+	no scansion for: horrificos
+447	Ingentum clipeum informant, unum omnia contra
+	no scansion for: Ingentum
+512	et generi fatum indulgent, quem numina poscunt,
+	no scansion for: indulgent,
+524	Namque inproviso vibratus ab aethere fulgor
+	no scansion for: inproviso
+544	laetus adit: mactant lectas de more bidentis
+	no scansion for: mactant
+555	ocius ire equites Tyrrheni ad litora regis.
+	no scansion for: litora
+687	Aegyptum viresque Orientis et ultima secum
+	no scansion for: viresque
+704	Actius haec cernens arcum tendebat Apollo
+	no scansion for: tendebat
+708	vela dare et laxos iam iamque inmittere funis.
+	no scansion for: inmittere
+715	moenia, dis Italis votum inmortale sacrabat,
+	no scansion for: inmortale
+716	maxuma tercentum totam delubra per urbem.
+	no scansion for: maxuma tercentum

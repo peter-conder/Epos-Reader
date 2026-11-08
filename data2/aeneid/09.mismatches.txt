@@ -1,0 +1,214 @@
+29	Perseus: vertitur arma tenens et toto vertice supra est.
+	LASLA:   
+41	Perseus: Aeneas: siqua interea fortuna fuisset,
+	LASLA:   Aeneas si qua interea fortuna fuisset
+44	Perseus: Ergo etsi conferre manum pudor iraque monstrat,
+	LASLA:   ergo si si conferre manum pudor iraque monstrat
+121	Perseus: quot prius aeratae steterant ad litora prorae
+	LASLA:   
+134	Perseus: siqua Phryges prae se iactant, responsa deorum:
+	LASLA:   si qua Phryges prae se iactant responsa deorum
+172	Perseus: quos pater Aeneas, siquando adversa vocarent,
+	LASLA:   quos pater Aeneas si quando aduersa uocarent
+210	Perseus: Sed siquis, quae multa vides discrimine tali,
+	LASLA:   sed si quis quae multa uides discrimine tali
+211	Perseus: siquis in adversum rapiat casusve deusve,
+	LASLA:   si quis in aduersum rapiat casusue deusue
+214	Perseus: mandet humo solita aut siqua id Fortuna vetabit,
+	LASLA:   mandet humo solita aut si qua id Fortuna uetabit
+226	Perseus: ductores Teucrum primi et delecta iuventus
+	LASLA:   ductores Teucrum primi delecta iuuentus
+287	Perseus: Hanc ego nunc ignaram huius quodcumque pericli est
+	LASLA:   hanc ego nunc ignaram huius quodcumque pericli
+370	Perseus: tercentum, scutati omnes, Volcente magistro.
+	LASLA:   ter centum scutati omnes Uolcente magistro
+403	Perseus: suspiciens altam Lunam sic voce precatur:
+	LASLA:   suspiciens altam Lunam et sic uoce precatur
+406	Perseus: Siqua tuis umquam pro me pater Hyrtacus aris
+	LASLA:   si qua tuis umquam pro me pater Hyrtacus aris
+407	Perseus: dona tulit, siqua ipse meis venatibus auxi
+	LASLA:   dona tulit si qua ipse meis uenatibus auxi
+446	Perseus: Fortunati ambo! Siquid mea carmina possunt,
+	LASLA:   fortunati ambo si quid mea carmina possunt
+493	Perseus: Figite me, siqua est pietas, in me omnia tela
+	LASLA:   figite me si qua est pietas in me omnia tela
+512	Perseus: Saxa quoque infesto volvebant pondere, siqua
+	LASLA:   saxa quoque infesto uoluebant pondere si qua
+529	Perseus: et meministis enim, divae, et memorare potestis.
+	LASLA:   
+741	Perseus: Incipe, siqua animo virtus, et consere dextram:
+	LASLA:   incipe si qua animo uirtus et consere dextram
+
+Lemmas with no definition (add them to EXTRA):
+albanus:adj
+ambo:det
+argolicus:adj
+ausonius:adj
+berecyntius:adj
+bis:adv
+dardanius:adj
+dindymus:adj
+ecquis:pron
+etruscus:adj
+euboicus:adj
+gnosius:adj
+hiberus:adj
+horrendum:adv
+idaeus:adj
+latonius:adj
+maeonius:adj
+magnum:adv
+multa:adv
+neptunius:adj
+nereius:adj
+ociter:adv
+pallanteus:adj
+pelasgus:adj
+quicumque:det
+quisque:det
+quisquis:det
+raster:noun
+rutulus:adj
+semel:adv
+sidonius:adj
+symaethius:adj
+thebanus:adj
+tiburs:adj
+uenerandus:adj
+
+Scansion: 6 unfinished half-lines (feet marked as far as they go): 167, 295, 467, 520, 721, 761
+
+Scansion: lines whose syllables don't divide into six feet (no foot marks drawn): 386
+
+Scansion: words paired despite a different spelling (Perseus ~ Hypotactic):
+6	divom ~ dīvum
+40	optumus ~ optimus
+78	ignes ~ ignīs
+129	ignes ~ ignīs
+155	decumum ~ decimum
+238	proxuma ~ proxima
+251	voltum ~ vultum
+289	lacrumas ~ lacrimās
+383	calles ~ callīs
+401	volnera ~ vulnera
+487	volnera ~ vulnera
+490	avolsaque ~ āvulsaque
+495	divom ~ dīvum
+578	volnus ~ vulnus
+580	volnere ~ vulnere
+591	fugaces ~ fugācīs
+611	vires ~ vīrīs
+700	volneris ~ vulneris
+745	volnus ~ vulnus
+748	volneris ~ vulneris
+751	volnere ~ vulnere
+764	vires ~ vīrīs
+802	vires ~ vīrīs
+
+Scansion: words that could not be matched:
+16	Adgnovit iuvenis duplicisque ad sidera palmas
+	no scansion for: Adgnovit
+41	Aeneas: siqua interea fortuna fuisset,
+	no scansion for: siqua
+46	armatique cavis expectant turribus hostem.
+	no scansion for: expectant
+68	excutiat Teucros vallo atque effundat in aequum?
+	no scansion for: aequum?
+130	exspectans Rutulos. Ergo maria invia Teucris
+	no scansion for: exspectans
+134	siqua Phryges prae se iactant, responsa deorum:
+	no scansion for: siqua
+151	Palladii caesis summae custodibus arcis
+	no scansion for: summae
+172	quos pater Aeneas, siquando adversa vocarent,
+	no scansion for: siquando
+179	it iuxta comes Euryalus, quo pulchrior alter
+	no scansion for: it
+187	mens agitat mihi nec placida contenta quietest.
+	no scansion for: quietest.
+210	Sed siquis, quae multa vides discrimine tali,
+	no scansion for: siquis,
+211	siquis in adversum rapiat casusve deusve,
+	no scansion for: siquis
+214	mandet humo solita aut siqua id Fortuna vetabit,
+	no scansion for: siqua
+215	absenti ferat inferias decoretque sepulchro.
+	no scansion for: sepulchro.
+221	adceleremus, ait. Vigiles simul excitat, illi
+	no scansion for: adceleremus,
+226	ductores Teucrum primi et delecta iuventus
+	no scansion for: et
+236	quae ferimus. Rutuli somno vinoque soluti
+	no scansion for: soluti
+287	Hanc ego nunc ignaram huius quodcumque pericli est
+	no scansion for: est
+305	Gnosius atque habilem vagina aptarat eburna.
+	no scansion for: Gnosius
+331	nanctus equis ferroque secat pendentia colla;
+	no scansion for: nanctus
+370	tercentum, scutati omnes, Volcente magistro.
+	no scansion for: tercentum,
+406	Siqua tuis umquam pro me pater Hyrtacus aris
+	no scansion for: Siqua
+407	dona tulit, siqua ipse meis venatibus auxi
+	no scansion for: siqua
+421	auctorem nec quo se ardens inmittere possit.
+	no scansion for: inmittere
+446	Fortunati ambo! Siquid mea carmina possunt,
+	no scansion for: Siquid
+456	caede locum et plenos spumanti sanguine rivos.
+	no scansion for: plenos spumanti
+464	quisque suas variisque acuunt rumoribus iras.
+	no scansion for: suas
+481	Hunc ego te, Euryale, aspicio? Tune illa senectae
+	no scansion for: illa
+486	alitibusque iaces, nec te, tua funera mater
+	no scansion for: funera
+493	Figite me, siqua est pietas, in me omnia tela
+	no scansion for: siqua
+501	Illionei monitu et multum lacrimantis Iuli
+	no scansion for: Illionei
+505	Adcelerant acta pariter testudine Volsci
+	no scansion for: Adcelerant
+512	Saxa quoque infesto volvebant pondere, siqua
+	no scansion for: siqua
+525	Vos, o Calliope, precor, adspirate canenti,
+	no scansion for: adspirate
+550	hinc acies atque hinc acies adstare Latinas:
+	no scansion for: adstare
+561	sperasti te posse manus? Simul adripit ipsum
+	no scansion for: adripit
+567	tollitur: invadunt et fossas agere complent;
+	no scansion for: agere
+584	eductum Matris luco Symaethia circum
+	no scansion for: Matris
+635	His capti Phryges haec Rutulis responsa remittunt.
+	no scansion for: His
+645	aethere se misit, spirantis dimovet auras
+	no scansion for: misit,
+676	freti animis, ultroque invitant moenibus hostem.
+	no scansion for: animis,
+677	Ipsi intus dextra ac laeva pro turribus adstant,
+	no scansion for: adstant,
+686	agminibus totis: at versi terga dedere
+	no scansion for: at
+717	Hic Mars armipotens animum viresque Latinis
+	no scansion for: viresque
+724	portam vi magna converso cardine torquet,
+	no scansion for: magna
+741	Incipe, siqua animo virtus, et consere dextram:
+	no scansion for: siqua
+751	dividit inpubesque immani volnere malas.
+	no scansion for: inpubesque
+765	addit Halym comitem et confixa Phegea parma,
+	no scansion for: Halym
+770	occupat; huic uno desectum comminus ictu
+	no scansion for: desectum
+773	ungere tela manu ferrumque armare veneno,
+	no scansion for: ungere
+782	Quos alios muros, quae iam ultra moenia habetis?
+	no scansion for: quae iam
+784	aggeribus tantas strages inpune per urbem
+	no scansion for: inpune
+789	consistunt. Turnus paulatim excedere pugna
+	no scansion for: pugna

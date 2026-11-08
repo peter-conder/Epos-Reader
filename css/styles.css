@@ -800,24 +800,66 @@
   }
   .word.selected.has-note::after { background: var(--on-primary); }
 
-  /* Scansion marks are drawn on the word itself (a long bar and a short dot) rather than
-     built as extra elements, so a whole book stays light to lay out */
-  [data-scansion="on"] .word::before {
+  /* Scansion. Each scanned word is split into .syl spans (data-q: L long, S short, E elided;
+     data-x: flags, see SCAN_NOTES in app.js). Every mark is absolutely positioned, so turning
+     scansion on or off never changes a line's width.
+       .syl::before   quantity mark above the syllable (bar = long, dot = short)
+       .syl::after    foot boundary, before a syllable that starts a foot
+       .word::before  caesura, in the gap after the word (caesuras always fall at word ends) */
+  .syl { position: relative; }
+
+  [data-scansion="on"] .syl::before {
     content: '';
-    position: absolute; top: -8px; left: 50%;
-    width: 15.5px; height: 6px;
-    transform: translateX(-50%);
+    position: absolute; top: -8px; height: 6px;
     pointer-events: none;
-    --m-long: linear-gradient(var(--gray-900), var(--gray-900));
-    --m-short: radial-gradient(circle, var(--secondary) 1.6px, transparent 1.9px);
-    background: var(--m-long) left center / 10px 2px no-repeat,
-                var(--m-short) right center / 3.5px 3.5px no-repeat;
+    --m-color: var(--gray-900);
   }
-  /* every other word starts short */
-  [data-scansion="on"] .word:nth-child(even)::before {
-    background: var(--m-short) left center / 3.5px 3.5px no-repeat,
-                var(--m-long) right center / 10px 2px no-repeat;
+  [data-scansion="on"] .syl[data-q="L"]::before {
+    left: 12%; right: 12%;
+    background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat;
   }
+  [data-scansion="on"] .syl[data-q="S"]::before {
+    left: 50%; width: 3.5px; transform: translateX(-50%);
+    --m-color: var(--secondary);
+    background: radial-gradient(circle, var(--m-color) 1.6px, transparent 1.9px) center / 3.5px 3.5px no-repeat;
+  }
+  /* the ictus (the long syllable that starts each foot) */
+  [data-scansion="on"] .syl[data-x*="f"]::before { --m-color: var(--primary); }
+  /* a normally short syllable lengthened by the poet */
+  [data-scansion="on"] .syl[data-x*="d"]::before {
+    background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat,
+                linear-gradient(var(--m-color), var(--m-color)) center 0 / 100% 1px no-repeat;
+  }
+  /* elided: not sounded, so dimmed and unmarked */
+  [data-scansion="on"] .syl[data-q="E"] { opacity: 0.45; }
+  /* synizesis or consonantal i: two vowels run together into one syllable */
+  [data-scansion="on"] .syl[data-x*="z"],
+  [data-scansion="on"] .syl[data-x*="r"] {
+    text-decoration: underline dotted var(--secondary);
+    text-underline-offset: 3px;
+  }
+
+  /* foot boundary: inside the word, or in the gap before it (half the column-gap plus the word padding) */
+  [data-scansion="on"] .syl[data-x*="f"]::after {
+    content: '';
+    position: absolute; left: -0.5px; top: 12%; bottom: 8%;
+    width: 1px;
+    background: color-mix(in srgb, var(--secondary) 45%, transparent);
+    pointer-events: none;
+  }
+  [data-scansion="on"] .syl[data-x*="f"]:first-child::after { left: calc(-6px - 0.225em - 0.5px); }
+  [data-scansion="on"] .verse-words > .word:first-child > .syl:first-child::after { display: none; }
+
+  [data-scansion="on"] .word[data-caesura]::before {
+    content: '';
+    position: absolute; right: calc(-0.225em - 2px); top: 8%; bottom: 4%;
+    width: 4px;
+    border-inline: 1px solid var(--primary);
+    pointer-events: none;
+  }
+
+  /* keep the marks visible on a selected word's filled background */
+  [data-scansion="on"] .word.selected .syl::before { --m-color: var(--on-primary); }
 
   /* Off-screen copy of a few lines, used to measure them at other text sizes */
   .fit-probe {
@@ -850,6 +892,7 @@
   }
   .card-lemma { font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; padding-right: 40px; }
   .card-morph { font-size: 12px; opacity: 0.7; margin-bottom: 10px; }
+  .card-scan { font-size: 12px; margin: -6px 0 10px; color: var(--primary); white-space: pre; }
   .card-def { font-size: 14px; line-height: 1.45; }
 
   /* Note button on the gloss: turns the selected-tab colour once there is a note */
