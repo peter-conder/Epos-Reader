@@ -121,14 +121,14 @@
       <button class="tool-btn" id="btn-text" style="--i: 2" data-tip="Text Options" aria-label="Text formatting options" aria-expanded="false">
         <svg class="icon"><use href="assets/icons.svg#i-text"/></svg>
       </button>
-      <button class="tool-btn" id="btn-popups" style="--i: 3" data-tip="Edit Popups" aria-label="Edit popups" aria-expanded="false">
+      <button class="tool-btn" id="btn-popups" style="--i: 3" data-tip="View Options" aria-label="View options" aria-expanded="false">
         <svg class="icon"><use href="assets/icons.svg#i-popups"/></svg>
       </button>
     </div>
 
     <div class="popover flyout" id="popups-flyout">
       <div class="flyout-header">
-        <span>Edit Popups</span>
+        <span>View Options</span>
         <button class="btn-close" data-close="popups-flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
       </div>
       <button class="switch-row" id="sw-words" role="switch" aria-checked="true">
@@ -137,6 +137,14 @@
       </button>
       <button class="switch-row" id="sw-notes" role="switch" aria-checked="true">
         <span class="switch-text"><span class="switch-title">Notes in popups</span><span class="switch-sub">Show the note button and saved notes in the gloss</span></span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
+      <button class="switch-row" id="sw-caesura" role="switch" aria-checked="true">
+        <span class="switch-text"><span class="switch-title">Caesurae</span><span class="switch-sub">Mark each caesura with ‖ when scansion is on</span></span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
+      <button class="switch-row" id="sw-synizesis" role="switch" aria-checked="true">
+        <span class="switch-text"><span class="switch-title">Synizesis &amp; consonantal i</span><span class="switch-sub">Underline vowels run together into one syllable</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
     </div>

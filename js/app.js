@@ -30,6 +30,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     settingsChips: $('settings-chips'), paletteChips: $('palette-chips'),
     splitBtn: $('btn-split'), meterBtn: $('btn-meter'), textBtn: $('btn-text'),
     popupsBtn: $('btn-popups'), popupsFlyout: $('popups-flyout'), swWords: $('sw-words'), swNotes: $('sw-notes'),
+    swCaesura: $('sw-caesura'), swSynizesis: $('sw-synizesis'),
     flyout: $('flyout'), fontSlider: $('font-size'), sizeSlider: $('size-slider'),
     picker: $('picker'), pickerTitle: $('picker-title'), workList: $('work-list'),
     bookPicker: $('book-picker'), booksGrid: $('books-grid'), backBtn: $('btn-back'),
@@ -102,7 +103,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     pickerTabId: null,     // the tab the Switch Work picker is changing
     pairPct: 50,           // width share of the left pane in a split pair
     fontRem: 1.45,         // text size chosen in the editor
-    popups: { words: true, notes: true }   // Edit Popups settings
+    popups: { words: true, notes: true, caesura: true, synizesis: true }   // View Options settings
   };
   let noteCtx = null;       // the word note open in the floating box
   let wordCtx = null;       // the word shown in the gloss
@@ -1688,17 +1689,20 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     });
   }
 
-  // Edit Popups switches
-  function bindSwitch(btn, key) {
+  // View Options switches. The popup switches close the gloss so it reopens with the new setting;
+  // the scansion switches set an attribute on <html> that the scansion CSS reads.
+  function bindSwitch(btn, key, onChange = hideWordCard) {
     btn.addEventListener('click', () => {
       const on = !state.popups[key];
       state.popups[key] = on;
       btn.setAttribute('aria-checked', String(on));
-      hideWordCard();
+      onChange(on);
     });
   }
   bindSwitch(el.swWords, 'words');
   bindSwitch(el.swNotes, 'notes');
+  bindSwitch(el.swCaesura, 'caesura', (on) => { root.dataset.caesura = on ? 'on' : 'off'; });
+  bindSwitch(el.swSynizesis, 'synizesis', (on) => { root.dataset.synizesis = on ? 'on' : 'off'; });
 
   // Close buttons inside popovers
   document.querySelectorAll('[data-close]').forEach((btn) =>

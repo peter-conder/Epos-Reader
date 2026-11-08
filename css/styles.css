@@ -431,7 +431,7 @@
   .tool-bar.open .tool-btn { animation: toolIn 520ms var(--ease-bouncy) backwards; animation-delay: calc(var(--i, 0) * 50ms + 90ms); }
   @keyframes toolIn { from { opacity: 0; transform: scale(0.4) translateY(-12px); } }
 
-  /* Flyouts (Text Options, Edit Popups): the main menu's look. Tops line up with their buttons in the open bar. */
+  /* Flyouts (Text Options, View Options): the main menu's look. Tops line up with their buttons in the open bar. */
   .flyout {
     --from: translateX(18px) scale(0.92);
     transform-origin: right top;
@@ -818,10 +818,14 @@
     left: 12%; right: 12%;
     background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat;
   }
+  /* breve: the bottom half of a ring */
   [data-scansion="on"] .syl[data-q="S"]::before {
-    left: 50%; width: 3.5px; transform: translateX(-50%);
+    left: 50%; top: -9px; width: 7px; height: 4px;
+    transform: translateX(-50%);
+    box-sizing: border-box;
     --m-color: var(--secondary);
-    background: radial-gradient(circle, var(--m-color) 1.6px, transparent 1.9px) center / 3.5px 3.5px no-repeat;
+    border: 1.5px solid var(--m-color); border-top: 0;
+    border-radius: 0 0 4px 4px;
   }
   /* the ictus (the long syllable that starts each foot) */
   [data-scansion="on"] .syl[data-x*="f"]::before { --m-color: var(--primary); }
@@ -857,6 +861,10 @@
     border-inline: 1px solid var(--primary);
     pointer-events: none;
   }
+
+  /* View Options can hide the caesura and synizesis / consonantal i marks */
+  [data-caesura="off"] .word[data-caesura]::before { display: none; }
+  [data-synizesis="off"] .syl[data-x] { text-decoration: none; }
 
   /* keep the marks visible on a selected word's filled background */
   [data-scansion="on"] .word.selected .syl::before { --m-color: var(--on-primary); }
