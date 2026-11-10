@@ -6,6 +6,7 @@ import { activateTab, addTab } from './tabs.js';
 import { scrollToLine } from './chunks.js';
 import { showWordCard, syncCardNote } from './word-card.js';
 import { flashLine, renderBookmarks } from './bookmarks.js';
+import { attachScrollbar } from './scrollbar.js';
 
 /* ==========================================================
    NOTES
@@ -126,6 +127,8 @@ export function markNotes(tab, scope) {
 }
 
 export function initNotes() {
+  attachScrollbar(el.notebookPane);
+
   /* New notes start as an empty card at the top, focused and ready to type.
      An empty card that loses focus simply disappears. */
   el.newNoteBtn.addEventListener('click', () => {

@@ -4,15 +4,103 @@ import { getTab, isText, shared, state } from './state.js';
 import { saveBookmarks } from './storage.js';
 import { textTop } from './chunks.js';
 import { jumpToLine, newId, noteSource, updateNotebookHeader } from './notes.js';
+import { LOADER_N, LOADER_RADII, MORPH_EASE, loaderPath } from './loader.js';
+import { TRACK_PAD, thumbMetrics } from './scrollbar.js';
 
 /* ==========================================================
    BOOKMARKS
-   A bookmark is tied to one line of a book and is added or removed from the word card. It shows as a
-   marker at the right of the line and as a dot on the original pane's scrollbar (click it to jump),
-   and is listed on the Notebook page below the notes. Saved in localStorage when available.
+   A bookmark is tied to one line of a book. It is added from the word card or from the marker in the
+   line's left margin (click the marker again to remove it). It shows as that marker and as a dot on the
+   original pane's scrollbar (click it to jump), and is listed on the Notebook page below the notes.
+   Saved in localStorage when available.
    ========================================================== */
-const TRACK_PAD = 24;   // the scrollbar track's end margin, as set on .pane::-webkit-scrollbar-track (--radius-xl)
-const THUMB_MIN = 32;   // the thumb's shortest length: its min-height in styles.css
+
+/* ---- The dot's shape ----
+   Each dot is an SVG path in a 34-unit box, drawn as a closed curve of LOADER_N radii (the same representation
+   the loading indicator uses, so shapes can be blended point by point). A dot rests as a small circle. When the
+   pane is scrolled near its bookmark the scrollbar thumb's pill hides and the dot morphs
+   pill -> a shape picked at random (the loader's star, a rounded triangle, a pentagon or a square) -> a larger
+   circle (which holds the bookmark glyph). */
+const DOT_R = 6, NEAR_R = 13;
+const PILL = { w: 4, h: 11 };               // half-width and half-height of the thumb's visible pill
+const SHAPE_MEAN = 13.5;                     // every in-between shape has this average radius, like the loader's shapes
+const circleRadii = (r) => new Array(LOADER_N).fill(r);
+const stillMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+/* A stadium (rounded-end pill), as the distance from its centre at each of the LOADER_N angles */
+function pillRadii({ w: a, h: b }) {
+  const c = b - a;   // the end caps are circles of radius a centred c above and below the middle
+  return Array.from({ length: LOADER_N }, (_, i) => {
+    const t = (i / LOADER_N) * Math.PI * 2;
+    const cos = Math.abs(Math.cos(t)), sin = Math.abs(Math.sin(t));
+    if (cos > 1e-6 && (a / cos) * sin <= c) return a / cos;   // hits the straight side
+    const dc = sin * c;                                        // otherwise it hits an end cap
+    return dc + Math.sqrt(dc * dc - c * c + a * a);
+  });
+}
+const PILL_RADII = pillRadii(PILL);
+const DOT_PATH = loaderPath(circleRadii(DOT_R), 1);
+
+/* A regular n-gon with one corner pointing up and its corners rounded by `rho` (the polygon the corners are
+   rounded from has circumradius 1), as the distance from its centre at each of the LOADER_N angles. The outline is
+   that polygon grown by rho: straight edges at distance cos(π/n) + rho, with an arc of radius rho at each corner. */
+function polygonRadii(n, rho) {
+  const step = (Math.PI * 2) / n, half = step / 2;
+  const apothem = Math.cos(half) + rho, edgeHalf = Math.sin(half);
+  return Array.from({ length: LOADER_N }, (_, i) => {
+    const t = (i / LOADER_N) * Math.PI * 2;
+    const u = t + Math.PI / 2 - half;               // angle from the first edge's normal (the first corner is at -90°)
+    const delta = u - Math.round(u / step) * step;  // angle from the nearest edge's normal, within ±half
+    if (apothem * Math.abs(Math.tan(delta)) <= edgeHalf) return apothem / Math.cos(delta);   // hits the straight edge
+    const dv = Math.cos(delta - Math.sign(delta) * half);   // otherwise it hits the arc round the nearer corner
+    return dv + Math.sqrt(dv * dv - 1 + rho * rho);
+  });
+}
+
+/* Scales a radius curve so its average radius is `mean` */
+function normalise(radii, mean = SHAPE_MEAN) {
+  const k = mean / (radii.reduce((s, r) => s + r, 0) / radii.length);
+  return radii.map((r) => r * k);
+}
+
+/* The shapes a dot can pass through on its way from pill to circle; one is picked at random each time */
+const SHAPES = [
+  normalise(LOADER_RADII[2]),     // the loader's 8-point star
+  normalise(polygonRadii(3, 0.45)),   // triangle with rounded corners
+  normalise(polygonRadii(5, 0.22)),   // pentagon
+  normalise(polygonRadii(4, 0.32))    // square
+];
+
+const mixRadii = (a, b, e) => a.map((r, i) => r + (b[i] - r) * e);
+
+/* Sets a dot to its resting or near state. With `animate` it plays the morph; otherwise it jumps there. */
+function setDotNear(dot, near, animate) {
+  const path = dot.querySelector('path');
+  const target = circleRadii(near ? NEAR_R : DOT_R);
+  dot.classList.toggle('near', near);
+  cancelAnimationFrame(dot._raf);
+  if (!animate || stillMotion.matches) {
+    dot._radii = target;
+    path.setAttribute('d', loaderPath(target, 1));
+    return;
+  }
+  // Near: pill -> shape (first 40%) -> circle. Away: back to the small circle.
+  const from = near ? PILL_RADII : (dot._radii ?? circleRadii(NEAR_R));
+  const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+  const duration = near ? 620 : 260;
+  const t0 = performance.now();
+  const frame = (now) => {
+    const p = Math.min(1, (now - t0) / duration);
+    let radii;
+    if (!near) radii = mixRadii(from, target, MORPH_EASE(p));
+    else if (p < 0.4) radii = mixRadii(from, shape, MORPH_EASE(p / 0.4));
+    else radii = mixRadii(shape, target, MORPH_EASE((p - 0.4) / 0.6));
+    dot._radii = radii;
+    path.setAttribute('d', loaderPath(radii, 1));
+    if (p < 1) dot._raf = requestAnimationFrame(frame);
+  };
+  dot._raf = requestAnimationFrame(frame);
+}
 
 /* The start of the line, kept with the bookmark so the Notebook can show it without opening the book */
 export function lineSnippet(tab, line) {
@@ -43,22 +131,30 @@ export function bookmarksChanged() {
 export function refreshBookmarkMarks(tabs = state.tabs) {
   for (const tab of tabs) {
     if (!isText(tab)) continue;
-    tab.ui.passage.querySelectorAll('.verse.bookmarked').forEach((v) => v.classList.remove('bookmarked'));
+    tab.ui.passage.querySelectorAll('.verse.bookmarked').forEach((v) => {
+      v.classList.remove('bookmarked');
+      v.firstElementChild.dataset.tip = 'Bookmark this line';
+    });
     markBookmarks(tab, tab.ui.passage);
     renderRail(tab);
   }
 }
 
-/* Marks the bookmarked lines inside `scope` (the passage, or one chunk as it is added) */
+/* Marks the bookmarked lines inside `scope` (the passage, or one chunk as it is added).
+   A line's margin glyph is its first child. */
 export function markBookmarks(tab, scope) {
   for (const b of state.bookmarks) {
-    if (isMarked(b, tab)) scope.querySelector(`.verse[data-line="${b.line}"]`)?.classList.add('bookmarked');
+    if (!isMarked(b, tab)) continue;
+    const verse = scope.querySelector(`.verse[data-line="${b.line}"]`);
+    if (!verse) continue;
+    verse.classList.add('bookmarked');
+    verse.firstElementChild.dataset.tip = 'Remove bookmark';
   }
 }
 
-/* Puts the rail over the original pane's scrollbar and a dot on it for each bookmark. The dot sits where the
-   scrollbar thumb's centre is when that line is centred in the pane (which is where a jump puts it), using
-   the browser's own thumb maths: thumb top = scrollTop / (scrollHeight - clientHeight) * (track - thumb).
+/* Puts a dot on the original pane's scrollbar rail (ui.rail, see scrollbar.js) for each bookmark. The dot sits
+   where the thumb's centre is when that line is centred in the pane (which is where a jump puts it), using the
+   same thumb maths as the thumb itself: thumb top = TRACK_PAD + scrollTop / (H - C) * (T - L).
    The spacers keep scrollHeight at the whole book's height, so this holds whichever chunks are in the page. */
 export function renderRail(tab) {
   const ui = tab.ui;
@@ -67,20 +163,14 @@ export function renderRail(tab) {
   if (!ui?.rail) return;
   const marks = ch?.pitch && !ui.root.hidden && pane.scrollHeight > pane.clientHeight
     ? state.bookmarks.filter((b) => isMarked(b, tab) && ch.lineNums.includes(b.line)) : [];
-  ui.rail.style.display = marks.length ? 'block' : '';
   if (!marks.length) {
     ui.rail.innerHTML = ui.railHtml = '';
     ui.railMarks = [];
-    pane?.classList.remove('bm-near');
+    ui.sb.rail.classList.remove('bm-near');
     return;
   }
 
-  ui.rail.style.left = `${pane.offsetLeft + pane.clientLeft + pane.clientWidth}px`;
-  ui.rail.style.top = `${pane.offsetTop + pane.clientTop}px`;
-  ui.rail.style.height = `${pane.clientHeight}px`;
-
-  const C = pane.clientHeight, H = pane.scrollHeight, T = C - 2 * TRACK_PAD;
-  const L = Math.min(T, Math.max((T * C) / H, THUMB_MIN));   // thumb length
+  const { C, H, T, L } = thumbMetrics(pane);
   const top = textTop(ch);
   ui.railMarks = marks.map((b) => {
     const p = top + (ch.lineNums.indexOf(b.line) + 0.5) * ch.pitch;   // the line's centre in scroll space
@@ -89,27 +179,31 @@ export function renderRail(tab) {
   });
   const html = ui.railMarks.map((m) =>
     `<button class="bm-dot" data-line="${m.line}" data-tip="Line ${m.line}" data-tip-side="left"
-      aria-label="Go to line ${m.line}" style="top:${m.y.toFixed(1)}px"></button>`).join('');
+      aria-label="Go to line ${m.line}" style="top:${m.y.toFixed(1)}px">
+      <svg viewBox="-17 -17 34 34" aria-hidden="true"><path d="${DOT_PATH}"/></svg></button>`).join('');
   if (ui.railHtml !== html) { ui.rail.innerHTML = html; ui.railHtml = html; }
-  updateRailNear(tab);
+  updateRailNear(tab, false);   // bring the dots to the right state without playing the morph
 }
 
-/* Scrolled to within a quarter-screen of a bookmark: its dot grows into a circle and the thumb's pill hides,
-   so the scrollbar looks like it has turned into the bookmark. */
-export function updateRailNear(tab) {
+/* Scrolled to within a quarter-screen of a bookmark: the thumb's pill hides and its dot morphs into a
+   circle (see setDotNear), so the scrollbar looks like it has turned into the bookmark. */
+export function updateRailNear(tab, animate = true) {
   const ui = tab.ui;
   const pane = ui?.paneOriginal;
   const marks = ui?.railMarks;
   if (!marks?.length) return;
   const centre = pane.scrollTop + pane.clientHeight / 2;
   const reach = pane.clientHeight * 0.75;
+  const held = ui.sb.rail.classList.contains('dragging');   // while the thumb is held only the thumb reacts
   let any = false;
   marks.forEach((m, i) => {
-    const near = Math.abs(m.p - centre) <= reach;
-    ui.rail.children[i]?.classList.toggle('near', near);
+    const dot = ui.rail.children[i];
+    const near = !held && Math.abs(m.p - centre) <= reach;
+    if (dot && dot.classList.contains('near') !== near) setDotNear(dot, near, animate);
+    else if (dot && !dot._radii) setDotNear(dot, near, false);   // a freshly built dot
     any ||= near;
   });
-  pane.classList.toggle('bm-near', any);
+  ui.sb.rail.classList.toggle('bm-near', any);
 }
 
 export function flashLine(verse) {

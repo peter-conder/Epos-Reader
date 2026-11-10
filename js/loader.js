@@ -12,9 +12,9 @@ const LOADER_SHAPES = [            // [lobes, depth] terms of r(θ) = 1 + Σ dep
   [[4, 0.17], [8, -0.035]],        // plump four-leaf clover
   [[10, 0.15], [20, -0.02]]        // deep 10-point starburst
 ];
-const LOADER_N = 144;              // points around each shape
+export const LOADER_N = 144;       // points around each shape
 const LOADER_STEP = 800;           // ms per shape: a 4-second cycle
-const LOADER_RADII = LOADER_SHAPES.map((terms) => Array.from({ length: LOADER_N }, (_, i) => {
+export const LOADER_RADII =LOADER_SHAPES.map((terms) => Array.from({ length: LOADER_N }, (_, i) => {
   const t = (i / LOADER_N) * Math.PI * 2;
   return 1 + terms.reduce((s, [n, a]) => s + a * Math.cos(n * t), 0);
 }));
@@ -32,7 +32,7 @@ export function cubicBezier(x1, y1, x2, y2) {
     return bz(t, y1, y2);
   };
 }
-const MORPH_EASE = cubicBezier(0.2, 0, 0, 1);         // fast in, long settle
+export const MORPH_EASE = cubicBezier(0.2, 0, 0, 1);         // fast in, long settle
 const SPIN_EASE = cubicBezier(0.34, 1.4, 0.64, 1);     // the spin burst overshoots a little as the shape lands
 
 /* A closed path through the points, smoothed into cubic Béziers (Catmull-Rom) */

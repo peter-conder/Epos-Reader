@@ -224,7 +224,7 @@
 <!-- WORD DEFINITION CARD -->
 <div class="word-card" id="word-card" role="dialog" aria-live="polite">
   <button class="card-bookmark" id="card-bookmark" data-tip="Bookmark this line" aria-label="Bookmark this line" aria-pressed="false">
-    <svg class="icon"><use href="assets/icons.svg#i-bookmark"/></svg>
+    <i class="bm-glyph" aria-hidden="true"></i>
   </button>
   <button class="card-note" id="card-note" data-tip="Add note" aria-label="Add note" aria-expanded="false">
     <svg class="icon"><use href="assets/icons.svg#i-note"/></svg>
@@ -255,7 +255,6 @@
 <template id="tpl-reader">
   <div class="view view-reader reader tab-view" data-split="off">
     <div class="workspace">
-      <div class="bm-rail" aria-hidden="true"></div>
       <section class="pane pane-original">
         <h1 class="book-title">Book I</h1>
         <div class="verses passage"></div>

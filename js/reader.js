@@ -8,7 +8,8 @@ import { makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js
 import { scheduleFit } from './fit.js';
 import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
-import { flashLine, refreshBookmarkMarks, renderRail, updateRailNear } from './bookmarks.js';
+import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark, updateRailNear } from './bookmarks.js';
+import { attachScrollbar } from './scrollbar.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -24,13 +25,16 @@ export function createReader(tab) {
     paneOriginal: rootEl.querySelector('.pane-original'),
     paneTranslation: rootEl.querySelector('.pane-translation'),
     divider: rootEl.querySelector('.divider'),
-    rail: rootEl.querySelector('.bm-rail'),
     passage: rootEl.querySelector('.passage'),
     translation: rootEl.querySelector('.translation'),
     titles: rootEl.querySelectorAll('.book-title'),
     renderedKey: null
   };
   el.panes.append(rootEl);
+  // Each pane gets its own drawn scrollbar; the original text's rail also carries the bookmark dots
+  tab.ui.sb = attachScrollbar(tab.ui.paneOriginal);
+  tab.ui.rail = tab.ui.sb.dots;
+  attachScrollbar(tab.ui.paneTranslation);
   bindReader(tab);
   // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
   tab.ro = new ResizeObserver(() => {
@@ -48,9 +52,12 @@ export function bindReader(tab) {
   const ui = tab.ui;
 
   ui.passage.addEventListener('click', (e) => {
+    const mark = e.target.closest('.verse-bm');
+    if (mark) { toggleBookmark(tab, +mark.closest('.verse').dataset.line); return; }   // adds it, or removes it if set
     const word = e.target.closest('.word');
     if (word) showWordCard(word);
   });
+  ui.sb.rail.addEventListener('sbdrag', () => updateRailNear(tab));   // holding or releasing the thumb
   ui.rail.addEventListener('click', (e) => {
     const dot = e.target.closest('.bm-dot');
     if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
@@ -176,7 +183,12 @@ export function verseHtml({ n, words }) {
   const html = words.map((w, j) =>
     `<span class="word" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
   ).join('');
-  return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
+  // --nd (digits in the line number) places the bookmark glyph to the left of the number; the glyph is the first
+  // child, so the row's last child stays the words (see lineWidth in fit.js)
+  const numbered = n === 1 || n % 5 === 0;
+  return `<div class="verse" data-line="${n}"${numbered ? ` style="--nd:${String(n).length}"` : ''}>`
+    + '<i class="verse-bm bm-glyph" data-tip="Bookmark this line"></i>'
+    + `<span class="verse-num">${numbered ? n : ''}</span><span class="verse-words">${html}</span></div>`;
 }
 
 /* Scansion: each syllable is [text, quantity, flags?]. Quantity is L long, S short, E elided.
