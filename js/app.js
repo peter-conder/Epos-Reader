@@ -27,6 +27,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     viewEmpty: $('view-empty'), viewSettings: $('view-settings'), viewNotebook: $('view-notebook'),
     notebookPane: $('notebook-pane'), noteGrid: $('note-grid'), nbCount: $('nb-count'), nbEmpty: $('nb-empty'),
     newNoteBtn: $('btn-new-note'),
+    bmList: $('bm-list'), bmEmpty: $('bm-empty'), nbBmCount: $('nb-bm-count'), cardBookmark: $('card-bookmark'),
     settingsChips: $('settings-chips'), paletteChips: $('palette-chips'),
     splitBtn: $('btn-split'), meterBtn: $('btn-meter'), textBtn: $('btn-text'),
     popupsBtn: $('btn-popups'), popupsFlyout: $('popups-flyout'), swWords: $('sw-words'), swNotes: $('sw-notes'),
@@ -93,6 +94,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
      pair: they share one pill in the sidebar and sit side by side.
      ========================================================== */
   const NOTES_KEY = 'epos.notes.v1';
+  const BOOKMARKS_KEY = 'epos.bookmarks.v1';
 
   const state = {
     tabs: [],              // left-to-right order of a pair is its order here
@@ -100,6 +102,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     view: 'reader',        // 'reader' (the open tab or tabs) | 'settings'
     scansion: false,
     notes: loadNotes(),    // { id, text, word, work, book, line, wordIdx, created }
+    bookmarks: loadBookmarks(),   // { id, work, book, line, text (snippet of the line), created }
     pickerTabId: null,     // the tab the Switch Work picker is changing
     pairPct: 50,           // width share of the left pane in a split pair
     fontRem: 1.45,         // text size chosen in the editor
@@ -516,6 +519,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       paneOriginal: rootEl.querySelector('.pane-original'),
       paneTranslation: rootEl.querySelector('.pane-translation'),
       divider: rootEl.querySelector('.divider'),
+      rail: rootEl.querySelector('.bm-rail'),
       passage: rootEl.querySelector('.passage'),
       translation: rootEl.querySelector('.translation'),
       titles: rootEl.querySelectorAll('.book-title'),
@@ -525,6 +529,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     bindReader(tab);
     // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
     tab.ro = new ResizeObserver(() => {
+      renderRail(tab);   // the dots follow the scrollbar as the pane is resized
       scheduleFit(tab, false);
       clearTimeout(tab.fitTimer);
       tab.fitTimer = setTimeout(() => scheduleFit(tab), 150);
@@ -541,9 +546,14 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       const word = e.target.closest('.word');
       if (word) showWordCard(word);
     });
+    ui.rail.addEventListener('click', (e) => {
+      const dot = e.target.closest('.bm-dot');
+      if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
+    });
     ui.paneOriginal.addEventListener('scroll', () => {
       if (selectedWord && ui.paneOriginal.contains(selectedWord) && performance.now() >= keepCardUntil) hideWordCard();
       syncChunks(ui.chunkers?.[0]);
+      updateRailNear(tab);
     }, { passive: true });
     ui.paneTranslation.addEventListener('scroll', () => syncChunks(ui.chunkers?.[1]), { passive: true });
 
@@ -620,6 +630,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     setBookTitles(tab);
     applySplit(tab);
     refreshNoteMarks([tab]);
+    refreshBookmarkMarks([tab]);
     scheduleFit(tab);
   }
 
@@ -707,7 +718,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
         node = document.createElement('div');
         node.className = 'verse-chunk';
         node.innerHTML = ch.rows.slice(k * CHUNK, (k + 1) * CHUNK).join('');
-        if (ch.container === ch.tab.ui.passage) markNotes(ch.tab, node);
+        if (ch.container === ch.tab.ui.passage) { markNotes(ch.tab, node); markBookmarks(ch.tab, node); }
         ch.container.insertBefore(node, next);
         ch.nodes.set(k, node);
       }
@@ -759,6 +770,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       if (measurePitch(ch)) sizeSpacers(ch);
       syncChunks(ch);
     }
+    renderRail(tab);
   }
 
   /* Scrolls a line of the original to the middle of its pane and returns its element */
@@ -2086,7 +2098,9 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   }
 
   function updateNotebookHeader() {
-    el.nbCount.textContent = countLabel();
+    const b = state.bookmarks.length;
+    el.nbCount.textContent = `${countLabel()} · ${b} ${b === 1 ? 'bookmark' : 'bookmarks'}`;
+    el.nbBmCount.textContent = String(b);
     el.nbEmpty.hidden = state.notes.length > 0;
     el.noteGrid.hidden = state.notes.length === 0;
   }
@@ -2110,6 +2124,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     notebookDirty = false;
     updateNotebookHeader();
     el.noteGrid.innerHTML = state.notes.map(noteCardHtml).join('');
+    renderBookmarks();
   }
 
   /* New notes start as an empty card at the top, focused and ready to type.
@@ -2174,22 +2189,24 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   /* Open the note's text in a tab (reusing one already on that book, which keeps
      a split intact), scroll to the line and open the word's gloss. */
-  async function jumpToNote(note) {
-    let tab = state.tabs.find((t) => isText(t) && t.work === note.work && t.book === note.book);
-    if (tab) activateTab(tab.id); else tab = addTab(note.work, note.book);
+  async function jumpToLine(work, book, line, wordIdx = null) {
+    let tab = state.tabs.find((t) => isText(t) && t.work === work && t.book === book);
+    if (tab) activateTab(tab.id); else tab = addTab(work, book);
     await tab.ui.ready;
 
     keepCardUntil = performance.now() + 600;
     // Deferred so the click that started the jump can't dismiss the gloss we are about to open,
     // and so the text has been fitted (which sets the row height the scroll position is worked out from).
     requestAnimationFrame(() => {
-      const verse = scrollToLine(tab, note.line);   // the line's chunk may not have been in the page
+      const verse = scrollToLine(tab, line);   // the line's chunk may not have been in the page
       if (!verse) return;
-      const word = note.wordIdx != null ? verse.querySelector(`.word[data-i="${note.wordIdx}"]`) : null;
+      const word = wordIdx != null ? verse.querySelector(`.word[data-i="${wordIdx}"]`) : null;
       verse.scrollIntoView({ block: 'center' });
-      if (word) showWordCard(word);
+      if (word) showWordCard(word); else flashLine(verse);
     });
   }
+
+  const jumpToNote = (note) => jumpToLine(note.work, note.book, note.line, note.wordIdx);
 
   /* ---- Dragging notes ----
      Press a card and a gray ripple spreads from the cursor; drag it and it is filled gray and lifted.
@@ -2429,6 +2446,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   /* Shows the word's note inside the gloss and updates the icon */
   function syncCardNote() {
+    syncCardBookmark();
     const note = wordCtx && findWordNote(wordCtx);
     const label = note ? 'Edit note' : 'Add note';
     el.cardNote.classList.toggle('has-note', !!note);
@@ -2496,6 +2514,189 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); closeNote(); }
   });
   document.addEventListener('pointerdown', (e) => { downInNote = !!e.target.closest('#note-box'); }, true);
+
+  /* ==========================================================
+     BOOKMARKS
+     A bookmark is tied to one line of a book and is added or removed from the word card. It shows as a
+     marker at the right of the line and as a dot on the original pane's scrollbar (click it to jump),
+     and is listed on the Notebook page below the notes. Saved in localStorage when available.
+     ========================================================== */
+  const TRACK_PAD = 24;   // the scrollbar track's end margin, as set on .pane::-webkit-scrollbar-track (--radius-xl)
+  const THUMB_MIN = 32;   // the thumb's shortest length: its min-height in styles.css
+
+  function loadBookmarks() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(BOOKMARKS_KEY) || '[]');
+      return Array.isArray(raw)
+        ? raw.filter((b) => b && b.id && WORKS[b.work] && typeof b.book === 'string' && Number.isInteger(b.line))
+        : [];
+    } catch { return []; }
+  }
+
+  function saveBookmarks() {
+    try { localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(state.bookmarks)); }
+    catch { /* storage unavailable: bookmarks stay in memory for this session */ }
+  }
+
+  /* The start of the line, kept with the bookmark so the Notebook can show it without opening the book */
+  function lineSnippet(tab, line) {
+    const l = tab.bookData?.byLine.get(line);
+    const words = l ? l.w.map((w) => w.f) : (WORKS[tab.work]?.lines?.[line - 1] ?? '').trim().split(/\s+/).filter(Boolean);
+    return words.slice(0, 7).join(' ') + (words.length > 7 ? '…' : '');
+  }
+
+  const isMarked = (b, tab) => b.work === tab.work && b.book === tab.book;
+
+  function toggleBookmark(tab, line) {
+    const i = state.bookmarks.findIndex((b) => isMarked(b, tab) && b.line === line);
+    if (i >= 0) state.bookmarks.splice(i, 1);
+    else state.bookmarks.push({ id: newId(), work: tab.work, book: tab.book, line, text: lineSnippet(tab, line), created: Date.now() });
+    bookmarksChanged();
+  }
+
+  /* Everything that has to refresh after any change to the bookmarks */
+  function bookmarksChanged() {
+    saveBookmarks();
+    refreshBookmarkMarks();
+    syncCardBookmark();
+    if (!el.viewNotebook.hidden && !el.panes.hidden) { updateNotebookHeader(); renderBookmarks(); }
+    else notebookDirty = true;
+  }
+
+  /* ---- Marks in the text and dots on the scrollbar ---- */
+  function refreshBookmarkMarks(tabs = state.tabs) {
+    for (const tab of tabs) {
+      if (!isText(tab)) continue;
+      tab.ui.passage.querySelectorAll('.verse.bookmarked').forEach((v) => v.classList.remove('bookmarked'));
+      markBookmarks(tab, tab.ui.passage);
+      renderRail(tab);
+    }
+  }
+
+  /* Marks the bookmarked lines inside `scope` (the passage, or one chunk as it is added) */
+  function markBookmarks(tab, scope) {
+    for (const b of state.bookmarks) {
+      if (isMarked(b, tab)) scope.querySelector(`.verse[data-line="${b.line}"]`)?.classList.add('bookmarked');
+    }
+  }
+
+  /* Puts the rail over the original pane's scrollbar and a dot on it for each bookmark. The dot sits where the
+     scrollbar thumb's centre is when that line is centred in the pane (which is where a jump puts it), using
+     the browser's own thumb maths: thumb top = scrollTop / (scrollHeight - clientHeight) * (track - thumb).
+     The spacers keep scrollHeight at the whole book's height, so this holds whichever chunks are in the page. */
+  function renderRail(tab) {
+    const ui = tab.ui;
+    const ch = ui?.chunkers?.[0];
+    const pane = ui?.paneOriginal;
+    if (!ui?.rail) return;
+    const marks = ch?.pitch && !ui.root.hidden && pane.scrollHeight > pane.clientHeight
+      ? state.bookmarks.filter((b) => isMarked(b, tab) && ch.lineNums.includes(b.line)) : [];
+    ui.rail.style.display = marks.length ? 'block' : '';
+    if (!marks.length) {
+      ui.rail.innerHTML = ui.railHtml = '';
+      ui.railMarks = [];
+      pane?.classList.remove('bm-near');
+      return;
+    }
+
+    ui.rail.style.left = `${pane.offsetLeft + pane.clientLeft + pane.clientWidth}px`;
+    ui.rail.style.top = `${pane.offsetTop + pane.clientTop}px`;
+    ui.rail.style.height = `${pane.clientHeight}px`;
+
+    const C = pane.clientHeight, H = pane.scrollHeight, T = C - 2 * TRACK_PAD;
+    const L = Math.min(T, Math.max((T * C) / H, THUMB_MIN));   // thumb length
+    const top = textTop(ch);
+    ui.railMarks = marks.map((b) => {
+      const p = top + (ch.lineNums.indexOf(b.line) + 0.5) * ch.pitch;   // the line's centre in scroll space
+      const s = clamp(p - C / 2, 0, H - C);                              // scrollTop with that line centred
+      return { line: b.line, p, y: TRACK_PAD + (s / (H - C)) * (T - L) + L / 2 };
+    });
+    const html = ui.railMarks.map((m) =>
+      `<button class="bm-dot" data-line="${m.line}" data-tip="Line ${m.line}" data-tip-side="left"
+        aria-label="Go to line ${m.line}" style="top:${m.y.toFixed(1)}px"></button>`).join('');
+    if (ui.railHtml !== html) { ui.rail.innerHTML = html; ui.railHtml = html; }
+    updateRailNear(tab);
+  }
+
+  /* Scrolled to within a quarter-screen of a bookmark: its dot grows into a circle and the thumb's pill hides,
+     so the scrollbar looks like it has turned into the bookmark. */
+  function updateRailNear(tab) {
+    const ui = tab.ui;
+    const pane = ui?.paneOriginal;
+    const marks = ui?.railMarks;
+    if (!marks?.length) return;
+    const centre = pane.scrollTop + pane.clientHeight / 2;
+    const reach = pane.clientHeight * 0.75;
+    let any = false;
+    marks.forEach((m, i) => {
+      const near = Math.abs(m.p - centre) <= reach;
+      ui.rail.children[i]?.classList.toggle('near', near);
+      any ||= near;
+    });
+    pane.classList.toggle('bm-near', any);
+  }
+
+  function flashLine(verse) {
+    if (!verse) return;
+    verse.classList.remove('flash');
+    void verse.offsetWidth;   // replay the animation if it is still running
+    verse.classList.add('flash');
+    setTimeout(() => verse.classList.remove('flash'), 1300);
+  }
+
+  /* ---- Word card button ---- */
+  function syncCardBookmark() {
+    const tab = selectedWord && getTab(selectedWord.closest('.tab-view')?.dataset.tabId);
+    const on = !!(wordCtx && tab && state.bookmarks.some((b) => isMarked(b, tab) && b.line === wordCtx.line));
+    el.cardBookmark.classList.toggle('has-bookmark', on);
+    el.cardBookmark.setAttribute('aria-pressed', String(on));
+    el.cardBookmark.dataset.tip = on ? 'Remove bookmark' : 'Bookmark this line';
+  }
+
+  el.cardBookmark.addEventListener('click', () => {
+    const tab = selectedWord && getTab(selectedWord.closest('.tab-view')?.dataset.tabId);
+    if (wordCtx && tab) toggleBookmark(tab, wordCtx.line);
+  });
+
+  /* ---- Notebook list ---- */
+  const bookmarkOrder = Object.keys(WORKS);
+
+  function bookmarkCardHtml(b) {
+    return `
+      <article class="bm-card" data-bm-id="${b.id}" tabindex="0" role="button" aria-label="Go to ${esc(noteSource(b))}">
+        <div class="bm-src">${icon('bookmark')}<span>${esc(noteSource(b))}</span></div>
+        ${b.text ? `<div class="bm-text">${esc(b.text)}</div>` : ''}
+        <button class="note-del" data-tip="Remove bookmark" aria-label="Remove bookmark">${icon('trash')}</button>
+      </article>`;
+  }
+
+  function renderBookmarks() {
+    const list = [...state.bookmarks].sort((a, b) =>
+      bookmarkOrder.indexOf(a.work) - bookmarkOrder.indexOf(b.work)
+      || ROMANS.indexOf(a.book) - ROMANS.indexOf(b.book)
+      || a.line - b.line);
+    el.bmEmpty.hidden = list.length > 0;
+    el.bmList.hidden = list.length === 0;
+    el.bmList.innerHTML = list.map(bookmarkCardHtml).join('');
+  }
+
+  el.bmList.addEventListener('click', (e) => {
+    const card = e.target.closest('.bm-card');
+    const b = card && state.bookmarks.find((x) => x.id === card.dataset.bmId);
+    if (!b) return;
+    if (e.target.closest('.note-del')) {
+      state.bookmarks.splice(state.bookmarks.indexOf(b), 1);
+      bookmarksChanged();
+    } else {
+      jumpToLine(b.work, b.book, b.line);
+    }
+  });
+
+  el.bmList.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || e.target !== e.target.closest('.bm-card')) return;
+    const b = state.bookmarks.find((x) => x.id === e.target.dataset.bmId);
+    if (b) jumpToLine(b.work, b.book, b.line);
+  });
 
   /* Hover tips: any element with data-tip gets a small popup in the style of the tab hover card */
   (() => {

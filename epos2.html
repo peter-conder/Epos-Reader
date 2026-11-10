@@ -88,6 +88,9 @@
           </header>
           <div class="note-grid" id="note-grid" hidden></div>
           <p class="nb-empty" id="nb-empty">No notes yet. Click a word in any text and use the note icon, or add one here.</p>
+          <div class="nb-divider" role="separator"><span>Bookmarks</span><span class="nb-divider-count" id="nb-bm-count"></span></div>
+          <div class="bm-list" id="bm-list"></div>
+          <p class="nb-empty" id="bm-empty">No bookmarks yet. Click a word and use the bookmark icon in its popup.</p>
         </section>
       </div>
     </div>
@@ -220,6 +223,9 @@
 
 <!-- WORD DEFINITION CARD -->
 <div class="word-card" id="word-card" role="dialog" aria-live="polite">
+  <button class="card-bookmark" id="card-bookmark" data-tip="Bookmark this line" aria-label="Bookmark this line" aria-pressed="false">
+    <svg class="icon"><use href="assets/icons.svg#i-bookmark"/></svg>
+  </button>
   <button class="card-note" id="card-note" data-tip="Add note" aria-label="Add note" aria-expanded="false">
     <svg class="icon"><use href="assets/icons.svg#i-note"/></svg>
   </button>
@@ -249,6 +255,7 @@
 <template id="tpl-reader">
   <div class="view view-reader reader tab-view" data-split="off">
     <div class="workspace">
+      <div class="bm-rail" aria-hidden="true"></div>
       <section class="pane pane-original">
         <h1 class="book-title">Book I</h1>
         <div class="verses passage"></div>

@@ -56,6 +56,7 @@
     /* Widest a lone reading pane gets; the book bar above it is held to the same width */
     --reader-max: 860px;
 
+    --bookmark-fill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.5 3.5h11v17L12 16.6l-5.5 3.9Z' fill='black' stroke='black' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
     --snippet-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5,19H19V9.82L14.18,5H5V19Zm0,2q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H15l6,6V19q0,0.82-0.59,1.41T19,21H5Zm2-4H17V15H7v2Zm0-4H17V11H7v2ZM7,9h7V7H7V9ZM5,19V5V9.82V19Z'/%3E%3C/svg%3E");
   }
 
@@ -693,7 +694,38 @@
   /* ==========================================================
      6. READER (split panes)
      ========================================================== */
-  .workspace { display: flex; height: 100%; overflow: hidden; }
+  .workspace { position: relative; display: flex; height: 100%; overflow: hidden; }
+
+  /* Bookmark dots ride on the original pane's scrollbar. The rail sits over the scrollbar (placed from script,
+     see positionRail in app.js); only the dots take clicks, so the scrollbar itself still drags. */
+  .bm-rail { position: absolute; width: 14px; z-index: 6; pointer-events: none; display: none; }
+  .bm-dot {
+    position: absolute; left: 7px;   /* centred on the 14px scrollbar; top is set from script */
+    width: 12px; height: 12px;
+    transform: translate(-50%, -50%);
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    border: 2px solid var(--surface);
+    box-sizing: border-box;
+    pointer-events: auto; cursor: pointer;
+    display: grid; place-items: center;
+    transition: width 260ms var(--ease-bouncy), height 260ms var(--ease-bouncy), left 260ms var(--ease-bouncy),
+                border-width 260ms ease, transform 140ms var(--ease-spring);
+  }
+  .bm-dot:hover { transform: translate(-50%, -50%) scale(1.15); }
+  /* Scrolled close to a bookmark: the dot grows into a circle with a bookmark in it (the thumb's pill is hidden
+     meanwhile, see .pane.bm-near). It grows leftwards so it is never clipped by the pane's edge. */
+  .bm-dot.near { left: 4px; width: 22px; height: 22px; border-width: 0; }
+  .bm-dot::after {
+    content: '';
+    width: 12px; height: 12px;
+    background: var(--on-primary);
+    -webkit-mask: var(--bookmark-fill-icon) center / contain no-repeat;
+            mask: var(--bookmark-fill-icon) center / contain no-repeat;
+    opacity: 0; transform: scale(0.4);
+    transition: opacity 200ms ease, transform 260ms var(--ease-bouncy);
+  }
+  .bm-dot.near::after { opacity: 1; transform: scale(1); }
 
   .pane {
     height: 100%;
@@ -703,9 +735,28 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-pane);
     overflow: hidden auto;
+    overscroll-behavior: contain;
     user-select: text;
     transition: padding 180ms ease;
   }
+
+  /* Scrollbar: no track chrome, thumb is a pill in the active-book colour, kept clear of the rounded corners */
+  .pane::-webkit-scrollbar { width: 14px; }
+  .pane::-webkit-scrollbar-track {
+    background: transparent;
+    border: none;
+    margin: var(--radius-xl) 0;
+  }
+  .pane::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: var(--radius-full);
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    min-height: 32px;   /* keep equal to THUMB_MIN in app.js: the bookmark dots are placed from it */
+  }
+  /* Near a bookmark the pill gives way to the bookmark's circle (see updateRailNear in app.js) */
+  .pane.bm-near::-webkit-scrollbar-thumb { background: transparent; }
+  .pane::-webkit-scrollbar-corner { background: transparent; }
 
   .pane-original {
     width: 100%; max-width: var(--reader-max); margin: 0 auto; flex-shrink: 0;
@@ -764,6 +815,7 @@
   .chunk-spacer { flex: none; }
 
   .verse {
+    position: relative;
     display: flex; align-items: baseline;
     font-family: var(--reading-font);
     font-size: var(--reading-font-size);
@@ -778,6 +830,21 @@
     user-select: none;
   }
   .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: 0.45em; }
+
+  /* A bookmarked line carries a marker just past the right edge of the text block (inside the pane's padding).
+     Positioned against the whole row, so it is centred on the line; absolute, so it adds nothing to the row
+     height the chunker measures. Bookmarks are only added or removed from the word card. */
+  .verse.bookmarked::after {
+    content: '';
+    position: absolute; left: calc(100% + 6px); top: 50%;
+    width: 16px; height: 16px; margin-top: -8px;
+    background: var(--primary);
+    -webkit-mask: var(--bookmark-fill-icon) center / 14px no-repeat;
+            mask: var(--bookmark-fill-icon) center / 14px no-repeat;
+    pointer-events: none;
+  }
+  .verse.flash { animation: lineFlash 1200ms ease-out; }
+  @keyframes lineFlash { 0%, 35% { background: var(--primary-container); } 100% { background: transparent; } }
 
   /* Min-height = one verse row (text line + word padding/margin) so the
      English lines stay level with the original. */
@@ -917,7 +984,7 @@
     70%  { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
   }
-  .card-lemma { font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; padding-right: 40px; }
+  .card-lemma { font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; padding-right: 80px; }
   .card-morph { font-size: 12px; opacity: 0.7; margin-bottom: 10px; }
   .card-scan { font-size: 12px; margin: -6px 0 10px; color: var(--primary); white-space: pre; }
   .card-def { font-size: 14px; line-height: 1.45; }
@@ -933,6 +1000,19 @@
   .card-note .icon { width: 17px; height: 17px; }
   .card-note:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); }
   .card-note.has-note, .card-note[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); }
+
+  /* Bookmark button, just left of the note button; filled once the line is bookmarked */
+  .card-bookmark {
+    position: absolute; top: 12px; right: 50px;
+    width: 34px; height: 34px;
+    border-radius: var(--radius-full);
+    display: grid; place-items: center;
+    transition: background-color 140ms ease, color 140ms ease, transform 150ms var(--ease-spring);
+  }
+  .card-bookmark .icon { width: 17px; height: 17px; }
+  .card-bookmark:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); }
+  .card-bookmark.has-bookmark { background: var(--primary); color: var(--on-primary); }
+  .card-bookmark.has-bookmark .icon { fill: currentColor; }
 
   /* The note, shown right in the gloss */
   .card-user-note {
@@ -1083,9 +1163,37 @@
   .nb-empty { padding: 56px 16px; text-align: center; font-size: 15px; line-height: 1.5; color: var(--gray-400); }
 
   /* 2 columns by default, 3 and 4 as the pane gets wider */
-  .note-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  @container (min-width: 820px)  { .note-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @container (min-width: 1180px) { .note-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .note-grid, .bm-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  @container (min-width: 820px)  { .note-grid, .bm-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @container (min-width: 1180px) { .note-grid, .bm-list { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  /* Divider between the notes and the bookmarks below them */
+  .nb-divider {
+    display: flex; align-items: center; gap: 14px;
+    margin: 40px 0 20px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--gray-800);
+  }
+  .nb-divider::after { content: ''; order: 1; flex: 1; height: 2px; border-radius: 2px; background: var(--secondary-container); }
+  .nb-divider-count { order: 2; font-weight: 500; letter-spacing: 0.2px; text-transform: none; color: var(--text-muted); }
+
+  .bm-card {
+    position: relative;
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px 44px 14px 16px;
+    background: var(--soft);
+    color: var(--on-secondary-container);
+    border-radius: var(--radius-md);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 150ms ease, box-shadow 200ms ease;
+  }
+  .bm-card:hover { background: color-mix(in srgb, var(--secondary-container) 80%, var(--primary)); box-shadow: var(--shadow-1); }
+  .bm-src { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.2px; color: var(--primary); }
+  .bm-src .icon { width: 14px; height: 14px; fill: currentColor; }
+  .bm-text { font-family: var(--reading-font); font-size: 0.95rem; font-style: italic; line-height: 1.4; overflow-wrap: anywhere; }
+  .bm-card:hover .note-del, .bm-card:focus-within .note-del { opacity: 1; }
+  .bm-card .note-del { top: 8px; right: 8px; bottom: auto; }
 
   .note-card {
     position: relative; overflow: hidden;
