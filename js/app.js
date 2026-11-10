@@ -543,7 +543,9 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     });
     ui.paneOriginal.addEventListener('scroll', () => {
       if (selectedWord && ui.paneOriginal.contains(selectedWord) && performance.now() >= keepCardUntil) hideWordCard();
+      syncChunks(ui.chunkers?.[0]);
     }, { passive: true });
+    ui.paneTranslation.addEventListener('scroll', () => syncChunks(ui.chunkers?.[1]), { passive: true });
 
     // Divider: rubber-bands past 80%, snaps the translation closed past 89%
     const dv = { active: false, rect: null, pct: 50, raf: 0 };
@@ -635,19 +637,142 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       const lines = data
         ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }))
         : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/).map((f) => ({ f })) }));
+      const trans = work.translations ?? [];
 
-      ui.passage.innerHTML = lines.map(({ n, words }) => {
-        const html = words.map((w, j) =>
-          `<span class="word" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
-        ).join('');
-        return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
-      }).join('');
-      ui.translation.innerHTML = work.translations.map((t) => `<div class="translation-line">${esc(t)}</div>`).join('');
+      // Only a few chunks of each pane are ever in the page (see CHUNKS below)
+      const prev = ui.chunkers ?? [];
+      // Widest-line guess for the fit: letters, plus about two letters' worth of padding and gap per word
+      const verseScore = (l) => l.words.reduce((s, w) => s + w.f.length + 2, 0);
+      ui.chunkers = [
+        makeChunker(tab, ui.passage, ui.paneOriginal, lines.map(verseHtml), lines.map(verseScore), prev[0]?.pitch),
+        makeChunker(tab, ui.translation, ui.paneTranslation,
+          trans.map((t) => `<div class="translation-line">${esc(t)}</div>`), trans.map((t) => t.length), prev[1]?.pitch)
+      ];
+      ui.chunkers[0].lineNums = lines.map((l) => l.n);
+      ui.chunkers.forEach(mountChunker);
       tab.fitModel = null;   // new text, new widths
-      refreshNoteMarks([tab]);
       scheduleFit(tab);
     });
     return ui.ready;
+  }
+
+  function verseHtml({ n, words }) {
+    const html = words.map((w, j) =>
+      `<span class="word" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
+    ).join('');
+    return `<div class="verse" data-line="${n}"><span class="verse-num">${n === 1 || n % 5 === 0 ? n : ''}</span><span class="verse-words">${html}</span></div>`;
+  }
+
+  /* ==========================================================
+     CHUNKS: a book is split into 25-line chunks and only three are in the page at
+     once (the one at the middle of the pane and its neighbours). Spacers above and
+     below stand in for the rest at their exact height, so the scrollbar, scroll
+     position and scroll anchoring behave as if the whole book were there.
+     Every line is one row of the same height (lines never wrap, and the scansion
+     marks are absolutely positioned), so one measured row height places everything.
+     ========================================================== */
+  const CHUNK = 25;     // lines per chunk
+  const ROW_GAP = 3;    // gap between lines, as in .verses and .verse-chunk
+
+  function makeChunker(tab, container, pane, rows, scores, pitch = 0) {
+    // The lines most likely to be the widest, measured for the fit instead of the whole text
+    const cand = scores.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]).slice(0, FIT_CANDIDATES).map(([, i]) => i);
+    return { tab, container, pane, rows, cand, pitch, nodes: new Map(), center: -1, lo: 0, hi: -1, top: null, bottom: null };
+  }
+
+  function mountChunker(ch) {
+    ch.container.innerHTML = '<div class="chunk-spacer"></div><div class="chunk-spacer"></div>';
+    [ch.top, ch.bottom] = ch.container.children;
+    ch.nodes.clear();
+    showWindow(ch, 0);
+    if (measurePitch(ch)) sizeSpacers(ch);
+  }
+
+  /* Puts chunks c-1 … c+1 in the page. Chunks already there are left alone. */
+  function showWindow(ch, c) {
+    const count = Math.ceil(ch.rows.length / CHUNK);
+    ch.center = c;
+    ch.lo = Math.max(0, c - 1);
+    ch.hi = Math.min(count - 1, c + 1);
+    for (const [k, node] of ch.nodes) {
+      if (k >= ch.lo && k <= ch.hi) continue;
+      if (selectedWord && node.contains(selectedWord)) hideWordCard();
+      node.remove();
+      ch.nodes.delete(k);
+    }
+    let next = ch.bottom;
+    for (let k = ch.hi; k >= ch.lo; k--) {
+      let node = ch.nodes.get(k);
+      if (!node) {
+        node = document.createElement('div');
+        node.className = 'verse-chunk';
+        node.innerHTML = ch.rows.slice(k * CHUNK, (k + 1) * CHUNK).join('');
+        if (ch.container === ch.tab.ui.passage) markNotes(ch.tab, node);
+        ch.container.insertBefore(node, next);
+        ch.nodes.set(k, node);
+      }
+      next = node;
+    }
+    sizeSpacers(ch);
+  }
+
+  function sizeSpacers(ch) {
+    const set = (sp, rows) => {
+      const h = rows * ch.pitch - ROW_GAP;   // n rows take n·pitch less one gap; the container's gap adds it back
+      sp.style.display = rows && h > 0 ? '' : 'none';
+      sp.style.height = `${Math.max(0, h)}px`;
+    };
+    set(ch.top, ch.lo * CHUNK);
+    set(ch.bottom, Math.max(0, ch.rows.length - (ch.hi + 1) * CHUNK));
+  }
+
+  /* Height of one row plus the gap. Read from the computed style, which a transform (the pop-in) doesn't change. */
+  function measurePitch(ch) {
+    const row = ch.nodes.values().next().value?.firstElementChild;
+    const h = row ? parseFloat(getComputedStyle(row).height) : 0;
+    if (!(h > 0)) return false;
+    const p = h + ROW_GAP;
+    if (Math.abs(p - ch.pitch) < 0.001) return false;
+    ch.pitch = p;
+    return true;
+  }
+
+  /* Where the text block starts within the pane's scrolling content */
+  function textTop({ container: c, pane: p }) {
+    return c.offsetParent === p ? c.offsetTop : c.offsetTop - p.offsetTop - p.clientTop;
+  }
+
+  /* Called on every scroll: swaps chunks only when the middle of the pane moves into another chunk */
+  function syncChunks(ch) {
+    if (!ch?.pitch || !ch.pane.clientHeight) return;
+    const count = Math.ceil(ch.rows.length / CHUNK);
+    const y = ch.pane.scrollTop + ch.pane.clientHeight / 2 - textTop(ch);
+    const c = clamp(Math.floor(y / (CHUNK * ch.pitch)), 0, Math.max(0, count - 1));
+    if (c !== ch.center) showWindow(ch, c);
+  }
+
+  /* After a fit or a resize: row heights may have changed */
+  function syncLayout(tab) {
+    const ui = tab.ui;
+    if (!ui?.chunkers || ui.root.hidden) return;
+    for (const ch of ui.chunkers) {
+      if (measurePitch(ch)) sizeSpacers(ch);
+      syncChunks(ch);
+    }
+  }
+
+  /* Scrolls a line of the original to the middle of its pane and returns its element */
+  function scrollToLine(tab, line) {
+    const ch = tab.ui.chunkers?.[0];
+    const i = ch?.lineNums?.indexOf(line) ?? -1;
+    if (i < 0) return null;
+    const find = () => ch.container.querySelector(`.verse[data-line="${line}"]`);
+    if (ch.pitch && ch.pane.clientHeight) {
+      ch.pane.scrollTop = textTop(ch) + (i + 0.5) * ch.pitch - ch.pane.clientHeight / 2;
+      syncChunks(ch);
+    }
+    if (!find()) showWindow(ch, Math.floor(i / CHUNK));
+    return find();
   }
 
   /* Scansion: each syllable is [text, quantity, flags?]. Quantity is L long, S short, E elided.
@@ -683,7 +808,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
 
   /* Text shrinks to fit its pane instead of wrapping, never below the smallest size the editor offers */
   const TWO_UP_SCALE = 0.86;
-  const FIT_CANDIDATES = 12;   // lines measured at the reference sizes
+  const FIT_CANDIDATES = 40;   // lines measured at the reference sizes (picked from the text, see makeChunker)
   const FIT_STEP = 100;        // sizes round down to 1/100 rem, so tiny width changes don't relayout the book
 
   /* How wide one line's content is (its flex row stretches to the widest line, so the row itself can't say) */
@@ -698,23 +823,22 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     return r.getBoundingClientRect().right - left + padRight;
   }
 
-  /* Width grows almost linearly with size (the text scales, word padding doesn't). The widest lines are
-     found in the layout already on screen, then only copies of those are laid out at the smallest and
-     largest sizes, instead of relaying out the whole book twice. Gives each line's { k, b } with width = k·size + b. */
+  /* Width grows almost linearly with size (the text scales, word padding doesn't). Most of the book isn't in
+     the page, so the lines likeliest to be widest are picked from the text itself (longest by letters and
+     words), and only copies of those are laid out at the smallest and largest sizes. Gives each line's
+     { k, b } with width = k·size + b. */
   function measureFitModel(checks) {
     const lo = MIN_FONT * TWO_UP_SCALE, hi = parseFloat(el.fontSlider.max);
     const model = new Map();
     for (const c of checks) {
-      const lines = [...c.verses.children];
-      const padRight = lines[0] ? parseFloat(getComputedStyle(lines[0]).paddingRight) || 0 : 0;
-      const widest = lines.map((l) => [lineWidth(l, padRight), l])
-        .sort((a, b) => b[0] - a[0]).slice(0, FIT_CANDIDATES).map(([, l]) => l.cloneNode(true));
-      if (!widest.length) { model.set(c.pn, []); continue; }
+      if (!c.ch.cand.length) { model.set(c.pn, []); continue; }
       const probe = document.createElement('div');
       probe.className = 'fit-probe';
       probe.setAttribute('aria-hidden', 'true');
-      probe.append(...widest);
+      probe.innerHTML = c.ch.cand.map((i) => c.ch.rows[i]).join('');
       c.pn.append(probe);
+      const widest = [...probe.children];
+      const padRight = parseFloat(getComputedStyle(widest[0]).paddingRight) || 0;
       const at = (size) => {
         probe.style.setProperty('--reading-font-size', `${size}rem`);
         probe.style.setProperty('--reading-trans-font-size', `${size * 0.86}rem`);
@@ -733,20 +857,24 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
   /* verify: also check the result against the real layout (skipped while a pane is being dragged) */
   function fitReader(tab, verify = true) {
     const ui = tab?.ui;
-    if (!ui || !ui.root.isConnected || ui.root.hidden || !ui.paneOriginal.clientWidth) return;
+    if (!ui?.chunkers || !ui.root.isConnected || ui.root.hidden || !ui.paneOriginal.clientWidth) return;
     // Two windows share the width, so the text sits a step smaller than in a single window
     const twoUp = !!partnerOf(tab) || !!tab.split;
     const max = state.fontRem * (twoUp ? TWO_UP_SCALE : 1);
     const min = Math.min(max, MIN_FONT);
     const panes = tab.split && ui.paneTranslation.clientWidth ? [ui.paneOriginal, ui.paneTranslation] : [ui.paneOriginal];
     // Padding doesn't depend on the font size, so it is read once rather than on every step of the search
-    const checks = panes.map((pn) => {
+    const checks = panes.map((pn, i) => {
       const cs = getComputedStyle(pn);
-      return { pn, verses: pn.querySelector('.verses'), pad: parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) };
+      return { pn, ch: ui.chunkers[i], verses: ui.chunkers[i].container, pad: parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) };
     });
+    // Only a few chunks are in the page, so the text block is held to the width of the book's widest
+    // line; otherwise it would shift sideways as wider lines scroll in
+    const widestAt = (pn, size) => Math.max(0, ...(model.get(pn) ?? []).map(({ k, b }) => k * size + b));
     const apply = (size) => {
       ui.root.style.setProperty('--reading-font-size', `${size.toFixed(3)}rem`);
       ui.root.style.setProperty('--reading-trans-font-size', `${(size * 0.86).toFixed(3)}rem`);
+      for (const c of checks) c.verses.style.minWidth = `${Math.ceil(widestAt(c.pn, size))}px`;
     };
     const fits = () => checks.every((c) => c.verses.offsetWidth <= c.pn.clientWidth - c.pad + 1);
 
@@ -794,6 +922,7 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
       tab.fitRaf = 0;
       tab.fitVerify = false;
       fitReader(tab, v);
+      syncLayout(tab);
     });
   }
 
@@ -1397,10 +1526,117 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     });
   }
 
+  /* ==========================================================
+     LOADING INDICATOR (Material 3 Expressive style): one solid shape with no track,
+     spinning clockwise while it morphs through a scalloped badge, a pentagon, an
+     8-point star, a clover and a 10-point starburst. Each shape is a smooth radius
+     curve r(θ) sampled at the same angles, so any two can be blended point by point;
+     every curve averages the same radius, so the footprint stays the same.
+     ========================================================== */
+  const LOADER_SHAPES = [            // [lobes, depth] terms of r(θ) = 1 + Σ depth·cos(lobes·θ)
+    [[12, 0.045]],                   // 12-point scalloped badge
+    [[5, 0.08], [10, 0.012]],        // rounded pentagon (the second term flattens the sides)
+    [[8, 0.11], [16, -0.015]],       // 8-point star with blunt tips
+    [[4, 0.17], [8, -0.035]],        // plump four-leaf clover
+    [[10, 0.15], [20, -0.02]]        // deep 10-point starburst
+  ];
+  const LOADER_N = 144;              // points around each shape
+  const LOADER_STEP = 800;           // ms per shape: a 4-second cycle
+  const LOADER_RADII = LOADER_SHAPES.map((terms) => Array.from({ length: LOADER_N }, (_, i) => {
+    const t = (i / LOADER_N) * Math.PI * 2;
+    return 1 + terms.reduce((s, [n, a]) => s + a * Math.cos(n * t), 0);
+  }));
+
+  /* A CSS-style cubic-bezier easing function */
+  function cubicBezier(x1, y1, x2, y2) {
+    const bz = (t, a, b) => 3 * a * t * (1 - t) ** 2 + 3 * b * t * t * (1 - t) + t ** 3;
+    return (x) => {
+      if (x <= 0 || x >= 1) return x <= 0 ? 0 : 1;
+      let lo = 0, hi = 1, t = x;
+      for (let i = 0; i < 20; i++) {
+        if (bz(t, x1, x2) < x) lo = t; else hi = t;
+        t = (lo + hi) / 2;
+      }
+      return bz(t, y1, y2);
+    };
+  }
+  const MORPH_EASE = cubicBezier(0.2, 0, 0, 1);         // fast in, long settle
+  const SPIN_EASE = cubicBezier(0.34, 1.4, 0.64, 1);     // the spin burst overshoots a little as the shape lands
+
+  /* A closed path through the points, smoothed into cubic Béziers (Catmull-Rom) */
+  function loaderPath(radii, R) {
+    const pts = radii.map((r, i) => {
+      const t = (i / LOADER_N) * Math.PI * 2;
+      return [R * r * Math.cos(t), R * r * Math.sin(t)];
+    });
+    const n = pts.length, f = (v) => v.toFixed(2);
+    let d = `M${f(pts[0][0])},${f(pts[0][1])}`;
+    for (let i = 0; i < n; i++) {
+      const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+      d += `C${f(p1[0] + (p2[0] - p0[0]) / 6)},${f(p1[1] + (p2[1] - p0[1]) / 6)} ${f(p2[0] - (p3[0] - p1[0]) / 6)},${f(p2[1] - (p3[1] - p1[1]) / 6)} ${f(p2[0])},${f(p2[1])}`;
+    }
+    return `${d}Z`;
+  }
+
+  /* The indicator element. Its animation runs until it is taken out of the page. */
+  function createLoader() {
+    const wrap = document.createElement('div');
+    wrap.className = 'm3-loader';
+    wrap.setAttribute('role', 'progressbar');
+    wrap.setAttribute('aria-label', 'Loading');
+    wrap.innerHTML = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><path/></svg>';
+    const path = wrap.querySelector('path');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const R = 40;   // the deepest shape reaches about 47 of the 50 units around the centre
+    let t0 = 0;
+    const frame = (now) => {
+      if (!wrap.isConnected) return;
+      t0 ||= now;
+      const t = now - t0;
+      const step = Math.floor(t / LOADER_STEP), p = (t % LOADER_STEP) / LOADER_STEP;
+      const from = LOADER_RADII[step % LOADER_RADII.length], to = LOADER_RADII[(step + 1) % LOADER_RADII.length];
+      const e = MORPH_EASE(p);
+      path.setAttribute('d', loaderPath(from.map((r, i) => r + (to[i] - r) * e), R));
+      // A slow steady spin, plus a quarter-turn burst that lands with each new shape
+      if (!still) path.setAttribute('transform', `rotate(${((t * 0.045 + (step + SPIN_EASE(p)) * 90) % 360).toFixed(2)})`);
+      requestAnimationFrame(frame);
+    };
+    path.setAttribute('d', loaderPath(LOADER_RADII[0], R));
+    requestAnimationFrame(frame);
+    return wrap;
+  }
+
+  /* Opening a work from a home page: the indicator shows for 0.3 s. The book starts downloading at once,
+     the reader is built hidden behind the indicator at 0.2 s, and it is shown when the indicator goes. */
+  const LOAD_BUILD_MS = 200, LOAD_SHOW_MS = 300;
+  function openWithLoader(host, work, build, reveal) {
+    if (host.classList.contains('loading')) return;   // one work at a time
+    host.classList.add('loading');
+    const loader = createLoader();
+    host.append(loader);
+    loadBook(work, 'I');
+    setTimeout(build, LOAD_BUILD_MS);
+    setTimeout(() => {
+      loader.remove();
+      host.classList.remove('loading');
+      reveal();
+    }, LOAD_SHOW_MS);
+  }
+
   // The page shown when no tab is open
   const homeCarousel = $('home-carousel');
   homeCarousel.innerHTML = CAROUSEL_HTML;
-  bindCarousel(homeCarousel, (work) => addTab(work, 'I'));
+  bindCarousel(homeCarousel, (work) => {
+    let tab = null;
+    openWithLoader(el.viewEmpty, work, () => {
+      tab = newTextTab(work, 'I');
+      createReader(tab);
+      renderPassage(tab);
+    }, () => {
+      state.tabs.push(tab);
+      activateTab(tab.id);
+    });
+  });
 
   /* "+" opens a new tab on the home page */
   function addNewTab() {
@@ -1418,13 +1654,31 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     return tab;
   }
 
-  /* Choosing a work turns the new tab into a reader on Book I, in the same place in the sidebar and any split */
+  /* Choosing a work turns the new tab into a reader on Book I, in the same place in the sidebar and any split.
+     The home page stays on screen with the loading indicator while the reader is built behind it. */
   function openWorkInTab(tab, work) {
     const old = tab.view;
-    Object.assign(tab, { kind: 'text', work, book: 'I', split: false, splitPct: 50, fresh: true });
-    createReader(tab);
-    old.remove();
-    activateTab(tab.id);
+    const current = () => getTab(tab.id) === tab && tab.view === old;   // not closed (or undone) in the meantime
+    let built = null;
+    openWithLoader(old, work, () => {
+      if (!current()) return;
+      Object.assign(tab, { kind: 'text', work, book: 'I', split: false, splitPct: 50 });
+      createReader(tab);
+      built = tab.ui.root;
+      tab.view = old;   // the home page stays this tab's view until the reader is shown
+      renderPassage(tab);
+    }, () => {
+      if (!built) return;
+      if (!current()) {
+        // closed while loading: the reader that was built is no longer anyone's
+        if (getTab(tab.id) !== tab || tab.ui.root !== built) built.remove();
+        return;
+      }
+      tab.view = built;
+      tab.fresh = true;
+      old.remove();
+      if (state.activeId === tab.id) activateTab(tab.id); else renderAll();
+    });
   }
 
   /* ==========================================================
@@ -1925,13 +2179,13 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     if (tab) activateTab(tab.id); else tab = addTab(note.work, note.book);
     await tab.ui.ready;
 
-    const verse = tab.ui.passage.querySelector(`.verse[data-line="${note.line}"]`);
-    if (!verse) return;
-    const word = note.wordIdx != null ? verse.querySelector(`.word[data-i="${note.wordIdx}"]`) : null;
-
     keepCardUntil = performance.now() + 600;
-    // Deferred so the click that started the jump can't dismiss the gloss we are about to open.
+    // Deferred so the click that started the jump can't dismiss the gloss we are about to open,
+    // and so the text has been fitted (which sets the row height the scroll position is worked out from).
     requestAnimationFrame(() => {
+      const verse = scrollToLine(tab, note.line);   // the line's chunk may not have been in the page
+      if (!verse) return;
+      const word = note.wordIdx != null ? verse.querySelector(`.word[data-i="${note.wordIdx}"]`) : null;
       verse.scrollIntoView({ block: 'center' });
       if (word) showWordCard(word);
     });
@@ -2152,10 +2406,15 @@ import { ROMANS, LEXICON, WORKS } from './data.js';
     for (const tab of tabs) {
       if (!isText(tab)) continue;
       tab.ui.passage.querySelectorAll('.word.has-note').forEach((w) => w.classList.remove('has-note'));
-      for (const n of state.notes) {
-        if (n.wordIdx == null || n.work !== tab.work || n.book !== tab.book) continue;
-        tab.ui.passage.querySelector(`.verse[data-line="${n.line}"] .word[data-i="${n.wordIdx}"]`)?.classList.add('has-note');
-      }
+      markNotes(tab, tab.ui.passage);
+    }
+  }
+
+  /* Marks the noted words inside `scope` (the passage, or one chunk as it is added) */
+  function markNotes(tab, scope) {
+    for (const n of state.notes) {
+      if (n.wordIdx == null || n.work !== tab.work || n.book !== tab.book) continue;
+      scope.querySelector(`.verse[data-line="${n.line}"] .word[data-i="${n.wordIdx}"]`)?.classList.add('has-note');
     }
   }
 

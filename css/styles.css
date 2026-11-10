@@ -576,8 +576,23 @@
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-pane);
     user-select: none;
+    position: relative;
   }
   .home-title { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.5px; text-align: center; text-wrap: balance; }
+
+  /* Opening a work: the home page fades out behind the loading indicator */
+  .empty-state > .home-title, .empty-state > .home-carousel { transition: opacity 150ms ease; }
+  .empty-state.loading > .home-title, .empty-state.loading > .home-carousel { opacity: 0; pointer-events: none; }
+
+  /* Loading indicator: one solid morphing shape, no track or container (drawn by createLoader in app.js) */
+  .m3-loader {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    pointer-events: none;
+    animation: loader-in 140ms ease-out both;
+  }
+  .m3-loader svg { width: 48px; height: 48px; fill: var(--primary); overflow: visible; }
+  @keyframes loader-in { from { opacity: 0; transform: scale(0.6); } }
 
   /* Home screen: Material 3 Expressive multi-browse carousel (large, medium and small items).
      data-rank is each card's distance from the focused one; the focused card is always large. */
@@ -743,6 +758,10 @@
 
   /* The text block stays centered in its pane at any font size */
   .verses { display: flex; flex-direction: column; gap: 3px; width: max-content; margin-inline: auto; }
+  /* Only a few 25-line chunks are in the page; spacers hold the height of the rest (see CHUNKS in app.js).
+     The gap must match .verses and ROW_GAP in app.js. */
+  .verse-chunk { display: flex; flex-direction: column; gap: 3px; }
+  .chunk-spacer { flex: none; }
 
   .verse {
     display: flex; align-items: baseline;
