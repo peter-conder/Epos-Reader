@@ -1,6 +1,6 @@
 import { el, esc, icon } from './dom.js';
 import { activeTab, getTab, groupOf, isNotebook, isText, newTabId, partnerOf, shared, state, WORK_ICON, workOf } from './state.js';
-import { growDur, playExit } from './motion.js';
+import { beginSplitClose } from './motion.js';
 import { closePopovers, renderAll, showUndo } from './layout.js';
 import { createReader, renderReader } from './reader.js';
 import { addNewTab } from './home.js';
@@ -100,8 +100,8 @@ export function closeTab(id, opts = {}) {
   if (idx === -1) return;
   const tab = state.tabs[idx];
   const partner = partnerOf(tab);
-  if (partner) growDur(opts.exit === 'push' ? 560 : 780);
-  if (!opts.skipExit) playExit(tab);
+  // Recorded while the pane is still on screen; played once the layout has closed up behind it
+  const playClose = opts.skipExit ? null : beginSplitClose(tab, opts.ghostRect);
   tab.ro?.disconnect();
   const snap = { tab, idx, partnerId: partner?.id ?? null, autoId: null };
   if (partner) partner.partnerId = null;
@@ -119,6 +119,7 @@ export function closeTab(id, opts = {}) {
   } else {
     renderAll();
   }
+  playClose?.();
   if (!opts.silent) showUndo(snap);
 }
 

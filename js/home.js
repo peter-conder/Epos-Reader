@@ -1,5 +1,5 @@
 import { WORKS } from './data.js';
-import { $, el, esc } from './dom.js';
+import { $, el, esc, icon } from './dom.js';
 import { getTab, newTabId, state } from './state.js';
 import { loadBook } from './book-data.js';
 import { renderAll } from './layout.js';
@@ -82,7 +82,7 @@ export function addNewTab() {
   view.className = 'view empty-state tab-view';
   view.dataset.tabId = id;
   view.hidden = true;
-  view.innerHTML = `<h2 class="home-title">Select a Text</h2><div class="home-carousel" role="list" aria-label="Choose a work to read">${CAROUSEL_HTML}</div>`;
+  view.innerHTML = `<button class="pane-close" aria-label="Close pane" data-tip="Close pane" data-tip-side="bottom">${icon('close')}</button><h2 class="home-title">Select a Text</h2><div class="home-carousel" role="list" aria-label="Choose a work to read">${CAROUSEL_HTML}</div>`;
   el.panes.append(view);
   const tab = { id, kind: 'new', partnerId: null, view, fresh: true };
   bindCarousel(view.querySelector('.home-carousel'), (work) => openWorkInTab(tab, work));

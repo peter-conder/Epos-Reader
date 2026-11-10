@@ -1,6 +1,6 @@
 import { $, clamp, el } from './dom.js';
 import { activeTab, groupOf, state } from './state.js';
-import { makeGhost, shrinkAway, SPRING } from './motion.js';
+import { SPRING } from './motion.js';
 import { renderAll } from './layout.js';
 import { activateTab, closeTab } from './tabs.js';
 import { hideWordCard } from './word-card.js';
@@ -10,8 +10,16 @@ import { hideWordCard } from './word-card.js';
 export function initPanes() {
   /* Clicking inside a pane focuses its tab */
   el.panes.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.pane-close')) return;
     const view = e.target.closest('.tab-view');
     if (view && view.dataset.tabId !== state.activeId) activateTab(view.dataset.tabId);
+  });
+
+  /* The X in a split pane's top-right corner closes that pane's tab */
+  el.panes.addEventListener('click', (e) => {
+    const btn = e.target.closest('.pane-close');
+    const id = btn?.closest('.tab-view')?.dataset.tabId;
+    if (id) closeTab(id);
   });
 
   /* Resize bar between the two panes of a split pair */
@@ -158,13 +166,12 @@ export function initPanes() {
       s.partner.view.animate(springFrames(partnerVisual - npl, 0, 1), { duration: 780, easing: 'linear' });
     }
 
+    // Slides on out from where it was dropped, while its neighbour widens to fill the room
     function dismiss(s) {
-      const dir = s.idx === 0 ? -1 : 1;
-      shrinkAway(makeGhost(s.view, { left: s.left + s.dx, top: s.top, width: s.w, height: s.h }), dir);
       s.view.style.transform = '';
       s.partner.view.style.transform = '';
       s.view.classList.remove('drag-live');
-      closeTab(s.tab.id, { skipExit: true });
+      closeTab(s.tab.id, { ghostRect: { left: s.left + s.dx, top: s.top, width: s.w, height: s.h } });
     }
   })();
 }

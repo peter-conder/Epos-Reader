@@ -1317,11 +1317,14 @@
   /* ==========================================================
      10. SPLIT TABS
      ========================================================== */
-  .panes { display: flex; height: 100%; }
+  .panes { display: flex; height: 100%; position: relative; }
   .pair-divider { order: 1; }
   .panes[data-count="2"] .pair-divider { display: flex; }
+  /* A split opening or closing is driven from script (see beginSplitOpen / beginSplitClose in motion.js) */
+  .panes.morphing :is(.tab-view, .pane, .pair-divider) { transition: none !important; }
 
   .tab-view {
+    position: relative;
     flex: 1 1 0; min-width: 0; height: 100%;
     /* Panes spring between sizes; the bounce comes from the overshooting curve */
     transition: flex-grow var(--grow-dur, 520ms) var(--ease-bouncy), transform 520ms var(--ease-bouncy);
@@ -1337,6 +1340,24 @@
   .panes[data-count="2"] .pane-original { max-width: 100%; }
   .panes[data-count="2"] .book-title, .panes[data-count="2"] .nb-title { cursor: grab; user-select: none; touch-action: none; }
   body.pane-dragging, body.pane-dragging * { cursor: grabbing !important; user-select: none !important; }
+
+  /* Each pane of a split has an X pinned to its top-right corner, so it rides along with the pane's edge.
+     It sits left of the scrollbar rail (the rightmost 20px of the pane). */
+  .pane-close {
+    position: absolute; top: 14px; right: 24px;
+    z-index: 7;
+    width: 32px; height: 32px;
+    border-radius: var(--radius-full);
+    display: none; place-items: center;
+    color: var(--gray-600);
+    transition: background-color 120ms ease, color 120ms ease, transform 150ms var(--ease-spring);
+  }
+  .pane-close .icon { width: 18px; height: 18px; }
+  .pane-close:hover { background: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text); transform: scale(1.08); }
+  .pane-close:active { transform: scale(0.94); }
+  .pane-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .panes[data-count="2"] .pane-close { display: grid; }
+  .panes[data-count="2"] .nb-header { padding-right: 44px; }   /* clear of the X */
 
   /* Two tabs sharing one pill, with a cut between them */
   .tab-group { display: flex; gap: 3px; }

@@ -1,9 +1,8 @@
 import { el } from './dom.js';
-import { activeTab, getTab, groupOf, isText, partnerOf, shared, state } from './state.js';
-import { playExit } from './motion.js';
+import { activeTab, getTab, groupOf, partnerOf, shared, state } from './state.js';
+import { beginSplitClose } from './motion.js';
 import { renderAll } from './layout.js';
-import { activateTab, newTextTab, pairTabs, renderTabs, unpair } from './tabs.js';
-import { createReader } from './reader.js';
+import { activateTab, pairTabs, renderTabs, unpair } from './tabs.js';
 import { hideHoverCard } from './sidebar.js';
 
 /* ==========================================================
@@ -39,8 +38,6 @@ export function dropTargetAt(x, y) {
     const m = el.main.getBoundingClientRect();
     const inRight = x >= m.left + m.width * 0.5 && x <= m.right && y >= m.top && y <= m.bottom;
     if (inRight && open.id !== shared.dragging.id) return { tab: open, zone: 'main' };
-    // Dragging the open tab itself onto the right of a single reader opens a new tab beside it
-    if (inRight && isText(open) && !partnerOf(open)) return { tab: open, zone: 'main-new' };
   }
   return null;
 }
@@ -76,7 +73,7 @@ export function startTabDrag() {
   document.body.append(clone);
 
   tabDrag = { id: pendingDrag.id, clone, sx: pendingDrag.x, sy: pendingDrag.y, left: r.left, top: r.top, home,
-    x: pendingDrag.x, y: pendingDrag.y, target: null, newTab: false, denied: false };
+    x: pendingDrag.x, y: pendingDrag.y, target: null, denied: false };
   shared.dragging = { id: pendingDrag.id, previewId: null };
   hideHoverCard();
   document.body.classList.add('dragging-tab');
@@ -91,11 +88,9 @@ export function moveTabDrag(e) {
   d.clone.style.transform = `translate(${e.clientX - d.sx}px, ${e.clientY - d.sy}px) scale(1.04)`;
 
   const hit = dropTargetAt(e.clientX, e.clientY);
-  const isNew = hit?.zone === 'main-new';
-  const ok = !!hit && (isNew || canSplitWith(hit.tab));
+  const ok = !!hit && canSplitWith(hit.tab);
   const denied = !!hit && !ok && !partnerOf(getTab(d.id));
-  d.target = ok && !isNew ? hit.tab : null;
-  d.newTab = ok && isNew;
+  d.target = ok ? hit.tab : null;
 
   const nextId = d.target?.id ?? null;
   if (nextId !== shared.dragging.previewId) {
@@ -136,15 +131,8 @@ export function finishTabDrag(cancelled) {
   const h = d.home;
   const overHome = d.x >= h.left - 8 && d.x <= h.right + 8 && d.y >= h.top - 8 && d.y <= h.bottom + 8;
 
-  let change = null;
-  if (!cancelled && d.newTab && isText(dragged)) {
-    const nt = newTextTab(dragged.work, dragged.book);
-    nt.fresh = false;
-    createReader(nt);
-    state.tabs.push(nt);
-    pairTabs(dragged.id, nt.id);
-    change = 'pair';
-  } else if (!cancelled && d.target) {
+  let change = null, playClose = null;
+  if (!cancelled && d.target) {
     pairTabs(d.target.id, d.id);
     change = 'pair';
   } else if (!cancelled && d.denied) {
@@ -153,7 +141,7 @@ export function finishTabDrag(cancelled) {
     // dropped anywhere else (any spot on the sidebar included): the tab leaves the split
     if (groupOf(activeTab()).includes(dragged)) {
       const leaving = groupOf(activeTab()).find((t) => t.id !== state.activeId);
-      if (leaving) playExit(leaving);
+      if (leaving) playClose = beginSplitClose(leaving);
     }
     unpair(dragged);
     change = 'unpair';
@@ -170,6 +158,7 @@ export function finishTabDrag(cancelled) {
   if (change === 'pair') activateTab(d.id);
   else if (change === 'unpair') renderAll();
   else renderTabs();
+  playClose?.();
   landDraggedTab(d);
 }
 

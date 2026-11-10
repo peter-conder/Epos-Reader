@@ -1,7 +1,7 @@
 import { ROMANS } from './data.js';
 import { $, el, root } from './dom.js';
 import { activeTab, groupOf, isText, partnerOf, shared, state, workOf } from './state.js';
-import { growDur, playEnter, playPop } from './motion.js';
+import { beginSplitOpen, isMorphing, playPop, settleMorph } from './motion.js';
 import { renderTabs, undoClose } from './tabs.js';
 import { renderPassage, setBookTitles } from './reader.js';
 import { closeNote, hideWordCard } from './word-card.js';
@@ -49,32 +49,36 @@ export function renderView() {
   const tab = activeTab();
   const settings = state.view === 'settings';
   const showPanes = hasTabs && !settings;
+  const shown = showPanes ? groupOf(tab) : [];
+  const ids = shown.map((t) => t.id);
+  if (ids.join() !== lastShown.join()) settleMorph();   // a different set of panes: any running open/close ends now
+  // A pane that joins one already on screen slides in from its side while the other makes room
+  const joined = shown.length === 2 ? shown.filter((t) => !lastShown.includes(t.id)) : [];
+  const stay = joined.length === 1 && !el.panes.hidden ? shown.find((t) => t !== joined[0]) : null;
+  const playOpen = stay && lastShown.includes(stay.id) ? beginSplitOpen(stay.view) : null;
+
   el.viewEmpty.hidden = hasTabs || settings;
   el.viewSettings.hidden = !settings;
   el.panes.hidden = !showPanes;
-
-  const shown = showPanes ? groupOf(tab) : [];
   el.panes.dataset.count = shown.length;
-  // A pane that joins one already on screen grows in from nothing
-  const joined = shown.length === 2 ? shown.filter((t) => !lastShown.includes(t.id)) : [];
-  const animateJoin = joined.length === 1 && lastShown.length > 0;
   for (const t of state.tabs) {
     const on = shown.includes(t);
     t.view.hidden = !on;
     t.view.classList.toggle('is-active', on && shown.length > 1 && t.id === state.activeId);
     if (on) t.view.style.order = shown.indexOf(t) * 2;
   }
-  if (animateJoin) { growDur(420); joined[0].view.style.flex = '0 1 0'; void el.panes.offsetWidth; }
   shown.forEach((t, i) => {
-    t.view.style.flex = shown.length > 1 ? `${i === 0 ? state.pairPct : 100 - state.pairPct} 1 0` : '100 1 0';
+    const flex = shown.length > 1 ? `${i === 0 ? state.pairPct : 100 - state.pairPct} 1 0` : '100 1 0';
+    t.view.dataset.flex = flex;                     // a pane being resized by an open/close gets it back at the end
+    if (!isMorphing(t.view)) t.view.style.flex = flex;
   });
-  if (animateJoin) playEnter(joined[0].view, shown.indexOf(joined[0]) === 0 ? -1 : 1);
+  if (playOpen) playOpen(joined[0].view, shown.indexOf(joined[0]) === 0 ? -1 : 1);
   shown.forEach((t) => {
     if (!t.fresh) return;
     t.fresh = false;
-    if (!(animateJoin && t === joined[0])) playPop(t.view);
+    if (!(playOpen && t === joined[0])) playPop(t.view);
   });
-  lastShown = shown.map((t) => t.id);
+  lastShown = ids;
   el.progress.hidden = !hasTabs || !isText(tab);
   alignProgress();
 }
