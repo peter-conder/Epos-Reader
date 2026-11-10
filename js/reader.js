@@ -151,6 +151,7 @@ export function renderPassage(tab) {
   const key = `${tab.work}:${tab.book}`;
   if (ui.renderedKey === key) return ui.ready;
   ui.renderedKey = key;
+  tab.range = null;   // the old book's lines; set again once this one is on screen (showRange in chunks.js)
   if (shared.selectedWord && ui.passage.contains(shared.selectedWord)) hideWordCard();
 
   ui.ready = loadBook(tab.work, tab.book).then((data) => {

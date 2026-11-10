@@ -38,8 +38,9 @@ export const shared = {
 let tabSeq = 0;
 export const newTabId = () => `tab-${Date.now()}-${++tabSeq}`;
 
-// Tab icons (Material Symbols): shield for the Aeneid, swords for the Iliad, sailboat for the Odyssey
-export const WORK_ICON = { aeneid: 'shield', iliad: 'swords', odyssey: 'sailing' };
+/* The part of a text tab's label after the work's name: "• I.1-25" (tab.range is the 25 lines at the middle of
+   the pane, kept up to date by showWindow in chunks.js; it is empty until the book has loaded) */
+export const tabRef = (tab) => `• ${tab.book}${tab.range ? `.${tab.range}` : ''}`;
 
 export const getTab = (id) => state.tabs.find((t) => t.id === id);
 export const activeTab = () => getTab(state.activeId);

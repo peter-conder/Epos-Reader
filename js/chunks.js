@@ -1,5 +1,5 @@
-import { clamp } from './dom.js';
-import { shared } from './state.js';
+import { clamp, el } from './dom.js';
+import { shared, tabRef } from './state.js';
 import { FIT_CANDIDATES } from './fit.js';
 import { hideWordCard } from './word-card.js';
 import { markNotes } from './notes.js';
@@ -56,6 +56,17 @@ export function showWindow(ch, c) {
     next = node;
   }
   sizeSpacers(ch);
+  if (ch.container === ch.tab.ui.passage) showRange(ch);
+}
+
+/* The sidebar tab names the 25 lines of the middle chunk (the other two chunks are the 75 in the page). This runs
+   only when the middle chunk changes, and touches one small piece of text rather than redrawing the tab list. */
+function showRange(ch) {
+  const nums = ch.lineNums;
+  if (!nums?.length) return;
+  const tab = ch.tab;
+  tab.range = `${nums[ch.center * CHUNK]}-${nums[Math.min(nums.length, (ch.center + 1) * CHUNK) - 1]}`;
+  for (const ref of el.tabList.querySelectorAll(`.tab[data-tab-id="${tab.id}"] .tab-ref`)) ref.textContent = tabRef(tab);
 }
 
 export function sizeSpacers(ch) {

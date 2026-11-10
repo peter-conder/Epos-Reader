@@ -298,8 +298,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
   }
   .tab-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
-  .tab-icon { width: 20px; height: 20px; }
   .tab-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 14.5px; font-weight: 600; }
+  /* "Aeneid • I.1-25": the work's name gives way (with an ellipsis) before the book and lines do */
+  .tab-title-work { display: flex; gap: 0.4em; min-width: 0; overflow: visible; }
+  .tab-work { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-style: italic; font-weight: 600; }
+  .tab-ref { flex: none; font-variant-numeric: tabular-nums; }
   .tab-close {
     width: 22px; height: 22px;
     border-radius: var(--radius-full);

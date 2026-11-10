@@ -1,5 +1,5 @@
 import { el, esc, icon } from './dom.js';
-import { activeTab, getTab, groupOf, isNotebook, isText, newTabId, partnerOf, shared, state, WORK_ICON, workOf } from './state.js';
+import { activeTab, getTab, groupOf, isNotebook, isText, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
 import { beginSplitClose } from './motion.js';
 import { closePopovers, renderAll, showUndo } from './layout.js';
 import { createReader, renderReader } from './reader.js';
@@ -10,20 +10,21 @@ import { hideWordCard } from './word-card.js';
 /* ==========================================================
    TABS (sidebar)
    ========================================================== */
-const iconName = (tab) => (isNotebook(tab) ? 'notebook' : isText(tab) ? WORK_ICON[tab.work] : 'plus');
 const tabName = (tab) => (isNotebook(tab) ? 'Notebook' : isText(tab) ? workOf(tab).title : 'New Tab');
 
-/* Expanded: "Book II". Compact (half of a split): "II". The notebook and new tabs have no text when compact. */
+/* A text tab reads "Aeneid • I.1-25" (work in italics); the notebook and new tabs are just their name */
+const labelHtml = (tab) => (isText(tab)
+  ? `<span class="tab-title tab-title-work"><em class="tab-work">${esc(workOf(tab).title)}</em><span class="tab-ref">${esc(tabRef(tab))}</span></span>`
+  : `<span class="tab-title">${tabName(tab)}</span>`);
+
 export function tabHtml(tab, { compact = false, extra = '' } = {}) {
   const text = isText(tab);
   const active = tab.id === state.activeId;
-  const label = text ? (compact ? tab.book : `Book ${tab.book}`) : (compact ? '' : tabName(tab));
   const full = text ? `${workOf(tab).title} · Book ${tab.book}` : tabName(tab);
   return `
     <div class="tab${compact ? ' tab-half' : ''}${active ? ' active' : ''}${extra}" data-tab-id="${tab.id}" role="tab" tabindex="0" aria-selected="${active}" aria-label="${esc(full)}">
       <span class="tab-left">
-        <svg class="icon tab-icon"><use href="assets/icons.svg#i-${iconName(tab)}"/></svg>
-        ${label ? `<span class="tab-title">${label}</span>` : ''}
+        ${labelHtml(tab)}
       </span>
       <button class="tab-close" data-tip="Close Tab" data-tip-side="bottom" aria-label="Close tab">${icon('close')}</button>
     </div>`;
@@ -31,12 +32,10 @@ export function tabHtml(tab, { compact = false, extra = '' } = {}) {
 
 /* The half of a pill that shows where a dragged tab would land */
 export function previewHalfHtml(tab) {
-  const label = isText(tab) ? tab.book : '';
   return `
     <div class="tab tab-half preview-half" aria-hidden="true">
       <span class="tab-left">
-        <svg class="icon tab-icon"><use href="assets/icons.svg#i-${iconName(tab)}"/></svg>
-        ${label ? `<span class="tab-title">${label}</span>` : ''}
+        ${labelHtml(tab)}
       </span>
     </div>`;
 }
