@@ -18,7 +18,7 @@ export const el = {
   bmList: $('bm-list'), bmEmpty: $('bm-empty'), nbBmCount: $('nb-bm-count'), cardBookmark: $('card-bookmark'),
   settingsChips: $('settings-chips'), paletteChips: $('palette-chips'),
   splitBtn: $('btn-split'), meterBtn: $('btn-meter'), textBtn: $('btn-text'),
-  popupsBtn: $('btn-popups'), popupsFlyout: $('popups-flyout'), swWords: $('sw-words'), swNotes: $('sw-notes'),
+  popupsBtn: $('btn-popups'), themeBtn: $('btn-theme'), popupsFlyout: $('popups-flyout'), swWords: $('sw-words'), swNotes: $('sw-notes'),
   swCaesura: $('sw-caesura'), swSynizesis: $('sw-synizesis'),
   flyout: $('flyout'), fontSlider: $('font-size'), sizeSlider: $('size-slider'),
   picker: $('picker'), pickerTitle: $('picker-title'), workList: $('work-list'),

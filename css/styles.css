@@ -19,15 +19,22 @@
     --primary-container: #D5E4F7;
     --on-primary-container: #0C1D29;
     --secondary: #555F68;
+    --on-secondary: #FFFFFF;
     --secondary-container: #D9E3ED;
     --on-secondary-container: #121C23;
 
-    --bg: color-mix(in srgb, var(--secondary-container) 45%, #ffffff);
+    /* What tints are mixed into (white here, near-black in dark mode), and what hovers shade toward */
+    --mix-base: #ffffff;
+    --hover-shade: #000000;
+    --bg: color-mix(in srgb, var(--secondary-container) 45%, var(--mix-base));
     --surface: #ffffff;
     --text: var(--gray-900);
     --text-muted: var(--gray-500);
     /* Light tint used for fields and chips inside tinted popups */
-    --soft: color-mix(in srgb, var(--secondary-container) 60%, #ffffff);
+    --soft: color-mix(in srgb, var(--secondary-container) 60%, var(--mix-base));
+    /* The toast: dark on a light page, light on a dark one */
+    --inverse-surface: #18181b;
+    --inverse-on-surface: #ffffff;
 
     --radius-sm: 8px;
     --radius-md: 16px;
@@ -63,6 +70,53 @@
     --bookmark-plus-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.5 4.2v4.6M15.2 6.5h4.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
     --bookmark-fill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.5 3.5h11v17L12 16.6l-5.5 3.9Z' fill='black' stroke='black' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
     --snippet-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5,19H19V9.82L14.18,5H5V19Zm0,2q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H15l6,6V19q0,0.82-0.59,1.41T19,21H5Zm2-4H17V15H7v2Zm0-4H17V11H7v2ZM7,9h7V7H7V9ZM5,19V5V9.82V19Z'/%3E%3C/svg%3E");
+  }
+
+  /* Dark mode. The palette roles themselves come from settings.js (each palette has a dark set); the values
+     below are Slate's, so the page is right before the script runs. The grey scale is turned around, so
+     everything drawn in --gray-* (borders, muted text, tracks) keeps its meaning. The page and the panes are
+     tinted with a little of the palette's secondary container, which keeps the six palettes telling apart. */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --gray-50:  #18171b;
+    --gray-100: #212024;
+    --gray-200: #2f2e33;
+    --gray-300: #3e3d43;
+    --gray-400: #5d5c63;
+    --gray-500: #9b9aa2;
+    --gray-600: #b5b4bc;
+    --gray-700: #cfced5;
+    --gray-800: #e2e1e7;
+    --gray-900: #ecebf0;
+
+    --primary: #B3C8E8;
+    --on-primary: #1B2E49;
+    --primary-container: #334461;
+    --on-primary-container: #D3E3FF;
+    --secondary: #BEC6DC;
+    --on-secondary: #283041;
+    --secondary-container: #3F4759;
+    --on-secondary-container: #DAE2F9;
+
+    --mix-base: #121115;
+    --hover-shade: #ffffff;
+    --bg: color-mix(in srgb, var(--secondary-container) 16%, #0d0c10);
+    --surface: color-mix(in srgb, var(--secondary-container) 24%, #141317);
+    --text: #e6e1e5;
+    --soft: color-mix(in srgb, var(--secondary-container) 60%, var(--mix-base));
+    --inverse-surface: #e6e1e5;
+    --inverse-on-surface: #1c1b1f;
+
+    /* Shadows hardly show on a dark page; the panes are set apart by their tint and border instead */
+    --shadow-pop:  0 12px 36px rgba(0, 0, 0, 0.5);
+    --shadow-pane: 0 2px 10px rgba(0, 0, 0, 0.25);
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+    --shadow-3: 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 8px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Switching modes: colours cross-fade, for this moment only (settings.js adds and removes the class) */
+  :root.theme-fade, :root.theme-fade *, :root.theme-fade *::before, :root.theme-fade *::after {
+    transition: background-color 320ms ease, color 320ms ease, border-color 320ms ease, fill 320ms ease, stroke 320ms ease !important;
   }
 
   /* ==========================================================
@@ -230,7 +284,7 @@
     padding: 8px;
     border: 0;
     border-radius: 24px;
-    background: color-mix(in srgb, var(--secondary-container) 30%, #ffffff);
+    background: color-mix(in srgb, var(--secondary-container) 30%, var(--mix-base));
     color: var(--text);
     z-index: 275;
   }
@@ -312,7 +366,7 @@
     transition: background-color 130ms ease, opacity 130ms ease, transform 130ms ease;
   }
   .tab-close .icon { width: 13px; height: 13px; }
-  .tab-close:hover { opacity: 1; background: rgba(255, 255, 255, 0.2); transform: scale(1.1); }
+  .tab-close:hover { opacity: 1; background: color-mix(in srgb, currentColor 18%, transparent); transform: scale(1.1); }
   .tab:not(.active) .tab-close:hover { background: var(--gray-200); }
 
   /* Collapse, notebook and new tab: three parts of one pill (same cut as a split tab pair) */
@@ -331,7 +385,7 @@
   }
   .add-half:first-child { border-radius: 24px 8px 8px 24px; }
   .add-half:last-child  { border-radius: 8px 24px 24px 8px; }
-  .add-half:hover { background: color-mix(in srgb, var(--primary-container) 86%, #000); transform: translateY(-1px); }
+  .add-half:hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); transform: translateY(-1px); }
   .add-half:active { transform: scale(0.97); }
   .add-half .icon { width: 22px; height: 22px; }
 
@@ -404,7 +458,7 @@
   /* One bar, the same colour as the new-tab buttons. Collapsed it is a circle holding a single button;
      opened it springs out into a pill that holds every tool. */
   .tool-bar {
-    --tools: 4;
+    --tools: 5;
     position: relative;
     display: flex; flex-direction: column; align-items: center; gap: 8px;
     width: 56px; height: 56px; padding: 4px;
@@ -413,7 +467,7 @@
     border-radius: 28px;
     transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms ease;
   }
-  .tool-bar:not(.open):hover { background: color-mix(in srgb, var(--primary-container) 86%, #000); }
+  .tool-bar:not(.open):hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); }
   .tool-bar.open { height: calc(56px + var(--tools) * 56px); transition: height 640ms var(--ease-bouncy), background-color 150ms ease; }
 
   .tool-toggle, .tool-btn {
@@ -439,6 +493,12 @@
   .tool-bar:not(.open) .tool-btn { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 90ms ease, visibility 0s linear 90ms; }
   .tool-bar.open .tool-btn { animation: toolIn 520ms var(--ease-bouncy) backwards; animation-delay: calc(var(--i, 0) * 50ms + 90ms); }
   @keyframes toolIn { from { opacity: 0; transform: scale(0.4) translateY(-12px); } }
+  /* Light / dark: the moon (in light mode) and the sun (in dark mode) swap with a spin */
+  .theme-btn .icon { grid-area: 1 / 1; transition: opacity 160ms ease, transform 560ms var(--ease-bouncy); }
+  :root.theme-fade .theme-btn .icon { transition: opacity 160ms ease, transform 560ms var(--ease-bouncy) !important; }
+  .theme-btn .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+  :root[data-theme="dark"] .theme-btn .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+  :root[data-theme="dark"] .theme-btn .icon-sun { opacity: 1; transform: none; }
 
   /* Flyouts (Text Options, View Options): the main menu's look. Tops line up with their buttons in the open bar. */
   .flyout {
@@ -1083,7 +1143,7 @@
     color: var(--gray-800);
   }
   .palette-swatch { display: flex; gap: 6px; margin-bottom: 4px; }
-  .palette-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14), 0 0 0 1.5px rgba(255,255,255,.9); }
+  .palette-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14), 0 0 0 1.5px var(--surface); }
   .settings-chips { display: flex; flex-wrap: wrap; gap: 10px; }
   .settings-chip {
     flex: 1; min-width: 140px;
@@ -1109,8 +1169,8 @@
     transform: translateX(-50%) translateY(24px) scale(0.92);
     display: flex; align-items: center; gap: 16px;
     padding: 6px 6px 6px 22px;
-    background: var(--gray-900);
-    color: #fff;
+    background: var(--inverse-surface);
+    color: var(--inverse-on-surface);
     border-radius: var(--radius-full);
     font-size: 13.5px; font-weight: 500;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
@@ -1131,6 +1191,9 @@
   }
   .toast-undo:hover { background: color-mix(in srgb, var(--primary) 82%, #fff); }
   .toast-undo:active { transform: scale(0.95); }
+  /* On the light toast of dark mode the pale primary would wash out: the button takes the deep container instead */
+  :root[data-theme="dark"] .toast-undo { background: var(--primary-container); color: var(--on-primary-container); }
+  :root[data-theme="dark"] .toast-undo:hover { background: color-mix(in srgb, var(--primary-container) 84%, #000); }
 
   /* Hover tips for icon buttons: the tab hover card, smaller */
   .tip {
@@ -1199,7 +1262,7 @@
     flex-shrink: 0;
     transition: background-color 150ms ease, transform 150ms var(--ease-spring);
   }
-  .btn-new-note:hover { background: var(--gray-700); transform: translateY(-1px); }
+  .btn-new-note:hover { background: color-mix(in srgb, var(--primary) 86%, var(--hover-shade)); transform: translateY(-1px); }
   .btn-new-note:active { transform: scale(0.97); }
   .btn-new-note .icon { width: 18px; height: 18px; }
   .nb-empty { padding: 56px 16px; text-align: center; font-size: 15px; line-height: 1.5; color: var(--gray-400); }
@@ -1253,15 +1316,15 @@
   .note-card > .note-edit, .note-card > .note-jump, .note-card > .note-del { position: relative; z-index: 1; }
 
   /* Hovered: the "elevated" card, a surface lifted by a soft shadow */
-  .note-card:hover { background: color-mix(in srgb, var(--primary-container) 92%, #000); box-shadow: var(--shadow-1); }
+  .note-card:hover { background: color-mix(in srgb, var(--primary-container) 92%, var(--hover-shade)); box-shadow: var(--shadow-1); }
   .note-card:focus-within { background: var(--surface); border-color: var(--primary); }
 
   /* Pressed: the card darkens and a deeper ripple spreads from the cursor to fill it */
-  .note-card.pressed { background: color-mix(in srgb, var(--primary-container) 88%, #000); border-color: transparent; }
+  .note-card.pressed { background: color-mix(in srgb, var(--primary-container) 88%, var(--hover-shade)); border-color: transparent; }
   .note-ripple {
     position: absolute; z-index: 0;
     border-radius: 50%;
-    background: color-mix(in srgb, var(--primary-container) 78%, #000);
+    background: color-mix(in srgb, var(--primary-container) 78%, var(--hover-shade));
     pointer-events: none;
     transform: scale(0);
     transition: transform 460ms cubic-bezier(0.2, 0, 0, 1), opacity 240ms ease;
@@ -1272,7 +1335,7 @@
   /* Dragged: filled gray and lifted, following the cursor (position is set from script) */
   .note-card.dragging {
     z-index: 20;
-    background: color-mix(in srgb, var(--primary-container) 78%, #000); border-color: transparent;
+    background: color-mix(in srgb, var(--primary-container) 78%, var(--hover-shade)); border-color: transparent;
     box-shadow: var(--shadow-3);
     cursor: grabbing;
     will-change: transform;

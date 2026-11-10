@@ -12,6 +12,7 @@ export const state = {
   activeId: null,
   view: 'reader',        // 'reader' (the open tab or tabs) | 'settings'
   scansion: false,
+  theme: 'light',        // 'light' | 'dark' (set from the saved choice or the system's at start)
   notes: loadNotes(),    // { id, text, word, work, book, line, wordIdx, created }
   bookmarks: loadBookmarks(),   // { id, work, book, line, text (snippet of the line), created }
   pickerTabId: null,     // the tab the Switch Work picker is changing

@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  /* Set light/dark before the first paint so a dark page doesn't flash white (settings.js takes over from here) */
+  try {
+    document.documentElement.dataset.theme = localStorage.getItem('epos.theme.v1')
+      ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } catch { /* storage unavailable */ }
+</script>
 <script src="js/main.js" type="module" defer></script>
 </head>
 <body>
@@ -127,6 +134,10 @@
       </button>
       <button class="tool-btn" id="btn-popups" style="--i: 3" data-tip="View Options" aria-label="View options" aria-expanded="false">
         <svg class="icon"><use href="assets/icons.svg#i-popups"/></svg>
+      </button>
+      <button class="tool-btn theme-btn" id="btn-theme" style="--i: 4" data-tip="Dark Mode" aria-label="Dark mode" aria-pressed="false">
+        <svg class="icon icon-moon"><use href="assets/icons.svg#i-moon"/></svg>
+        <svg class="icon icon-sun"><use href="assets/icons.svg#i-sun"/></svg>
       </button>
     </div>
 

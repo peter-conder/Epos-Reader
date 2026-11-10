@@ -1,6 +1,6 @@
 import { WORKS } from './data.js';
 import { el, esc, icon, root } from './dom.js';
-import { activeTab, isText } from './state.js';
+import { activeTab, isText, state } from './state.js';
 import { renderAll } from './layout.js';
 import { addTab } from './tabs.js';
 import { renderReader } from './reader.js';
@@ -14,23 +14,44 @@ export function syncSettingsChips(workKey) {
 }
 
 /* ==========================================================
-   COLOR PALETTES (Material 3 Expressive)
+   COLOR PALETTES (Material 3 Expressive), each with a light and a dark set of roles:
+   p primary, on on-primary, c primary container, onc on-primary-container,
+   s secondary, ons on-secondary, sc secondary container, onsc on-secondary-container
    ========================================================== */
 const PALETTES = {
-  green: { name: 'Pine', p: '#4E6543', on: '#FFFFFF', c: '#CFEBC0', onc: '#0C2006', s: '#54634D', sc: '#D7E8CE', onsc: '#121F0E' },
-  red: { name: 'Coral', p: '#8C4A56', on: '#FFFFFF', c: '#FFD9DF', onc: '#3A0715', s: '#75565B', sc: '#FFD9DF', onsc: '#2B1519' },
-  bluegray: { name: 'Slate', p: '#505F6E', on: '#FFFFFF', c: '#D5E4F7', onc: '#0C1D29', s: '#555F68', sc: '#D9E3ED', onsc: '#121C23' },
-  yellow: { name: 'Golden', p: '#695F10', on: '#FFFFFF', c: '#F4E489', onc: '#201C00', s: '#635F41', sc: '#EAE3BD', onsc: '#1F1C05' },
-  purple: { name: 'Lavender', p: '#7D33CF', on: '#FFFFFF', c: '#EADDFF', onc: '#24005B', s: '#625B71', sc: '#E8DEF8', onsc: '#1E192B' }
+  green: { name: 'Pine',
+    light: { p: '#386A42', on: '#FFFFFF', c: '#BAF3BF', onc: '#00210B', s: '#526351', ons: '#FFFFFF', sc: '#D5E8D1', onsc: '#101F11' },
+    dark:  { p: '#99D5A3', on: '#043918', c: '#20512C', onc: '#BAF3BF', s: '#B9CCB6', ons: '#243425', sc: '#3A4B3A', onsc: '#D5E8D1' } },
+  red: { name: 'Coral',
+    light: { p: '#8F4A50', on: '#FFFFFF', c: '#FFD9DC', onc: '#3B0812', s: '#76565A', ons: '#FFFFFF', sc: '#FFD9DC', onsc: '#2C1518' },
+    dark:  { p: '#FFB2B9', on: '#561D24', c: '#723339', onc: '#FFD9DC', s: '#E5B9BD', ons: '#44292D', sc: '#5D3F43', onsc: '#FFD9DC' } },
+  bluegray: { name: 'Slate',
+    light: { p: '#4A5C7A', on: '#FFFFFF', c: '#D3E3FF', onc: '#001C39', s: '#565E71', ons: '#FFFFFF', sc: '#DAE2F9', onsc: '#131B2C' },
+    dark:  { p: '#B3C8E8', on: '#1B2E49', c: '#334461', onc: '#D3E3FF', s: '#BEC6DC', ons: '#283041', sc: '#3F4759', onsc: '#DAE2F9' } },
+  yellow: { name: 'Golden',
+    light: { p: '#6B5F00', on: '#FFFFFF', c: '#F8E468', onc: '#201C00', s: '#656040', ons: '#FFFFFF', sc: '#ECE4C0', onsc: '#201C04' },
+    dark:  { p: '#DCC84F', on: '#383100', c: '#514700', onc: '#F8E468', s: '#CFC8A5', ons: '#363116', sc: '#4D482B', onsc: '#ECE4C0' } },
+  purple: { name: 'Lavender',
+    light: { p: '#8241B2', on: '#FFFFFF', c: '#F0DBFF', onc: '#2C0051', s: '#7D5260', ons: '#FFFFFF', sc: '#FFD8E4', onsc: '#31111D' },
+    dark:  { p: '#DEB7FF', on: '#4D0A7F', c: '#672698', onc: '#F0DBFF', s: '#EFB8C8', ons: '#492532', sc: '#633B48', onsc: '#FFD8E4' } },
+  // Amber: warm and low in blue light, made for reading in dark mode
+  amber: { name: 'Amber',
+    light: { p: '#8F4E00', on: '#FFFFFF', c: '#FFDCC2', onc: '#2E1500', s: '#745943', ons: '#FFFFFF', sc: '#FFDCBE', onsc: '#2A1706' },
+    dark:  { p: '#FFB77B', on: '#4C2700', c: '#6C3A00', onc: '#FFDCC2', s: '#E4C0A6', ons: '#422C19', sc: '#5A422D', onsc: '#FFDCBE' } }
 };
 const PALETTE_KEY = 'epos.palette.v1';
+const THEME_KEY = 'epos.theme.v1';
+let currentPalette = 'bluegray';
+
+const rolesOf = (pal) => pal[state.theme] ?? pal.light;
 
 export function applyPalette(key) {
   const paletteKey = PALETTES[key] ? key : 'bluegray';
-  const pal = PALETTES[paletteKey];
+  currentPalette = paletteKey;
+  const pal = rolesOf(PALETTES[paletteKey]);
   const vars = {
     '--primary': pal.p, '--on-primary': pal.on, '--primary-container': pal.c, '--on-primary-container': pal.onc,
-    '--secondary': pal.s, '--secondary-container': pal.sc, '--on-secondary-container': pal.onsc
+    '--secondary': pal.s, '--on-secondary': pal.ons, '--secondary-container': pal.sc, '--on-secondary-container': pal.onsc
   };
   for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
   for (const chip of el.paletteChips.children) chip.classList.toggle('active', chip.dataset.palette === paletteKey);
@@ -45,6 +66,50 @@ export function applyPalette(key) {
 export function choosePalette(key) {
   const saved = applyPalette(key);
   try { localStorage.setItem(PALETTE_KEY, saved); } catch { /* storage unavailable */ }
+}
+
+/* The swatches show the colours of the mode that is on, so what you pick is what you get */
+function renderPaletteChoices() {
+  el.paletteChips.innerHTML = Object.entries(PALETTES).map(([key, p]) => {
+    const pal = rolesOf(p);
+    return `
+    <button class="settings-chip" data-palette="${key}">
+      <span class="palette-swatch"><span class="palette-dot" style="background:${pal.p}"></span><span class="palette-dot" style="background:${pal.c}"></span><span class="palette-dot" style="background:${pal.sc}"></span></span>
+      <span class="settings-chip-title">${esc(p.name)}</span>
+      <span class="settings-chip-sub">${esc(pal.p.toUpperCase())}</span>
+    </button>`;
+  }).join('');
+  el.paletteMenu.innerHTML = Object.entries(PALETTES).map(([key, p]) => `
+    <button class="sub-item" data-palette="${key}" role="menuitemradio" aria-checked="false">
+      <span class="sub-lead"><span class="sub-dot" style="background:${rolesOf(p).p}"></span><svg class="icon sub-check"><use href="assets/icons.svg#i-check"/></svg></span>
+      <span>${esc(p.name)}</span>
+    </button>`).join('');
+}
+
+/* ==========================================================
+   LIGHT / DARK MODE (the moon / sun button in the tool bar)
+   ========================================================== */
+let fadeTimer = 0;
+export function applyTheme(mode, { fade = false } = {}) {
+  state.theme = mode === 'dark' ? 'dark' : 'light';
+  if (fade) {
+    // Colours cross-fade only while the switch happens, so nothing else pays for the transition
+    root.classList.add('theme-fade');
+    clearTimeout(fadeTimer);
+    fadeTimer = setTimeout(() => root.classList.remove('theme-fade'), 360);
+  }
+  root.dataset.theme = state.theme;
+  renderPaletteChoices();
+  applyPalette(currentPalette);
+  const dark = state.theme === 'dark';
+  const label = dark ? 'Light Mode' : 'Dark Mode';
+  el.themeBtn.setAttribute('aria-pressed', String(dark));
+  el.themeBtn.dataset.tip = label;
+}
+
+export function toggleTheme() {
+  applyTheme(state.theme === 'dark' ? 'light' : 'dark', { fade: true });
+  try { localStorage.setItem(THEME_KEY, state.theme); } catch { /* storage unavailable */ }
 }
 
 export function initSettings() {
@@ -70,19 +135,6 @@ export function initSettings() {
     syncSettingsChips(workKey);
   });
 
-  el.paletteChips.innerHTML = Object.entries(PALETTES).map(([key, pal]) => `
-    <button class="settings-chip" data-palette="${key}">
-      <span class="palette-swatch"><span class="palette-dot" style="background:${pal.p}"></span><span class="palette-dot" style="background:${pal.c}"></span><span class="palette-dot" style="background:${pal.sc}"></span></span>
-      <span class="settings-chip-title">${esc(pal.name)}</span>
-      <span class="settings-chip-sub">${esc(pal.p.toUpperCase())}</span>
-    </button>`).join('');
-
-  el.paletteMenu.innerHTML = Object.entries(PALETTES).map(([key, pal]) => `
-    <button class="sub-item" data-palette="${key}" role="menuitemradio" aria-checked="false">
-      <span class="sub-lead"><span class="sub-dot" style="background:${pal.p}"></span><svg class="icon sub-check"><use href="assets/icons.svg#i-check"/></svg></span>
-      <span>${esc(pal.name)}</span>
-    </button>`).join('');
-
   for (const container of [el.paletteChips, el.paletteMenu]) {
     container.addEventListener('click', (e) => {
       const it = e.target.closest('[data-palette]');
@@ -90,7 +142,12 @@ export function initSettings() {
     });
   }
 
-  let savedPalette = null;
-  try { savedPalette = localStorage.getItem(PALETTE_KEY); } catch { /* storage unavailable */ }
-  applyPalette(savedPalette || 'bluegray');
+  let savedPalette = null, savedTheme = null;
+  try {
+    savedPalette = localStorage.getItem(PALETTE_KEY);
+    savedTheme = localStorage.getItem(THEME_KEY);
+  } catch { /* storage unavailable */ }
+  currentPalette = PALETTES[savedPalette] ? savedPalette : 'bluegray';
+  // With no choice saved yet, start in the system's mode
+  applyTheme(savedTheme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 }

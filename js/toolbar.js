@@ -4,6 +4,7 @@ import { closePopovers, setBook, setOpen, setView } from './layout.js';
 import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
 import { hideWordCard } from './word-card.js';
+import { toggleTheme } from './settings.js';
 
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
@@ -72,6 +73,7 @@ export function initToolbar() {
 
   el.splitBtn.addEventListener('click', toggleSplit);
   el.meterBtn.addEventListener('click', toggleScansion);
+  el.themeBtn.addEventListener('click', toggleTheme);
   for (const [btn, flyout] of [[el.textBtn, el.flyout], [el.popupsBtn, el.popupsFlyout]]) {
     btn.addEventListener('click', () => {
       const open = !flyout.classList.contains('open');
