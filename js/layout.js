@@ -1,5 +1,5 @@
 import { ROMANS } from './data.js';
-import { $, el, root } from './dom.js';
+import { $, clamp, el, root } from './dom.js';
 import { activeTab, groupOf, isText, partnerOf, shared, state, workOf } from './state.js';
 import { beginSplitOpen, isMorphing, playPop, settleMorph } from './motion.js';
 import { renderTabs, undoClose } from './tabs.js';
@@ -139,40 +139,97 @@ export function renderAll() {
   if (isText(tab)) syncSettingsChips(tab.work);
 }
 
+/* The active pill is ACTIVE_GROW times as wide as a resting one. Its extra width is taken from the pills on both of
+   its sides, so it swells around its own centre; with the same flex-grow on every other pill, only the pill that
+   was active would give room back and the new one would stretch toward it. Pills far from it hardly change. */
+const ACTIVE_GROW = 1.6;
+const MIN_SHARE = 0.92;   // the narrowest a resting pill gets, as a share of an even split of the room
+function growSegments() {
+  const segs = [...el.segments.children];
+  const n = segs.length, k = segs.findIndex((s) => s.classList.contains('active'));
+  if (k < 0) { segs.forEach((s) => { s.style.flexGrow = ''; }); return; }
+  // Room left of the active pill, in resting-pill widths: what it had before it grew, less half of its growth.
+  // Near an end there are too few pills on that side to give up half, so no pill is let shrink below MIN_SHARE of
+  // an even share; the other side gives the rest. (The end pills themselves have only one side to take from.)
+  const minW = MIN_SHARE * (n - ACTIVE_GROW) / Math.max(1, n - 1);
+  const ideal = k + 0.5 - ACTIVE_GROW / 2;
+  const left = k === 0 ? 0 : k === n - 1 ? n - ACTIVE_GROW
+    : clamp(ideal, k * minW, n - ACTIVE_GROW - (n - 1 - k) * minW);
+  const right = n - ACTIVE_GROW - left;
+  segs.forEach((s, i) => {
+    s.style.flexGrow = i === k ? ACTIVE_GROW : i < k ? left / k : right / (n - 1 - k);
+  });
+}
+
+/* The click bounces (see .pop and .shove in styles.css): the new pill swells from its centre by a fixed POP_PX on
+   each side, and every other pill is knocked away from it, the nearest ones most */
+const POP_PX = 4;            // how far past each side the new pill swells; less than the room around it
+const ACTIVE_MARGIN = 6;     // .segment.active's margin-inline
+const SHOVE_PX = 7, SHOVE_FALLOFF = 0.85, SHOVE_MIN = 3;   // the nearest move 7px; even the farthest move 3px
+function bounceSegments(segs, target) {
+  const pill = segs[target];
+  if (!pill) return;
+  // The width the pill is growing to (it has only just started), so the swell is POP_PX whatever the bar's width
+  const n = segs.length;
+  const gap = parseFloat(getComputedStyle(el.segments).columnGap) || 0;
+  const room = el.segments.clientWidth - gap * (n - 1) - 2 * ACTIVE_MARGIN;
+  const finalWidth = (room * parseFloat(pill.style.flexGrow || ACTIVE_GROW)) / n;
+  pill.style.setProperty('--pop', finalWidth > 0 ? (1 + (2 * POP_PX) / finalWidth).toFixed(4) : '1');
+  segs.forEach((s, i) => {
+    if (i === target) return;
+    const dist = Math.abs(i - target);
+    const d = Math.max(SHOVE_MIN, SHOVE_PX * SHOVE_FALLOFF ** (dist - 1));
+    s.style.setProperty('--shove', `${(i < target ? -d : d).toFixed(2)}px`);
+  });
+  void el.segments.offsetWidth;   // restarts the bounces on rapid clicks
+  segs.forEach((s, i) => s.classList.add(i === target ? 'pop' : 'shove'));
+}
+
 /* Segmented book bar in the top bar (for the active text tab) */
 export function renderSegments() {
   const tab = activeTab();
   if (!isText(tab)) return;
+  // Every pill keeps its numeral (hidden by CSS until it is active) so it can fade in and out with the pill's motion
   el.segments.innerHTML = ROMANS.slice(0, workOf(tab).bookCount).map((r) => {
     const on = r === tab.book;
-    return `<button class="segment${on ? ' active' : ''}" data-book="${r}" aria-label="Book ${r}"${on ? ' aria-current="true"' : ''}>${on ? r : ''}</button>`;
+    return `<button class="segment${on ? ' active' : ''}" data-book="${r}" aria-label="Book ${r}"${on ? ' aria-current="true"' : ''}>${r}</button>`;
   }).join('');
+  growSegments();
 }
+
+let bookRender = 0;   // the frame request that builds the newly chosen book (see setBook)
 
 export function setBook(roman) {
   const tab = activeTab();
   if (!isText(tab) || tab.book === roman) return;
 
-  // Ripple neighbours away from the newly selected segment.
   const target = ROMANS.indexOf(roman);
   const segs = [...el.segments.children];
-  segs.forEach((s) => s.classList.remove('ripple-left', 'ripple-right'));
-  void el.segments.offsetWidth; // restart animations on rapid clicks
   segs.forEach((s, i) => {
     const on = i === target;
-    if (!on) s.classList.add(i < target ? 'ripple-left' : 'ripple-right');
+    s.classList.remove('pop', 'shove');
     s.classList.toggle('active', on);
-    s.textContent = on ? roman : '';
     s.toggleAttribute('aria-current', on);
   });
+  growSegments();
+  bounceSegments(segs, target);
 
   tab.book = roman;
-  tab.ui.paneOriginal.scrollTop = 0;
-  renderPassage(tab);
-  setBookTitles(tab);
-  renderTabs();
-  refreshNoteMarks([tab]);
-  setView('reader');
+  // Building the book is the heavy part. It waits two frames so the pill's first frames are painted and the click
+  // answers at once; clicking again before then cancels this and builds only the latest book.
+  cancelAnimationFrame(bookRender);
+  bookRender = requestAnimationFrame(() => {
+    bookRender = requestAnimationFrame(() => {
+      // Another tab was opened meanwhile: activating it already rendered its own current book
+      if (activeTab() !== tab || tab.book !== roman) return;
+      tab.ui.paneOriginal.scrollTop = 0;
+      renderPassage(tab);
+      setBookTitles(tab);
+      renderTabs();
+      refreshNoteMarks([tab]);
+      setView('reader');
+    });
+  });
 }
 
 export function initLayout() {

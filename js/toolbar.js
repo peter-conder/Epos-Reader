@@ -68,7 +68,7 @@ export function initToolbar() {
     const seg = e.target.closest('.segment');
     if (seg) setBook(seg.dataset.book);
   });
-  el.segments.addEventListener('animationend', (e) => e.target.classList.remove('ripple-left', 'ripple-right'));
+  el.segments.addEventListener('animationend', (e) => e.target.classList.remove('pop', 'shove'));
 
   toolToggle.addEventListener('click', () => setTools(!toolBar.classList.contains('open')));
   // Clicking anywhere outside the bar (and the flyouts that belong to it) folds it back into the circle
