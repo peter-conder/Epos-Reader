@@ -7,16 +7,17 @@ const TWO_UP_SCALE = 0.86;
 export const FIT_CANDIDATES = 40;   // lines measured at the reference sizes (picked from the text, see makeChunker)
 const FIT_STEP = 100;        // sizes round down to 1/100 rem, so tiny width changes don't relayout the book
 
-/* How wide one line's content is (its flex row stretches to the widest line, so the row itself can't say) */
-export function lineWidth(line, padRight) {
+/* How wide one line's content is (its flex row stretches to the widest line, so the row itself can't say).
+   Rects include transforms, so `scale` (how much bigger or smaller the page is drawn than laid out) is divided out. */
+export function lineWidth(line, padRight, scale = 1) {
   const left = line.getBoundingClientRect().left;
   if (line.classList.contains('verse')) {
     const last = line.lastElementChild?.lastElementChild ?? line.lastElementChild;
-    return last ? last.getBoundingClientRect().right - left : 0;
+    return last ? (last.getBoundingClientRect().right - left) / scale : 0;
   }
   const r = document.createRange();
   r.selectNodeContents(line);
-  return r.getBoundingClientRect().right - left + padRight;
+  return (r.getBoundingClientRect().right - left) / scale + padRight;
 }
 
 /* Width grows almost linearly with size (the text scales, word padding doesn't). Most of the book isn't in
@@ -38,7 +39,11 @@ export function measureFitModel(checks) {
     const at = (size) => {
       probe.style.setProperty('--reading-font-size', `${size}rem`);
       probe.style.setProperty('--reading-trans-font-size', `${size * 0.86}rem`);
-      return widest.map((l) => lineWidth(l, padRight));
+      // A new tab's pop-in (a scale animation) is still running when its text is first fitted, and rects are drawn
+      // sizes, not layout sizes. The probe's layout width is a computed style, which transforms don't touch.
+      const layoutW = parseFloat(getComputedStyle(probe).width);
+      const scale = layoutW > 0 ? probe.getBoundingClientRect().width / layoutW : 1;
+      return widest.map((l) => lineWidth(l, padRight, scale || 1));
     };
     const wLo = at(lo), wHi = at(hi);
     probe.remove();

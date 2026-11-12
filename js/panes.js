@@ -1,5 +1,5 @@
 import { $, clamp, el } from './dom.js';
-import { activeTab, getTab, groupOf, partnerOf, state } from './state.js';
+import { activeTab, getTab, groupOf, isNotebook, isText, partnerOf, state } from './state.js';
 import { closeTranslation } from './reader.js';
 import { SPRING } from './motion.js';
 import { renderAll } from './layout.js';
@@ -26,6 +26,23 @@ export function initPanes() {
     if (tab?.split && !partnerOf(tab)) closeTranslation(tab);
     else closeTab(id);
   });
+
+  /* With one window open, the wheel scrolls it from anywhere on the page (margins, sidebar, toolbar, scrollbar rail),
+     not only from over the pane. Popovers, the word card and a scrolling sidebar keep their own wheel. */
+  document.addEventListener('wheel', (e) => {
+    if (e.defaultPrevented || e.ctrlKey || !e.deltaY) return;
+    if (state.view !== 'reader' || el.panes.hidden || el.panes.dataset.count !== '1') return;
+    const t = e.target;
+    if (t.closest('.pane, .popover, .word-card, textarea')) return;   // these scroll (or are scrolled over) by themselves
+    const list = t.closest('.tab-list');
+    if (list && list.scrollHeight > list.clientHeight) return;
+    const tab = activeTab();
+    const pane = isText(tab) ? tab.ui?.paneOriginal : isNotebook(tab) ? $('notebook-pane') : null;
+    if (!pane || !pane.clientHeight) return;
+    // deltaMode: 0 pixels, 1 lines, 2 pages
+    pane.scrollTop += e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? pane.clientHeight : 1);
+    e.preventDefault();
+  }, { passive: false });
 
   /* Resize bar between the two panes of a split pair */
   (() => {

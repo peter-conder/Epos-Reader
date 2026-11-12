@@ -28,7 +28,7 @@ const PALETTES = {
   bluegray: { name: 'Slate',
     light: { p: '#4A5C7A', on: '#FFFFFF', c: '#D3E3FF', onc: '#001C39', s: '#565E71', ons: '#FFFFFF', sc: '#DAE2F9', onsc: '#131B2C' },
     dark:  { p: '#B3C8E8', on: '#1B2E49', c: '#334461', onc: '#D3E3FF', s: '#BEC6DC', ons: '#283041', sc: '#3F4759', onsc: '#DAE2F9' } },
-  yellow: { name: 'Golden',
+  yellow: { name: 'Limoncello',
     light: { p: '#6B5F00', on: '#FFFFFF', c: '#F8E468', onc: '#201C00', s: '#656040', ons: '#FFFFFF', sc: '#ECE4C0', onsc: '#201C04' },
     dark:  { p: '#DCC84F', on: '#383100', c: '#514700', onc: '#F8E468', s: '#CFC8A5', ons: '#363116', sc: '#4D482B', onsc: '#ECE4C0' } },
   purple: { name: 'Lavender',

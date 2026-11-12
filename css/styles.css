@@ -841,6 +841,8 @@
     /* max-width eases between its two values when a second tab opens or closes (see the split-tabs rule below) */
     transition: padding 180ms ease, max-width var(--grow-dur, 520ms) ease;
   }
+  /* While the text-size slider is dragged the pane follows --reader-max at once instead of easing after it */
+  .resizing-text .pane-original { transition: padding 180ms ease; }
   .reader[data-split="on"] .pane-original { max-width: none; min-width: 25%; margin: 0; }
   .workspace.snapping .pane-original { transition: width 320ms var(--ease-spring), padding 180ms ease; }
 
@@ -969,7 +971,13 @@
     transition: background-color 140ms ease, color 140ms ease, transform 140ms var(--ease-spring);
   }
   .word:hover { background: color-mix(in srgb, var(--secondary-container) 75%, transparent); transform: translateY(-1px); }
-  .word.selected { background: var(--primary); color: var(--on-primary); font-weight: 600; transform: scale(1.04); }
+  /* No font-weight change: real bold is wider (it would push the neighbours) and loads a new font face,
+     whose 'loadingdone' refits the book. The shadow thickens the strokes without touching layout. */
+  .word.selected {
+    background: var(--primary); color: var(--on-primary);
+    text-shadow: 0.3px 0 0 currentColor, -0.3px 0 0 currentColor;
+    transform: scale(1.04);
+  }
 
   /* Words that carry a note: tinted like the book bar, with the note icon in the selected-book colour */
   .word.has-note { background: var(--primary-container); }

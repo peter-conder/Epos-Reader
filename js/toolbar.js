@@ -1,6 +1,6 @@
 import { $, clamp, el, MIN_FONT, root } from './dom.js';
 import { state } from './state.js';
-import { closePopovers, setBook, setOpen, setView } from './layout.js';
+import { alignProgress, closePopovers, setBook, setOpen, setView } from './layout.js';
 import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
 import { hideWordCard } from './word-card.js';
@@ -23,6 +23,11 @@ export function closePaletteMenu() {
   paletteItem.classList.remove('open');
   setOpen(el.paletteMenu, false);
 }
+
+/* The reading pane's default width limit (--reader-max in styles.css), and the text size at which the
+   widest hexameter about fills it */
+const BASE_READER_MAX = 860;
+const BASE_FIT_REM = 1.4;
 
 /* The toolbar is one bar: a circle with a single button when collapsed (the default), a pill of tools when open */
 const toolBar = $('tool-bar'), toolToggle = $('btn-tools');
@@ -101,18 +106,28 @@ export function initToolbar() {
   document.querySelectorAll('[data-close]').forEach((btn) =>
     btn.addEventListener('click', () => setOpen($(btn.dataset.close), false)));
 
-  // Text size: each reader sets its own size when it fits its text, so only the chosen size is stored here
+  // Text size: each reader sets its own size when it fits its text, so only the chosen size is stored here.
+  // Lines never wrap, so the pane's width limit grows with the size; otherwise the text would stop
+  // growing once the widest line filled the pane (it still stops when the pane fills the window).
   el.fontSlider.addEventListener('input', () => {
     const val = parseFloat(el.fontSlider.value);
     const max = parseFloat(el.fontSlider.max);
     el.sizeSlider.style.setProperty('--pct', ((val - MIN_FONT) / (max - MIN_FONT)).toFixed(4));
     state.fontRem = val;
+    root.style.setProperty('--reader-max', `${Math.round(BASE_READER_MAX * Math.max(1, val / BASE_FIT_REM))}px`);
+    alignProgress();   // the book bar is as wide as the pane; the main area didn't resize, so nothing else tells it
     fitAll();
   });
 
   // Handle squeezes while shared.dragging, then bounces back
-  const endSliderDrag = () => el.sizeSlider.classList.remove('dragging');
-  el.fontSlider.addEventListener('pointerdown', () => el.sizeSlider.classList.add('dragging'));
+  const endSliderDrag = () => {
+    el.sizeSlider.classList.remove('dragging');
+    root.classList.remove('resizing-text');
+  };
+  el.fontSlider.addEventListener('pointerdown', () => {
+    el.sizeSlider.classList.add('dragging');
+    root.classList.add('resizing-text');
+  });
   el.fontSlider.addEventListener('blur', endSliderDrag);
   addEventListener('pointerup', endSliderDrag);
   addEventListener('pointercancel', endSliderDrag);
