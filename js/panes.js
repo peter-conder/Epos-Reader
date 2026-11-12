@@ -1,5 +1,6 @@
 import { $, clamp, el } from './dom.js';
-import { activeTab, groupOf, state } from './state.js';
+import { activeTab, getTab, groupOf, partnerOf, state } from './state.js';
+import { closeTranslation } from './reader.js';
 import { SPRING } from './motion.js';
 import { renderAll } from './layout.js';
 import { activateTab, closeTab } from './tabs.js';
@@ -19,7 +20,11 @@ export function initPanes() {
   el.panes.addEventListener('click', (e) => {
     const btn = e.target.closest('.pane-close');
     const id = btn?.closest('.tab-view')?.dataset.tabId;
-    if (id) closeTab(id);
+    if (!id) return;
+    const tab = getTab(id);
+    // On a lone reader showing the English beside it, the X closes the English pane
+    if (tab?.split && !partnerOf(tab)) closeTranslation(tab);
+    else closeTab(id);
   });
 
   /* Resize bar between the two panes of a split pair */

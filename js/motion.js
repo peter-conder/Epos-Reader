@@ -167,18 +167,60 @@ export function beginSplitClose(tab, ghostRect) {
   };
 }
 
-/* The English pane closing: same shrink, run on a frozen copy because the real pane is hidden at once */
-export function playTranslationExit(tab) {
+/* The English pane closing: the same motion as a split tab closing. Call while the pane is still on screen;
+   the returned function is called once the layout no longer shows it. The pane (on a frozen copy, with its X
+   and the divider) slides out through the right edge while the original pane eases to its single-view place. */
+export function beginTranslationClose(tab) {
   const ui = tab.ui;
-  if (!ui || ui.root.hidden || el.panes.hidden) return;
-  const pane = ui.paneTranslation;
-  const r = pane.getBoundingClientRect();
-  if (!r.width) return;
+  if (!ui || ui.root.hidden || el.panes.hidden) return null;
+  const pane = ui.paneTranslation, orig = ui.paneOriginal, dv = ui.divider;
+  if (!pane.offsetWidth) return null;
+
+  settleMorph();
+  const wr = ui.workspace.getBoundingClientRect();
+  // offset sizes ignore the squash / snap-target transforms the pane may be wearing
+  const rectOf = (n) => ({ left: wr.left + n.offsetLeft, top: wr.top + n.offsetTop, width: n.offsetWidth, height: n.offsetHeight });
+  const r = rectOf(pane);
+  const from = { left: orig.offsetLeft, w: orig.offsetWidth };
+
   const ghost = makeGhost(pane, r);
   ghost.style.display = 'block';
   ghost.classList.remove('squash', 'snap-target');
   const cs = getComputedStyle(ui.root);
   for (const name of ['--reading-font-size', '--reading-trans-font-size']) ghost.style.setProperty(name, cs.getPropertyValue(name));
   ghost.scrollTop = pane.scrollTop;
-  shrinkAway(ghost, 1);
+  // The X belongs to the reader, not to the pane, so the copy gets its own (pinned to the pane's top while it scrolls)
+  const btn = ui.root.querySelector(':scope > .pane-close');
+  if (btn) {
+    const gx = btn.cloneNode(true);
+    Object.assign(gx.style, { display: 'grid', top: `${15 + pane.scrollTop}px`, right: '25px' });
+    ghost.append(gx);
+  }
+  const dvGhost = makeGhost(dv, rectOf(dv));
+  dvGhost.style.display = 'flex';      // outside the reader the divider's own rule would hide it
+
+  return () => {
+    el.panes.classList.add('morphing');
+    const m = el.main.getBoundingClientRect();
+    const to = { left: orig.offsetLeft, w: orig.offsetWidth };
+    // The leaving pane moves as far as the staying edge does, or at least far enough to be gone
+    const travel = Math.max(to.left + to.w - (from.left + from.w), m.right - r.left);
+
+    const opts = { duration: PANE_DUR, easing: EMPHASIZED, fill: 'both' };
+    const slide = { transform: ['none', `translateX(${travel}px)`] };
+    const anims = [
+      ghost.animate(slide, opts),
+      dvGhost.animate(slide, opts),
+      dvGhost.animate({ opacity: [1, 0] }, { duration: PANE_DUR * 0.4, easing: 'ease-out', fill: 'both' }),
+      orig.animate({
+        width: [`${from.w}px`, `${to.w}px`],
+        maxWidth: [`${from.w}px`, `${to.w}px`],
+        marginLeft: [`${from.left}px`, `${to.left}px`]
+      }, opts)
+    ];
+    runMorph([], anims, () => {
+      ghost.remove();
+      dvGhost.remove();
+    });
+  };
 }

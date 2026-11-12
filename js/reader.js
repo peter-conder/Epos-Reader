@@ -2,7 +2,7 @@ import { ROMANS, WORKS } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
 import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js';
 import { loadBook } from './book-data.js';
-import { playPop, playTranslationExit } from './motion.js';
+import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
 import { scheduleFit } from './fit.js';
@@ -113,10 +113,7 @@ export function bindReader(tab) {
     document.body.classList.remove('resizing');
 
     if (dv.pct >= 89) {
-      playTranslationExit(tab);
-      tab.split = false;
-      applySplit(tab);
-      syncToolbar();
+      closeTranslation(tab);
     } else if (dv.pct > 80) {
       tab.splitPct = 70;
       animateSplitTo(ui, 70);
@@ -235,12 +232,22 @@ export function applySplit(tab) {
 export function toggleSplit() {
   const tab = activeTab();
   if (!isText(tab) || partnerOf(tab)) return;
-  tab.split = !tab.split;
-  if (tab.split && (tab.splitPct > 75 || tab.splitPct < 25)) tab.splitPct = 50;
-  if (!tab.split) playTranslationExit(tab);   // copy the pane while it is still on screen
+  if (tab.split) { closeTranslation(tab); return; }
+  tab.split = true;
+  if (tab.splitPct > 75 || tab.splitPct < 25) tab.splitPct = 50;
   applySplit(tab);
   syncToolbar();
-  if (tab.split) playPop(tab.ui.paneTranslation);
+  playPop(tab.ui.paneTranslation);
+}
+
+/* Close the English pane: it slides out like a closing split tab (see beginTranslationClose in motion.js) */
+export function closeTranslation(tab) {
+  if (!tab?.split) return;
+  const play = beginTranslationClose(tab);   // while the pane is still on screen
+  tab.split = false;
+  applySplit(tab);
+  syncToolbar();
+  play?.();
 }
 
 export function animateSplitTo(ui, pct) {

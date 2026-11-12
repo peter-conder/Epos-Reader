@@ -1422,7 +1422,7 @@
   .pane-close:hover { background: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text); transform: scale(1.08); }
   .pane-close:active { transform: scale(0.94); }
   .pane-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-  .panes[data-count="2"] .pane-close { display: grid; }
+  .panes[data-count="2"] .pane-close, .reader[data-split="on"] > .pane-close { display: grid; }
   .panes[data-count="2"] .nb-header { padding-right: 44px; }   /* clear of the X */
 
   /* Two tabs sharing one pill, with a cut between them */
