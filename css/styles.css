@@ -116,10 +116,8 @@
     --shadow-3: 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 8px 3px rgba(0, 0, 0, 0.3);
   }
 
-  /* Switching modes: colours cross-fade, for this moment only (settings.js adds and removes the class) */
-  :root.theme-fade, :root.theme-fade *, :root.theme-fade *::before, :root.theme-fade *::after {
-    transition: background-color 320ms ease, color 320ms ease, border-color 320ms ease, fill 320ms ease, stroke 320ms ease !important;
-  }
+  /* Switching modes: the whole page cross-fades as one snapshot (a view transition started in settings.js) */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 320ms; animation-timing-function: ease; }
 
   /* ==========================================================
      2. BASE
@@ -519,7 +517,6 @@
   @keyframes toolIn { from { opacity: 0; transform: scale(0.4) translateY(-12px); } }
   /* Light / dark: the moon (in light mode) and the sun (in dark mode) swap with a spin */
   .theme-btn .icon { grid-area: 1 / 1; transition: opacity 160ms ease, transform 560ms var(--ease-bouncy); }
-  :root.theme-fade .theme-btn .icon { transition: opacity 160ms ease, transform 560ms var(--ease-bouncy) !important; }
   .theme-btn .icon-sun { opacity: 0; transform: rotate(-90deg) scale(0.5); }
   :root[data-theme="dark"] .theme-btn .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
   :root[data-theme="dark"] .theme-btn .icon-sun { opacity: 1; transform: none; }

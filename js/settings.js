@@ -89,15 +89,8 @@ function renderPaletteChoices() {
 /* ==========================================================
    LIGHT / DARK MODE (the moon / sun button in the tool bar)
    ========================================================== */
-let fadeTimer = 0;
-export function applyTheme(mode, { fade = false } = {}) {
+export function applyTheme(mode) {
   state.theme = mode === 'dark' ? 'dark' : 'light';
-  if (fade) {
-    // Colours cross-fade only while the switch happens, so nothing else pays for the transition
-    root.classList.add('theme-fade');
-    clearTimeout(fadeTimer);
-    fadeTimer = setTimeout(() => root.classList.remove('theme-fade'), 360);
-  }
   root.dataset.theme = state.theme;
   renderPaletteChoices();
   applyPalette(currentPalette);
@@ -108,7 +101,12 @@ export function applyTheme(mode, { fade = false } = {}) {
 }
 
 export function toggleTheme() {
-  applyTheme(state.theme === 'dark' ? 'light' : 'dark', { fade: true });
+  const next = state.theme === 'dark' ? 'light' : 'dark';
+  // The browser cross-fades one snapshot of the old page into the new one, so the colours switch in a single
+  // style pass. A transition on every word and syllable instead made the switch stutter.
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.startViewTransition && !still) document.startViewTransition(() => applyTheme(next));
+  else applyTheme(next);
   try { localStorage.setItem(THEME_KEY, state.theme); } catch { /* storage unavailable */ }
 }
 
