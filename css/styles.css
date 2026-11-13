@@ -1029,7 +1029,8 @@
     --m-color: var(--gray-900);
   }
   [data-scansion="on"] .syl[data-q="L"]::before {
-    left: 12%; right: 12%;
+    left: 50%; width: 10px;
+    transform: translateX(-50%);
     background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat;
   }
   /* breve: the bottom half of a ring */
@@ -1041,8 +1042,6 @@
     border: 1.5px solid var(--m-color); border-top: 0;
     border-radius: 0 0 4px 4px;
   }
-  /* the ictus (the long syllable that starts each foot) */
-  [data-scansion="on"] .syl[data-x*="f"]::before { --m-color: var(--primary); }
   /* a normally short syllable lengthened by the poet */
   [data-scansion="on"] .syl[data-x*="d"]::before {
     background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat,
