@@ -16,6 +16,7 @@ import { initSettings } from './settings.js';
 import { closePaletteMenu, initToolbar } from './toolbar.js';
 import { initTooltips } from './tooltips.js';
 import { initViewport } from './viewport.js';
+import { initBottomBar } from './bottom-bar.js';
 
 /* Epos reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
@@ -62,5 +63,6 @@ initNotes();
 initNoteDrag();
 initBookmarks();
 initTooltips();
+initBottomBar();
 
 addNewTab();   // a New Tab is always open when the page loads

@@ -10,6 +10,7 @@ import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
 import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark, updateRailNear } from './bookmarks.js';
 import { attachScrollbar } from './scrollbar.js';
+import { bottomBarScroll } from './bottom-bar.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -66,6 +67,7 @@ export function bindReader(tab) {
     if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil) hideWordCard();
     syncChunks(ui.chunkers?.[0]);
     updateRailNear(tab);
+    bottomBarScroll(tab);
   }, { passive: true });
   ui.paneTranslation.addEventListener('scroll', () => syncChunks(ui.chunkers?.[1]), { passive: true });
 

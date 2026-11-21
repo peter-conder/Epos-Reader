@@ -2,7 +2,7 @@
 <html lang="en" data-scansion="off">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Epos - Classical Poetry Reader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -256,6 +256,18 @@
   <div class="note-box-title" id="note-title">Note</div>
   <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
 </div>
+
+<!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
+     Swipe across the pill to move between tabs. -->
+<nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">
+  <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
+  <div class="bb-pill" id="bb-pill" aria-live="polite">
+    <div class="bb-track" id="bb-track"></div>
+  </div>
+  <button class="bb-tabs" id="btn-tabs" aria-label="Show all tabs">
+    <span class="bb-count" id="bb-count">1</span>
+  </button>
+</nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span>Tab closed</span>

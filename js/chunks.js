@@ -4,6 +4,7 @@ import { FIT_CANDIDATES } from './fit.js';
 import { hideWordCard } from './word-card.js';
 import { markNotes } from './notes.js';
 import { markBookmarks, renderRail } from './bookmarks.js';
+import { refreshBottomBar } from './bottom-bar.js';
 
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
@@ -104,6 +105,17 @@ function lineAt(ch, y) {
 export function lineCenter(ch, i) {
   const b = lineBox(ch, i);
   return b.top + b.height / 2;
+}
+
+/* The first and last line numbers on screen, not counting what the bottom padding (under the phone's
+   bottom bar) covers. Null before the book has loaded. */
+export function visibleLines(ch) {
+  if (!ch?.pitch || !ch.lineNums?.length || !ch.pane.clientHeight) return null;
+  const pad = parseFloat(getComputedStyle(ch.pane).paddingBottom) || 0;
+  const top = ch.pane.scrollTop - textTop(ch);
+  const bottom = top + ch.pane.clientHeight - pad;
+  const last = ch.rows.length - 1;
+  return [ch.lineNums[clamp(lineAt(ch, Math.max(0, top)), 0, last)], ch.lineNums[clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)]];
 }
 
 /* ---------- Measuring ---------- */
@@ -230,6 +242,7 @@ export function syncLayout(tab) {
     syncChunks(ch);
   }
   renderRail(tab);
+  refreshBottomBar(tab);   // the line range on screen may have changed
 }
 
 /* Scrolls a line of the original to the middle of its pane and returns its element */

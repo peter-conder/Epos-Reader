@@ -6,6 +6,7 @@ import { createReader, renderReader } from './reader.js';
 import { addNewTab } from './home.js';
 import { hideHoverCard } from './sidebar.js';
 import { hideWordCard } from './word-card.js';
+import { showChrome } from './bottom-bar.js';
 
 /* ==========================================================
    TABS (sidebar)
@@ -88,6 +89,7 @@ export function activateTab(id) {
   if (!tab) return;
   state.activeId = id;
   state.view = 'reader';
+  showChrome();
   closePopovers();
   hideWordCard();
   groupOf(tab).forEach(renderReader);

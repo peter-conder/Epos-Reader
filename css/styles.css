@@ -1541,7 +1541,128 @@
 
 
   /* ==========================================================
-     12. COMPACT (phones: below 600px, as in js/viewport.js)
+     12. MOBILE SHELL (phones and tablets: 1024px and below, as in js/viewport.js)
+     No top bar, sidebar or toolbar: a floating menu button, full-bleed reading panes, and a bottom
+     bar for the open tab (see bottom-bar.js). Both float over the text and hide while you read.
+     ========================================================== */
+  .bottom-bar { display: none; }
+
+  @media (max-width: 1024px) {
+    :root {
+      --bar-h: 56px;
+      --bar-gap: 10px;
+      --bar-bottom: calc(var(--bar-gap) + env(safe-area-inset-bottom));
+      --bar-room: calc(var(--bar-h) + var(--bar-bottom) + 20px);   /* what the bar covers, plus breathing room */
+      --chrome-ease: cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .sidebar, .toolbar, .pane-close, .pair-divider, .drop-hint { display: none !important; }
+    .shell { height: 100%; margin-top: 0; padding: 0; gap: 0; }
+    .main { height: 100%; border-radius: 0; }
+
+    /* The top bar shrinks to its menu button, floating at the top left */
+    .top-bar {
+      inset: calc(10px + env(safe-area-inset-top)) auto auto calc(10px + env(safe-area-inset-left));
+      height: auto; padding: 0;
+      background: none;
+      pointer-events: none;
+    }
+    .top-bar > :not(.top-left), .brand { display: none !important; }
+    .top-left { width: auto; }
+    #btn-menu {
+      margin: 0;
+      pointer-events: auto;
+      background: color-mix(in srgb, var(--surface) 86%, transparent);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+              backdrop-filter: blur(16px) saturate(1.4);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-pop);
+      transition: transform 280ms var(--chrome-ease), opacity 200ms ease, background-color 150ms ease;
+    }
+    .drawer { top: calc(68px + env(safe-area-inset-top)); left: calc(10px + env(safe-area-inset-left)); }
+
+    /* Panes run edge to edge; their padding keeps the first and last lines clear of the floating controls */
+    .pane {
+      border: 0; border-radius: 0; box-shadow: none;
+      padding-top: calc(68px + env(safe-area-inset-top));
+      padding-bottom: var(--bar-room);
+    }
+    .pane-original { max-width: none; }
+    .settings-page { padding-top: calc(68px + env(safe-area-inset-top)); padding-bottom: var(--bar-room); }
+    .empty-state { padding-bottom: var(--bar-room); }
+    .toast { bottom: calc(var(--bar-h) + var(--bar-bottom) + 12px); }
+
+    /* Bottom bar */
+    .bottom-bar {
+      position: fixed; left: 50%; bottom: var(--bar-bottom);
+      transform: translateX(-50%);
+      width: min(560px, calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+      height: var(--bar-h);
+      display: flex; align-items: center; gap: 4px;
+      padding: 6px;
+      background: color-mix(in srgb, var(--surface) 86%, transparent);
+      -webkit-backdrop-filter: blur(16px) saturate(1.4);
+              backdrop-filter: blur(16px) saturate(1.4);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-pop);
+      overflow: hidden;
+      z-index: 60;
+      transition: transform 280ms var(--chrome-ease), opacity 200ms ease;
+    }
+    /* How far through the tab you are: a thin line along the bar's top edge, inside its rounded ends */
+    .bb-progress { position: absolute; top: 0; left: 28px; right: 28px; height: 3px; border-radius: 0 0 3px 3px; overflow: hidden; }
+    .bb-progress-fill {
+      height: 100%;
+      background: var(--primary);
+      transform: scaleX(0); transform-origin: left center;
+      transition: transform 120ms linear;
+    }
+    /* The pill holds three labels side by side (previous, open, next tab); a swipe slides the row */
+    .bb-pill {
+      flex: 1; min-width: 0; height: 100%;
+      overflow: hidden;
+      border-radius: var(--radius-full);
+      touch-action: none;
+      cursor: grab;
+      user-select: none; -webkit-user-select: none;
+    }
+    .bb-track { display: flex; width: 300%; height: 100%; margin-left: -100%; will-change: transform; }
+    .bb-slot {
+      flex: 0 0 calc(100% / 3); min-width: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+      padding-inline: 12px;
+    }
+    .bb-title, .bb-sub { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .bb-title { font-size: 14px; font-weight: 600; letter-spacing: -0.1px; }
+    .bb-sub { font-size: 12px; color: var(--gray-600); font-variant-numeric: tabular-nums; }
+    .bb-sub:empty { display: none; }
+    /* Tab-overview button: the number of open tabs in a rounded square */
+    .bb-tabs {
+      width: 44px; height: 44px; flex-shrink: 0;
+      display: grid; place-items: center;
+      border-radius: var(--radius-full);
+      transition: background-color 150ms ease, transform 150ms ease;
+    }
+    .bb-tabs:active { background: var(--gray-200); transform: scale(0.94); }
+    .bb-count {
+      min-width: 22px; height: 22px; padding: 0 4px;
+      display: grid; place-items: center;
+      border: 2px solid currentColor; border-radius: 7px;
+      font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
+    }
+
+    /* Reading: both float away, down and up */
+    .chrome-hidden .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }
+    .chrome-hidden #btn-menu { transform: translateY(calc(-100% - 24px - env(safe-area-inset-top))); opacity: 0; pointer-events: none; }
+  }
+
+  @media (max-width: 1024px) and (prefers-reduced-motion: reduce) {
+    .bottom-bar, #btn-menu, .bb-progress-fill { transition-duration: 0ms; }
+  }
+
+  /* ==========================================================
+     13. COMPACT (phones: below 600px, as in js/viewport.js)
      ========================================================== */
   @media (max-width: 599.98px) {
     :root { --reading-padding: 16px; --hang: 1.25em; }
@@ -1555,6 +1676,10 @@
     .verse-words { flex-wrap: wrap; row-gap: 0; column-gap: 0.25em; min-width: 0; padding-left: var(--hang); }
     .word { padding-inline: 4px; }
     .verse-words > .word:first-child { margin-left: calc(-1 * var(--hang)); }
+
+    /* No room beside the text for the English (it becomes a swap toggle) */
+    .pane-translation, .divider { display: none !important; }
+    .reader .pane-original { width: 100% !important; }
 
     /* The bookmark marker sits beside the line's first row, not the middle of a wrapped line */
     .verse-bm { top: calc(var(--reading-font-size) * var(--reading-line-height) / 2 + 3px); }
