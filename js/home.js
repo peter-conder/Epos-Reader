@@ -42,6 +42,7 @@ export function bindCarousel(carousel, onPick) {
   const clearHot = () => cards.forEach((c) => c.classList.remove('hot'));
 
   carousel.addEventListener('pointerover', (e) => {
+    if (e.pointerType === 'touch') return;   // a tap goes straight to the click below
     const card = e.target.closest('.home-card');
     if (card) setFocus(cards.indexOf(card));
   });

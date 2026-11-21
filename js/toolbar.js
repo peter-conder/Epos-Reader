@@ -5,6 +5,7 @@ import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
 import { hideWordCard } from './word-card.js';
 import { toggleTheme } from './settings.js';
+import { canHover } from './viewport.js';
 
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
@@ -48,7 +49,7 @@ export function initToolbar() {
     if (!open) closePaletteMenu();
   });
 
-  paletteItem.addEventListener('mouseenter', openPaletteMenu);
+  paletteItem.addEventListener('mouseenter', () => { if (canHover()) openPaletteMenu(); });   // taps open it through the click below
 
   el.drawer.addEventListener('click', (e) => {
     const action = e.target.closest('[data-action]')?.dataset.action;

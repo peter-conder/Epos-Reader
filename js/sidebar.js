@@ -5,6 +5,7 @@ import { closePopovers, renderAll, setOpen } from './layout.js';
 import { renderReader } from './reader.js';
 import { addNewTab } from './home.js';
 import { countLabel, openNotebook } from './notes.js';
+import { canHover } from './viewport.js';
 
 let hoverTimer = 0;       // tab hover card
 let hoveredTabId = null;
@@ -146,6 +147,7 @@ export function initSidebar() {
   el.addNotebook.addEventListener('click', openNotebook);
 
   el.tabList.addEventListener('mouseover', (e) => {
+    if (!canHover()) return;   // touch fires mouseover on tap; the card would cover what was tapped
     const pill = e.target.closest('.tab');
     if (!pill?.dataset.tabId || pill === shared.hoveredPill || shared.dragging) return;
     shared.hoveredPill = pill;

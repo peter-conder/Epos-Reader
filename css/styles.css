@@ -178,7 +178,7 @@
     color: var(--on-primary-container);
     transition: background-color 120ms ease, transform 150ms var(--ease-spring);
   }
-  .btn-close:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.1); }
+  @media (hover: hover) { .btn-close:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.1); } }
   .btn-close .icon { width: 16px; height: 16px; }
 
   /* ==========================================================
@@ -201,7 +201,7 @@
     display: grid; place-items: center;
     transition: background-color 150ms ease, transform 150ms ease;
   }
-  .icon-button:hover { background: var(--gray-200); }
+  @media (hover: hover) { .icon-button:hover { background: var(--gray-200); } }
   .icon-button:active { transform: scale(0.95); }
   /* Main menu: its centre sits over the centre of the tab icons below (12px shell + 10px sidebar + 1px border + 16px tab padding + half an icon) */
   #btn-menu { width: 48px; height: 48px; margin-left: calc(12px + 10px + 1px + 16px + 10px - 16px - 24px); }
@@ -241,7 +241,7 @@
                 background-color 90ms ease-out, color 120ms ease,
                 transform 300ms var(--ease-springy);   /* a pill that stops being active lightens at once, so it never lingers darker than its neighbours */
   }
-  .segment:hover:not(.active) { background: color-mix(in srgb, var(--primary) 45%, var(--primary-container)); transform: scaleY(1.3); }
+  @media (hover: hover) { .segment:hover:not(.active) { background: color-mix(in srgb, var(--primary) 45%, var(--primary-container)); transform: scaleY(1.3); } }
   /* A rectangle with very round corners: 8px on a 24px height leaves a short flat stretch on each side */
   .segment.active {
     /* flex-grow comes from growSegments() in layout.js, which also sizes the pills around it */
@@ -296,7 +296,8 @@
     text-align: left;
     transition: background-color 140ms ease;
   }
-  .drawer-item:hover, .drawer-item.open { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); }
+  .drawer-item.open { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); }
+  @media (hover: hover) { .drawer-item:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); } }
 
   /* Submenu that sits further out (palette picker) */
   .submenu {
@@ -319,7 +320,7 @@
     text-align: left;
     transition: background-color 140ms ease;
   }
-  .sub-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+  @media (hover: hover) { .sub-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); } }
   .sub-item.active { background: var(--secondary-container); color: var(--on-secondary-container); }
   .sub-lead { width: 24px; height: 24px; flex-shrink: 0; display: grid; place-items: center; }
   .sub-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
@@ -365,7 +366,7 @@
     user-select: none;
     transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
   }
-  .tab:hover { background: var(--gray-100); color: var(--text); border-color: var(--gray-300); }
+  @media (hover: hover) { .tab:hover { background: var(--gray-100); color: var(--text); border-color: var(--gray-300); } }
   .tab.active {
     background: var(--primary);
     color: var(--on-primary);
@@ -388,8 +389,8 @@
     transition: background-color 130ms ease, opacity 130ms ease, transform 130ms ease;
   }
   .tab-close .icon { width: 13px; height: 13px; }
-  .tab-close:hover { opacity: 1; background: color-mix(in srgb, currentColor 18%, transparent); transform: scale(1.1); }
-  .tab:not(.active) .tab-close:hover { background: var(--gray-200); }
+  @media (hover: hover) { .tab-close:hover { opacity: 1; background: color-mix(in srgb, currentColor 18%, transparent); transform: scale(1.1); } }
+  @media (hover: hover) { .tab:not(.active) .tab-close:hover { background: var(--gray-200); } }
 
   /* Collapse, notebook and new tab: three parts of one pill (same cut as a split tab pair) */
   .add-split { display: flex; gap: 3px; transition: gap 300ms ease; }
@@ -407,7 +408,7 @@
   }
   .add-half:first-child { border-radius: 24px 8px 8px 24px; }
   .add-half:last-child  { border-radius: 8px 24px 24px 8px; }
-  .add-half:hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); transform: translateY(-1px); }
+  @media (hover: hover) { .add-half:hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); transform: translateY(-1px); } }
   .add-half:active { transform: scale(0.97); }
   .add-half .icon { width: 22px; height: 22px; }
 
@@ -465,7 +466,7 @@
     font-size: 11.5px; font-weight: 600;
     transition: background-color 140ms ease, color 140ms ease;
   }
-  .btn-hover-switch:hover { background: var(--primary); color: var(--on-primary); }
+  @media (hover: hover) { .btn-hover-switch:hover { background: var(--primary); color: var(--on-primary); } }
   .btn-hover-switch .icon { width: 14px; height: 14px; }
 
   /* Right: vertical toolbar */
@@ -489,7 +490,7 @@
     border-radius: 28px;
     transition: height 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms ease;
   }
-  .tool-bar:not(.open):hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); }
+  @media (hover: hover) { .tool-bar:not(.open):hover { background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade)); } }
   .tool-bar.open { height: calc(56px + var(--tools) * 56px); transition: height 640ms var(--ease-bouncy), background-color 150ms ease; }
 
   .tool-toggle, .tool-btn {
@@ -500,17 +501,18 @@
     color: var(--on-primary-container);
   }
   .tool-toggle { transition: background-color 150ms ease; }
-  .tool-bar.open .tool-toggle:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); }
+  @media (hover: hover) { .tool-bar.open .tool-toggle:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); } }
   .tool-toggle .icon { grid-area: 1 / 1; transition: opacity 160ms ease, transform 420ms var(--ease-bouncy); }
   .tool-toggle .icon-close { opacity: 0; transform: rotate(-90deg) scale(0.5); }
   .tool-bar.open .tool-toggle .icon-open { opacity: 0; transform: rotate(90deg) scale(0.5); }
   .tool-bar.open .tool-toggle .icon-close { opacity: 1; transform: none; }
 
   .tool-btn { transition: background-color 150ms ease, color 150ms ease, transform 150ms var(--ease-spring); }
-  .tool-btn:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.06); }
-  .tool-btn.active, .tool-btn.active:hover { background: var(--primary); color: var(--on-primary); }
+  @media (hover: hover) { .tool-btn:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.06); } }
+  .tool-btn.active { background: var(--primary); color: var(--on-primary); }
+  @media (hover: hover) { .tool-btn.active:hover { background: var(--primary); color: var(--on-primary); } }
   .tool-btn.disabled { opacity: 0.35; cursor: not-allowed; }
-  .tool-btn.disabled:hover { background: none; transform: none; }
+  @media (hover: hover) { .tool-btn.disabled:hover { background: none; transform: none; } }
   /* Tools are hidden while collapsed and pop in one after another as the bar opens */
   .tool-bar:not(.open) .tool-btn { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 90ms ease, visibility 0s linear 90ms; }
   .tool-bar.open .tool-btn { animation: toolIn 520ms var(--ease-bouncy) backwards; animation-delay: calc(var(--i, 0) * 50ms + 90ms); }
@@ -553,7 +555,7 @@
     text-align: left;
     transition: background-color 140ms ease;
   }
-  .switch-row:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); }
+  @media (hover: hover) { .switch-row:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); } }
   .switch-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .switch-title { font-size: 16px; font-weight: 500; }
   .switch-sub { font-size: 12px; line-height: 1.25; opacity: 0.72; }
@@ -589,7 +591,7 @@
   }
   .pill-opt:first-child { border-radius: 24px 8px 8px 24px; }
   .pill-opt:last-child  { border-radius: 8px 24px 24px 8px; }
-  .pill-opt:hover:not(.active) { background: color-mix(in srgb, var(--soft) 84%, var(--primary)); }
+  @media (hover: hover) { .pill-opt:hover:not(.active) { background: color-mix(in srgb, var(--soft) 84%, var(--primary)); } }
   .pill-opt:active { transform: scale(0.93); }
   .pill-opt.active, .pill-opt.active:first-child, .pill-opt.active:last-child {
     flex-grow: 1.45;
@@ -641,7 +643,7 @@
     background: var(--primary);
     transition: left 100ms ease-out, transform 320ms var(--ease-bouncy);
   }
-  .m3-slider:hover .ms-handle { transform: scaleY(1.1); }
+  @media (hover: hover) { .m3-slider:hover .ms-handle { transform: scaleY(1.1); } }
   .m3-slider.dragging .ms-handle { transform: scale(0.7, 1.25); }
   .ms-input:focus-visible ~ .ms-handle { outline: 2px solid var(--primary); outline-offset: 3px; }
 
@@ -724,8 +726,9 @@
   }
   .home-card.hot .home-card-title { opacity: 1; transform: none; transition-delay: 90ms; }
   /* Hovered: lifted by a shadow. Focused: a ring set off from the card by a small gap. */
-  .home-card:hover, .home-card:focus-visible { z-index: 1; }
-  .home-card:hover { box-shadow: var(--shadow-3); }
+  .home-card:focus-visible { z-index: 1; }
+  @media (hover: hover) { .home-card:hover { z-index: 1; } }
+  @media (hover: hover) { .home-card:hover { box-shadow: var(--shadow-3); } }
   .home-card:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
 
   /* Switch Work picker (opened from a tab's hover card) */
@@ -752,8 +755,9 @@
     transition: background-color 140ms ease, transform 220ms var(--ease-bouncy);
   }
   .work-item + .work-item { margin-top: 2px; }
-  .work-item:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); transform: translateX(3px); }
-  .work-item.active, .work-item.active:hover { background: var(--primary); color: var(--on-primary); }
+  @media (hover: hover) { .work-item:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); transform: translateX(3px); } }
+  .work-item.active { background: var(--primary); color: var(--on-primary); }
+  @media (hover: hover) { .work-item.active:hover { background: var(--primary); color: var(--on-primary); } }
   .work-item .icon { width: 16px; height: 16px; }
   .work-name { display: block; font-size: 16px; font-weight: 500; }
   .work-author { display: block; font-size: 12px; opacity: 0.72; }
@@ -778,7 +782,7 @@
     font-size: 13px; font-weight: 600;
     transition: background-color 140ms ease, transform 140ms var(--ease-spring);
   }
-  .book-cell:hover { background: color-mix(in srgb, var(--secondary-container) 60%, var(--primary)); transform: scale(1.06); }
+  @media (hover: hover) { .book-cell:hover { background: color-mix(in srgb, var(--secondary-container) 60%, var(--primary)); transform: scale(1.06); } }
   .book-cell.active { background: var(--primary); color: var(--on-primary); }
 
   /* ==========================================================
@@ -830,7 +834,7 @@
      centre -2px, radius 13 x 1.12 hover => its right side stops at about 12.6px of the 20px rail. */
   .bm-dot.near { left: -2px; }
   .bm-dot.near path { stroke-width: 0; }
-  .bm-dot:hover { transform: translate(-50%, -50%) scale(1.12); }
+  @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.12); } }
   .bm-dot::after {
     content: '';
     width: 14px; height: 14px;
@@ -896,8 +900,8 @@
     pointer-events: none;
     transition: background-color 150ms ease, transform 150ms ease, height 150ms ease;
   }
-  .divider:hover .divider-pill, .divider.dragging .divider-pill,
-  .pair-divider:hover .pair-divider-pill, .pair-divider.dragging .pair-divider-pill { background: var(--primary); transform: scaleX(1.4); height: 60px; }
+  .divider.dragging .divider-pill, .pair-divider.dragging .pair-divider-pill { background: var(--primary); transform: scaleX(1.4); height: 60px; }
+  @media (hover: hover) { .divider:hover .divider-pill, .pair-divider:hover .pair-divider-pill { background: var(--primary); transform: scaleX(1.4); height: 60px; } }
   .divider.elastic .divider-pill { background: var(--gray-600); transform: scaleX(1.8); }
   .pair-divider.elastic .pair-divider-pill { background: var(--primary); transform: scaleX(1.8); height: 60px; }
 
@@ -959,12 +963,12 @@
     color: var(--primary);
     opacity: 0; cursor: pointer;
   }
-  .verse:hover .verse-bm { opacity: 0.35; }
-  .verse-bm:hover { opacity: 1; transform: scale(1.2); }
+  @media (hover: hover) { .verse:hover .verse-bm { opacity: 0.35; } }
+  @media (hover: hover) { .verse-bm:hover { opacity: 1; transform: scale(1.2); } }
   .verse.bookmarked .verse-bm { opacity: 1; }
   .verse.bookmarked .verse-bm::before { -webkit-mask-image: var(--bookmark-fill-icon); mask-image: var(--bookmark-fill-icon); }
-  .verse:not(.bookmarked) .verse-bm:hover::before { -webkit-mask-image: var(--bookmark-add-icon); mask-image: var(--bookmark-add-icon); }
-  .verse:not(.bookmarked) .verse-bm:hover::after { transform: scale(1); }
+  @media (hover: hover) { .verse:not(.bookmarked) .verse-bm:hover::before { -webkit-mask-image: var(--bookmark-add-icon); mask-image: var(--bookmark-add-icon); } }
+  @media (hover: hover) { .verse:not(.bookmarked) .verse-bm:hover::after { transform: scale(1); } }
   .verse.flash { animation: lineFlash 1200ms ease-out; }
   @keyframes lineFlash { 0%, 35% { background: var(--primary-container); } 100% { background: transparent; } }
 
@@ -991,7 +995,7 @@
     cursor: pointer;
     transition: background-color 140ms ease, color 140ms ease, transform 140ms var(--ease-spring);
   }
-  .word:hover { background: color-mix(in srgb, var(--secondary-container) 75%, transparent); transform: translateY(-1px); }
+  @media (hover: hover) { .word:hover { background: color-mix(in srgb, var(--secondary-container) 75%, transparent); transform: translateY(-1px); } }
   /* No font-weight change: real bold is wider (it would push the neighbours) and loads a new font face,
      whose 'loadingdone' refits the book. The shadow thickens the strokes without touching layout. */
   .word.selected {
@@ -1002,7 +1006,7 @@
 
   /* Words that carry a note: tinted like the book bar, with the note icon in the selected-book colour */
   .word.has-note { background: var(--primary-container); }
-  .word.has-note:hover { background: color-mix(in srgb, var(--primary-container) 88%, var(--primary)); }
+  @media (hover: hover) { .word.has-note:hover { background: color-mix(in srgb, var(--primary-container) 88%, var(--primary)); } }
   .word.selected.has-note { background: var(--primary); }
   .word.has-note::after {
     content: '';
@@ -1125,7 +1129,7 @@
     transition: background-color 140ms ease, color 140ms ease, transform 150ms var(--ease-spring);
   }
   .card-note .icon { width: 17px; height: 17px; }
-  .card-note:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); }
+  @media (hover: hover) { .card-note:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); } }
   .card-note.has-note, .card-note[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); }
 
   /* Bookmark button, just left of the note button; filled once the line is bookmarked */
@@ -1137,10 +1141,10 @@
     transition: background-color 140ms ease, color 140ms ease, transform 150ms var(--ease-spring);
   }
   .card-bookmark .bm-glyph { width: 19px; height: 19px; }
-  .card-bookmark:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); }
-  .card-bookmark:hover .bm-glyph { transform: scale(1.3); }
-  .card-bookmark:not(.has-bookmark):hover .bm-glyph::before { -webkit-mask-image: var(--bookmark-add-icon); mask-image: var(--bookmark-add-icon); }
-  .card-bookmark:not(.has-bookmark):hover .bm-glyph::after { transform: scale(1); }
+  @media (hover: hover) { .card-bookmark:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.08); } }
+  @media (hover: hover) { .card-bookmark:hover .bm-glyph { transform: scale(1.3); } }
+  @media (hover: hover) { .card-bookmark:not(.has-bookmark):hover .bm-glyph::before { -webkit-mask-image: var(--bookmark-add-icon); mask-image: var(--bookmark-add-icon); } }
+  @media (hover: hover) { .card-bookmark:not(.has-bookmark):hover .bm-glyph::after { transform: scale(1); } }
   .card-bookmark.has-bookmark { background: var(--primary); color: var(--on-primary); }
   .card-bookmark.has-bookmark .bm-glyph::before { -webkit-mask-image: var(--bookmark-fill-icon); mask-image: var(--bookmark-fill-icon); }
 
@@ -1155,7 +1159,7 @@
     cursor: pointer;
     transition: background-color 140ms ease;
   }
-  .card-user-note:hover { background: color-mix(in srgb, var(--secondary-container) 60%, var(--primary)); }
+  @media (hover: hover) { .card-user-note:hover { background: color-mix(in srgb, var(--secondary-container) 60%, var(--primary)); } }
   .card-user-note .icon { width: 16px; height: 16px; margin-top: 1px; color: var(--primary); }
   .card-user-note p { min-width: 0; max-height: 7.5em; overflow-y: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
 
@@ -1183,7 +1187,7 @@
     text-align: left;
     transition: background-color 160ms ease, border-color 160ms ease;
   }
-  .settings-chip:hover { background: var(--gray-50); border-color: var(--gray-300); }
+  @media (hover: hover) { .settings-chip:hover { background: var(--gray-50); border-color: var(--gray-300); } }
   .settings-chip.active { background: var(--primary); color: var(--on-primary); border-color: transparent; }
   .settings-chip-title { font-size: 14.5px; font-weight: 700; }
   .settings-chip-sub { font-size: 11.5px; opacity: 0.8; }
@@ -1217,11 +1221,11 @@
     font-size: 13.5px; font-weight: 600;
     transition: background-color 150ms ease, transform 150ms var(--ease-spring);
   }
-  .toast-undo:hover { background: color-mix(in srgb, var(--primary) 82%, #fff); }
+  @media (hover: hover) { .toast-undo:hover { background: color-mix(in srgb, var(--primary) 82%, #fff); } }
   .toast-undo:active { transform: scale(0.95); }
   /* On the light toast of dark mode the pale primary would wash out: the button takes the deep container instead */
   :root[data-theme="dark"] .toast-undo { background: var(--primary-container); color: var(--on-primary-container); }
-  :root[data-theme="dark"] .toast-undo:hover { background: color-mix(in srgb, var(--primary-container) 84%, #000); }
+  @media (hover: hover) { :root[data-theme="dark"] .toast-undo:hover { background: color-mix(in srgb, var(--primary-container) 84%, #000); } }
 
   /* Hover tips for icon buttons: the tab hover card, smaller */
   .tip {
@@ -1290,7 +1294,7 @@
     flex-shrink: 0;
     transition: background-color 150ms ease, transform 150ms var(--ease-spring);
   }
-  .btn-new-note:hover { background: color-mix(in srgb, var(--primary) 86%, var(--hover-shade)); transform: translateY(-1px); }
+  @media (hover: hover) { .btn-new-note:hover { background: color-mix(in srgb, var(--primary) 86%, var(--hover-shade)); transform: translateY(-1px); } }
   .btn-new-note:active { transform: scale(0.97); }
   .btn-new-note .icon { width: 18px; height: 18px; }
   .nb-empty { padding: 56px 16px; text-align: center; font-size: 15px; line-height: 1.5; color: var(--gray-400); }
@@ -1321,11 +1325,12 @@
     cursor: pointer;
     transition: background-color 150ms ease, box-shadow 200ms ease;
   }
-  .bm-card:hover { background: color-mix(in srgb, var(--secondary-container) 80%, var(--primary)); box-shadow: var(--shadow-1); }
+  @media (hover: hover) { .bm-card:hover { background: color-mix(in srgb, var(--secondary-container) 80%, var(--primary)); box-shadow: var(--shadow-1); } }
   .bm-src { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.2px; color: var(--primary); }
   .bm-src .icon { width: 14px; height: 14px; fill: currentColor; }
   .bm-text { font-family: var(--reading-font); font-size: 0.95rem; font-style: italic; line-height: 1.4; overflow-wrap: anywhere; }
-  .bm-card:hover .note-del, .bm-card:focus-within .note-del { opacity: 1; }
+  .bm-card:focus-within .note-del { opacity: 1; }
+  @media (hover: hover) { .bm-card:hover .note-del { opacity: 1; } }
   .bm-card .note-del { top: 8px; right: 8px; bottom: auto; }
 
   .note-card {
@@ -1344,7 +1349,7 @@
   .note-card > .note-edit, .note-card > .note-jump, .note-card > .note-del { position: relative; z-index: 1; }
 
   /* Hovered: the "elevated" card, a surface lifted by a soft shadow */
-  .note-card:hover { background: color-mix(in srgb, var(--primary-container) 92%, var(--hover-shade)); box-shadow: var(--shadow-1); }
+  @media (hover: hover) { .note-card:hover { background: color-mix(in srgb, var(--primary-container) 92%, var(--hover-shade)); box-shadow: var(--shadow-1); } }
   .note-card:focus-within { background: var(--surface); border-color: var(--primary); }
 
   /* Pressed: the card darkens and a deeper ripple spreads from the cursor to fill it */
@@ -1371,7 +1376,7 @@
   }
   .note-card.dragging * { cursor: grabbing !important; }
   /* While one card is being dragged, the others don't react to the cursor passing over them */
-  .note-grid.sorting .note-card:not(.dragging):hover { background: var(--primary-container); box-shadow: none; }
+  @media (hover: hover) { .note-grid.sorting .note-card:not(.dragging):hover { background: var(--primary-container); box-shadow: none; } }
   body.note-dragging, body.note-dragging * { cursor: grabbing !important; user-select: none !important; }
 
   /* Card text is edited in place; a hidden mirror makes the card grow with it */
@@ -1392,7 +1397,7 @@
   .note-jump .icon { width: 12px; height: 12px; margin-left: 4px; vertical-align: -1px; }
   .note-word { font-size: 0.9rem; font-weight: 600; font-style: italic; overflow-wrap: anywhere; }
   .note-src { font-size: 11.5px; font-weight: 500; letter-spacing: 0.2px; opacity: 0.7; }
-  .note-card:hover .note-jump .note-word { text-decoration: underline; text-underline-offset: 3px; }
+  @media (hover: hover) { .note-card:hover .note-jump .note-word { text-decoration: underline; text-underline-offset: 3px; } }
 
   .note-del {
     position: absolute; right: 10px; bottom: 10px;
@@ -1404,8 +1409,9 @@
   }
   .note-card > .note-del { position: absolute; }
   .note-del .icon { width: 15px; height: 15px; }
-  .note-card:hover .note-del, .note-card:focus-within .note-del { opacity: 1; }
-  .note-del:hover { background: color-mix(in srgb, var(--on-primary-container) 14%, transparent); }
+  .note-card:focus-within .note-del { opacity: 1; }
+  @media (hover: hover) { .note-card:hover .note-del { opacity: 1; } }
+  @media (hover: hover) { .note-del:hover { background: color-mix(in srgb, var(--on-primary-container) 14%, transparent); } }
   @media (hover: none) { .note-del { opacity: 0.7; } }
 
   /* ==========================================================
@@ -1447,7 +1453,7 @@
     transition: background-color 120ms ease, color 120ms ease, transform 150ms var(--ease-spring);
   }
   .pane-close .icon { width: 18px; height: 18px; }
-  .pane-close:hover { background: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text); transform: scale(1.08); }
+  @media (hover: hover) { .pane-close:hover { background: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text); transform: scale(1.08); } }
   .pane-close:active { transform: scale(0.94); }
   .pane-close:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
   .panes[data-count="2"] .pane-close, .reader[data-split="on"] > .pane-close { display: grid; }
@@ -1461,15 +1467,15 @@
   .tab-half .tab-left { gap: 6px; }
   .tab-half .tab-title { font-size: 13.5px; }
   .tab-half.partner { background: var(--secondary-container); border-color: transparent; color: var(--text); }
-  .tab-half.partner:hover { background: var(--gray-300); }
+  @media (hover: hover) { .tab-half.partner:hover { background: var(--gray-300); } }
   .tab-half .tab-close {
     position: absolute; right: 5px; top: 50%;
     transform: translateY(-50%);
     opacity: 0;
     background: inherit;
   }
-  .tab-half:hover .tab-close { opacity: 0.9; }
-  .tab-half .tab-close:hover { transform: translateY(-50%) scale(1.1); }
+  @media (hover: hover) { .tab-half:hover .tab-close { opacity: 0.9; } }
+  @media (hover: hover) { .tab-half .tab-close:hover { transform: translateY(-50%) scale(1.1); } }
 
   /* Dragging */
   .tab.drag-ghost { background: transparent; border: 1.5px dashed var(--gray-300); box-shadow: none; pointer-events: none; }
@@ -1508,3 +1514,23 @@
   .drop-hint.show { opacity: 1; transform: none; }
   body.dragging-tab, body.dragging-tab * { cursor: grabbing !important; user-select: none !important; }
   body.drag-denied, body.drag-denied * { cursor: not-allowed !important; }
+
+  /* ==========================================================
+     11. TOUCH
+     Interactions follow the pointer, not the width (see js/viewport.js): hover styles
+     above sit inside @media (hover: hover), and controls revealed by hover stay visible
+     here. On coarse pointers small buttons get a 44px hit area without changing how
+     they look, so desktop layouts on touch screens don't shift.
+     ========================================================== */
+  @media (hover: none) {
+    .tab-half .tab-close { opacity: 0.9; }
+  }
+  @media (pointer: coarse) {
+    .btn-close, .toast-undo { position: relative; }
+    :is(.btn-close, .pane-close, .card-note, .card-bookmark, .note-del, .toast-undo)::after {
+      content: '';
+      position: absolute;
+      inset: min(0px, (100% - 44px) / 2);   /* grows the box to 44px each way; never shrinks a bigger one */
+      border-radius: inherit;
+    }
+  }
