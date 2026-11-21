@@ -1,5 +1,5 @@
 import { el, esc, icon } from './dom.js';
-import { activeTab, getTab, groupOf, isNotebook, isText, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
+import { activeTab, byRecent, getTab, groupOf, isNotebook, isText, markUsed, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
 import { beginSplitClose } from './motion.js';
 import { closePopovers, renderAll, showUndo } from './layout.js';
 import { createReader, renderReader } from './reader.js';
@@ -7,6 +7,7 @@ import { addNewTab } from './home.js';
 import { hideHoverCard } from './sidebar.js';
 import { hideWordCard } from './word-card.js';
 import { showChrome } from './bottom-bar.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    TABS (sidebar)
@@ -84,9 +85,11 @@ export function addTab(work, book) {
   return tab;
 }
 
-export function activateTab(id) {
+/* promote: count this as using the tab (see byRecent); a swipe on the phone's bottom bar only peeks */
+export function activateTab(id, { promote = true } = {}) {
   const tab = getTab(id);
   if (!tab) return;
+  if (promote) markUsed(tab);
   state.activeId = id;
   state.view = 'reader';
   showChrome();
@@ -116,7 +119,9 @@ export function closeTab(id, opts = {}) {
     state.activeId = null;
     snap.autoId = addNewTab().id;
   } else if (id === state.activeId) {
-    activateTab((partner ?? state.tabs[Math.max(0, idx - 1)]).id);
+    // Desktop: the neighbour in the sidebar. Below desktop the sidebar's order isn't shown: the most recently used.
+    if (isMobileTier()) activateTab(byRecent()[0].id, { promote: false });
+    else activateTab((partner ?? state.tabs[Math.max(0, idx - 1)]).id);
   } else {
     renderAll();
   }

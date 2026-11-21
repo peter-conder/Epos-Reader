@@ -118,6 +118,10 @@ export function visibleLines(ch) {
   return [ch.lineNums[clamp(lineAt(ch, Math.max(0, top)), 0, last)], ch.lineNums[clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)]];
 }
 
+/* Index of the line the reader was last at the top of (0 at the start, or before the book has loaded).
+   Kept while the tab is hidden, so the tab grid can show where each tab is. */
+export const anchorIndex = (ch) => ch?.anchor?.i ?? 0;
+
 /* ---------- Measuring ---------- */
 
 /* Remembers the height of every chunk in the page and updates the average pitch. Returns whether anything moved.

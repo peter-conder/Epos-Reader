@@ -8,6 +8,7 @@ import { closeNote, hideWordCard } from './word-card.js';
 import { refreshNoteMarks, renderNotebook } from './notes.js';
 import { syncSettingsChips } from './settings.js';
 import { renderBottomBar } from './bottom-bar.js';
+import { renderTabGrid } from './tab-grid.js';
 import { isMobileTier } from './viewport.js';
 
 let lastShown = [];   // ids of the tabs that were on screen after the last render
@@ -138,6 +139,7 @@ export function renderAll() {
   renderSegments();
   renderBrand();
   renderBottomBar();
+  renderTabGrid();
   syncToolbar();
   const tab = activeTab();
   if (isText(tab)) syncSettingsChips(tab.work);

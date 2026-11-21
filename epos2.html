@@ -257,6 +257,25 @@
   <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
 </div>
 
+<!-- TAB GRID (phones and tablets): every open tab, most recently used first -->
+<section class="tab-grid" id="tab-grid" aria-label="Open tabs" hidden>
+  <header class="tg-header">
+    <h2 class="tg-count" id="tg-count">Tabs</h2>
+    <button class="tg-new" id="tg-new" aria-label="Open a chapter in a new tab"></button>
+    <button class="tg-done" id="tg-done">Done</button>
+  </header>
+  <ul class="tg-list" id="tg-list"></ul>
+</section>
+
+<!-- CHAPTER LIST (phones and tablets): every book that can be opened, by work -->
+<section class="chapter-list" id="chapter-list" role="dialog" aria-modal="true" aria-labelledby="cl-title" hidden>
+  <header class="cl-header">
+    <h2 class="cl-title" id="cl-title">Open a Chapter</h2>
+    <button class="cl-close" id="cl-close" aria-label="Close"></button>
+  </header>
+  <div class="cl-body" id="cl-body"></div>
+</section>
+
 <!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
      Swipe across the pill to move between tabs. -->
 <nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">

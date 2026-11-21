@@ -1,10 +1,12 @@
 import { clamp, el, root } from './dom.js';
-import { activeTab, isNotebook, isText, state, workOf } from './state.js';
+import { activeTab, byRecent, isNotebook, isText, markUsed, state, workOf } from './state.js';
 import { visibleLines } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
 import { renderAll } from './layout.js';
 import { isMobileTier, onTierChange } from './viewport.js';
+import { closeChapterList, openChapterList } from './chapters.js';
+import { closeTabGrid } from './tab-grid.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
@@ -21,6 +23,7 @@ const EDGE_GIVE = 0.3;     // past the first or last tab the pill moves this muc
 const AXIS_SLOP = 8;       // px before a drag counts as sideways or not
 const SETTLE_MS = 260;
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
+const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent)
 
 const RANGE_DASH = '–';
 
@@ -37,8 +40,10 @@ function labelFor(tab) {
   return { title: 'New Tab', sub: 'Choose a work' };
 }
 
+const NEW_SLOT = { new: true };   // past the last tab: swiping on opens the chapter list
 const slotHtml = (tab) => {
   if (!tab) return '<div class="bb-slot" aria-hidden="true"></div>';
+  if (tab === NEW_SLOT) return '<div class="bb-slot bb-slot-new" aria-hidden="true"><span class="bb-title">New Chapter</span></div>';
   const { title, sub } = labelFor(tab);
   return `<div class="bb-slot"><span class="bb-title">${title}</span><span class="bb-sub">${sub}</span></div>`;
 };
@@ -50,9 +55,11 @@ function scrollerOf(tab) {
   return null;
 }
 
+/* The tabs either side of this one in the grid's order (most recent first, left to right) */
 const neighbours = (tab) => {
-  const i = state.tabs.indexOf(tab);
-  return [state.tabs[i - 1] ?? null, state.tabs[i + 1] ?? null];
+  const order = byRecent();
+  const i = order.indexOf(tab);
+  return [order[i - 1] ?? null, order[i + 1] ?? NEW_SLOT];
 };
 
 /* Whole bar: the three pills (previous, open, next), the tab count and the progress line */
@@ -85,7 +92,7 @@ export function refreshBottomBar(tab) {
 
 /* ---------- Hiding while reading ---------- */
 const setChromeHidden = (on) => root.classList.toggle('chrome-hidden', on);
-let lastY = 0, run = 0, lastPane = null;
+let lastY = 0, run = 0, read = 0, lastPane = null;
 
 /* Called on every scroll of a tab's pane: refreshes the line range and progress, and hides or shows the bars */
 export function bottomBarScroll(tab) {
@@ -99,6 +106,8 @@ export function bottomBarScroll(tab) {
   lastPane = pane;
   lastY = y;
   if (!dy) return;
+  // Reading on in a tab reached by a swipe makes it the most recent (it moves to the front of the grid)
+  if (tab !== byRecent()[0] && (read += Math.abs(dy)) > READ_AFTER) { markUsed(tab); renderBottomBar(); }
   if (Math.sign(dy) !== Math.sign(run)) run = 0;
   run += dy;
   const atEnd = y <= 0 || y + pane.clientHeight >= pane.scrollHeight - 2;
@@ -151,8 +160,13 @@ function bindSwipe() {
     const go = !cancelled && to && (Math.abs(d.dx) > d.w * COMMIT || (Math.abs(v) > FLICK && Math.abs(d.dx) > FLICK_MIN && Math.sign(v) === Math.sign(d.dx)));
     if (!go) { place(0, true); return; }
     place(Math.sign(d.dx) * d.w, true);
-    // The new tab opens once its pill has slid into place (activating it redraws the bar, centred)
-    setTimeout(() => { if (activeTab() === d.tab) activateTab(to.id); }, SETTLE_MS);
+    // The new tab opens once its pill has slid into place (activating it redraws the bar, centred). A swipe is
+    // only a peek: the order stays as it is until the tab is read in.
+    setTimeout(() => {
+      if (activeTab() !== d.tab) return;
+      if (to === NEW_SLOT) { place(0, false); openChapterList(); }
+      else activateTab(to.id, { promote: false });
+    }, SETTLE_MS);
   };
   pill.addEventListener('pointerup', (e) => end(e, false));
   pill.addEventListener('pointercancel', (e) => end(e, true));
@@ -167,6 +181,8 @@ export function initBottomBar() {
   });
   onTierChange(() => {
     setChromeHidden(false);
+    closeTabGrid();
+    closeChapterList();
     renderAll();   // one pane at a time below desktop, both of a split pair above it
   });
 }
@@ -175,4 +191,5 @@ export function initBottomBar() {
 export function showChrome() {
   setChromeHidden(false);
   lastPane = null;
+  read = 0;
 }

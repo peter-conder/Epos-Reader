@@ -42,7 +42,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - "+" in the tab grid, or swiping past the last tab, opens a **chapter list**, grouped by work.
 - Works with no data file are hidden (decided by whether the data exists, not a hard-coded list). Currently only the Aeneid has data.
 - Chapters already open carry an "Open" badge; tapping one switches to its tab instead of duplicating it.
-- **Home screen (no tabs open):** the work carousel, stacked vertically. Tapping a work opens its chapter list.
+- **Home screen (no tabs open):** the work carousel, stacked vertically. Tapping a work opens its chapter list. Works with no data are left off the stacked cards too, so a tap never leads to an empty list (desktop still shows all three).
 
 ## Menus and sheets
 

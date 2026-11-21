@@ -50,6 +50,13 @@ export const workOf = (tab) => WORKS[tab?.work] ?? WORKS.aeneid;
 export const isNotebook = (tab) => tab?.kind === 'notebook';
 export const isText = (tab) => tab?.kind === 'text';   // a reader; 'new' tabs show the home page
 
+/* Tabs by when they were last really used, most recent first (the phone's tab grid and swipe order). Using a
+   tab means opening it from the grid or the chapter list, or starting to read in it; a quick swipe to peek at
+   one doesn't count, so the order never shuffles under the thumb. Ties keep the sidebar's order. */
+export const byRecent = () => [...state.tabs].sort((a, b) => (b.usedAt ?? 0) - (a.usedAt ?? 0));
+export const markUsed = (tab) => { if (tab) tab.usedAt = Date.now() + (++usedSeq) / 1000; };
+let usedSeq = 0;   // two tabs used in the same millisecond still get an order
+
 /* The tabs shown together with this one, left to right */
 export function groupOf(tab) {
   const p = partnerOf(tab);
