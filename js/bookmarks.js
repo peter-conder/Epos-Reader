@@ -2,7 +2,7 @@ import { ROMANS, WORKS } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
 import { getTab, isText, shared, state } from './state.js';
 import { saveBookmarks } from './storage.js';
-import { textTop } from './chunks.js';
+import { lineCenter, textTop } from './chunks.js';
 import { jumpToLine, newId, noteSource, updateNotebookHeader } from './notes.js';
 import { LOADER_N, LOADER_RADII, MORPH_EASE, loaderPath } from './loader.js';
 import { TRACK_PAD, thumbMetrics } from './scrollbar.js';
@@ -173,7 +173,7 @@ export function renderRail(tab) {
   const { C, H, T, L } = thumbMetrics(pane);
   const top = textTop(ch);
   ui.railMarks = marks.map((b) => {
-    const p = top + (ch.lineNums.indexOf(b.line) + 0.5) * ch.pitch;   // the line's centre in scroll space
+    const p = top + lineCenter(ch, ch.lineNums.indexOf(b.line));   // the line's centre in scroll space
     const s = clamp(p - C / 2, 0, H - C);                              // scrollTop with that line centred
     return { line: b.line, p, y: TRACK_PAD + (s / (H - C)) * (T - L) + L / 2 };
   });

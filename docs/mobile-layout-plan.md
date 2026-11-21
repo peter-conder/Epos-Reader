@@ -20,7 +20,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 
 ## Long lines
 
-- **Compact:** lines wrap with a fixed hanging indent. No shrink-to-fit: text renders at the font slider's size and `fit.js` does not run.
+- **Compact:** lines wrap with a fixed hanging indent (1.25em). No shrink-to-fit: text follows the font slider, drawn at 0.8× its size (a phone is read closer than a monitor, the same idea as the existing 0.86× for two-up), and `fit.js` does not fit. Word spacing and the line-number gutter are tighter than on desktop.
 - **Medium:** keeps shrink-to-fit, as on desktop.
 - `js/chunks.js` must support chunks of different heights. Because the hanging indent is fixed, a wrapped line is always a whole number of rows, so a chunk's height is (rows × pitch) and can mostly be counted rather than measured. Unseen chunks are estimated from the average and corrected as they render; scroll restore and the progress bar use cumulative heights.
 

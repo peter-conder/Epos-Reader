@@ -8,31 +8,167 @@ import { markBookmarks, renderRail } from './bookmarks.js';
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
    once (the one at the middle of the pane and its neighbours). Spacers above and
-   below stand in for the rest at their exact height, so the scrollbar, scroll
-   position and scroll anchoring behave as if the whole book were there.
-   Every line is one row of the same height (lines never wrap, and the scansion
-   marks are absolutely positioned), so one measured row height places everything.
+   below stand in for the rest, so the scrollbar, scroll position and bookmark dots
+   behave as if the whole book were there.
+
+   Lines can wrap (on phones), so chunks differ in height. Each chunk's height is
+   measured whenever it is in the page and remembered; a chunk that hasn't been seen
+   yet is estimated from the average line height so far (`pitch`, a line plus its gap).
+   On a wide screen nothing wraps, every chunk is 25 identical rows, and the estimate
+   is exact.
+
+   Because estimates can be corrected, a pixel scroll offset isn't a stable place in
+   the book. The reading position is kept as an anchor instead: the line at the top
+   of the pane and how far into it the pane starts. After anything that can move lines
+   (new chunks, a refit, a resize) the anchor is put back where it was.
    ========================================================== */
 const CHUNK = 25;     // lines per chunk
-const ROW_GAP = 3;    // gap between lines, as in .verses and .verse-chunk
+const ROW_GAP = 3;    // gap between lines and between chunks, as in .verses and .verse-chunk
 
 export function makeChunker(tab, container, pane, rows, scores, pitch = 0) {
   // The lines most likely to be the widest, measured for the fit instead of the whole text
   const cand = scores.map((s, i) => [s, i]).sort((a, b) => b[0] - a[0]).slice(0, FIT_CANDIDATES).map(([, i]) => i);
-  return { tab, container, pane, rows, cand, pitch, nodes: new Map(), center: -1, lo: 0, hi: -1, top: null, bottom: null };
+  return { tab, container, pane, rows, cand, pitch, heights: [], anchor: null,
+    nodes: new Map(), center: -1, lo: 0, hi: -1, top: null, bottom: null };
 }
 
 export function mountChunker(ch) {
   ch.container.innerHTML = '<div class="chunk-spacer"></div><div class="chunk-spacer"></div>';
   [ch.top, ch.bottom] = ch.container.children;
   ch.nodes.clear();
+  ch.heights = [];
+  ch.anchor = null;
   showWindow(ch, 0);
-  if (measurePitch(ch)) sizeSpacers(ch);
 }
+
+/* ---------- Geometry. Positions are in the text block's own space: 0 is the top of its first line. ---------- */
+const chunkCount = (ch) => Math.ceil(ch.rows.length / CHUNK);
+const linesIn = (ch, k) => Math.min(CHUNK, ch.rows.length - k * CHUNK);
+/* n rows take n·pitch less one gap */
+const chunkHeight = (ch, k) => ch.heights[k] ?? linesIn(ch, k) * ch.pitch - ROW_GAP;
+const chunkPitch = (ch, k) => (chunkHeight(ch, k) + ROW_GAP) / linesIn(ch, k);
+
+function chunkTop(ch, k) {
+  let y = 0;
+  for (let j = 0; j < k; j++) y += chunkHeight(ch, j) + ROW_GAP;
+  return y;
+}
+
+/* Height of the chunks a..b-1 laid end to end (what a spacer standing in for them must be) */
+function span(ch, a, b) {
+  let h = 0;
+  for (let k = a; k < b; k++) h += chunkHeight(ch, k) + ROW_GAP;
+  return Math.max(0, h - ROW_GAP);
+}
+
+/* Read from the computed style, which a transform (the pop-in) doesn't change */
+const boxHeight = (node) => parseFloat(getComputedStyle(node).height) || 0;
+
+/* A line's top and height. Exact when its chunk is in the page, estimated otherwise. */
+function lineBox(ch, i) {
+  const k = Math.floor(i / CHUNK);
+  const top = chunkTop(ch, k);
+  const node = ch.nodes.get(k);
+  const row = node?.children[i - k * CHUNK];
+  if (row) return { top: top + row.offsetTop - node.offsetTop, height: boxHeight(row) + ROW_GAP };
+  const p = chunkPitch(ch, k);
+  return { top: top + (i - k * CHUNK) * p, height: p };
+}
+
+/* Index of the chunk at y */
+function chunkAt(ch, y) {
+  const count = chunkCount(ch);
+  let top = 0;
+  for (let k = 0; k < count; k++) {
+    top += chunkHeight(ch, k) + ROW_GAP;
+    if (y < top) return k;
+  }
+  return Math.max(0, count - 1);
+}
+
+/* Index of the line at y */
+function lineAt(ch, y) {
+  const k = chunkAt(ch, y);
+  const node = ch.nodes.get(k);
+  const base = chunkTop(ch, k);
+  if (node) {
+    const rows = node.children;
+    let i = 0;
+    while (i + 1 < rows.length && base + rows[i + 1].offsetTop - node.offsetTop <= y) i++;
+    return k * CHUNK + i;
+  }
+  return k * CHUNK + clamp(Math.floor((y - base) / chunkPitch(ch, k)), 0, linesIn(ch, k) - 1);
+}
+
+/* A line's centre, for the bookmark dots on the scrollbar rail */
+export function lineCenter(ch, i) {
+  const b = lineBox(ch, i);
+  return b.top + b.height / 2;
+}
+
+/* ---------- Measuring ---------- */
+
+/* Remembers the height of every chunk in the page and updates the average pitch. Returns whether anything moved.
+   `fresh`: the layout may have changed (a refit or a resize), so remembered heights of chunks not in the page
+   are dropped as well, unless every chunk in the page measures as it did before (then nothing changed). */
+function measureChunks(ch, fresh = false) {
+  const seen = [];
+  for (const [k, node] of ch.nodes) {
+    const h = boxHeight(node);
+    if (h > 0) seen.push([k, h]);   // 0: the reader is hidden, nothing to learn
+  }
+  if (!seen.length) return false;
+  const moved = seen.some(([k, h]) => Math.abs((ch.heights[k] ?? -1) - h) > 0.5);
+  if (!moved) return false;
+  if (fresh) ch.heights = [];
+  for (const [k, h] of seen) ch.heights[k] = h;
+  let px = 0, lines = 0;
+  ch.heights.forEach((h, k) => { if (h != null) { px += h + ROW_GAP; lines += linesIn(ch, k); } });
+  ch.pitch = px / lines;
+  return true;
+}
+
+export function sizeSpacers(ch) {
+  const set = (sp, h) => {
+    sp.style.display = h > 0 ? '' : 'none';
+    sp.style.height = `${Math.max(0, h)}px`;
+  };
+  set(ch.top, ch.lo > 0 ? span(ch, 0, ch.lo) : 0);
+  set(ch.bottom, ch.hi + 1 < chunkCount(ch) ? span(ch, ch.hi + 1, chunkCount(ch)) : 0);
+}
+
+/* ---------- The reading position ---------- */
+
+/* Where the text block starts within the pane's scrolling content */
+export function textTop({ container: c, pane: p }) {
+  return c.offsetParent === p ? c.offsetTop : c.offsetTop - p.offsetTop - p.clientTop;
+}
+
+/* Notes which line is at the top of the pane, and how far into it. Above the first line (the title)
+   there's nothing to keep: the title doesn't move. */
+function saveAnchor(ch) {
+  if (!ch.pitch || !ch.pane.clientHeight) return;
+  const y = ch.pane.scrollTop - textTop(ch);
+  if (y <= 0) { ch.anchor = null; return; }
+  const i = lineAt(ch, y);
+  const b = lineBox(ch, i);
+  ch.anchor = { i, frac: clamp((y - b.top) / b.height, 0, 1) };
+}
+
+/* Scrolls so the anchored line is back where it was. Only writes when it is off, since a write stops
+   a touch fling. */
+function restoreAnchor(ch) {
+  if (!ch.anchor || !ch.pane.clientHeight) return;
+  const b = lineBox(ch, ch.anchor.i);
+  const target = textTop(ch) + b.top + ch.anchor.frac * b.height;
+  if (Math.abs(ch.pane.scrollTop - target) > 0.5) ch.pane.scrollTop = target;
+}
+
+/* ---------- The window of chunks in the page ---------- */
 
 /* Puts chunks c-1 … c+1 in the page. Chunks already there are left alone. */
 export function showWindow(ch, c) {
-  const count = Math.ceil(ch.rows.length / CHUNK);
+  const count = chunkCount(ch);
   ch.center = c;
   ch.lo = Math.max(0, c - 1);
   ch.hi = Math.min(count - 1, c + 1);
@@ -55,6 +191,7 @@ export function showWindow(ch, c) {
     }
     next = node;
   }
+  measureChunks(ch);
   sizeSpacers(ch);
   if (ch.container === ch.tab.ui.passage) showRange(ch);
 }
@@ -69,47 +206,27 @@ function showRange(ch) {
   for (const ref of el.tabList.querySelectorAll(`.tab[data-tab-id="${tab.id}"] .tab-ref`)) ref.textContent = tabRef(tab);
 }
 
-export function sizeSpacers(ch) {
-  const set = (sp, rows) => {
-    const h = rows * ch.pitch - ROW_GAP;   // n rows take n·pitch less one gap; the container's gap adds it back
-    sp.style.display = rows && h > 0 ? '' : 'none';
-    sp.style.height = `${Math.max(0, h)}px`;
-  };
-  set(ch.top, ch.lo * CHUNK);
-  set(ch.bottom, Math.max(0, ch.rows.length - (ch.hi + 1) * CHUNK));
-}
-
-/* Height of one row plus the gap. Read from the computed style, which a transform (the pop-in) doesn't change. */
-export function measurePitch(ch) {
-  const row = ch.nodes.values().next().value?.firstElementChild;
-  const h = row ? parseFloat(getComputedStyle(row).height) : 0;
-  if (!(h > 0)) return false;
-  const p = h + ROW_GAP;
-  if (Math.abs(p - ch.pitch) < 0.001) return false;
-  ch.pitch = p;
-  return true;
-}
-
-/* Where the text block starts within the pane's scrolling content */
-export function textTop({ container: c, pane: p }) {
-  return c.offsetParent === p ? c.offsetTop : c.offsetTop - p.offsetTop - p.clientTop;
-}
-
 /* Called on every scroll: swaps chunks only when the middle of the pane moves into another chunk */
 export function syncChunks(ch) {
   if (!ch?.pitch || !ch.pane.clientHeight) return;
-  const count = Math.ceil(ch.rows.length / CHUNK);
-  const y = ch.pane.scrollTop + ch.pane.clientHeight / 2 - textTop(ch);
-  const c = clamp(Math.floor(y / (CHUNK * ch.pitch)), 0, Math.max(0, count - 1));
-  if (c !== ch.center) showWindow(ch, c);
+  const c = chunkAt(ch, ch.pane.scrollTop + ch.pane.clientHeight / 2 - textTop(ch));
+  if (c !== ch.center) {
+    saveAnchor(ch);     // from the layout as it was
+    showWindow(ch, c);  // new chunks may measure differently from their estimates
+    restoreAnchor(ch);
+  }
+  saveAnchor(ch);
 }
 
-/* After a fit or a resize: row heights may have changed */
+/* After a fit or a resize: lines may have changed height, or started or stopped wrapping */
 export function syncLayout(tab) {
   const ui = tab.ui;
   if (!ui?.chunkers || ui.root.hidden) return;
   for (const ch of ui.chunkers) {
-    if (measurePitch(ch)) sizeSpacers(ch);
+    if (measureChunks(ch, true)) {
+      sizeSpacers(ch);
+      restoreAnchor(ch);
+    }
     syncChunks(ch);
   }
   renderRail(tab);
@@ -121,9 +238,12 @@ export function scrollToLine(tab, line) {
   const i = ch?.lineNums?.indexOf(line) ?? -1;
   if (i < 0) return null;
   const find = () => ch.container.querySelector(`.verse[data-line="${line}"]`);
+  const centre = () => { ch.pane.scrollTop = textTop(ch) + lineCenter(ch, i) - ch.pane.clientHeight / 2; };
   if (ch.pitch && ch.pane.clientHeight) {
-    ch.pane.scrollTop = textTop(ch) + (i + 0.5) * ch.pitch - ch.pane.clientHeight / 2;
+    centre();          // from the estimate, which brings the line's chunk into the page…
     syncChunks(ch);
+    centre();          // …then from where it really is
+    saveAnchor(ch);
   }
   if (!find()) showWindow(ch, Math.floor(i / CHUNK));
   return find();

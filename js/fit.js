@@ -1,9 +1,11 @@
 import { clamp, el, MIN_FONT } from './dom.js';
 import { isText, partnerOf, state } from './state.js';
 import { syncLayout } from './chunks.js';
+import { tier } from './viewport.js';
 
 /* Text shrinks to fit its pane instead of wrapping, never below the smallest size the editor offers */
 const TWO_UP_SCALE = 0.86;
+const COMPACT_SCALE = 0.8;   // a phone is read closer than a monitor, so the chosen size is drawn a step smaller
 export const FIT_CANDIDATES = 40;   // lines measured at the reference sizes (picked from the text, see makeChunker)
 const FIT_STEP = 100;        // sizes round down to 1/100 rem, so tiny width changes don't relayout the book
 
@@ -59,6 +61,16 @@ export function measureFitModel(checks) {
 export function fitReader(tab, verify = true) {
   const ui = tab?.ui;
   if (!ui?.chunkers || !ui.root.isConnected || ui.root.hidden || !ui.paneOriginal.clientWidth) return;
+  // Phones wrap long lines instead of shrinking them (see .verse-words under COMPACT in styles.css):
+  // the text follows the size chosen in the editor, never fitted
+  if (tier() === 'compact') {
+    const size = state.fontRem * COMPACT_SCALE;
+    ui.root.style.setProperty('--reading-font-size', `${size}rem`);
+    ui.root.style.setProperty('--reading-trans-font-size', `${size * 0.86}rem`);
+    for (const ch of ui.chunkers) ch.container.style.minWidth = '';
+    tab.fitSize = null;   // back on a wider screen, the fit starts over
+    return;
+  }
   // Two windows share the width, so the text sits a step smaller than in a single window
   const twoUp = !!partnerOf(tab) || !!tab.split;
   const max = state.fontRem * (twoUp ? TWO_UP_SCALE : 1);
