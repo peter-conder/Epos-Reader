@@ -19,6 +19,7 @@ import { initViewport } from './viewport.js';
 import { initBottomBar } from './bottom-bar.js';
 import { initTabGrid } from './tab-grid.js';
 import { initChapters } from './chapters.js';
+import { closeFormatSheet, initFormatSheet } from './format-sheet.js';
 
 /* Epos reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
@@ -51,6 +52,8 @@ document.addEventListener('click', (e) => {
   if (!t.closest('#drawer, #btn-menu, #palette-menu')) { setOpen(el.drawer, false); closePaletteMenu(); }
   if (!t.closest('#flyout, #btn-text')) setOpen(el.flyout, false);
   if (!t.closest('#popups-flyout, #btn-popups')) setOpen(el.popupsFlyout, false);
+  // Tapping anywhere but the sheet (or the menu that opened it) closes the Format Text sheet
+  if (!t.closest('#format-sheet, #drawer, #btn-menu')) closeFormatSheet();
 });
 
 document.addEventListener('keydown', (e) => {
@@ -68,5 +71,6 @@ initTooltips();
 initBottomBar();
 initTabGrid();
 initChapters();
+initFormatSheet();
 
 addNewTab();   // a New Tab is always open when the page loads

@@ -36,15 +36,27 @@
   <div class="top-right"></div>
 </header>
 
-<!-- HAMBURGER DRAWER -->
+<!-- HAMBURGER DRAWER. Phones and tablets show the mobile-only items instead of the desktop-only ones:
+     Settings, Notebook, Format Text, the palette swatches and the light/dark switch. -->
 <div class="popover drawer" id="drawer" role="menu">
   <button class="drawer-item" data-action="settings" role="menuitem">
     <span>Settings &amp; Options</span><svg class="icon"><use href="assets/icons.svg#i-gear"/></svg>
   </button>
-  <button class="drawer-item" id="drawer-palette" data-action="palette" role="menuitem" aria-haspopup="true">
+  <button class="drawer-item mobile-only" data-action="notebook" role="menuitem">
+    <span>Notebook</span><svg class="icon"><use href="assets/icons.svg#i-notebook"/></svg>
+  </button>
+  <button class="drawer-item mobile-only" data-action="format" role="menuitem" aria-haspopup="dialog">
+    <span>Format Text</span><svg class="icon"><use href="assets/icons.svg#i-format-size"/></svg>
+  </button>
+  <div class="drawer-swatches mobile-only" id="drawer-swatches" role="radiogroup" aria-label="Color palette"></div>
+  <button class="switch-row drawer-theme mobile-only" id="sw-theme" role="switch" aria-checked="false">
+    <span class="switch-text"><span class="switch-title">Dark Mode</span></span>
+    <span class="switch" aria-hidden="true"></span>
+  </button>
+  <button class="drawer-item desktop-only" id="drawer-palette" data-action="palette" role="menuitem" aria-haspopup="true">
     <span>Color Palette</span><svg class="icon"><use href="assets/icons.svg#i-chevron-right"/></svg>
   </button>
-  <button class="drawer-item" data-action="about" role="menuitem">
+  <button class="drawer-item desktop-only" data-action="about" role="menuitem">
     <span>About Epos</span><svg class="icon"><use href="assets/icons.svg#i-info"/></svg>
   </button>
 </div>
@@ -274,6 +286,22 @@
     <button class="cl-close" id="cl-close" aria-label="Close"></button>
   </header>
   <div class="cl-body" id="cl-body"></div>
+</section>
+
+<!-- FORMAT TEXT SHEET (phones and tablets): the bottom half of the screen, so the text stays in view above it.
+     While it is open it holds the toolbar's Text Appearance and View Options panels (see format-sheet.js). -->
+<section class="format-sheet" id="format-sheet" role="dialog" aria-labelledby="fs-title" hidden>
+  <div class="fs-grip" id="fs-grip" aria-hidden="true"><span></span></div>
+  <header class="fs-header">
+    <h2 class="fs-title" id="fs-title">Format Text</h2>
+    <button class="fs-close" id="fs-close" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
+  </header>
+  <div class="fs-body" id="fs-body">
+    <button class="switch-row" id="sw-scansion" role="switch" aria-checked="false">
+      <span class="switch-text"><span class="switch-title">Scansion</span><span class="switch-sub">Mark long and short syllables and the feet</span></span>
+      <span class="switch" aria-hidden="true"></span>
+    </button>
+  </div>
 </section>
 
 <!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.

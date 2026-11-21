@@ -1657,7 +1657,7 @@
     .chrome-hidden #btn-menu { transform: translateY(calc(-100% - 24px - env(safe-area-inset-top))); opacity: 0; pointer-events: none; }
   }
 
-  .tab-grid, .chapter-list { display: none; }
+  .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only { display: none; }
 
   @media (max-width: 1024px) {
     /* ---- Home page: the works stacked, each named; works with no data yet are left out ---- */
@@ -1801,6 +1801,69 @@
       font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
     }
     .cl-empty { padding: 40px 8px; text-align: center; color: var(--gray-600); }
+
+    /* ---- Menu: Settings, Notebook, Format Text, palette swatches, light/dark ---- */
+    #drawer { width: min(300px, calc(100vw - 20px)); }
+    #drawer .mobile-only { display: flex; }
+    #drawer .desktop-only { display: none; }
+    .drawer-item { padding-block: 14px; min-height: 52px; }
+    .drawer-swatches {
+      flex-wrap: wrap; justify-content: space-between; gap: 8px;
+      padding: 10px 14px 12px;
+      margin: 4px 0;
+      border-block: 1px solid color-mix(in srgb, var(--on-primary-container) 14%, transparent);
+    }
+    .drawer-swatch {
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+      transition: transform 150ms var(--ease-spring), box-shadow 150ms ease;
+    }
+    .drawer-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--primary-container), 0 0 0 4px var(--on-primary-container); }
+    .drawer-swatch:active { transform: scale(0.9); }
+    .sw-check { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(0, 0, 0, 0.35); color: #fff; opacity: 0; }
+    .sw-check .icon { width: 14px; height: 14px; stroke-width: 3; }
+    .drawer-swatch[aria-checked="true"] .sw-check { opacity: 1; }
+    .drawer-theme { padding: 14px 20px; }
+
+    /* ---- Format Text sheet: the bottom half of the screen, over the bottom bar ---- */
+    .format-sheet {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 65;
+      width: min(100%, 640px); margin-inline: auto;
+      max-height: min(56dvh, 560px);
+      display: flex; flex-direction: column;
+      background: var(--surface);
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.16);
+      padding-bottom: env(safe-area-inset-bottom);
+      transition: transform 260ms var(--chrome-ease);
+      animation: sheetUp 300ms var(--chrome-ease);
+    }
+    .format-sheet[hidden] { display: none; }
+    .fs-grip { display: grid; place-items: center; height: 22px; flex-shrink: 0; touch-action: none; cursor: grab; }
+    .fs-grip > span { width: 36px; height: 4px; border-radius: 2px; background: var(--gray-400); }
+    .fs-header { display: flex; align-items: center; padding: 0 12px 6px 24px; touch-action: none; }
+    .fs-title { flex: 1; font-size: 1.15rem; font-weight: 700; }
+    .fs-close { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--radius-full); }
+    .fs-close:active { background: var(--gray-200); }
+    .fs-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 12px 16px; }
+    .fs-body > #sw-scansion { background: var(--primary-container); color: var(--on-primary-container); }
+    /* The toolbar's panels, laid flat inside the sheet */
+    .format-sheet .popover.in-sheet {
+      position: static;
+      width: auto;
+      margin-top: 12px;
+      opacity: 1; transform: none; pointer-events: auto;
+      box-shadow: none;
+      transition: none;
+    }
+    .format-sheet .in-sheet .btn-close { display: none; }
+    .format-sheet .in-sheet .flyout-header { padding-top: 6px; }
+
+    /* While a sheet is up the bottom bar steps away under it */
+    .sheet-open .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }
 
     /* While the grid or list is up, the menu button steps aside (and the list covers the bottom bar) */
     :is(.grid-open, .chapters-open) #btn-menu { opacity: 0; pointer-events: none; }

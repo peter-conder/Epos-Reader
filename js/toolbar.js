@@ -6,6 +6,8 @@ import { fitAll } from './fit.js';
 import { hideWordCard } from './word-card.js';
 import { toggleTheme } from './settings.js';
 import { canHover } from './viewport.js';
+import { openNotebook } from './notes.js';
+import { openFormatSheet } from './format-sheet.js';
 
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
@@ -61,8 +63,17 @@ export function initToolbar() {
     } else if (action === 'about') {
       setOpen(el.drawer, false);
       closePaletteMenu();
+    } else if (action === 'notebook') {
+      setOpen(el.drawer, false);
+      openNotebook();
+    } else if (action === 'format') {
+      setOpen(el.drawer, false);
+      openFormatSheet();
     }
   });
+  // Phones and tablets: light/dark is a switch in the menu, and scansion a switch in the Format Text sheet
+  el.swTheme.addEventListener('click', toggleTheme);
+  el.swScansion.addEventListener('click', toggleScansion);
 
   el.brandBtn.addEventListener('click', () => setView('reader'));
   el.segments.addEventListener('click', (e) => {

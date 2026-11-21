@@ -263,4 +263,5 @@ export function toggleScansion() {
   root.dataset.scansion = state.scansion ? 'on' : 'off';
   el.meterBtn.classList.toggle('active', state.scansion);
   el.meterBtn.setAttribute('aria-pressed', String(state.scansion));
+  el.swScansion.setAttribute('aria-checked', String(state.scansion));
 }
