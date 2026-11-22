@@ -5,6 +5,7 @@ import { activateTab, closeTab } from './tabs.js';
 import { anchorIndex } from './chunks.js';
 import { countLabel } from './notes.js';
 import { openChapterList } from './chapters.js';
+import { hideWordCard } from './word-card.js';
 
 /* ==========================================================
    TAB GRID (phones and tablets): every open tab as a card, most recently used first, opened and closed
@@ -66,6 +67,7 @@ export function renderTabGrid() {
 }
 
 export function openTabGrid() {
+  hideWordCard();
   el.tabGrid.hidden = false;
   document.documentElement.classList.add('grid-open');
   el.tabsBtn.setAttribute('aria-expanded', 'true');

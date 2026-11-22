@@ -1,6 +1,7 @@
 import { el, root } from './dom.js';
 import { showChrome } from './bottom-bar.js';
 import { onTierChange } from './viewport.js';
+import { hideWordCard } from './word-card.js';
 
 /* ==========================================================
    FORMAT TEXT SHEET (phones and tablets): text options in the bottom half of the screen, Kindle-style, so the
@@ -19,6 +20,7 @@ export const formatSheetOpen = () => !el.formatSheet.hidden;
 
 export function openFormatSheet() {
   if (formatSheetOpen()) return;
+  hideWordCard();   // one sheet at a time
   home ??= el.flyout.parentElement;
   for (const p of PANELS()) { p.classList.add('in-sheet'); el.fsBody.append(p); }
   el.formatSheet.hidden = false;
@@ -29,42 +31,41 @@ export function openFormatSheet() {
 export function closeFormatSheet() {
   if (!formatSheetOpen()) return;
   el.formatSheet.hidden = true;
-  el.formatSheet.style.transform = '';
   root.classList.remove('sheet-open');
   for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
   showChrome();
 }
 
-/* Pulling the grip (or the header) down drags the sheet with it; far enough and it closes */
-function bindGrip() {
+/* Pulling a sheet's grip (or whatever `handles` matches) down drags the sheet with it; far enough and it closes.
+   Shared by the Format Text sheet and the word card's sheet. */
+export function bindSheetDrag(sheet, handles, onClose, enabled = () => true) {
   let g = null;
-  const handle = (e) => e.target.closest('#fs-grip, .fs-header') && !e.target.closest('button');
-  el.formatSheet.addEventListener('pointerdown', (e) => {
-    if (!handle(e) || e.button !== 0) return;
+  sheet.addEventListener('pointerdown', (e) => {
+    if (!enabled() || e.button !== 0 || !e.target.closest(handles) || e.target.closest('button, textarea, input')) return;
     g = { id: e.pointerId, y0: e.clientY, dy: 0 };
-    el.formatSheet.setPointerCapture(e.pointerId);
-    el.formatSheet.style.transition = 'none';
+    sheet.setPointerCapture(e.pointerId);
+    sheet.style.transition = 'none';
   });
-  el.formatSheet.addEventListener('pointermove', (e) => {
+  sheet.addEventListener('pointermove', (e) => {
     if (!g || e.pointerId !== g.id) return;
     g.dy = Math.max(0, e.clientY - g.y0);
-    el.formatSheet.style.transform = `translateY(${g.dy}px)`;
+    sheet.style.transform = `translateY(${g.dy}px)`;
   });
   const end = (e) => {
     if (!g || e.pointerId !== g.id) return;
     const { dy } = g;
     g = null;
-    el.formatSheet.style.transition = '';
-    if (dy > CLOSE_DRAG) closeFormatSheet();
-    else el.formatSheet.style.transform = '';
+    sheet.style.transition = '';
+    sheet.style.transform = '';
+    if (dy > CLOSE_DRAG) onClose();
   };
-  el.formatSheet.addEventListener('pointerup', end);
-  el.formatSheet.addEventListener('pointercancel', end);
+  sheet.addEventListener('pointerup', end);
+  sheet.addEventListener('pointercancel', end);
 }
 
 export function initFormatSheet() {
   el.fsClose.addEventListener('click', closeFormatSheet);
-  bindGrip();
+  bindSheetDrag(el.formatSheet, '#fs-grip, .fs-header', closeFormatSheet);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFormatSheet(); });
   // Back on a desktop-wide screen the panels go home to the toolbar
   onTierChange(closeFormatSheet);

@@ -11,6 +11,7 @@ import { refreshNoteMarks } from './notes.js';
 import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark, updateRailNear } from './bookmarks.js';
 import { attachScrollbar } from './scrollbar.js';
 import { bottomBarScroll } from './bottom-bar.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -64,7 +65,8 @@ export function bindReader(tab) {
     if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
   });
   ui.paneOriginal.addEventListener('scroll', () => {
-    if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil) hideWordCard();
+    // A popup anchored to the word would drift away from it; the phone's sheet isn't anchored, so it stays
+    if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil && !isMobileTier()) hideWordCard();
     syncChunks(ui.chunkers?.[0]);
     updateRailNear(tab);
     bottomBarScroll(tab);

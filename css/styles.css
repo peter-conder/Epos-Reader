@@ -1658,6 +1658,7 @@
   }
 
   .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only { display: none; }
+  .card-grip { display: none; }
 
   @media (max-width: 1024px) {
     /* ---- Home page: the works stacked, each named; works with no data yet are left out ---- */
@@ -1862,8 +1863,49 @@
     .format-sheet .in-sheet .btn-close { display: none; }
     .format-sheet .in-sheet .flyout-header { padding-top: 6px; }
 
+    /* ---- Word card sheet: the gloss slides up from the bottom instead of popping up by the word ---- */
+    .word-card {
+      inset: auto 0 0 0;
+      width: min(100%, 640px); margin-inline: auto;
+      max-height: min(62dvh, 600px);
+      overflow-y: auto; overscroll-behavior: contain;
+      padding: 0 24px calc(20px + env(safe-area-inset-bottom));
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.16);
+      z-index: 66;
+      opacity: 1;
+      visibility: hidden;
+      transform: translateY(105%);
+      transition: transform 280ms var(--chrome-ease), visibility 0s linear 280ms;
+    }
+    .word-card.visible { visibility: visible; transform: none; animation: none; transition: transform 300ms var(--chrome-ease); }
+    .card-grip {
+      position: sticky; top: 0; z-index: 2;
+      display: grid; place-items: center;
+      height: 24px; margin: 0 -24px 6px;
+      background: inherit;
+      touch-action: none; cursor: grab;
+    }
+    .card-grip > span { width: 36px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--on-primary-container) 35%, transparent); }
+    .card-lemma, .card-morph { touch-action: none; }   /* pulling the card's title down closes it too */
+    .card-note, .card-bookmark { top: 30px; }
+    .card-def { font-size: 15px; line-height: 1.45; }
+    /* The note editor opens inside the card, under the definition */
+    .note-box.in-sheet {
+      position: static;
+      width: auto;
+      margin-top: 16px;
+      padding: 12px;
+      background: color-mix(in srgb, var(--surface) 70%, var(--primary-container));
+      opacity: 1; visibility: visible; transform: none; pointer-events: auto;
+      box-shadow: none;
+      transition: none;
+    }
+    /* Room below the last lines, so even they can be scrolled clear of the card */
+    .card-open .pane-original { padding-bottom: 65dvh; transition: none; }   /* at once: the reveal scrolls into it */
+
     /* While a sheet is up the bottom bar steps away under it */
-    .sheet-open .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }
+    :is(.sheet-open, .card-open) .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }
 
     /* While the grid or list is up, the menu button steps aside (and the list covers the bottom bar) */
     :is(.grid-open, .chapters-open) #btn-menu { opacity: 0; pointer-events: none; }
