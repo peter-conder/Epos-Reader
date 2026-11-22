@@ -160,11 +160,31 @@ export function textTop({ container: c, pane: p }) {
   return c.offsetParent === p ? c.offsetTop : c.offsetTop - p.offsetTop - p.clientTop;
 }
 
-/* Notes which line is at the top of the pane, and how far into it. Above the first line (the title)
+/* Notes which line is the first you can read (just below the top padding), and how far into it. Above the first line (the title)
    there's nothing to keep: the title doesn't move. */
-function saveAnchor(ch) {
+/* How far below the pane's top edge reading starts: its top padding, which differs by layout (on a phone it clears
+   the floating menu button). The anchor is the first line you can read, so a change of layout keeps that line. */
+const topInset = (ch) => parseFloat(getComputedStyle(ch.pane).paddingTop) || 0;
+
+/* While the window is being resized (or turned, or crossing to another layout) the browser moves scroll positions
+   itself: a pane that shrinks gets its scroll clamped, a pane that was hidden comes back at the top. Those aren't
+   the reader moving, so for a moment after each resize the anchors are held as they were, and the layout code puts
+   every pane back by them. Deliberate jumps (force) still save.
+   Only a change of width counts: lines re-wrap when the width changes, while a height change is a phone's address
+   bar sliding away mid-scroll (iOS fires resize for it) or its keyboard opening, and holding then would pull the
+   reader back to where the scroll began. */
+const HOLD_MS = 400;
+let holdUntil = 0, lastWidth = innerWidth;
+addEventListener('resize', () => {
+  if (innerWidth === lastWidth) return;
+  lastWidth = innerWidth;
+  holdUntil = performance.now() + HOLD_MS;
+});
+
+function saveAnchor(ch, force = false) {
   if (!ch.pitch || !ch.pane.clientHeight) return;
-  const y = ch.pane.scrollTop - textTop(ch);
+  if (!force && performance.now() < holdUntil) return;
+  const y = ch.pane.scrollTop + topInset(ch) - textTop(ch);
   if (y <= 0) { ch.anchor = null; return; }
   const i = lineAt(ch, y);
   const b = lineBox(ch, i);
@@ -176,7 +196,7 @@ function saveAnchor(ch) {
 function restoreAnchor(ch) {
   if (!ch.anchor || !ch.pane.clientHeight) return;
   const b = lineBox(ch, ch.anchor.i);
-  const target = textTop(ch) + b.top + ch.anchor.frac * b.height;
+  const target = textTop(ch) + b.top + ch.anchor.frac * b.height - topInset(ch);
   if (Math.abs(ch.pane.scrollTop - target) > 0.5) ch.pane.scrollTop = target;
 }
 
@@ -272,7 +292,7 @@ export function scrollToLine(tab, line) {
     centre();          // from the estimate, which brings the line's chunk into the page…
     syncChunks(ch);
     centre();          // …then from where it really is
-    saveAnchor(ch);
+    saveAnchor(ch, true);
   }
   if (!find()) showWindow(ch, Math.floor(i / CHUNK));
   return find();

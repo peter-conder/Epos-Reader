@@ -79,12 +79,13 @@ Rotating a tablet, resizing a window, iPad multitasking:
 - A split shows only its active pane; the split (and `pairPct`) comes back when the window widens.
 - The side-by-side English becomes the swap toggle on compact, and comes back when the window widens.
 - Open popovers, hover cards and sheets close.
-- Scroll stays anchored to the top visible line.
+- Scroll stays anchored to the top visible line: the first line below the pane's top padding, which differs by layout. For a moment after the window's width changes, the browser's own scroll adjustments (a shrinking pane's scroll being clamped, a hidden pane coming back at the top) aren't taken as the reader moving. Height-only resizes (a phone's address bar or keyboard) don't count, so scrolling is never pulled back.
+- English swapped in on a phone goes back to the Latin, at the same line, on a wider screen.
 - **Saved state never changes** when crossing tiers; compact is only a different view of the same tabs.
 
 ## Build order
 
-Each phase is its own commit.
+Each phase is its own commit. All eight are done.
 
 1. **Tier scaffold:** width tiers, `hover`/`pointer` queries, bigger touch targets.
 2. **Line wrapping:** fixed hanging indent and variable-height chunks; no fitting on compact.

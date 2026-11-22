@@ -13,9 +13,9 @@ import { initNotes } from './notes.js';
 import { initNoteDrag } from './note-drag.js';
 import { initBookmarks } from './bookmarks.js';
 import { initSettings } from './settings.js';
-import { closePaletteMenu, initToolbar } from './toolbar.js';
+import { closePaletteMenu, initToolbar, setTools } from './toolbar.js';
 import { initTooltips } from './tooltips.js';
-import { initViewport } from './viewport.js';
+import { initViewport, onTierChange } from './viewport.js';
 import { initBottomBar } from './bottom-bar.js';
 import { initTabGrid } from './tab-grid.js';
 import { initChapters } from './chapters.js';
@@ -74,5 +74,16 @@ initTabGrid();
 initChapters();
 initFormatSheet();
 initEnglish();
+
+/* Crossing between phone, tablet and desktop layouts (rotating a tablet, resizing a window): anything floating is
+   closed, since it was placed for the old layout. The sheets, tab grid, chapter list and line menu close themselves
+   (see their modules). Nothing saved changes: tabs, splits, the English pane and the reading position carry over. */
+onTierChange(() => {
+  cancelTabDrag();
+  closePopovers();
+  closePaletteMenu();
+  hideHoverCard();
+  setTools(false);
+});
 
 addNewTab();   // a New Tab is always open when the page loads
