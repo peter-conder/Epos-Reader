@@ -31,6 +31,7 @@ export const el = {
   bottomBar: $('bottom-bar'), bbPill: $('bb-pill'), bbTrack: $('bb-track'), bbProgress: $('bb-progress-fill'),
   bbCount: $('bb-count'), tabsBtn: $('btn-tabs'),
   tabGrid: $('tab-grid'), tgCount: $('tg-count'), tgNew: $('tg-new'), tgDone: $('tg-done'), tgList: $('tg-list'),
+  langBtn: $('btn-lang'), lineMenu: $('line-menu'), lineTapChips: $('linetap-chips'),
   drawerSwatches: $('drawer-swatches'), swTheme: $('sw-theme'),
   formatSheet: $('format-sheet'), fsBody: $('fs-body'), fsClose: $('fs-close'), fsGrip: $('fs-grip'), swScansion: $('sw-scansion'),
   chapterList: $('chapter-list'), clTitle: $('cl-title'), clClose: $('cl-close'), clBody: $('cl-body')

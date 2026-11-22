@@ -61,11 +61,14 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - **Default (compact): swap toggle.** Flips the whole view between Latin and English, keeping your place.
 - **Optional (setting): line-tap mode.** Tapping a line number shows that line's English. The English hides while the Format text sheet is open.
 - **Medium:** the existing side-by-side dual pane.
+- The EN button sits at the left of the bottom bar: it swaps on a phone and opens the side-by-side pane on a tablet. Swapping back without scrolling the English returns to the exact Latin line, even past the end of the English.
+- English exists only for Book I, lines 1–16, so far (`translations` in `js/data.js`). Where it stops, the English pane says so; a line with none says "No English for this line yet."
 
 ## Line numbers and hover-only controls
 
 - **Tap a line number:** shows its English when line-tap mode is on; otherwise toggles the bookmark. Settings says which.
 - **Long press a line:** action menu (bookmark, note, copy).
+- A bookmarked line shows its number in the primary colour (even lines that don't usually show one) and a ribbon in the margin; the desktop's margin bookmark marker is hidden below desktop.
 - Tooltips are dropped on touch devices; menu items get visible text labels instead.
 - The tab hover card is retired on mobile; the tab grid replaces it.
 

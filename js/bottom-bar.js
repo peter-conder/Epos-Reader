@@ -4,9 +4,10 @@ import { visibleLines } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
 import { renderAll } from './layout.js';
-import { isMobileTier, onTierChange } from './viewport.js';
+import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { closeChapterList, openChapterList } from './chapters.js';
 import { closeTabGrid } from './tab-grid.js';
+import { syncLangButton } from './english.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
@@ -28,9 +29,11 @@ const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used 
 const RANGE_DASH = '–';
 
 /* What the pill says for a tab */
+const showingEnglish = (tab) => tab.lang === 'en' && tier() === 'compact';
+
 function labelFor(tab) {
   if (isText(tab)) {
-    const lines = visibleLines(tab.ui?.chunkers?.[0]);
+    const lines = visibleLines(tab.ui?.chunkers?.[showingEnglish(tab) ? 1 : 0]);
     return {
       title: `${workOf(tab).title.replace(/^The /, '')} · Book ${tab.book}`,
       sub: lines ? `Lines ${lines[0]}${lines[1] !== lines[0] ? RANGE_DASH + lines[1] : ''}` : ''
@@ -50,7 +53,7 @@ const slotHtml = (tab) => {
 
 /* The scrolling element behind a tab, if it has one */
 function scrollerOf(tab) {
-  if (isText(tab)) return tab.ui?.paneOriginal ?? null;
+  if (isText(tab)) return (showingEnglish(tab) ? tab.ui?.paneTranslation : tab.ui?.paneOriginal) ?? null;
   if (isNotebook(tab)) return el.notebookPane;
   return null;
 }
@@ -71,6 +74,7 @@ export function renderBottomBar() {
   el.bbTrack.style.transform = '';
   el.bbTrack.innerHTML = slotHtml(prev) + slotHtml(tab) + slotHtml(next);
   el.bbCount.textContent = String(state.tabs.length);
+  syncLangButton();
   el.tabsBtn.setAttribute('aria-label', `Show all tabs (${state.tabs.length} open)`);
   updateProgress(tab);
 }

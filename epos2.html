@@ -124,6 +124,8 @@
         <div class="settings-chips" id="settings-chips"></div>
         <div class="settings-section-title">Color Palette</div>
         <div class="settings-chips" id="palette-chips"></div>
+        <div class="settings-section-title">Tapping a Line Number <span class="settings-section-note">on phones and tablets</span></div>
+        <div class="settings-chips" id="linetap-chips"></div>
       </div>
     </div>
   </div>
@@ -304,10 +306,14 @@
   </div>
 </section>
 
+<!-- LINE MENU (phones and tablets): a long press on a line -->
+<div class="popover line-menu" id="line-menu" role="menu" aria-label="Line actions"></div>
+
 <!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
      Swipe across the pill to move between tabs. -->
 <nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">
   <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
+  <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
   <div class="bb-pill" id="bb-pill" aria-live="polite">
     <div class="bb-track" id="bb-track"></div>
   </div>

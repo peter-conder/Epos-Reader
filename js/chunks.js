@@ -234,6 +234,18 @@ export function syncChunks(ch) {
   saveAnchor(ch);
 }
 
+/* Puts line index i at the top of the chunker's pane (null: back to the very top, title and all) */
+export function jumpToIndex(ch, i, frac = 0) {
+  if (!ch?.rows.length) return;
+  measureChunks(ch, true);
+  sizeSpacers(ch);
+  if (i == null) { ch.anchor = null; ch.pane.scrollTop = 0; syncChunks(ch); return; }
+  ch.anchor = { i: clamp(i, 0, ch.rows.length - 1), frac };
+  restoreAnchor(ch);   // from the estimate, which brings the line's chunk into the page…
+  syncChunks(ch);
+  restoreAnchor(ch);   // …then from where it really is
+}
+
 /* After a fit or a resize: lines may have changed height, or started or stopped wrapping */
 export function syncLayout(tab) {
   const ui = tab.ui;

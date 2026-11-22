@@ -2,6 +2,7 @@ import { el, root } from './dom.js';
 import { showChrome } from './bottom-bar.js';
 import { onTierChange } from './viewport.js';
 import { hideWordCard } from './word-card.js';
+import { relayoutLineEnglish } from './english.js';
 
 /* ==========================================================
    FORMAT TEXT SHEET (phones and tablets): text options in the bottom half of the screen, Kindle-style, so the
@@ -25,6 +26,7 @@ export function openFormatSheet() {
   for (const p of PANELS()) { p.classList.add('in-sheet'); el.fsBody.append(p); }
   el.formatSheet.hidden = false;
   root.classList.add('sheet-open');
+  relayoutLineEnglish();   // lines' English hides while the sheet is open
   el.fsBody.scrollTop = 0;
 }
 
@@ -32,6 +34,7 @@ export function closeFormatSheet() {
   if (!formatSheetOpen()) return;
   el.formatSheet.hidden = true;
   root.classList.remove('sheet-open');
+  relayoutLineEnglish();
   for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
   showChrome();
 }
