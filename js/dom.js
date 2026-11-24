@@ -27,7 +27,14 @@ export const el = {
   wordCard: $('word-card'), cardLemma: $('card-lemma'), cardMorph: $('card-morph'), cardScan: $('card-scan'), cardDef: $('card-def'),
   cardNote: $('card-note'), cardUserNote: $('card-user-note'), cardUserNoteText: $('card-user-note-text'),
   noteBox: $('note-box'), noteTitle: $('note-title'), noteInput: $('note-input'),
-  toast: $('toast')
+  toast: $('toast'),
+  bottomBar: $('bottom-bar'), bbPill: $('bb-pill'), bbTrack: $('bb-track'), bbProgress: $('bb-progress-fill'),
+  bbCount: $('bb-count'), tabsBtn: $('btn-tabs'),
+  tabGrid: $('tab-grid'), tgCount: $('tg-count'), tgNew: $('tg-new'), tgDone: $('tg-done'), tgList: $('tg-list'),
+  langBtn: $('btn-lang'), lineMenu: $('line-menu'), lineTapChips: $('linetap-chips'),
+  drawerSwatches: $('drawer-swatches'), swTheme: $('sw-theme'),
+  formatSheet: $('format-sheet'), fsBody: $('fs-body'), fsClose: $('fs-close'), fsGrip: $('fs-grip'), swScansion: $('sw-scansion'),
+  chapterList: $('chapter-list'), clTitle: $('cl-title'), clClose: $('cl-close'), clBody: $('cl-body')
 };
 
 export const MIN_FONT = parseFloat(el.fontSlider.min);

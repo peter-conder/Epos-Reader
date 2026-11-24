@@ -2,7 +2,7 @@
 <html lang="en" data-scansion="off">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Epos - Classical Poetry Reader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,15 +36,27 @@
   <div class="top-right"></div>
 </header>
 
-<!-- HAMBURGER DRAWER -->
+<!-- HAMBURGER DRAWER. Phones and tablets show the mobile-only items instead of the desktop-only ones:
+     Settings, Notebook, Format Text, the palette swatches and the light/dark switch. -->
 <div class="popover drawer" id="drawer" role="menu">
   <button class="drawer-item" data-action="settings" role="menuitem">
     <span>Settings &amp; Options</span><svg class="icon"><use href="assets/icons.svg#i-gear"/></svg>
   </button>
-  <button class="drawer-item" id="drawer-palette" data-action="palette" role="menuitem" aria-haspopup="true">
+  <button class="drawer-item mobile-only" data-action="notebook" role="menuitem">
+    <span>Notebook</span><svg class="icon"><use href="assets/icons.svg#i-notebook"/></svg>
+  </button>
+  <button class="drawer-item mobile-only" data-action="format" role="menuitem" aria-haspopup="dialog">
+    <span>Format Text</span><svg class="icon"><use href="assets/icons.svg#i-format-size"/></svg>
+  </button>
+  <div class="drawer-swatches mobile-only" id="drawer-swatches" role="radiogroup" aria-label="Color palette"></div>
+  <button class="switch-row drawer-theme mobile-only" id="sw-theme" role="switch" aria-checked="false">
+    <span class="switch-text"><span class="switch-title">Dark Mode</span></span>
+    <span class="switch" aria-hidden="true"></span>
+  </button>
+  <button class="drawer-item desktop-only" id="drawer-palette" data-action="palette" role="menuitem" aria-haspopup="true">
     <span>Color Palette</span><svg class="icon"><use href="assets/icons.svg#i-chevron-right"/></svg>
   </button>
-  <button class="drawer-item" data-action="about" role="menuitem">
+  <button class="drawer-item desktop-only" data-action="about" role="menuitem">
     <span>About Epos</span><svg class="icon"><use href="assets/icons.svg#i-info"/></svg>
   </button>
 </div>
@@ -112,6 +124,8 @@
         <div class="settings-chips" id="settings-chips"></div>
         <div class="settings-section-title">Color Palette</div>
         <div class="settings-chips" id="palette-chips"></div>
+        <div class="settings-section-title">Tapping a Line Number <span class="settings-section-note">on phones and tablets</span></div>
+        <div class="settings-chips" id="linetap-chips"></div>
       </div>
     </div>
   </div>
@@ -256,6 +270,57 @@
   <div class="note-box-title" id="note-title">Note</div>
   <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
 </div>
+
+<!-- TAB GRID (phones and tablets): every open tab, most recently used first -->
+<section class="tab-grid" id="tab-grid" aria-label="Open tabs" hidden>
+  <header class="tg-header">
+    <h2 class="tg-count" id="tg-count">Tabs</h2>
+    <button class="tg-new" id="tg-new" aria-label="Open a chapter in a new tab"></button>
+    <button class="tg-done" id="tg-done">Done</button>
+  </header>
+  <ul class="tg-list" id="tg-list"></ul>
+</section>
+
+<!-- CHAPTER LIST (phones and tablets): every book that can be opened, by work -->
+<section class="chapter-list" id="chapter-list" role="dialog" aria-modal="true" aria-labelledby="cl-title" hidden>
+  <header class="cl-header">
+    <h2 class="cl-title" id="cl-title">Open a Chapter</h2>
+    <button class="cl-close" id="cl-close" aria-label="Close"></button>
+  </header>
+  <div class="cl-body" id="cl-body"></div>
+</section>
+
+<!-- FORMAT TEXT SHEET (phones and tablets): the bottom half of the screen, so the text stays in view above it.
+     While it is open it holds the toolbar's Text Appearance and View Options panels (see format-sheet.js). -->
+<section class="format-sheet" id="format-sheet" role="dialog" aria-labelledby="fs-title" hidden>
+  <div class="fs-grip" id="fs-grip" aria-hidden="true"><span></span></div>
+  <header class="fs-header">
+    <h2 class="fs-title" id="fs-title">Format Text</h2>
+    <button class="fs-close" id="fs-close" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
+  </header>
+  <div class="fs-body" id="fs-body">
+    <button class="switch-row" id="sw-scansion" role="switch" aria-checked="false">
+      <span class="switch-text"><span class="switch-title">Scansion</span><span class="switch-sub">Mark long and short syllables and the feet</span></span>
+      <span class="switch" aria-hidden="true"></span>
+    </button>
+  </div>
+</section>
+
+<!-- LINE MENU (phones and tablets): a long press on a line -->
+<div class="popover line-menu" id="line-menu" role="menu" aria-label="Line actions"></div>
+
+<!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
+     Swipe across the pill to move between tabs. -->
+<nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">
+  <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
+  <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
+  <div class="bb-pill" id="bb-pill" aria-live="polite">
+    <div class="bb-track" id="bb-track"></div>
+  </div>
+  <button class="bb-tabs" id="btn-tabs" aria-label="Show all tabs">
+    <span class="bb-count" id="bb-count">1</span>
+  </button>
+</nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span>Tab closed</span>

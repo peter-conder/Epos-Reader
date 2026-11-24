@@ -55,7 +55,7 @@ export function applyPalette(key) {
   };
   for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
   for (const chip of el.paletteChips.children) chip.classList.toggle('active', chip.dataset.palette === paletteKey);
-  for (const it of el.paletteMenu.children) {
+  for (const it of [...el.paletteMenu.children, ...el.drawerSwatches.children]) {
     const on = it.dataset.palette === paletteKey;
     it.classList.toggle('active', on);
     it.setAttribute('aria-checked', String(on));
@@ -79,6 +79,12 @@ function renderPaletteChoices() {
       <span class="settings-chip-sub">${esc(pal.p.toUpperCase())}</span>
     </button>`;
   }).join('');
+  // The phone menu's row of swatches: each the palette's primary over its container colour
+  el.drawerSwatches.innerHTML = Object.entries(PALETTES).map(([key, p]) => {
+    const pal = rolesOf(p);
+    return `<button class="drawer-swatch" data-palette="${key}" role="radio" aria-checked="false" aria-label="${esc(p.name)}"
+      style="--sw-a:${pal.p}; --sw-b:${pal.c}"><span class="sw-check">${icon('check')}</span></button>`;
+  }).join('');
   el.paletteMenu.innerHTML = Object.entries(PALETTES).map(([key, p]) => `
     <button class="sub-item" data-palette="${key}" role="menuitemradio" aria-checked="false">
       <span class="sub-lead"><span class="sub-dot" style="background:${rolesOf(p).p}"></span><svg class="icon sub-check"><use href="assets/icons.svg#i-check"/></svg></span>
@@ -97,6 +103,7 @@ export function applyTheme(mode) {
   const dark = state.theme === 'dark';
   const label = dark ? 'Light Mode' : 'Dark Mode';
   el.themeBtn.setAttribute('aria-pressed', String(dark));
+  el.swTheme.setAttribute('aria-checked', String(dark));
   el.themeBtn.dataset.tip = label;
 }
 
@@ -133,7 +140,7 @@ export function initSettings() {
     syncSettingsChips(workKey);
   });
 
-  for (const container of [el.paletteChips, el.paletteMenu]) {
+  for (const container of [el.paletteChips, el.paletteMenu, el.drawerSwatches]) {
     container.addEventListener('click', (e) => {
       const it = e.target.closest('[data-palette]');
       if (it) choosePalette(it.dataset.palette);

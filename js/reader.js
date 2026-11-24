@@ -10,6 +10,9 @@ import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
 import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark, updateRailNear } from './bookmarks.js';
 import { attachScrollbar } from './scrollbar.js';
+import { bottomBarScroll } from './bottom-bar.js';
+import { isMobileTier } from './viewport.js';
+import { lineNumberTap } from './english.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -54,6 +57,8 @@ export function bindReader(tab) {
   ui.passage.addEventListener('click', (e) => {
     const mark = e.target.closest('.verse-bm');
     if (mark) { toggleBookmark(tab, +mark.closest('.verse').dataset.line); return; }   // adds it, or removes it if set
+    const num = isMobileTier() && e.target.closest('.verse-num');
+    if (num && lineNumberTap(num.closest('.verse'))) return;
     const word = e.target.closest('.word');
     if (word) showWordCard(word);
   });
@@ -63,11 +68,13 @@ export function bindReader(tab) {
     if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
   });
   ui.paneOriginal.addEventListener('scroll', () => {
-    if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil) hideWordCard();
+    // A popup anchored to the word would drift away from it; the phone's sheet isn't anchored, so it stays
+    if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil && !isMobileTier()) hideWordCard();
     syncChunks(ui.chunkers?.[0]);
     updateRailNear(tab);
+    bottomBarScroll(tab);
   }, { passive: true });
-  ui.paneTranslation.addEventListener('scroll', () => syncChunks(ui.chunkers?.[1]), { passive: true });
+  ui.paneTranslation.addEventListener('scroll', () => { syncChunks(ui.chunkers?.[1]); bottomBarScroll(tab); }, { passive: true });
 
   // Divider: rubber-bands past 80%, snaps the translation closed past 89%
   const dv = { active: false, rect: null, pct: 50, raf: 0 };
@@ -158,7 +165,8 @@ export function renderPassage(tab) {
     const lines = data
       ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }))
       : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/).map((f) => ({ f })) }));
-    const trans = work.translations ?? [];
+    // The sample translation is of Book I's opening lines; other books have none yet (it used to be shown for every book)
+    const trans = tab.book === 'I' ? work.translations ?? [] : [];
 
     // Only a few chunks of each pane are ever in the page (see CHUNKS below)
     const prev = ui.chunkers ?? [];
@@ -170,6 +178,11 @@ export function renderPassage(tab) {
         trans.map((t) => `<div class="translation-line">${esc(t)}</div>`), trans.map((t) => t.length), prev[1]?.pitch)
     ];
     ui.chunkers[0].lineNums = lines.map((l) => l.n);
+    ui.chunkers[1].lineNums = trans.map((_, i) => lines[i]?.n ?? i + 1);
+    // Where the English stops short of the Latin, say so at its end
+    ui.transMore ??= ui.paneTranslation.appendChild(Object.assign(document.createElement('p'), { className: 'trans-more' }));
+    ui.transMore.textContent = !trans.length ? 'No English translation of this book yet.'
+      : trans.length < lines.length ? `English is available for lines 1\u2013${trans.length} so far.` : '';
     ui.chunkers.forEach(mountChunker);
     tab.fitModel = null;   // new text, new widths
     scheduleFit(tab);
@@ -186,7 +199,7 @@ export function verseHtml({ n, words }) {
   const numbered = n === 1 || n % 5 === 0;
   return `<div class="verse" data-line="${n}"${numbered ? ` style="--nd:${String(n).length}"` : ''}>`
     + '<i class="verse-bm bm-glyph" data-tip="Bookmark this line"></i>'
-    + `<span class="verse-num">${numbered ? n : ''}</span><span class="verse-words">${html}</span></div>`;
+    + `<span class="verse-num" data-n="${n}">${numbered ? n : ''}</span><span class="verse-words">${html}</span></div>`;
 }
 
 /* Scansion: each syllable is [text, quantity, flags?]. Quantity is L long, S short, E elided.
@@ -261,4 +274,5 @@ export function toggleScansion() {
   root.dataset.scansion = state.scansion ? 'on' : 'off';
   el.meterBtn.classList.toggle('active', state.scansion);
   el.meterBtn.setAttribute('aria-pressed', String(state.scansion));
+  el.swScansion.setAttribute('aria-checked', String(state.scansion));
 }

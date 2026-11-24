@@ -6,6 +6,8 @@ import { renderAll } from './layout.js';
 import { activateTab, newTextTab } from './tabs.js';
 import { createReader, renderPassage } from './reader.js';
 import { createLoader } from './loader.js';
+import { availableWorks, openChapterList } from './chapters.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    HOME PAGE: a carousel of the works, shown when nothing is open and as the page
@@ -32,8 +34,16 @@ const CAROUSEL_HTML = HOME_WORKS.map((key, i) => `
     <span class="home-card-scrim"></span><span class="home-card-title">${esc(WORKS[key].title)}</span>
   </button>`).join('');
 
+/* Below desktop the cards stack, and a work with no data yet is left out (as in the chapter list) */
+function markUnavailable(carousel) {
+  availableWorks().then((have) => {
+    for (const card of carousel.children) card.toggleAttribute('data-unavailable', !have.includes(card.dataset.work));
+  });
+}
+
 export function bindCarousel(carousel, onPick) {
   const cards = [...carousel.children];
+  markUnavailable(carousel);
   const setFocus = (idx) => cards.forEach((card, i) => {
     card.dataset.rank = Math.min(2, Math.abs(i - idx));
     card.classList.toggle('hot', i === idx);
@@ -42,6 +52,7 @@ export function bindCarousel(carousel, onPick) {
   const clearHot = () => cards.forEach((c) => c.classList.remove('hot'));
 
   carousel.addEventListener('pointerover', (e) => {
+    if (e.pointerType === 'touch') return;   // a tap goes straight to the click below
     const card = e.target.closest('.home-card');
     if (card) setFocus(cards.indexOf(card));
   });
@@ -54,19 +65,22 @@ export function bindCarousel(carousel, onPick) {
   });
   carousel.addEventListener('click', (e) => {
     const card = e.target.closest('.home-card');
-    if (card) onPick(card.dataset.work);
+    if (!card) return;
+    // On a phone or tablet a work leads to its list of books; on desktop it opens Book I
+    if (isMobileTier()) openChapterList({ only: card.dataset.work, into: carousel.closest('.tab-view') ? state.tabs.find((t) => t.view === carousel.closest('.tab-view')) : null });
+    else onPick(card.dataset.work);
   });
 }
 
 /* Opening a work from a home page: the indicator shows for 0.3 s. The book starts downloading at once,
    the reader is built hidden behind the indicator at 0.2 s, and it is shown when the indicator goes. */
 const LOAD_BUILD_MS = 200, LOAD_SHOW_MS = 300;
-export function openWithLoader(host, work, build, reveal) {
+export function openWithLoader(host, work, book, build, reveal) {
   if (host.classList.contains('loading')) return;   // one work at a time
   host.classList.add('loading');
   const loader = createLoader();
   host.append(loader);
-  loadBook(work, 'I');
+  loadBook(work, book);
   setTimeout(build, LOAD_BUILD_MS);
   setTimeout(() => {
     loader.remove();
@@ -91,15 +105,16 @@ export function addNewTab() {
   return tab;
 }
 
-/* Choosing a work turns the new tab into a reader on Book I, in the same place in the sidebar and any split.
-   The home page stays on screen with the loading indicator while the reader is built behind it. */
-export function openWorkInTab(tab, work) {
+/* Choosing a work turns the new tab into a reader on Book I (or the book chosen from the chapter list), in the
+   same place in the sidebar and any split. The home page stays on screen with the loading indicator while the
+   reader is built behind it. */
+export function openWorkInTab(tab, work, book = 'I') {
   const old = tab.view;
   const current = () => getTab(tab.id) === tab && tab.view === old;   // not closed (or undone) in the meantime
   let built = null;
-  openWithLoader(old, work, () => {
+  openWithLoader(old, work, book, () => {
     if (!current()) return;
-    Object.assign(tab, { kind: 'text', work, book: 'I', split: false, splitPct: 50 });
+    Object.assign(tab, { kind: 'text', work, book, split: false, splitPct: 50 });
     createReader(tab);
     built = tab.ui.root;
     tab.view = old;   // the home page stays this tab's view until the reader is shown
@@ -124,7 +139,7 @@ export function initHome() {
   homeCarousel.innerHTML = CAROUSEL_HTML;
   bindCarousel(homeCarousel, (work) => {
     let tab = null;
-    openWithLoader(el.viewEmpty, work, () => {
+    openWithLoader(el.viewEmpty, work, 'I', () => {
       tab = newTextTab(work, 'I');
       createReader(tab);
       renderPassage(tab);

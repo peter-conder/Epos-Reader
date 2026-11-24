@@ -7,6 +7,9 @@ import { renderPassage, setBookTitles } from './reader.js';
 import { closeNote, hideWordCard } from './word-card.js';
 import { refreshNoteMarks, renderNotebook } from './notes.js';
 import { syncSettingsChips } from './settings.js';
+import { renderBottomBar } from './bottom-bar.js';
+import { renderTabGrid } from './tab-grid.js';
+import { isMobileTier } from './viewport.js';
 
 let lastShown = [];   // ids of the tabs that were on screen after the last render
 
@@ -49,7 +52,8 @@ export function renderView() {
   const tab = activeTab();
   const settings = state.view === 'settings';
   const showPanes = hasTabs && !settings;
-  const shown = showPanes ? groupOf(tab) : [];
+  // Below desktop only the open tab is shown, even if it is half of a split pair (the pair is kept for wider screens)
+  const shown = showPanes ? (isMobileTier() ? [tab] : groupOf(tab)) : [];
   const ids = shown.map((t) => t.id);
   if (ids.join() !== lastShown.join()) settleMorph();   // a different set of panes: any running open/close ends now
   // A pane that joins one already on screen slides in from its side while the other makes room
@@ -134,6 +138,8 @@ export function renderAll() {
   renderTabs();
   renderSegments();
   renderBrand();
+  renderBottomBar();
+  renderTabGrid();
   syncToolbar();
   const tab = activeTab();
   if (isText(tab)) syncSettingsChips(tab.work);
