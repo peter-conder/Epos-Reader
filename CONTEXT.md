@@ -98,5 +98,5 @@ A saved Line, with no text of the reader's own.
 _Avoid_: Favourite, pin, flag
 
 **Notebook**:
-The tab that gathers all of the reader's Notes. Bookmarks are not part of it.
+The tab that gathers all of the reader's Notes and Bookmarks.
 _Avoid_: Notes page, journal

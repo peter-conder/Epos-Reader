@@ -1,6 +1,6 @@
 # Greek Book numbering for the Iliad and Odyssey
 
-Status: needs-triage
+Status: resolved
 
 ## What
 
@@ -19,6 +19,11 @@ The code numbers every Work with Roman numerals:
 - Tab labels and the bottom bar use the short Work abbreviations; fuller views use the full name.
 - Saved Notes, Bookmarks and tabs from before the change still load.
 
-Blocked until the Greek data is committed.
 
 ## Comments
+
+**2026-11-24:** Resolved. Tabs, Notes and Bookmarks still store the Book as a Roman numeral and data files keep their plain numbers, so saved state is unaffected. Only what's displayed changed:
+
+- `js/data.js`: each Work has an `abbr` and a `numerals` style, plus `bookLabel()`, `workName()` and `citation()` helpers.
+- The display sites now use `bookLabel()`: tab pills (`Aen. I.1-25`), bottom bar (`Aen. II`), toolbar segments, Book titles, the chapter list, the Book picker, the hover card, the tab grid, and the source line on Notes and Bookmarks.
+- Checked in Chromium at 1280×800 and 390×844 with no page errors: the Aeneid shows I, II, III…, and the Iliad shows Α, Β, Γ… with "Book Α". The Greek data isn't here yet, so the Iliad was checked with the sample lines in `js/data.js`.

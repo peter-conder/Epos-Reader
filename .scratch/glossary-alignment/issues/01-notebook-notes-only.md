@@ -1,6 +1,6 @@
 # Notebook shows Notes only
 
-Status: needs-triage
+Status: wontfix
 
 ## What
 
@@ -15,3 +15,5 @@ Status: needs-triage
 - Bookmarks are still listed and reachable wherever else they appear (check `js/bookmarks.js` and `js/sidebar.js`), so nothing is lost.
 
 ## Comments
+
+**2026-11-24:** Won't fix. Taking Bookmarks out would have left them with no list anywhere else (in a Book they only show as margin marks), so the owner decided to keep Bookmarks in the Notebook. `CONTEXT.md` now defines the Notebook as gathering Notes and Bookmarks, which matches the code.
