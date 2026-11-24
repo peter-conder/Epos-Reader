@@ -1,0 +1,169 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+ʽἑκάεργος:adj
+̓ἀθήνη:noun
+Αἰακίδης:propn
+Αἰακός:propn
+Αἴνιος:propn
+Δαρδανίδης:propn
+Διομήδης:propn
+Ζεύς:propn
+Θερσίλοχος:propn
+Θρασίος:propn
+Κρόνος:propn
+Λέλεγες:propn
+Λαοθόη:propn
+Λαομέδων:propn
+Λητώ:propn
+Λυκάων:propn
+Λῆμνος:propn
+Μενοιτιάδης:propn
+Μνῆσος:propn
+Μυρμιδόνες:propn
+Μύδων:propn
+Ξάνθος:propn
+Πάτροκλος:propn
+Πήδασος:propn
+Παίων:propn
+Παιονία:propn
+Παλλάς:propn
+Περίβοια:propn
+Πηλείδης:propn
+Πηλείων:propn
+Πηλεγών:propn
+Πηλεύς:propn
+Πολύδωρος:propn
+Ποσειδεών:propn
+Σατνιόεις:propn
+Σιμόεις:propn
+Σκάμανδρος:propn
+Τυδείδης:propn
+αἰπήεις:adj
+αἴρω:verb
+βαθυδινήεις:adj
+βαθυρρείτης:adj
+γάρ:part
+γουνόομαι:verb
+δάμνημι:verb
+δαμνάω:verb
+εἰ:cconj
+εἴδομαι:verb
+εἶδον:verb
+εἷος:adv
+θηρατήρ:noun
+θωρηκτής:adj
+κίω:verb
+καί:adv
+καί:cconj
+κατεναντίον:adp
+κοναβίζω:verb
+κοῦρος:noun
+μέλδομαι:verb
+μέμαα:verb
+μίγνυμι:verb
+μειδιάω:verb
+μᾶλλον:adv
+νευρή:noun
+νόσφι:adp
+οἶδα:verb
+οὐτάζω:verb
+πατρώιος:adj
+πελώριος:adj
+περιδείδω:verb
+πουλυβότειρα:adj
+πρηνής:adj
+πρῶτος:adj
+πτολίεθρον:noun
+πυκινός:adj
+πυκινός:adv
+πυροφόρος:adj
+πόποι:intj
+τίπτε:adv
+τίπτε:pron
+τε:part
+τεός:adj
+φίλτερος:adj
+ἀγακλειτός:adj
+ἀλύσκω:verb
+ἀνέρομαι:verb
+ἀντία:adp
+ἀπαυράω:verb
+ἀρειή:noun
+ἀτύζω:verb
+ἄν:part
+ἄω:verb
+ἆρα:part
+Ἀγήνωρ:propn
+Ἀθήνη:propn
+Ἀκεσσαμενός:propn
+Ἀντήνωρ:propn
+Ἀξιός:propn
+Ἀπόλλων:propn
+Ἀρίσβη:propn
+Ἀστεροπαῖος:propn
+Ἀστύπυλος:propn
+Ἀχελῷος:propn
+Ἀχιλλεύς:propn
+Ἄλτης:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐμπίπλημι:verb
+ἐναντίον:adp
+ἐρίβωλος:adj
+ἐρυθαίνομαι:verb
+ἐρωή:noun
+ἐύρρους:adj
+ἔργνυμι:verb
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑκάεργος:adj
+Ἕκτωρ:propn
+ἠδέ:cconj
+ἤτοι:part
+Ἠετίων:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἰδέ:cconj
+ἱρός:adj
+Ἰήσων:propn
+Ἰλήιος:adj
+Ἴδη:propn
+Ἴμβριος:propn
+ὀπίσσω:adv
+ὁσάκις:adv
+Ὀφελέστης:propn
+Ὄλυμπος:propn
+ὦ:intj
+ᾍδης:noun
+ᾗ:adv
+
+Words the treebank does not analyse (Line: word):
+95: ,
+182: ·
+246: ·
+256: ,
+280: ,
+338: ,
+342: ,
+357: ,
+381: ,
+423: ,
+468: ·
+488: ,
+529: ·
+537: ,
+585: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+113: ἢ ἀ = ἢ
+113: πὸ = ἀπὸ
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

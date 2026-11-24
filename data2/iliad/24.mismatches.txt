@@ -1,0 +1,196 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αὐτομέδων:propn
+Βρισηίς:propn
+Δαρδανίδης:propn
+Δηίφοβος:propn
+Ζεύς:propn
+Θέτις:propn
+Θρᾷξ:propn
+Κασσάνδρη:propn
+Λέσβος:propn
+Λητώ:propn
+Λῆμνος:propn
+Μήστωρ:propn
+Μενοιτιάδης:propn
+Μυρμιδόνες:propn
+Μυσός:propn
+Νιόβη:propn
+Ξάνθος:propn
+Πάμμων:propn
+Πάρις:propn
+Πάτροκλος:propn
+Πέργαμος:propn
+Πηλείδης:propn
+Πηλεύς:propn
+Πολίτης:propn
+Πολύκτωρ:propn
+Ποσειδεών:propn
+Σάμος:propn
+Σίπυλος:propn
+Τροίαθεν:adv
+Τροίανδε:adv
+Τρωίλος:propn
+Τρῳάς:propn
+Φρυγίη:propn
+αἶα:noun
+βιός:noun
+γάρ:part
+δοιώ:adj
+δώδεκα:num
+εἰ:cconj
+εἰσαναβαίνω:verb
+εἴδομαι:verb
+εἴθε:intj
+εἵς:adj
+εἶδον:verb
+εἷος:cconj
+ζεύς:noun
+θάω:verb
+θηρατήρ:noun
+κάλη:adj
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κατακείω:verb
+κεῖνος:adj
+κηώεις:adj
+κλαυθμός:noun
+κτερίζω:verb
+μάκαρος:adj
+μέδομαι:verb
+μέμαα:verb
+μέσαυλος:noun
+μίγνυμι:verb
+μελάντερον:adj
+μετόπισθε:adv
+μόρφνος:noun
+νοσφίζομαι:verb
+νόσφι:adv
+οἰκτείρω:verb
+παρέξ:adp
+πρηνής:adj
+πυκινός:adj
+πυρή:noun
+σάμος:noun
+σκηπάνιον:noun
+σκυδμαίνω:verb
+σόος:adj
+τίπτε:pron
+τε:part
+τεός:adj
+τρεῖς:num
+φίλτερος:adj
+φυλακτήρ:noun
+φυλακός:noun
+χέρνιβον:noun
+χαρίζομαι:verb
+ἀλιτήμων:adj
+ἀναμίγνυμι:verb
+ἀπαυράω:verb
+ἀρνός:noun
+ἄκοιτις:noun
+ἄν:part
+ἄργυφος:adj
+ἄρον:noun
+ἄω:verb
+ἆ:intj
+Ἀίδης:propn
+Ἀγάθων:propn
+Ἀθήνη:propn
+Ἀλέξανδρος:propn
+Ἀνδρομάχη:propn
+Ἀντίφονος:propn
+Ἀπόλλων:propn
+Ἀτρείων:propn
+Ἀχελῷος:propn
+Ἀχιλλεύς:propn
+Ἄλκιμος:propn
+Ἄργος:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐκνοστέω:verb
+ἐξαναβαίνω:verb
+ἐπέοικε:verb
+ἐπήν:cconj
+ἐπισταμένως:adv
+ἐπιστοναχέω:verb
+ἐριούνιος:noun
+ἔγρω:verb
+ἔσθος:noun
+ἔσω:adp
+ἕ:pron
+ἕκτωρ:noun
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑκάβη:propn
+Ἑκτόρεος:adj
+Ἑλένη:propn
+Ἑλλήσποντος:propn
+Ἑρμῆς:propn
+Ἕκτωρ:propn
+Ἕλενος:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἥρα:propn
+ἰδέ:cconj
+ἱρός:adj
+Ἰδαῖος:adj
+Ἰδαῖος:propn
+Ἱππόθοος:propn
+Ἴδη:adv
+Ἴμβρος:propn
+Ἶλος:propn
+Ἶρις:propn
+ὀπαδέω:verb
+ὁμοκλέω:verb
+Ὄλυμπος:propn
+ὑπείρ:adp
+ὑπνάω:verb
+ὦ:intj
+ῥύομαι:verb
+ῥύσκομαι:verb
+
+Words the treebank does not analyse (Line: word):
+15: ὄπισθεν,
+63: ,
+68: ,
+77: ,
+96: ·
+120: ,
+131: ·
+140: πρόφρονι
+159: ,
+201: ,
+265: ,
+337: ,
+339: ,
+415: ,
+473: ,
+489: ,
+511: ,
+518: ,
+571: ,
+600: ·
+613: ,
+622: ·
+689: ,
+706: ,
+707: ,
+718: ,
+746: ,
+764: ·
+776: ,
+782: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

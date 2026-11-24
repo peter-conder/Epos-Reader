@@ -1,0 +1,131 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αὐτομέδων:propn
+Βαλίος:propn
+Βρισηίς:propn
+Εἰλείθυια:propn
+Εὐρυσθεύς:propn
+Ζεύς:propn
+Θέτις:propn
+Θήβη:propn
+Θόας:propn
+Κρειοντιάδης:propn
+Κόων:propn
+Λαερτιάδης:propn
+Λητώ:propn
+Λυκομήδης:propn
+Λυρνησσός:propn
+Μέγης:propn
+Μελάνιππος:propn
+Μενοίτιος:propn
+Μηριόνης:propn
+Μυρμιδόνες:propn
+Μύνης:propn
+Νεοπτόλεμος:propn
+Ξάνθος:propn
+Πάτροκλος:propn
+Πήλιον:propn
+Περσηιάδης:propn
+Πηλείδης:propn
+Πηλείων:propn
+Πηλεύς:propn
+Ποδάργη:propn
+Πριαμίδης:propn
+Σθένελος:propn
+Σκῦρος:adv
+Σκῦρος:propn
+Ταλθύβιος:propn
+Τυδείδης:propn
+Φθία:propn
+Φυλείδης:propn
+Χείρων:propn
+γάρ:part
+δοιώ:adj
+δώδεκα:num
+εἰ:cconj
+εἰ:intj
+εἰσείδω:verb
+εἶδον:verb
+ζάω:verb
+ζεύς:noun
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+κεῖνος:adj
+κραταιγύαλος:adj
+λιγέως:adv
+μέμαα:verb
+μίγνυμι:verb
+μᾶλλον:adv
+νόσφι:adp
+οἶδα:verb
+πατρώιος:adj
+πρῶτος:adj
+πυκινός:adj
+τανυπτέρυξ:adj
+ταρφειός:adj
+τε:part
+τηλεκλυτός:adj
+τρεῖς:num
+χαρίζομαι:verb
+ἀμβροσίη:noun
+ἀπαυράω:verb
+ἄμητος:noun
+ἄν:part
+ἄω:verb
+Ἀθήνη:propn
+Ἀλκμήνη:propn
+Ἀντηνορίδης:propn
+Ἀχιλλεύς:propn
+Ἄλκιμος:propn
+Ἄργος:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐκκαταπάλλομαι:verb
+ἐπήν:adv
+ἐπήν:cconj
+ἐπιτλῆναι:verb
+ἕ:pron
+ἕνεκα:adp
+Ἑλένη:propn
+Ἕκτωρ:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἡνιοχεύς:noun
+ἤτοι:part
+Ἥρα:propn
+Ἥφαιστος:propn
+ἰδέ:cconj
+Ἰδομενεύς:propn
+ὀλίγιστος:adj
+ὀρθόκραιρος:adj
+Ὄλυμπος:propn
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+2: ,
+6: ·
+11: ,
+16: ,
+74: ,
+144: ,
+149: ·
+246: ,
+248: ,
+265: ,
+290: ·
+301: ,
+348: ,
+354: ,
+386: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

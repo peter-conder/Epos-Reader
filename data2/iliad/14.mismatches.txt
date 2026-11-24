@@ -1,0 +1,192 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰνείας:propn
+Αἴας:propn
+Βοιώτιος:adj
+Γάργαρον:propn
+Γλαῦκος:propn
+Γυρτιάδης:propn
+Δανάη:propn
+Διομήδης:propn
+Ζεύς:propn
+Θήβη:propn
+Θρασυμήδης:propn
+Θρᾷξ:propn
+Θόας:propn
+Θῆβαι:propn
+Καλυδών:propn
+Κρόνος:propn
+Κῶς:propn
+Λεκτόν:propn
+Λητώ:propn
+Λύκιοι:propn
+Λῆμνος:propn
+Μέλας:propn
+Μέρμερος:propn
+Μίνως:propn
+Μαχάων:propn
+Μηριόνης:propn
+Μοῦσα:propn
+Μυσός:propn
+Μόρυς:propn
+Ξάνθος:propn
+Οἰνεύς:propn
+Πανθοίδης:propn
+Πασιθέη:propn
+Πειρίθοος:propn
+Περιφήτης:propn
+Περσεύς:propn
+Πηνέλεως:propn
+Πιερία:propn
+Πλευρών:propn
+Πορθεύς:propn
+Ποσειδεών:propn
+Ποσειδῶν:propn
+Πουλυδάμας:propn
+Πριαμίδης:propn
+Προθοήνωρ:propn
+Προθόων:propn
+Πρόμαχος:propn
+Σάτνιος:propn
+Σαρπηδών:propn
+Σατνιόεις:adj
+Σεμέλη:propn
+Τελαμωνιάδης:propn
+Τελαμών:adj
+Τεῦκρος:propn
+Τηθύς:propn
+Τυδείδης:propn
+Τυδεύς:propn
+Φάλκης:propn
+Φόρβας:propn
+Χάρις:propn
+αἰειγενέτης:adj
+αἴρω:verb
+γάρ:part
+δαμνάω:verb
+εἰ:cconj
+εἰσαφικάνω:verb
+εἴδομαι:verb
+εἴθε:intj
+εἵς:adj
+εἶδον:verb
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κατευνάω:verb
+κεῖνος:adj
+κοῦρος:noun
+κύμινδις:noun
+μάρτυρος:noun
+μέδων:noun
+μέμαα:verb
+μίγνυμι:verb
+μενεχάρμης:adj
+νηληιάδης:noun
+νόσφι:adp
+νόσφι:adv
+νώνυμνος:adj
+οὐτάζω:verb
+παραλέγω:verb
+πευκάλιμος:adj
+πουλυβότειρα:adj
+πρόκροσσοι:adj
+πυροφόρος:adj
+πόποι:intj
+πύκα:adv
+συνεέργω:verb
+τίπτε:pron
+τε:part
+τεός:adj
+τρεῖς:num
+χαλκίς:noun
+χροιά:noun
+ἀγκοίνη:noun
+ἀεικέλιος:adj
+ἀμβροσίη:noun
+ἀμφιγύεις:adj
+ἄκοιτις:noun
+ἄν:part
+Ἀίδης:propn
+Ἀγήνωρ:propn
+Ἀθήνη:propn
+Ἀκάμας:propn
+Ἀκρισιώνη:propn
+Ἀλεγηνορίδης:propn
+Ἀλκμήνη:propn
+Ἀντήνωρ:propn
+Ἀντίλοχος:propn
+Ἀρηίλυκος:propn
+Ἀρχέλοχος:propn
+Ἀσκληπιάδης:propn
+Ἀχιλλεύς:propn
+Ἄγριος:propn
+Ἄδρηστος:propn
+Ἄθως:propn
+Ἄργος:propn
+Ἄρης:propn
+ἐγκατατίθεμαι:verb
+ἐγώ:pron
+ἐξαπαφίσκω:verb
+ἐρωή:noun
+ἔρδω:verb
+ἔρσα:noun
+ἕ:pron
+ἕνεκα:adp
+Ἑκαμήδη:propn
+Ἑρμῆς:propn
+Ἕκτωρ:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἠμαθίη:propn
+Ἠνοπίδης:propn
+Ἡρακλέης:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἰδέ:cconj
+ἰόμωροι:noun
+Ἰλιονεύς:propn
+Ἰλιόθεν:adv
+Ἰξίων:adj
+Ἱπποτίων:propn
+Ἴδη:propn
+Ἴμβρος:propn
+ὀξυόεις:adj
+ὅπη:adv
+Ὀιλεύς:propn
+Ὀιλιάδης:propn
+Ὄλυμπος:propn
+Ὑπερήνωρ:propn
+Ὕρτιος:propn
+ὦ:intj
+ῥύομαι:verb
+Ῥέα:propn
+Ῥαδάμανθυς:propn
+
+Words the treebank does not analyse (Line: word):
+21: ,
+133: ,
+178: ,
+203: ᾽
+248: ,
+267: ,
+276: ,
+307: ,
+321: ᾽
+377: ,
+446: ,
+457: ,
+485: ,
+509: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

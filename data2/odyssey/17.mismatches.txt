@@ -1,0 +1,180 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰγύπτιος:adj
+Αἴγυπτος:propn
+Δμήτωρ:propn
+Δόλιος:propn
+Εὐπείθης:propn
+Εὐρυνόμη:propn
+Εὐρύμαχος:propn
+Εὔμαιος:propn
+Ζεύς:propn
+Θεοκλύμενος:propn
+Θεσπρωτοί:propn
+Καλυψώ:propn
+Κρήτη:propn
+Κύπρος:propn
+Λέσβος:propn
+Λαερτιάδης:propn
+Λακεδαίμων:propn
+Μέδων:propn
+Μέντωρ:propn
+Μίνως:propn
+Μελάνθιος:propn
+Μελανθεύς:propn
+Μενέλαος:propn
+Νήριτος:propn
+Πείραιος:propn
+Πηνελόπεια:propn
+Πολύκτωρ:propn
+Πυλόνδε:adv
+Πύλος:propn
+Τηλέμαχος:propn
+Τροίανδε:adv
+Φήμιος:propn
+Φιλομηλεΐδης:propn
+βώτωρ:noun
+γάρ:part
+γεγωνέω:verb
+δμῶος:noun
+εἰ:cconj
+εἰ:intj
+εἰσαναβαίνω:verb
+εἴθε:intj
+εἶδον:verb
+εὐρύκλεια:noun
+ζώω:verb
+κάλη:adj
+κάτος:adj
+κίω:verb
+καί:adv
+καί:cconj
+καθέζετο:verb
+καλλίρους:adj
+καταστόρνυμι:verb
+καταχεύω:verb
+κεῖνος:adj
+κεῖνος:pron
+κλαυθμός:noun
+κτέαρ:noun
+κύπρος:noun
+μάλιστα:adv
+μέμαα:verb
+μολοβρός:noun
+μᾶλλον:adv
+νόσφι:adv
+οἶδα:verb
+πάτρη:noun
+παρέξ:adp
+πατρώιος:adj
+πεύθομαι:verb
+ποτιπτύσσω:verb
+προβιβάω:verb
+προπάροιθεν:adv
+πρῶτος:adj
+πόποι:intj
+σκηρίπτομαι:verb
+τε:part
+τηλέμαχος:noun
+τρεῖς:num
+χαρίζομαι:verb
+ἀγακλειτός:adj
+ἀλύσκω:verb
+ἀμφιέλισσα:noun
+ἀναγκαῖος:adj
+ἀντίον:adp
+ἀντίον:noun
+ἀπαίνυμαι:verb
+ἀπόπροθεν:adv
+ἀρά:noun
+ἀρνός:noun
+ἄν:part
+ἆρα:part
+Ἀθήνη:propn
+Ἀντίνοος:propn
+Ἀπόλλων:propn
+Ἁλιθέρσης:propn
+Ἄντιφος:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐμπάζομαι:verb
+ἐμπίπλημι:verb
+ἐναντίον:adv
+ἐπισταμένως:adv
+ἑταίρα:noun
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑλένη:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἱρός:adj
+Ἰασίδης:propn
+Ἰθάκη:propn
+Ἰκάριος:adj
+Ἴθακος:propn
+ὑφορβός:noun
+ὥστε:cconj
+ὦ:intj
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+6: ,
+73: ,
+75: ,
+78: ,
+101: ,
+126: ὡς
+175: ,
+176: χέρειον
+177: ,
+182: δαῖτ᾽
+185: ,
+196: ,
+225: καί
+246: ·
+264: ,
+298: ,
+306: ,
+309: τραπεζῆες
+310: ·
+360: .
+362: ,
+374: ,
+381: ,
+385: θέσπιν
+397: ,
+403: τοιοῦτον
+458: ,
+479: ,
+481: ,
+483: ,
+484: ,
+499: ,
+526: πίονι
+531: ,
+535: πίονας
+547: ,
+561: ,
+593: ,
+602: ,
+606: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+114: ἔφασκε, = ἔφασκεν
+212: ἐκίχανʼ = ἐκίχαν̓
+218: ὁμοῖον. = ὁμοῖν
+341: ἴθυνε. = ἴθυνεν
+355: γένοιθʼ = γένοιθ̓
+435: φαινομένηφι = φαινομένηφιν
+484: ἐστι. = ἐστιν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

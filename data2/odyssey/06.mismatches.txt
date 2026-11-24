@@ -1,0 +1,86 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Δύμας:propn
+Ζεύς:propn
+Κύκλωψ:propn
+Λητώ:propn
+Ναυσίθοος:propn
+Ναυσικάα:propn
+Παλλάς:propn
+Σχερία:propn
+Χάρις:propn
+βιός:noun
+γάρ:part
+γουνόομαι:verb
+εἰ:cconj
+εἰ:intj
+εἰσφορέω:verb
+εἴδομαι:verb
+εἶδον:verb
+κίω:verb
+καί:adv
+καί:cconj
+μίγνυμι:verb
+μωμεύω:verb
+πολυάρητος:adj
+τε:part
+τηλόθεν:adv
+τρεῖς:num
+χαρίζομαι:verb
+χορός:noun
+ἀεικέλιος:adj
+ἀμφιέλισσα:noun
+ἀπόπροθεν:adv
+ἀράω:verb
+ἄν:part
+Ἀθήνη:propn
+Ἀλκίνοος:propn
+Ἀπόλλων:propn
+ἐγώ:pron
+ἐλπωρή:noun
+ἐπέοικε:verb
+ἐπήν:cconj
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐρύμανθος:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἥφαιστος:propn
+ὀρεσιτρόφος:adj
+Ὄλυμπος:propn
+Ὄλυμπόνδε:adv
+ὑποδύομαι:verb
+Ὑπέρεια:propn
+ὦ:intj
+Ὠγυγία:propn
+ᾍδης:adv
+ᾗ:adv
+ῥυπόομαι:verb
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+42: ,
+50: ,
+57: ,
+66: ·
+144: ,
+174: ,
+175: ,
+187: ,
+209: ,
+211: ,
+223: ,
+246: ,
+247: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

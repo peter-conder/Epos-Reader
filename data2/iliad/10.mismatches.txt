@@ -1,0 +1,161 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἀθήνη:noun
+Αἰακίδης:propn
+Αἴας:propn
+Αὐτόλυκος:propn
+Διομήδης:propn
+Δόλων:propn
+Εὐμήδης:propn
+Ζεύς:propn
+Θράκιος:adj
+Θρασυμήδης:propn
+Θρᾷξ:propn
+Θῆβαι:propn
+Κάρ:propn
+Καδμεῖος:adj
+Καύκωνες:propn
+Κυθήριος:adj
+Λέλεγες:propn
+Λαερτιάδης:propn
+Λύκιοι:propn
+Μενέλαος:propn
+Μηριόνης:propn
+Μυσός:propn
+Μόλος:propn
+Μῄων:propn
+Οἰνείδης:propn
+Παίων:propn
+Παλλάς:propn
+Πελασγός:propn
+Πηλείων:propn
+Σκάνδεια:propn
+Τυδεΐδης:propn
+Τυδείδης:propn
+Τυδεύς:propn
+Φυλεύς:propn
+αἴθην:adj
+αἴρω:verb
+βιός:noun
+γάρ:part
+γλυκερός:adj
+εἰ:cconj
+εἵς:num
+εἶδον:verb
+εἷος:cconj
+κίω:verb
+καί:adv
+καί:cconj
+κεῖνος:adj
+μάλιστα:adv
+μέδων:noun
+μέμαα:verb
+μίγνυμι:verb
+μετόπισθε:adv
+μᾶλλον:adv
+νόσφι:adv
+οἴω:verb
+οἶδα:verb
+παρέξ:adp
+πελώριος:adj
+περιδείδω:verb
+πευκεδανός:adj
+προπάροιθεν:adv
+πρῶτος:adj
+πυκινός:adj
+στορέννυμι:verb
+τίπτε:pron
+τε:part
+τρισκαιδέκατος:adj
+φυλακή:noun
+φυλακός:noun
+χαρίζομαι:verb
+ἀγλαίζω:verb
+ἀλύσκω:verb
+ἀπαυράω:verb
+ἀπόπροθεν:adv
+ἁμός:adj
+ἄν:part
+ἄφαλος:adj
+ἆρα:part
+Ἀγαμεμνόνεος:adj
+Ἀθήνη:propn
+Ἀμφιδάμας:propn
+Ἀπόλλων:propn
+Ἀσωπός:propn
+Ἀχιλλεύς:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐπέοικε:verb
+ἐπήν:cconj
+ἐπισταμένως:adv
+ἐρυθαίνομαι:verb
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐλεών:propn
+Ἑκτόρεος:adj
+Ἕκτωρ:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἠϊονεύς:propn
+Ἥρα:propn
+ἰδέ:cconj
+ἱερόν:noun
+ἱρός:adj
+Ἰδομενεύς:propn
+Ἰλιόθι:adv
+Ἱπποκόων:propn
+Ἶλος:propn
+ὀδών:noun
+Ὀρμενίδης:propn
+Ὄλυμπος:propn
+ὑπόρρηνος:adj
+ὕπνον:noun
+ὦ:intj
+ᾗ:adv
+ῥύομαι:verb
+Ῥῆσος:propn
+
+Words the treebank does not analyse (Line: word):
+87: Νηληϊάδη
+127: ,
+146: ,
+148: ,
+153: ὄρθ᾽
+155: ,
+162: ,
+177: ,
+189: ,
+218: ,
+227: ,
+240: ,
+266: Ἀμύντορος
+289: ·
+313: ,
+328: ,
+362: ,
+378: ,
+430: Θύμβρης
+435: ᾽
+442: πελάσσετον
+463: ·
+474: ᾽
+512: ,
+519: ᾽
+555: Νηληϊάδη
+557: ,
+566: Τυδεΐδεω
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

@@ -222,7 +222,7 @@ export function wordHtml(w) {
 export function scanText(s) {
   if (!s?.length) return '';
   const sylls = s.map(([t, q]) => {
-    const bare = t.replace(/[.,;:!?·᾽—–]/g, '');
+    const bare = t.replace(/[.,;:!?·᾽’‘“”«»—–]/g, '');
     return q === 'E' ? `(${bare})` : bare;
   }).join(' · ');
   const marks = s.filter(([, q]) => q !== 'E').map(([, q]) => (q === 'L' ? '–' : '⏑')).join(' ');

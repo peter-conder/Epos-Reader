@@ -1,0 +1,135 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰγύπτιος:adj
+Εὐηνορίδης:propn
+Εὐρύκλεια:propn
+Εὐρύμαχος:propn
+Εὐρύνομος:propn
+Ζεύς:propn
+Κύκλωψ:propn
+Λαέρτης:propn
+Λειώκριτος:propn
+Μέντωρ:propn
+Μαστορίδης:propn
+Νοήμων:propn
+Παλλάς:propn
+Πεισήνωρ:propn
+Πεισηνορίδης:propn
+Πηνελόπεια:propn
+Πυλόνδε:adv
+Πόλυβος:propn
+Πύλος:propn
+Σπάρτη:propn
+Σπάρτηθεν:adv
+Τηλέμαχος:propn
+Τυρώ:propn
+Φρόνιος:propn
+γάρ:part
+δώδεκα:num
+εἰ:cconj
+εἰσαναβαίνω:verb
+εἴδομαι:verb
+εἴθε:intj
+εἶδον:verb
+εὐπλοκαμίς:adj
+ζώω:verb
+θόωκος:noun
+θᾶσσον:adv
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+καταχεύω:verb
+μάλιστα:adv
+μέδομαι:verb
+μᾶλλον:adv
+οἶδα:verb
+οἶνωψ:adj
+οὗ:adv
+πάτρη:noun
+πατρώιος:adj
+πνοιή:noun
+ποτιπτύσσω:verb
+πρῶτος:adj
+τί:adv
+τίπτε:pron
+τε:part
+τεός:adj
+τρεῖς:num
+χαρίζομαι:verb
+ἀκράαντος:adj
+ἀλλόγνωτος:adj
+ἀλύσκω:verb
+ἀνσχετός:adj
+ἀσχάλλω:verb
+ἄν:part
+Ἀθήνη:propn
+Ἀλκμήνη:propn
+Ἀντίνοος:propn
+Ἁλιθέρσης:propn
+Ἄντιφος:propn
+ἐγώ:pron
+ἐλπωρή:noun
+ἐμπάζομαι:verb
+ἐμπίπλημι:verb
+ἐπιλωβεύω:verb
+ἔντοσθεν:adp
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐφύρα:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἰθάκη:propn
+Ἰθακήσιος:adj
+Ἰκάριος:propn
+ὑποκρίνομαι:verb
+ὦ:intj
+Ὤπς:propn
+
+Words the treebank does not analyse (Line: word):
+55: πάντα,
+64: νεμεσσήθητε
+64: καὶ
+65: αἰδέσθητε
+71: ,
+103: ,
+126: ,
+130: ,
+131: ,
+143: ·
+168: ,
+174: ,
+182: ,
+183: ,
+197: ,
+201: ,
+207: ,
+223: ,
+250: ,
+270: ,
+310: ,
+332: ,
+346: ,
+347: ,
+349: ,
+372: ,
+398: ,
+402: ,
+416: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+72: ἐυδαςἈχαιούς, = ἐυκνήμιδας
+394: ῥʼἰέναι = ῤ̓ ἰέναι
+402: ἐυδεςδεςἑταῖροι = ἐυκνήμιδες
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+72
+402
+
+Lines whose Scansion does not have six Feet:
+

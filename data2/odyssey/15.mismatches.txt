@@ -1,0 +1,181 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+ʽἑρμῆς:noun
+̓ἀθήνη:noun
+Βοηθοΐδης:propn
+Βοηθοί:x
+Διοκλῆς:propn
+Εὐρύμαχος:propn
+Εὔμαιος:propn
+Ζεύς:propn
+Θεοκλύμενος:propn
+Θῆβαι:propn
+Κλεῖτος:propn
+Κλυτίδης:propn
+Κρουνοί:propn
+Κτήσιος:propn
+Κτιμένη:propn
+Λαέρτης:propn
+Λακεδαίμων:propn
+Μάντιος:propn
+Μεγαπένθης:propn
+Μελάμπους:propn
+Μενέλαος:propn
+Νεστορίδης:propn
+Οϊκλῆς:propn
+Πείραιος:propn
+Πεισίστρατος:propn
+Πηνελόπεια:propn
+Πολυφείδης:propn
+Πόλυβος:propn
+Πύλιος:adj
+Πύλιος:propn
+Πύλος:propn
+Σάμη:adv
+Σάμος:propn
+Σιδόνιος:adj
+Συρία:propn
+Τάφιοι:propn
+Τηλέμαχος:propn
+Φεαί:propn
+Φηραί:propn
+Φυλάκη:propn
+Φύλακος:propn
+Χαλκίς:propn
+γάρ:part
+δαιτρεύω:verb
+δασυπλῆτις:adj
+δεδίσκομαι:verb
+δεῖπνος:noun
+εἰ:cconj
+εἴθε:intj
+εἶδον:verb
+εὔμαιος:noun
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+καθύπερθεν:adp
+κεράω:verb
+κεῖνος:adj
+κεῖσε:adv
+κηώεις:adj
+κτέαρ:noun
+κυδρός:adj
+ληίστωρ:noun
+μάλιστα:adv
+μάστις:noun
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μενέλαος:noun
+μᾶλλον:adv
+ναυσικλυτός:adj
+νεστορίδης:noun
+νοῦσος:noun
+ξεινοδόκος:noun
+οἰνοχοέω:verb
+οἶδα:verb
+παλλάς:noun
+παρέξ:adp
+προβιβάω:verb
+πρῶτος:adj
+πτολίεθρον:noun
+πόποι:intj
+τε:part
+τηλέμαχος:noun
+τρεῖς:num
+χαρίζομαι:verb
+ἀμφιέλισσα:adj
+ἀνέρομαι:verb
+ἀντίον:adv
+ἀντίον:noun
+ἄεσα:verb
+ἄν:part
+ἄω:verb
+ἆρα:part
+Ἀθήνη:propn
+Ἀλκμαίων:propn
+Ἀλφειός:propn
+Ἀμφίλοχος:propn
+Ἀμφιάραος:propn
+Ἀντιφάτης:propn
+Ἀπόλλων:propn
+Ἀρύβας:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐπήν:cconj
+ἔραζε:adv
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐπειός:adj
+Ἐτεωνεύς:propn
+Ἑλένη:propn
+Ἑλλάς:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+Ἥρα:propn
+Ἥφαιστος:propn
+Ἦλις:propn
+Ἰθάκη:propn
+Ἰθάκηνδε:adv
+Ἰθακήσιος:adj
+ὁπλότατος:adj
+ὅπη:adv
+Ὀρμενίδης:propn
+Ὀρτίλοχος:propn
+Ὄλυμπος:propn
+ὑπίσχομαι:verb
+ὑπαλεύομαι:verb
+ὑποδρώω:verb
+ὑποκρίνομαι:verb
+ὑφορβός:noun
+Ὑπερησίη:adv
+ὦ:intj
+ᾍδης:noun
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+2: ,
+10: ,
+49: ,
+56: ,
+58: καλλικόμοιο.
+64: διοτρεφές,
+68: ,
+72: ,
+87: διοτρεφές,
+88: ·
+92: τό
+111: ,
+218: ,
+220: ,
+238: .
+246: ·
+260: ,
+335: ·
+379: ,
+388: ,
+390: ,
+429: ·
+435: ,
+437: ,
+486: ,
+514: ·
+531: ,
+545: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+89: ἐμοῖσι· = ἐμοῖσιν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

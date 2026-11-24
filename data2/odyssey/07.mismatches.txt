@@ -1,0 +1,115 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἀλκίνοος:noun
+̓ἀρήτη:noun
+Γίγας:propn
+Εὐρυμέδουσα:propn
+Εὐρυμέδων:propn
+Εὔβοια:propn
+Ζεύς:propn
+Καλυψώ:propn
+Κύκλωψ:propn
+Λαοδάμας:propn
+Μαραθών:propn
+Ναυσίθοος:propn
+Ναυσικάα:propn
+Παλλάς:propn
+Περίβοια:propn
+Ποντόνοος:propn
+Ποσειδεών:propn
+Σχερία:propn
+Τιτυός:propn
+γάρ:part
+εἰ:cconj
+εἴδομαι:verb
+εἴθε:intj
+εἶδον:verb
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κατακείω:verb
+καταχεύω:verb
+κεῖνος:adj
+κοῦρος:noun
+μάλιστα:adv
+μέδων:noun
+μήλωψ:noun
+μίγνυμι:verb
+μᾶλλον:adv
+ναυσικλυτός:adj
+οἶδα:verb
+πάτρη:noun
+πρῶτος:adj
+πυκινός:adj
+στορέννυμι:verb
+συκῆ:noun
+τε:part
+τεός:adj
+τηλόθεν:adv
+χαρίζομαι:verb
+ἀγακλειτός:adj
+ἀγακλυτός:adj
+ἀγλαόκαρπος:adj
+ἀμφιέλισσα:noun
+ἀνέρομαι:verb
+ἀπόπροθεν:adv
+ἄκοιτις:noun
+ἄν:part
+ἄπιος:adj
+Ἀθήνη:propn
+Ἀθῆναι:propn
+Ἀλκίνοος:propn
+Ἀπείρηθεν:adv
+Ἀπειραῖος:adj
+Ἀπόλλων:propn
+Ἀρήτη:propn
+ἐγώ:pron
+ἐλπωρή:noun
+ἐμπίπλημι:verb
+ἔρδω:verb
+ἔσω:adv
+ἕ:pron
+ἕπομαι:verb
+Ἐρεχθεύς:propn
+Ἐχένηος:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἥφαιστος:propn
+ἰδυῖα:verb
+ἱερόν:noun
+ὀπαδέω:verb
+ὁπλότατος:adj
+ὦ:intj
+Ὠγυγία:propn
+ῥοιά:noun
+Ῥαδάμανθυς:propn
+Ῥηξήνωρ:propn
+
+Words the treebank does not analyse (Line: word):
+67: ,
+159: ,
+192: ,
+208: ,
+226: ,
+242: ,
+275: ·
+284: .
+292: ·
+299: ,
+309: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+140: ἔχων, = ἔων
+261: ἦλθε, = ἦλθεν
+330: ὀνόμαζε· = ὀνόμαζεν
+335: ἀμφιπόλοισι = ἀμφιπόλοισιν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

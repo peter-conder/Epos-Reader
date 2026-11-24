@@ -1,0 +1,135 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἀθήνη:noun
+Εὐπείθης:propn
+Εὐρύμαχος:propn
+Εὔμαιος:propn
+Ζάκυνθος:propn
+Ζεύς:propn
+Θεσπρωτοί:propn
+Κλύτιος:propn
+Κρήτη:propn
+Λαέρτης:propn
+Λαερτιάδης:propn
+Μέδων:propn
+Νῖσος:propn
+Παλλάς:propn
+Πηνελόπεια:propn
+Πυλόνδε:adv
+Πόλυβος:propn
+Πύλος:propn
+Σάμη:propn
+Τάφιοι:propn
+Τηλέμαχος:propn
+Τροίανδε:adv
+γάρ:part
+δοιώ:adj
+δουλίχιος:noun
+δουλικίον:noun
+δουλιχίον:noun
+δόρπος:noun
+εἰ:cconj
+εἰσαναβαίνω:verb
+εἶδον:verb
+εὐφρονέων:adj
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+καθέζετο:verb
+κεῖνος:adj
+μάλιστα:adv
+μάρτυρος:noun
+μέμαα:verb
+μεγάλως:adv
+μελαγχροιής:adj
+μᾶλλον:adv
+ναυσικλυτός:adj
+νόσφι:adp
+οἶδα:verb
+παρέξ:adp
+πατρώιος:adj
+περιφύομαι:verb
+πεύθομαι:verb
+πρῶτος:adj
+πόποι:intj
+πύκα:adv
+σάμη:noun
+τε:part
+τεός:adj
+χαρίζομαι:verb
+ἀντίον:adp
+ἀντίον:adv
+ἀποτρωπάω:verb
+ἄεσα:verb
+ἄν:part
+ἄπιος:adj
+ἆρα:part
+Ἀθήνη:propn
+Ἀμφίνομος:propn
+Ἀντίνοος:propn
+Ἀρητιάδης:propn
+Ἀρκείσιος:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐμπάζομαι:verb
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+Ἰθάκη:propn
+Ἰθάκηνδε:adv
+Ἰκάριος:adj
+ὅπη:adv
+ὑποδάμναμαι:verb
+ὑφορβός:noun
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+8: ,
+44: ·
+46: ,
+69: ,
+88: πλεόνεσσιν
+91: ,
+101: [ἔλθοι
+101: ἀλητεύων·
+101: ἔτι
+101: γὰρ
+101: καὶ
+101: ἐλπίδος
+101: αἶσα·]
+123: Ζακύνθῳ,
+141: ,
+184: ,
+202: ,
+202: πατέρ᾽
+217: γαμψώνυχες,
+242: ἐπίφρονα
+286: ·
+288: ,
+351: ,
+358: ,
+393: ,
+418: ,
+458: ἐσάντα
+479: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+2: ἐντύνοντ᾽ = ἐντύνοντο
+44: “ἧσʼ = ἧσ̓
+49: δʼαὖ = δ̓ αὖ
+270: φαινομένηφι = φαινομένηφιν
+401: ἐστι = ἐστιν
+471: θʼἝρμαιος = θ̓ Ἕρμαιος
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

@@ -1,0 +1,170 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰγύπτιος:adj
+Αἰτωλός:adj
+Αἴγυπτος:propn
+Αἴγυπτόνδε:adv
+Δουλίχιον:propn
+Δουλίχιόδε:adv
+Δωδώνη:propn
+Εὔμαιος:propn
+Ζεύς:propn
+Θεσπρωτοί:propn
+Θόας:propn
+Κάστωρ:propn
+Κρής:propn
+Κρήτη:propn
+Λαέρτης:propn
+Λαερτιάδης:propn
+Λιβύη:propn
+Μαιάς:propn
+Μενέλαος:propn
+Μεσαύλιος:propn
+Πηνελόπεια:propn
+Πύλος:propn
+Τάφιοι:propn
+Τηλέμαχος:propn
+Φείδων:propn
+αἰειγενέτης:adj
+αἴρω:verb
+βώτωρ:noun
+γάρ:part
+δάμνημι:verb
+δαιτρεύω:verb
+δμῶος:noun
+δώδεκα:num
+εἰ:cconj
+εἴθε:intj
+εἶδον:verb
+εὐχροής:adj
+εὔμαιος:noun
+ζώω:verb
+καί:adv
+καί:cconj
+καταριγηλός:adj
+καταχεύω:verb
+κεῖνος:pron
+κρυφηδόν:adv
+κτέαρ:noun
+κτέομαι:verb
+κυνέα:noun
+λόχονδε:adv
+μάλιστα:adv
+μάρτυρος:noun
+μέτειμι:verb
+νέα:noun
+νεανίης:noun
+νόσφι:adp
+νόσφι:adv
+οἶδα:verb
+παρέξ:adv
+περιτρέφομαι:verb
+πλησίον:adp
+πολυανθής:adj
+πολυμενθης:adj
+πρῶτον:adv
+πρῶτος:adj
+σκοτομήνιος:adj
+τε:part
+τεός:adj
+τρεῖς:num
+χαλκοῦς:noun
+χαρίζομαι:verb
+ἀγακλυτός:adj
+ἀκουή:noun
+ἀλεξάνεμος:adj
+ἀπαίνυμαι:verb
+ἄν:part
+ἆ:intj
+Ἀθήνη:propn
+Ἀνδραίμων:propn
+Ἀρκείσιος:propn
+Ἄκαστος:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐναντίον:adv
+ἐξαπαφίσκω:verb
+ἐπέοικε:verb
+ἐπήν:cconj
+ἐρχατάομαι:verb
+ἐυρρείτης:noun
+ἔντοσθεν:adp
+ἔργνυμι:verb
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑλένη:propn
+Ἑρμῆς:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+Ἰδομενεύς:propn
+Ἰθάκη:propn
+ὁμοκλέω:verb
+ὁπόσε:adv
+ὅπη:adv
+Ὄλυμπος:propn
+ὑφορβός:noun
+Ὑλακίδης:propn
+ὦ:intj
+ᾍδης:noun
+ᾗ:adv
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+56: ,
+56: ,
+64: οἶκόν
+64: τε
+64: κλῆρόν
+64: τε
+64: πολυμνήστην
+64: τε
+64: γυναῖκα,
+80: τά
+81: ·
+91: ,
+99: τοσσοῦτον·
+104: ,
+109: φάθ᾽
+109: ,
+119: τό
+125: ,
+149: ,
+153: ,
+169: ·
+191: πολύμητις
+195: ,
+226: τά
+236: ,
+250: ·
+254: ὡς
+258: ἀμφιελίσσας.
+325: κεν
+367: ,
+381: ·
+383: τάς
+393: ·
+402: ,
+415: ,
+422: ὅγ᾽
+476: ὕπερθε
+499: ,
+518: ἐγγὺς
+520: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+64: οἶκόν τε κλῆρόν τε πολυμνήστην τε γυναῖκα
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+52: ὀνόμαζε· = ὀνόμαζεν
+109: φάθ᾽ = φύθ̓
+208: ἐδάσαντο = ἐδύσαντο
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+
