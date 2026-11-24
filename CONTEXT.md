@@ -18,6 +18,49 @@ _Avoid_: Poem, text, title
 One of the numbered divisions of a Work, written in Roman numerals (Aeneid I–XII, Homer I–XXIV).
 _Avoid_: Chapter, canto, section
 
+**Line**:
+One numbered verse of a Book.
+_Avoid_: Verse (on its own), row
+
+**Source**:
+An outside project that Epos Reader takes text, translation, lemmas, definitions or scansion from. Every Source is credited.
+_Avoid_: Provider, dataset
+
+### Words
+
+**Lemma**:
+The dictionary headword a word form belongs to, e.g. *arma* for "armis".
+_Avoid_: Root, stem, base form
+
+**Morphology**:
+The grammatical analysis of one word form in its Line: case, number, gender, tense, mood and so on.
+_Avoid_: Parse, grammar tag
+
+**Lexicon**:
+The dictionary for one language, shared by every Work in that language. It gives each Lemma a headword, part of speech and definition.
+_Avoid_: Dictionary, glossary, vocabulary
+
+### Meter
+
+**Scansion**:
+The metrical analysis of a Line into long, short and elided syllables, with feet and other marks, as given by Hypotactic.
+_Avoid_: Meter marks, prosody
+
+**Long / Short / Elided**:
+A syllable's quantity in Scansion. An elided syllable is written but not pronounced.
+_Avoid_: Heavy / light, longum / breve
+
+**Foot**:
+One metrical unit of the hexameter. There are six in a Line.
+_Avoid_: Measure, beat
+
+**Caesura**:
+A word break inside a Foot that Hypotactic marks as a pause. Epos Reader shows only the caesuras Hypotactic marks, not every one a reader might count.
+_Avoid_: Pause, break
+
+**Hiatus**, **Synizesis**, **Consonantal i**, **Lengthened syllable**, **Hypermetric syllable**:
+The rarer marks Scansion can put on a syllable, under their usual metrical names.
+
 ### Reading
 
 **Word card**:
@@ -28,6 +71,20 @@ _Avoid_: Gloss, popup, tooltip
 Two text tabs shown side by side, each with its own Work and Book.
 _Avoid_: Dual view, dual pane, pair
 
+**Translation**:
+The English of a Work, taken from Perseus.
+_Avoid_: English (as a noun for the text), crib, version
+
 **Parallel translation**:
-The English translation shown next to the original, line by line.
+The Translation shown next to the original, Line by Line.
 _Avoid_: Dual view, dual pane, English pane
+
+### Your own marks
+
+**Note**:
+Text the reader writes, attached to one word in one Line.
+_Avoid_: Annotation, comment
+
+**Bookmark**:
+A saved Line, with no text of the reader's own.
+_Avoid_: Favourite, pin, flag
