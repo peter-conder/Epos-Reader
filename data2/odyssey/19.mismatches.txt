@@ -1,0 +1,174 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἴθων:propn
+Αὐτόλυκος:propn
+Δευκαλίων:propn
+Δουλίχιον:propn
+Δουλιχιόν:propn
+Δωδώνη:propn
+Εἰλείθυια:propn
+Εὐρυβάτης:propn
+Εὐρυνόμη:propn
+Εὐρύκλεια:propn
+Ζάκυνθος:propn
+Ζεύς:propn
+Ζῆθος:propn
+Θεσπρωτοί:propn
+Θρινακίη:propn
+Κνωσός:propn
+Κρήτη:propn
+Κρήτηνδε:adv
+Κύδωνες:propn
+Λαέρτης:propn
+Λαερτιάδης:propn
+Μάλεια:propn
+Μίνως:propn
+Μελανθώ:propn
+Πάνδαρος:adj
+Παλλάς:propn
+Παρνασός:adv
+Παρνασός:propn
+Πελασγός:propn
+Πηνελόπεια:propn
+Σάμη:propn
+Τηλέμαχος:propn
+Τροίανδε:adv
+Φείδων:propn
+αἶα:noun
+αἶσις:noun
+βιός:noun
+βρότεος:adj
+γάρ:part
+δεῖπνος:noun
+δώδεκα:num
+εἰ:cconj
+εἰσαναβαίνω:verb
+εἰσφορέω:verb
+εἶδον:verb
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+καθέζετο:verb
+κατακείω:verb
+καταχεύω:verb
+κεῖνος:adj
+κοῦρος:noun
+κραδάω:verb
+κρυφηδόν:adv
+κρόμυον:noun
+λύχνον:noun
+μάλιστα:adv
+μέδομαι:verb
+μέμαα:verb
+μίγνυμι:verb
+μελανόχρους:adj
+μᾶλλον:adv
+νηλιτής:noun
+νοσφίζομαι:verb
+οἶδα:verb
+πάτρη:noun
+περιφύομαι:verb
+πολυάρητος:adj
+πρῶτος:adj
+πυκινός:adj
+στορέννυμι:verb
+τε:part
+τεός:adj
+τηλόθεν:adv
+τρισκαιδέκατος:adj
+τροίανδε:adv
+χαλκοῦς:noun
+χαρίζομαι:verb
+χράομαι:verb
+ἀεκαζόμενος:adj
+ἀκράαντος:adj
+ἀλύσκω:verb
+ἀμφράζομαι:verb
+ἀνέρομαι:verb
+ἀναγκαίη:noun
+ἀντίον:noun
+ἀρνός:noun
+ἄν:part
+ἄω:verb
+ἆρα:part
+Ἀθήνη:propn
+Ἀμνισός:propn
+Ἀμφιθέη:propn
+Ἀπόλλων:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐμπάζομαι:verb
+ἐμπίπλημι:verb
+ἐννήκοντα:num
+ἐπήν:cconj
+ἐπαοιδή:noun
+ἐπισταμένως:adv
+ἐυπλοκαμίς:noun
+ἔμπεδα:adv
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑρμῆς:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἱκανόω:verb
+ἴσκε:verb
+Ἰδομενεύς:propn
+Ἰθάκη:propn
+Ἰκάριος:adj
+Ἰκμάλιος:propn
+Ἴτυλος:propn
+ὀδών:noun
+ὀξυόεις:adj
+ὀπαδέω:verb
+ὀπιπτεύω:verb
+ὁμοκλέω:verb
+Ὄλυμπος:propn
+ὑποκρίνομαι:verb
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+5: ·
+7: ,
+16: ,
+27: ·
+49: ,
+66: ,
+88: ,
+93: ,
+100: ,
+124: ,
+156: ,
+159: ,
+267: ,
+301: ,
+338: ,
+350: ·
+355: ,
+377: ,
+403: ,
+411: ,
+425: ,
+551: ,
+556: ,
+558: ,
+560: ,
+561: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+10: ἔμβαλε = ἔβαλε
+134: ἐμπάζομαι = ἐμπάξομαι
+182: εἴσω = ἴσω
+404: ἐστι.” = ἐστιν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

@@ -29,7 +29,7 @@ export function showWordCard(word) {
   word.classList.add('selected');
 
   const tab = getTab(word.closest('.tab-view').dataset.tabId);
-  const clean = word.textContent.replace(/[.,;:!?·᾽—–]/g, '').trim();
+  const clean = word.textContent.replace(/[.,;:!?·᾽’‘“”«»—–]/g, '').trim();
   shared.wordCtx = {
     work: tab.work, book: tab.book,
     line: +word.closest('.verse').dataset.line, wordIdx: +word.dataset.i, word: clean

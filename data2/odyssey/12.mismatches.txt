@@ -1,0 +1,119 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰήτης:propn
+Αἰαία:propn
+Αἰαῖος:adj
+Εὐρύλοχος:propn
+Ζεύς:propn
+Θηβαῖος:adj
+Θρινακίη:propn
+Κίρκη:propn
+Καλυψώ:propn
+Κράταιις:propn
+Κύκλωψ:propn
+Λαερτιάδης:propn
+Λαμπετίη:propn
+Νέαιρα:propn
+Περιμήδης:propn
+Πλαγκταί:propn
+Σειρήν:propn
+Σκύλλα:propn
+Τειρεσίης:propn
+Φαέθουσα:propn
+βρώμη:noun
+γάρ:part
+γεγωνέω:verb
+δέψω:verb
+δεκάτη:noun
+δόρπος:noun
+εἰ:cconj
+εἰ:intj
+εἰσείδω:verb
+εἶδον:verb
+ζώω:verb
+κάρη:noun
+κίω:verb
+καί:adv
+καί:cconj
+κατασκιάω:verb
+καταχεύω:verb
+κυανῶπις:adj
+μάλιστα:adv
+μέδομαι:verb
+μᾶλλον:adv
+μῆρα:noun
+νηνέμιος:adj
+οἴη:noun
+οἶδα:verb
+παρέξ:adp
+παρέξ:adv
+πατρώιος:adj
+περιμήκης:adj
+πουλυβότειρα:noun
+πρῶτος:adj
+στρεύγομαι:verb
+τε:part
+χορός:noun
+ἀλύσκω:verb
+ἀμβροσίη:noun
+ἀμφιέλισσα:adj
+ἀναβρόχω:verb
+ἀπαίνυμαι:verb
+ἄν:part
+Ἀργώ:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐξαποβαίνω:verb
+ἐπήν:cconj
+ἐπιποιμήν:noun
+ἐπισταμένως:adv
+ἕ:pron
+ἕπομαι:verb
+Ἐλπήνωρ:propn
+Ἑρμῆς:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἠέλιος:propn
+Ἠοῦς:propn
+Ἥρα:propn
+Ἰήσων:propn
+Ἰθάκη:propn
+ὀδών:noun
+ὀρθόκραιρος:adj
+Ὄλυμπος:propn
+ὕστερον:noun
+ὦ:intj
+Ὠγυγία:propn
+ᾍδης:noun
+ᾗ:adv
+ῥηγμίς:noun
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+25: ·
+28: ,
+111: ,
+142: ,
+200: ,
+213: ,
+217: ,
+246: ,
+262: ·
+297: ,
+343: ,
+385: ,
+411: .
+424: ῥ᾽
+439: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+88: ἀντιάσειε. = ἀντιάσειεν
+356: θεοῖσι, = θεοῖσιν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

@@ -1,0 +1,172 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Δημόδοκος:propn
+Εὐρύαλος:propn
+Εὔρυτος:propn
+Ζεύς:propn
+Θρῄκηνδε:adv
+Θόων:propn
+Κίρκη:propn
+Καλυψώ:propn
+Κλυτόνηος:propn
+Κυθέρεια:propn
+Κύπρος:propn
+Λαέρτης:propn
+Λαοδάμας:propn
+Λαοδάμας:x
+Λῆμνος:propn
+Μενέλαος:propn
+Μοῦσα:propn
+Ναυβολίδης:propn
+Ναυσίθοος:propn
+Ναυσικάα:propn
+Ναυτεύς:propn
+Οἰχαλία:adj
+Πάφος:propn
+Παλλάς:propn
+Πηλείδης:propn
+Πολύνηος:propn
+Ποντεύς:propn
+Ποντόνοος:propn
+Ποσειδεών:propn
+Ποσειδῶν:propn
+Πρυμνεύς:propn
+Πρωρεύς:propn
+Πυθώ:propn
+Πόλυβος:propn
+Σίντιες:propn
+Τεκτονίδης:propn
+Φιλοκτήτης:propn
+Χάρις:propn
+αἰνίζω:verb
+βιώσκομαι:verb
+γάρ:part
+δαίτης:noun
+δημόδοκος:noun
+δώδεκα:num
+εἰ:cconj
+εἰ:intj
+εἴδομαι:verb
+εἶδον:verb
+κίω:verb
+καί:adv
+καί:cconj
+καταχεύω:verb
+κεράω:verb
+κεῖνος:adj
+κοῦρος:noun
+κυβερνητήρ:noun
+λαοδάμας:noun
+μάλιστα:adv
+μέδων:noun
+μίγνυμι:verb
+μετόπισθε:adv
+μιγάζομαι:verb
+μᾶλλον:adv
+ναυσικλυτός:adj
+νόσφι:adv
+ξεινοδόκος:noun
+οἶδα:verb
+ποτιπτύσσω:verb
+πουλυβότειρα:noun
+πρῶτος:adj
+πτολίεθρον:noun
+πύκα:adv
+τε:part
+τεός:adj
+τρεῖς:num
+τρισκαιδέκατος:adj
+φορμίζω:verb
+χαρίζομαι:verb
+χορός:noun
+ἀγακλυτός:adj
+ἀθερίζω:verb
+ἀκμόθετον:noun
+ἀλύσκω:verb
+ἀμφιγύεις:adj
+ἄν:part
+ἆρα:part
+Ἀγχίαλος:propn
+Ἀθήνη:propn
+Ἀκρόνεως:propn
+Ἀλκίνοος:propn
+Ἀμφίαλος:propn
+Ἀναβησίσευς:x
+Ἀπόλλων:propn
+Ἀρήτη:propn
+Ἀχιλλεύς:propn
+Ἄρης:propn
+Ἅλιος:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐμπίπλημι:verb
+ἐνήνοθε:verb
+ἐπήν:cconj
+ἐριούνης:noun
+ἑρμίς:noun
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐλατρεύς:propn
+Ἐπειός:adj
+Ἐρετμεύς:propn
+Ἑκάεργος:adj
+Ἑρμῆς:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+Ἡρακλέης:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἱερόν:noun
+Ἰλιόθι:adv
+ὀπαδέω:verb
+ὅπη:adv
+Ὄλυμπος:propn
+ὦ:intj
+Ὠκύαλος:propn
+
+Words the treebank does not analyse (Line: word):
+5: ,
+28: ,
+38: ·
+42: ,
+49: ὡς
+49: ,
+76: θαλείῃ
+125: ,
+166: ,
+234: ,
+236: ,
+251: οἷσι
+290: ·
+307: ,
+313: ,
+321: ,
+343: ,
+355: ,
+389: ὡς
+398: ,
+424: ,
+433: ,
+446: πολύτλας
+450: ·
+451: ,
+461: ,
+474: πολύμητις
+487: ,
+499: ,
+517: Δηιφόβοιο
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+235: προσέειπε· = προσέειπεν
+331: ἔχουσι, = ἔχουσιν
+370: κέλευσε = κέλευσεν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

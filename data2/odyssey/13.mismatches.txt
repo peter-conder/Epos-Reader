@@ -1,0 +1,131 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἀθήνη:noun
+Δημόδοκος:propn
+Ζεύς:propn
+Κρήτη:propn
+Λαερτιάδης:propn
+Λακεδαίμων:propn
+Μενέλαος:propn
+Νήριτος:propn
+Παλλάς:propn
+Πηνελόπεια:propn
+Ποντόνοος:propn
+Ποσειδεών:propn
+Σιδόνιος:adj
+Σπάρτη:propn
+Σχερία:propn
+Τηλέμαχος:propn
+Φόρκυς:propn
+αἴρω:verb
+αἶα:noun
+γάρ:part
+δώδεκα:num
+εἰ:cconj
+εἴθε:intj
+εἶδον:verb
+ζώω:verb
+θεώτερος:adj
+κίω:verb
+καί:adv
+καί:cconj
+κατακείω:verb
+μάλιστα:adv
+μέδων:noun
+μέμαα:verb
+μετόπισθε:adv
+μῆρα:noun
+ναυσικλυτός:adj
+νόσφι:adv
+οἶδα:verb
+πέπων:adj
+πατρώιος:adj
+περιμήκης:adj
+πρῶτος:adj
+πόποι:intj
+πότνα:noun
+τίπτε:adv
+τε:part
+τεός:adj
+τηλόθεν:adv
+τοιοῦτον:adj
+τοῖον:adv
+φαάντατος:adj
+χαρίζομαι:verb
+ἀεκαζόμενος:adj
+ἀνέρομαι:verb
+ἀπαυράω:verb
+ἄκοιτις:noun
+ἄν:part
+ἆρα:part
+Ἀθήνη:propn
+Ἀλκίνοος:propn
+Ἀρέθουσα:propn
+Ἀρήτη:propn
+ἐγκέφαλος:noun
+ἐγώ:pron
+ἔγρω:verb
+ἔμπεδον:adv
+ἔρδω:verb
+ἔρσα:noun
+ἕ:pron
+ἕνεκα:adp
+Ἐπειός:adj
+ἠέλιος:noun
+ἠδέ:cconj
+ἤπειρόνδε:adv
+Ἦλις:propn
+Ἰδομενεύς:propn
+Ἰθάκη:propn
+Ὀρσίλοχος:propn
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+1: ,
+12: ,
+15: ·
+20: τὰ
+26: δαῖτα
+41: τά
+47: ,
+60: τά
+71: τά
+76: τοὶ
+137: ,
+154: ὡς
+159: τό
+161: ·
+179: ,
+184: ,
+199: ,
+219: τῶν
+228: ,
+237: ,
+248: ,
+250: πολύτλας
+263: Τρωιάδος,
+274: τούς
+275: δῖαν,
+286: ·
+293: ,
+297: ,
+314: ,
+340: ,
+358: ·
+411: παρήμενος
+412: καλλιγύναικα
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+48: ἔειπε. = ἔειπεν
+77: λίθοιο. = λίθοις
+124: γʼὈδυσῆ᾽ = γ̓ Ὀδυσῆ̓
+131: Ὀδυσῆʼ = Ὀδυσῆ̓
+364: θείομεν = θείμεν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

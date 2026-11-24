@@ -1,0 +1,147 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+ʽὡς:adv
+̓ἀλέξανδρος:noun
+Αἴας:propn
+Αἴθρη:propn
+Δάρδανος:propn
+Δαρδανίδης:propn
+Ζεύς:propn
+Θυμοίτης:propn
+Κάστωρ:propn
+Κλυμένη:propn
+Κλυτίος:propn
+Κρής:propn
+Κρήτηθεν:adv
+Λάμπος:propn
+Λαερτιάδης:propn
+Λακεδαίμων:propn
+Λαοδίκη:propn
+Λαομεδοντιάδης:propn
+Λυκάων:propn
+Μενέλαος:propn
+Μύγδων:propn
+Μῃονίη:propn
+Οὐκαλέγων:propn
+Πάνθοος:propn
+Πάρις:propn
+Πιτθεύς:propn
+Πριαμίδης:propn
+Πυγμαῖοι:propn
+Σαγγάριος:propn
+Σκαιαί:propn
+Ταλθύβιος:propn
+Τρῳάς:propn
+Φρυγία:propn
+Φρύγιος:adj
+αἴρω:verb
+αἶα:noun
+γάρ:part
+δοίω:adj
+δούλη:noun
+εἰ:cconj
+εἴδομαι:verb
+εἴθε:intj
+εἶδον:verb
+ζεύς:noun
+κάλη:adj
+κίω:verb
+καί:adv
+καί:cconj
+καταχεύω:verb
+κευθάνω:verb
+κεῖνος:adj
+κηώεις:adj
+κοῦρος:noun
+μάκαπ:adj
+μάλιστα:adv
+μάρτυρος:noun
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μοιρηγενής:adj
+ξεινοδόκος:noun
+οἶδα:verb
+πελώριος:adj
+πολλός:adj
+πρῶτος:adj
+τε:part
+τετραχθά:adv
+φάλος:noun
+φυσίζους:adj
+χορός:noun
+ἀγγελίης:noun
+ἀερσίπους:adj
+ἀνέρομαι:verb
+ἀντίον:noun
+ἀρνός:noun
+ἄκοιτις:noun
+ἄν:part
+ἄπιος:adj
+ἆρα:part
+Ἀΐδης:propn
+Ἀθήνη:propn
+Ἀλέξανδρος:propn
+Ἀντήνωρ:propn
+Ἀντηνορίδης:propn
+Ἀτρεύς:propn
+Ἄργος:propn
+Ἄρης:propn
+ἐγκέφαλος:noun
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐναντίον:adv
+ἐπιστρέφω:verb
+ἐπιτροχάδη:adv
+ἐρωή:noun
+ἐυκνψ́μις:adj
+ἐυκϝήμις:adj
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑλένη:propn
+Ἑλικάων:propn
+Ἕκτωρ:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἠέλιος:propn
+ἰδέ:cconj
+Ἰδαῖος:propn
+Ἰδομενεύς:propn
+Ἰθάκη:propn
+Ἱκετάων:propn
+Ἴδη:adv
+Ἶρις:propn
+Ὀτρεύς:propn
+Ὄλυμπος:propn
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+33: Ὡς
+45: ,
+76: ,
+84: ,
+95: ,
+103: ,
+111: ,
+144: βοῶπις·
+200: πολύμητις
+231: ,
+234: ἑλίκωπας
+296: αἰειγενέτῃσιν.
+390: ·
+394: ,
+415: ὡς
+418: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

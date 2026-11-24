@@ -1,0 +1,218 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰτωλός:adj
+Αἰτώλιος:adj
+Αἱμονίδης:propn
+Αἴας:propn
+Αἴσηπος:propn
+Αἵμων:propn
+Αὐτόφονος:propn
+Βίας:propn
+Δανάη:propn
+Διομήδης:propn
+Διώρης:propn
+Εὐρυμέδων:propn
+Ζέλεια:propn
+Ζεύς:propn
+Θέτις:propn
+Θήβη:propn
+Θαλυσιάδης:propn
+Θρᾷξ:propn
+Θόας:propn
+Καδμεῖος:adj
+Καδμεῖος:propn
+Καπανεύς:adj
+Καπανεύς:propn
+Κεφαλλήν:propn
+Κρής:propn
+Κρόνος:propn
+Λαερτιάδης:propn
+Λαόδοκος:propn
+Λεῦκος:propn
+Λυκάων:propn
+Λύκιοι:propn
+Μαίων:propn
+Μαχάων:propn
+Μενέλαος:propn
+Μενεσθεύς:propn
+Μηριόνης:propn
+Μῃονίς:propn
+Πάνδαρος:propn
+Πέργαμον:propn
+Παλλάς:propn
+Πείροος:propn
+Πείρως:propn
+Πειραί:x
+Πελάγων:propn
+Πετεώς:propn
+Πολυνείκης:propn
+Πολυφόντης:propn
+Πριαμίδης:propn
+Πτολεμαῖος:propn
+Πύλιος:propn
+Σθένελος:propn
+Σιμοείσιος:adj
+Σιμόεις:adj
+Σπάρτη:propn
+Ταλθύβιος:propn
+Τηλέμαχος:propn
+Τρίκη:propn
+Τυδεύς:propn
+Χαλκωδοντιάδης:propn
+Χείρων:propn
+Χρομίος:propn
+αἴας:noun
+αἴρω:verb
+αἶα:noun
+βιός:noun
+βουλεύς:noun
+γάρ:part
+δαιτρόν:noun
+δημοκόων:noun
+διομήδης:noun
+δῆνος:noun
+εἰ:cconj
+εἴθε:intj
+εἶδον:verb
+θρέπτρα:noun
+κάλη:adj
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+καταπτώσσω:verb
+κερτόμιος:adj
+κουρότερος:adj
+κοῦρος:noun
+κόρσης:noun
+λίγγω:verb
+λεχεποίης:adj
+μάλιστα:adv
+μέδομαι:verb
+μέλαινα:noun
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μελάντερος:adj
+μενέλαος:noun
+νευρή:noun
+νόσφι:adv
+οἰνοχοέω:verb
+οἶδα:verb
+πνεύμων:noun
+πρηνής:adj
+πρῶτος:adj
+πτολίεθρον:noun
+πυρή:noun
+σιμοείσιος:adj
+τέττα:x
+τίπτε:pron
+τε:part
+τρεῖς:num
+φάλος:noun
+χαλκοῦς:noun
+χειμάρρους:adj
+ϝέκταρ:noun
+ἀντίον:noun
+ἀπέχθομαι:verb
+ἀρνός:noun
+ἄν:part
+ἆρα:part
+Ἀβυδόθεν:adv
+Ἀγήνωρ:propn
+Ἀθήνη:propn
+Ἀθηναῖος:adj
+Ἀλάστωρ:propn
+Ἀλέξανδρος:propn
+Ἀλαλκομενηίς:propn
+Ἀμαρυγκείδης:propn
+Ἀνθεμίδης:propn
+Ἀνθεμίων:propn
+Ἀντίλοχος:propn
+Ἀντηνορίδης:propn
+Ἀπόλλων:propn
+Ἀσκληπιάδης:propn
+Ἀσκληπιός:propn
+Ἀσωπός:propn
+Ἀτρεύς:propn
+Ἀχιλλεύς:propn
+Ἄβας:propn
+Ἄντιφος:propn
+Ἄργος:propn
+Ἄρης:propn
+ἐγώ:pron
+ἐπέοικε:verb
+ἐπήν:cconj
+ἐπιμάσσομαι:verb
+ἐπιστενάχω:verb
+ἐρωή:noun
+ἐυμελίης:adj
+ἑκκαιδεκάδωρος:adj
+ἑταίρα:noun
+ἔρδω:verb
+ἕ:pron
+ἕπομαι:verb
+Ἐλεφήνωρ:propn
+Ἐπειός:adj
+Ἐρευθαλίων:propn
+Ἐτεοκλεῖος:adj
+Ἐχέπωλος:propn
+Ἑλένη:propn
+Ἕκτωρ:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἥβη:propn
+Ἥρα:propn
+ἰδέ:cconj
+ἰόμωροι:noun
+ἱερή:noun
+ἱερόν:noun
+ἱππόσυνος:adj
+ἱρός:adj
+Ἰδομενεύς:propn
+Ἰμβρασίδης:propn
+Ἴδη:adv
+ὀπιπτεύω:verb
+Ὄλυμπος:propn
+ὦ:intj
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+20: ,
+28: τοῖό
+29: ·
+50: βοῶπις
+59: ἀγκυλομήτης,
+68: ,
+75: ἀγκυλομήτεω
+90: ·
+198: ,
+201: ·
+212: ,
+230: πολέας
+245: ,
+259: ,
+263: ,
+269: ,
+272: ,
+326: ,
+328: ·
+397: ,
+476: ,
+486: ,
+489: αἰολοθώρηξ
+491: ,
+520: Αἰνόθεν
+542: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

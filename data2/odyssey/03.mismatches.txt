@@ -1,0 +1,205 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἴας:propn
+Αἴγισθος:propn
+Αἴγυπτος:propn
+Γεραιστός:propn
+Γόρτυς:propn
+Διοκλής:propn
+Διομήδης:propn
+Εὐρυδίκη:propn
+Εὔβοια:propn
+Ζεύς:propn
+Θρασυμήδης:propn
+Καύκωνες:propn
+Κλυταιμνήστρη:propn
+Κλύμενος:propn
+Κρήτη:propn
+Κύδωνες:propn
+Λέσβος:propn
+Λαέρκης:propn
+Λακεδαίμων:propn
+Μάλεια:propn
+Μέντωρ:propn
+Μίμας:propn
+Μενέλαος:propn
+Μυρμιδόνες:propn
+Νεστορίδης:propn
+Νηληι:x
+Νηληιάδης:propn
+Πάτροκλος:propn
+Παλλάς:propn
+Πεισίστρατος:propn
+Περσεύς:propn
+Ποιάντιος:propn
+Πολυκάστη:propn
+Ποσειδεών:propn
+Ποσειδῶν:propn
+Πυλόνδε:adv
+Πύλιος:adj
+Πύλιος:propn
+Πύλος:propn
+Σούνιον:propn
+Στρατίος:propn
+Τένεδος:propn
+Τηλέμαχος:propn
+Τροίαθεν:adv
+Τροίανδε:adv
+Τυδείδης:propn
+Τυδεύς:propn
+Φαιστός:propn
+Φηραί:propn
+Φιλοκτήτης:propn
+Φρόντις:propn
+Χίος:propn
+Ψυρίη:propn
+γάρ:part
+δολομήτης:adj
+δολομήτης:noun
+εἰ:cconj
+εἴδομαι:verb
+εἴτε:cconj
+εἶδον:verb
+ζεύς:noun
+ζυγός:noun
+ζώω:verb
+θεόφιν:noun
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κατάρχω:verb
+κατακείω:verb
+κεράω:verb
+κοῦρος:noun
+κτερίζω:verb
+κυανοπρῴρειος:adj
+μέδομαι:verb
+μῆρα:noun
+νέα:noun
+νόσφι:adv
+οἰνοχοέω:verb
+οἶδα:verb
+πελώριος:adj
+πεύθομαι:verb
+ποτιπτύσσω:verb
+πρῶτος:adj
+πτολίεθρον:noun
+πύλος:noun
+τί:adv
+τε:part
+τεός:adj
+τηλέμαχος:noun
+τηλόθεν:adv
+ἀγακλειτός:adj
+ἀγακλυτός:adj
+ἀλύσκω:verb
+ἀμφιέλισσα:noun
+ἀπαυράω:verb
+ἄκοιτις:noun
+ἄν:part
+ἄω:verb
+Ἀίδης:adv
+Ἀγαμεμνόνεος:adj
+Ἀθήνη:propn
+Ἀθῆναι:propn
+Ἀλφειός:propn
+Ἀντίλοχος:propn
+Ἀπόλλων:propn
+Ἀχιλλεύς:propn
+Ἄργος:propn
+Ἄρητος:propn
+ἐγώ:pron
+ἐκεῖθι:adv
+ἐπήν:cconj
+ἐπιβουκόλος:noun
+ἐρύομαι:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐχέφρων:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἰδέ:cconj
+ἱερόν:noun
+Ἰάρδανος:propn
+Ἰδομενεύς:propn
+Ἰθάκη:propn
+ὁπλότατος:adj
+ὅ:pron
+ὅπη:adv
+Ὀλύμπια:propn
+Ὀνητορίδης:propn
+Ὀρέστης:propn
+Ὀρτίλοχος:propn
+ὑπείρ:adp
+ὑποδάμναμαι:verb
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+4: οἱ
+12: ,
+14: ,
+26: ,
+30: ὁ
+34: οἱ
+44: τοῦ
+75: τὸν
+77: ,
+87: ,
+90: ὅ
+97: ἀλλ᾽
+102: τὸν
+103: ,
+106: ,
+108: ·
+121: ,
+153: οἱ
+162: οἱ
+166: ὃ
+166: δὴ
+173: ὅ
+187: οὐδέ
+194: ,
+200: ,
+211: ,
+228: ,
+244: ,
+251: ἀλλά
+263: ·
+278: ,
+284: ,
+299: ·
+305: ἑπτάετες
+305: δ᾽
+305: ἤνασσε
+305: πολυχρύσοιο
+305: Μυκήνης,
+329: ,
+361: ,
+430: ,
+437: ·
+477: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+305: ἑπτάετες δ̓ ἤνασσε πολυχρύσοιο Μυκήνης
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+74: φέροντες;” = πέροντες
+86: πολέμιζον, = πολέμιξον
+131: ἐκέδασσεν = ἐσκέδασσεν
+139: δʼἦλθον = ἦλθον
+149: ἐυδεςδεςἈχαιοὶ = ἐυκνήμιδες
+166: δὴ = ὃδὴ
+187: οὐδέ = κοὐδέ
+187: κεύσω. = δεύσω
+268: εἴρυσθαι = ἔρυσασθαι
+373: ὀφθαλμοῖσι· = ὀφθαλμοῖς
+435: εἰργάζετο· = εἰργάξετο
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+149
+
+Lines whose Scansion does not have six Feet:
+

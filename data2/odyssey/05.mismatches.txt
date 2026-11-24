@@ -1,0 +1,116 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἰασίων:noun
+Αἰγαί:propn
+Βοώτης:propn
+Ζεύς:propn
+Κάδμος:propn
+Καλυψώ:propn
+Λαερτιάδης:propn
+Λακεδαίμων:propn
+Πηλεύς:propn
+Πηνελόπεια:propn
+Πιερία:propn
+Ποσειδεών:propn
+Πύλος:propn
+Σχερία:propn
+Σόλυμοι:propn
+Τηλέμαχος:propn
+Τιθωνός:propn
+αἴρω:verb
+γάρ:part
+εἰ:cconj
+εἰνάλιος:adj
+εἴδομαι:verb
+εἶδον:verb
+εὐκέατος:adj
+ζεύς:noun
+ζώω:verb
+καί:adv
+καί:cconj
+καθέζετο:verb
+καλλίρους:adj
+καλυψώ:noun
+κεῖνος:adj
+κεῖνος:pron
+κλιτύς:noun
+μέμαα:verb
+μίγνυμι:verb
+μετόπισθε:adv
+μᾶλλον:adv
+νηνέμιος:adj
+οἶδα:verb
+παρέξ:adv
+πρηνής:adj
+πυκινός:adj
+πόποι:intj
+πότνα:noun
+σταμίνες:noun
+στειλειόν:noun
+τίπτε:adv
+τανυσίπτερος:adj
+τε:part
+τηλόθεν:adv
+τρεῖς:num
+χαρίες:adj
+ἀελπής:adj
+ἀκουή:noun
+ἀλύσκω:verb
+ἀμβροσίη:noun
+ἀοιδιάω:verb
+ἄν:part
+Ἀθήνη:propn
+ἐγώ:pron
+ἐπήν:cconj
+ἐπαμάω:verb
+ἐπισταμένως:adv
+ἔρδω:verb
+ἔρσα:noun
+ἕ:pron
+ἕπομαι:verb
+Ἑρμῆς:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤπειρόνδε:adv
+Ἰνώ:propn
+ὀ͂νοψ:adj
+ὄψος:noun
+ὑπνάω:verb
+ὑποκλίνομαι:verb
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+2: ,
+39: ,
+43: ,
+108: ·
+126: ᾧ
+150: ,
+166: ,
+216: ,
+225: ,
+241: ,
+312: με
+344: ,
+358: ,
+364: ,
+370: .
+432: ὡς
+451: ,
+482: .
+486: πολύτλας
+492: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+245: ἴθυνε. = ἴθυνεν
+247: ἀλλήλοισι, = ἀλλήλοισιν
+271: ἔπιπτε = ἔπιπτεν
+321: ῥʼἐβάρυνε, = ῥ̓ ἐβάρυνε
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

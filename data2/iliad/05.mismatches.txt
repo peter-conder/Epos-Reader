@@ -1,0 +1,281 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἀθήνη:noun
+̓ἀλέξανδρος:noun
+Αἰγιάλεια:propn
+Αἰνείας:propn
+Αἰτωλός:propn
+Αἰτώλιος:adj
+Αἴας:propn
+Βῶρος:propn
+Γανυμήδης:propn
+Δάρης:propn
+Δαρδάνιος:adj
+Δαρδανίδης:propn
+Δηίκοων:propn
+Δηιπύλος:propn
+Διοκλῆς:propn
+Διομήδης:propn
+Διώνη:propn
+Δολοπίων:propn
+Εὐαίμων:propn
+Εὐαιμονίδης:propn
+Εὐρυδάμας:propn
+Εὐρύπυλος:propn
+Ζεύς:propn
+Θεανώ:propn
+Θρᾷξ:propn
+Θόων:propn
+Θῆβαι:propn
+Καδμεῖος:propn
+Καπανεύς:adj
+Καπανεύς:propn
+Καπανηιάδης:propn
+Κηφισίς:propn
+Κοίρανος:propn
+Κρήθων:propn
+Κρόνος:propn
+Κύπρις:propn
+Λαομέδων:propn
+Λητώ:propn
+Λυκάων:propn
+Λυκία:propn
+Λυκίηθεν:adv
+Λύκιοι:propn
+Μέγης:propn
+Μενέλαος:propn
+Μενέσθης:propn
+Μηριόνης:propn
+Μύδων:propn
+Μῄων:propn
+Νοήμων:propn
+Ξάνθος:propn
+Οἰνείδης:propn
+Οἰνοπίδης:propn
+Οἰνόμαος:propn
+Πάνδαρος:propn
+Πέργαμος:propn
+Πήδαιος:propn
+Παιάν:propn
+Παιήων:propn
+Παισός:propn
+Παλλάς:propn
+Παφλαγών:propn
+Πελάγων:propn
+Περίφας:propn
+Περγασίδης:propn
+Πολύειδος:propn
+Πριαμίδης:propn
+Πρύτανις:propn
+Πυλαιμένης:propn
+Πύλιος:propn
+Πύλος:propn
+Σέλαγος:propn
+Σαρπηδών:propn
+Σθένελος:propn
+Σιμόεις:propn
+Σκάμανδρος:propn
+Σκαμάνδριος:propn
+Στέντωρ:propn
+Στρόφιος:propn
+Τάρνη:propn
+Τελαμώνιος:adj
+Τεύθρας:propn
+Τληπόλεμος:propn
+Τρῆχος:propn
+Τυδεΐδης:propn
+Τυδείδης:propn
+Τυδεύς:propn
+Φέρεκλος:propn
+Φαίνοψ:propn
+Φαῖστος:propn
+Φηγεύς:propn
+Φηραί:propn
+Φυλείδης:propn
+Χάρις:propn
+Χρομίος:propn
+αἰνείας:noun
+αἴρω:verb
+αἶσις:noun
+βοείη:noun
+βρεχμός:noun
+γάρ:part
+δάμνημι:verb
+διαπρό:adp
+διασκίδνημι:verb
+εἰ:cconj
+εἴδομαι:verb
+εἶδον:verb
+ζεύς:noun
+ζυγός:noun
+ζώς:adj
+ζώω:verb
+θηρατήρ:noun
+θοῦρις:adj
+θυμαλέων:adj
+κάλη:adj
+καί:adv
+καί:cconj
+καίνυμαι:verb
+καταπτώσσω:verb
+καταχεύω:verb
+κερτόμιος:adj
+κεῖνος:adj
+κοῦρος:noun
+κτέαρ:noun
+μάλιστα:adv
+μέδομαι:verb
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μᾶλλον:adv
+νεοτευχής:adj
+νόσφι:adp
+νόσφι:adv
+οἶδα:verb
+οὐτάζω:verb
+πέπων:adj
+παππάζω:verb
+πατρώιος:adj
+πελειάς:noun
+πελώριος:adj
+περιτρέφομαι:verb
+πρηνής:adj
+πρόσθεϝ:adp
+πρῶτος:adj
+πόποι:intj
+πύκα:adv
+σθένελος:noun
+σμερδνός:adj
+τέος:adj
+τε:part
+τετραφάληρος:adj
+τεός:adj
+τηλόθεν:adv
+τριγλώχις:adj
+τυδείδης:noun
+χαλκοῦς:noun
+χαρίζομαι:verb
+χειμάρρους:adj
+χρυσάμπυξ:adj
+ἀμβροσίη:noun
+ἀμφίφαλος:adj
+ἀμφιβασις:noun
+ἀντίον:noun
+ἀπόρνυμι:verb
+ἀραιός:adj
+ἄδυτον:noun
+ἄλθομαι:verb
+ἄμαθος:noun
+ἄν:part
+ἄω:verb
+Ἀίδης:propn
+Ἀγχίαλος:propn
+Ἀγχίσης:propn
+Ἀδρηστίνη:propn
+Ἀθήνη:propn
+Ἀκάμας:propn
+Ἀλάστωρ:propn
+Ἀλίζωνος:propn
+Ἀλαλκομενηίς:propn
+Ἀλφειός:propn
+Ἀλωεύς:propn
+Ἀμφιτρύων:propn
+Ἀντήνωρ:propn
+Ἀντίλοχος:propn
+Ἀπόλλων:propn
+Ἀστύνοος:propn
+Ἀτυμνιάδης:propn
+Ἀχιλλεύς:propn
+Ἄβας:propn
+Ἄιδης:propn
+Ἄιδος:propn
+Ἄλκανδρος:propn
+Ἄμφιος:propn
+Ἄρης:propn
+Ἅλιος:propn
+ἐγώ:pron
+ἐκνοστέω:verb
+ἐντύω:verb
+ἐξαποδίω:verb
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐφιάλτης:propn
+Ἐχέμμων:propn
+Ἑκάεργος:adj
+Ἑρμῆς:propn
+Ἕκτωρ:propn
+Ἕλενος:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἡνιοχεύς:noun
+ἤτοι:part
+Ἠερίβοια:propn
+Ἡρακλέης:propn
+Ἥβη:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἰδέ:cconj
+ἱρός:adj
+Ἰδαῖος:adj
+Ἰδαῖος:propn
+Ἰδομενεύς:propn
+Ἶρις:propn
+ὀδυνήφατος:adj
+ὀδών:noun
+ὀξυόεις:adj
+ὀπίσσω:adv
+ὀπαδέω:verb
+ὀπός:noun
+ὁμοκλέω:verb
+ὁσσάτιος:adj
+Ὀδίος:propn
+Ὀρέσβιος:propn
+Ὀρέστης:propn
+Ὀρσίλοχος:propn
+Ὀρτίλοχος:propn
+Ὀχήσιος:propn
+Ὄλυμπος:propn
+ὕστατος:adj
+Ὑπείρων:propn
+Ὑψήνωρ:propn
+Ὕλη:propn
+ὦ:intj
+Ὦτος:propn
+ᾍδης:noun
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+33: ,
+147: ,
+148: ,
+157: ,
+182: αὐλώπιδί
+252: ,
+277: δαΐφρον
+304: ·
+341: ,
+352: ,
+402: ·
+621: ·
+702: ,
+705: ,
+719: ,
+731: ·
+767: ,
+836: ,
+901: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+612: ἱόν, = υἱόν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

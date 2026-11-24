@@ -1,0 +1,140 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἴολος:propn
+Εὐρυνόμη:propn
+Εὐρύκλεια:propn
+Ζεύς:propn
+Θηβαῖος:adj
+Κίκονες:propn
+Κίρκη:propn
+Καλυψώ:propn
+Κύκλωψ:propn
+Λάμπος:propn
+Λαιστρυγονίη:adj
+Παλλάς:propn
+Πηνελόπεια:propn
+Πλαγκταί:propn
+Ποσειδεών:propn
+Σειρήν:propn
+Σκύλλα:propn
+Τειρεσίης:propn
+Τηλέμαχος:propn
+Τηλέπυλος:propn
+Φαέθων:propn
+αἰειγενέτης:noun
+αἶα:noun
+γάρ:part
+γλυκερός:adj
+δῆνος:noun
+εἰ:cconj
+εἰ:intj
+εἰσείδω:verb
+εἶδον:verb
+θεειόω:verb
+κίω:verb
+καί:adv
+καί:cconj
+κεῖνος:pron
+λωβεύω:verb
+μάλιστα:adv
+μίγνυμι:verb
+μᾶλλον:adv
+νοσφίζομαι:verb
+οἶδα:verb
+παρέξ:adv
+περιδίδομαι:verb
+πολυμνήστη:adj
+πρῶτος:adj
+πυκινός:adj
+πυκινός:adv
+σαοφροσύνη:noun
+στορέννυμι:verb
+τίπτε:adv
+τίπτε:pron
+τε:part
+τεός:adj
+ἀγήρωρ:adj
+ἀθερίζω:verb
+ἀνέρομαι:verb
+ἀντίον:noun
+ἀράω:verb
+ἀτύζω:verb
+ἄν:part
+Ἀίδης:propn
+Ἀθήνη:propn
+Ἀκτορίς:propn
+ἐγκατατίθεμαι:verb
+ἐγώ:pron
+ἐλπωρή:noun
+ἐμπίπλημι:verb
+ἐναντίον:adv
+ἐντύω:verb
+ἐξαπαφίσκω:verb
+ἐπισταμένως:adv
+ἑξείης:adv
+ἑρμίς:noun
+ἔρδω:verb
+ἔσω:adp
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἑλένη:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤπειρόνδε:adv
+Ἥφαιστος:propn
+ἰδέ:cconj
+ἱερόν:noun
+Ἰθάκη:propn
+ὑπερικταίνομαι:verb
+ὦ:intj
+Ὠγυγία:propn
+ᾍδης:noun
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+27: ὡς
+32: ,
+36: ὡς
+46: ·
+48: [αἵματι
+48: καὶ
+48: λύθρῳ
+48: πεπαλαγμένον
+48: ὥς
+48: τε
+48: λέοντα.]
+86: ,
+110: ,
+113: ,
+127: ,
+141: ,
+174: ,
+233: ὡς
+246: ,
+308: ·
+308: ,
+310: ,
+314: ,
+315: ,
+352: .
+358: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+96: ὀνόμαζε· = ὀνόμαξε
+127: δʼἐμμεμαῶτες = δ̓ ἐμμεμαῶτες
+128: πάρεστι.” = πάρεστιν
+174: οὔτʼ = οὔ τ̓
+276: μʼἐν = μ̓ ἐν
+283: γήρα᾽ = γήρας
+311: ἦλθʼ = ἦλθ̓
+319: ἐυδαςἑταίρους = ἐϋκνήμιδας
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+319
+
+Lines whose Scansion does not have six Feet:
+

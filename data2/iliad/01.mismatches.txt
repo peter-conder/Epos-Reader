@@ -1,0 +1,174 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+ʽἑκάεργος:adj
+̓ἀπόλλων:noun
+Αἰγαίων:propn
+Αἰγείδην:propn
+Αἴας:propn
+Βρισεύς:propn
+Βρισηίς:propn
+Δρύας:propn
+Εὐρυβάτης:propn
+Ζεύς:propn
+Θέτις:propn
+Θήβη:propn
+Θεστορίδης:propn
+Θησεύς:propn
+Κάλχας:propn
+Κίλλα:propn
+Καινεύς:propn
+Κλυταιμνήστρη:propn
+Λητώ:propn
+Λῆμνος:propn
+Μενέλαος:propn
+Μενοιτιάδης:propn
+Μοῦσα:propn
+Μυρμιδόνες:propn
+Πάτροκλος:propn
+Παλλάς:propn
+Πειρίθοος:propn
+Πηλείδης:propn
+Πηλείων:propn
+Πηλεύς:propn
+Πηληιάδης:propn
+Πολύφημος:propn
+Ποσειδεών:propn
+Πύλιος:propn
+Πύλος:propn
+Σίντιες:propn
+Τένεδος:propn
+Ταλθύβιος:propn
+Χρυσηίς:propn
+Χρύση:propn
+Χρύσης:propn
+αἶσις:noun
+βιός:noun
+γάρ:part
+δαίτης:noun
+διείρομαι:verb
+δολομήτης:noun
+εἰ:cconj
+εἰ:intj
+εἴδομαι:verb
+εἴθε:intj
+εἴτε:adv
+εἶδον:verb
+ζάω:verb
+θεοπρόπιον:noun
+κίω:verb
+καί:adv
+καί:cconj
+καθέζετο:verb
+κατακείω:verb
+κερτόμιος:adj
+κεῖνος:adj
+μά:part
+μάκαρος:adj
+μάλιστα:adv
+μάρτυρος:noun
+μέμαα:verb
+μετατρέπομαι:verb
+μεταφράζω:verb
+μετόπισθε:adv
+μᾶλλον:adv
+μῆρα:noun
+νόσφι:adp
+νόσφι:adv
+οἰνοχοέω:verb
+οἶδα:verb
+πάτρη:noun
+πολυ:x
+πρῶτος:adj
+πτολίεθρον:noun
+πυρή:noun
+πόποι:intj
+σοί:pron
+τίπτε:pron
+τε:part
+τεός:adj
+τηλόθεν:adv
+τομή:noun
+ἀθερίζω:verb
+ἀμφιγύεις:adj
+ἀντίον:noun
+ἀπαυράω:verb
+ἀπρίατος:adj
+ἀργυρόπεζος:adj
+ἀρνός:noun
+ἄν:part
+ἄπιος:adj
+Ἀθήνη:propn
+Ἀπόλλων:propn
+Ἀχιλλεύς:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐναντίον:adp
+ἐπέοικε:verb
+ἐπιρρώομαι:verb
+ἑκατηβελέτης:noun
+ἑλικῶπις:adj
+ἑλώριον:noun
+ἔρδω:verb
+ἕ:pron
+ἕκατος:noun
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐξάδιος:propn
+Ἑκάεργος:adj
+Ἕκτωρ:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:adv
+ἠδέ:cconj
+ἤτοι:part
+Ἠετίων:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἱερόν:noun
+ἱλάομαι:verb
+Ἰδομενεύς:propn
+ὀρέγνυμι:verb
+Ὄλυμπος:propn
+ὕστατος:adj
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+3: Ἄϊδι
+33: ,
+37: ,
+52: ·
+85: ᾽
+104: ,
+149: ᾽
+155: Φθίῃ
+156: ,
+166: ·
+169: Φθίην
+188: ,
+199: ,
+216: ᾽
+251: ,
+259: ·
+296: ·
+335: ·
+403: Βριάρεων
+404: ,
+451: ,
+468: ,
+506: ·
+515: ,
+518: ᾽
+567: ,
+586: ᾽
+602: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+277: θελ᾽ = ἔθελ̓
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

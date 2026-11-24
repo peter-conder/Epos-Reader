@@ -1,0 +1,160 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+̓ἰδομενεύς:noun
+Αἴας:propn
+Αἵδης:propn
+Γλαῦκος:propn
+Δάρδανος:propn
+Δαναός:propn
+Δαρδανίδης:propn
+Δαρδανίων:propn
+Δεξιάδης:propn
+Διομήδης:propn
+Εὐαίμων:propn
+Εὐρύπυλος:propn
+Εὔνηος:propn
+Ζεύς:propn
+Θόας:propn
+Κελάδων:propn
+Λαομέδων:propn
+Λυκοῦργος:propn
+Λύκιοι:propn
+Λῆμνος:propn
+Μενέλαος:propn
+Μενέσθιος:propn
+Μηριόνης:propn
+Μυρμιδόνες:propn
+Πέργαμον:propn
+Πηλεύς:propn
+Ποσειδεών:propn
+Πριαμίδης:propn
+Πύλιος:propn
+Σαλαμίς:propn
+Σκάμανδρος:propn
+Ταλθύβιος:propn
+Τελαμών:adj
+Τροίανδε:adv
+Τρῳάς:propn
+Τυδείδης:propn
+Τυδεύς:propn
+Τυχίος:propn
+Φειά:propn
+Φυλομέδουσα:propn
+αἰειγενέτης:adj
+αἴας:noun
+αἴρω:verb
+γάρ:part
+διαπρό:adp
+δόρπος:noun
+εἰ:cconj
+εἴθε:intj
+εἶδον:verb
+εὐφρονέων:adj
+θεόφιν:noun
+θοῦρις:adj
+κίω:verb
+καί:adv
+καί:cconj
+καταχεύω:verb
+κεῖνος:adj
+κραδάω:verb
+μάλιστα:adv
+μέμαα:verb
+μέτειμι:verb
+μειδιάω:verb
+νέρθε:adv
+νεώτατος:adj
+οἰνίζομαι:verb
+οἶδα:verb
+οὐτάζω:verb
+πελώριος:adj
+πρῶτος:adj
+πυκινός:adj
+πυρή:noun
+πόποι:intj
+σταδίη:noun
+τίπτε:pron
+τε:part
+φυλακή:noun
+χαλκοῦς:noun
+ἄν:part
+Ἀθήνη:propn
+Ἀλέξανδρος:propn
+Ἀνδραιμονίδης:propn
+Ἀντήνωρ:propn
+Ἀπόλλων:propn
+Ἀρηί:x
+Ἀρκάς:propn
+Ἀχιλλεύς:propn
+Ἄργος:propn
+Ἄρης:propn
+Ἄρνη:propn
+ἐγώ:pron
+ἐπαείρω:verb
+ἐπισταμένως:adv
+ἐύρρους:adj
+ἕ:pron
+ἕκατος:noun
+ἕκτωρ:noun
+ἕνεκα:adp
+Ἐρευθαλίων:propn
+Ἑκάεργος:adj
+Ἑλένη:propn
+Ἑλλήσποντος:propn
+Ἕκτωρ:propn
+Ἕλενος:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἤτοι:part
+Ἠϊονῆς:propn
+Ἥρα:propn
+ἱππηλάσιος:adj
+ἱρός:adj
+Ἰάρδανος:propn
+Ἰήσων:propn
+Ἰδαῖε:propn
+Ἰδαῖος:propn
+Ἰδομενεύς:propn
+Ἰησονίδης:propn
+Ἰφίνοος:propn
+Ἱππόλοχος:propn
+Ἴδη:adv
+ὀξυόεις:adj
+ὀπιπτεύω:verb
+Ὄλυμπος:propn
+ὑποκρίνομαι:verb
+ὑποσχέθω:verb
+ὕστερον:noun
+Ὑψιπύλη:propn
+Ὕλη:propn
+ὦ:intj
+ᾗ:adv
+
+Words the treebank does not analyse (Line: word):
+10: βοῶπις·
+43: ,
+54: ,
+92: ,
+175: ,
+188: ,
+200: ,
+271: ·
+277: σχέθον,
+307: ,
+320: ,
+344: ,
+379: ,
+390: ·
+398: ,
+403: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

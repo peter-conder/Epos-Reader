@@ -65,6 +65,7 @@ export const WORKS = {
     language: 'Classical Latin',
     shortLanguage: 'Latin',
     formLabel: 'Classical Latin Form',
+    lexicon: 'latin',   // data2/lexicon/<name>.json
     bookCount: 12,
     lines: [
       'Arma virumque cano, Troiae qui primus ab oris',
@@ -111,6 +112,7 @@ export const WORKS = {
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
     formLabel: 'Homeric Greek Form',
+    lexicon: 'greek',
     bookCount: 24,
     lines: [
       'Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος',
@@ -157,6 +159,7 @@ export const WORKS = {
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
     formLabel: 'Homeric Greek Form',
+    lexicon: 'greek',
     bookCount: 24,
     lines: [
       'Ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ',

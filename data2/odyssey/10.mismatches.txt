@@ -1,0 +1,155 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰήτης:propn
+Αἰαία:propn
+Αἰολίη:propn
+Αἴολος:propn
+Γίγας:propn
+Εὐρύλοχος:propn
+Θηβαῖος:adj
+Κίρκη:propn
+Κύκλωψ:propn
+Λάμος:propn
+Λαερτιάδης:propn
+Λαιστρυγονία:propn
+Λαιστρυγών:propn
+Π́ερση:propn
+Περσεφόνεια:propn
+Πολίτης:propn
+Πράμνειος:propn
+Τειρεσίης:propn
+Τηλέπυλος:propn
+αἶα:noun
+βεβόλημαι:verb
+βρώμη:noun
+γάρ:part
+γουνόομαι:verb
+δεκάτη:noun
+δώδεκα:num
+δῆνος:noun
+εἰ:cconj
+εἴδομαι:verb
+εἶδον:verb
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+κατακείω:verb
+κοναβίζω:verb
+κρέα:noun
+λάχεια:adj
+μέσαυλος:noun
+μέτειμι:verb
+μίγνυμι:verb
+μείλιγμα:noun
+μελίκρητον:noun
+νεανίης:noun
+νόσφι:adp
+οἶδα:verb
+περιμήκης:adj
+περιστεναχίζω:verb
+πεύθομαι:verb
+πημί:verb
+πλωτός:adj
+πρῶτος:adj
+πτολίεθρον:noun
+πυγούσιος:adj
+πυρή:noun
+πόποι:intj
+πόρις:noun
+τίπτε:pron
+τε:part
+τεός:adj
+χαρίες:adj
+χαρίζομαι:verb
+χρυσόραπις:adj
+ἀλύσκω:verb
+ἀμφιέλισσα:noun
+ἀναμίγνυμι:verb
+ἀοιδιάω:verb
+ἀπέχθομαι:verb
+ἀραιός:adj
+ἄκοιτις:noun
+ἄν:part
+ἄργυφος:adj
+ἆ:intj
+Ἀίδης:propn
+Ἀι:x
+Ἀντιφάτης:propn
+Ἀρτακίη:propn
+ἐγώ:pron
+ἐμπίπλημι:verb
+ἐπήν:cconj
+ἐπαινός:adj
+ἔργνυμι:verb
+ἔρδω:verb
+ἕ:pron
+ἕπομαι:verb
+Ἐλπήνωρ:propn
+Ἑρμῆς:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤπειρόνδε:adv
+ἱερή:noun
+ἱερόν:noun
+Ἰθάκη:propn
+Ἱπποτάδης:propn
+ὀρέστερος:adj
+ὅπη:adv
+Ὄλυμπος:propn
+ὑποδύομαι:verb
+ὦ:intj
+ᾍδης:noun
+
+Words the treebank does not analyse (Line: word):
+1: ·
+44: ὅττι
+63: ·
+75: ,
+121: ῥ᾽
+135: ·
+166: ·
+176: ,
+217: ,
+236: ,
+243: χαμαιευνάδες
+261: ,
+270: ,
+271: ,
+281: ,
+321: ,
+336: ,
+353: ,
+382: ,
+406: ,
+413: ,
+435: ,
+438: ,
+448: ·
+456: “[Διογενὲς
+456: Λαερτιάδη,
+456: πολυμήχαν᾽
+456: Ὀδυσσεῦ,]
+466: ,
+472: ,
+496: ,
+516: ,
+525: ,
+541: ,
+563: ·
+
+Treebank words with no match in the Scansion text (cited Line: words):
+75: ἄρα
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+75: ἔρρ᾽ = ἔρρε
+75: ἀθανάτοισιν = θεοῖσιν
+242: ῥʼἄκυλον = ῥ̓ ἄκυλον
+251: “ᾔομεν, = ἤιομεν
+316: δέπᾳ, = δέπαι
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

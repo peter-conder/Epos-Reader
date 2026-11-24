@@ -1,0 +1,144 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αὐτονόη:propn
+Δολίος:propn
+Δουλίχιον:adj
+Δουλιχίης:propn
+Εὐπείθης:propn
+Εὐρυδάμας:propn
+Εὐρυνόμη:propn
+Εὐρύμαχος:propn
+Ζεύς:propn
+Κυθέρεια:propn
+Λαερτιάδης:propn
+Μελανθώ:propn
+Μούλιος:propn
+Νῖσος:propn
+Πείσανδρος:propn
+Πηνελόπεια:propn
+Πολυκτορίδης:propn
+Πόλυβος:propn
+Τηλέμαχος:propn
+Χάρις:propn
+αἴθε:cconj
+αἶα:noun
+γάρ:part
+δαί̓ς:noun
+δμῶος:noun
+εἰ:cconj
+εἰ:intj
+εἰσαναβαίνω:verb
+εἴθε:intj
+εἶδον:verb
+θάομαι:verb
+κίω:verb
+καί:adv
+καί:cconj
+κατακείω:verb
+κεῖνος:adj
+κραδίας:noun
+λέσχη:noun
+μάλιστα:adv
+μίγνυμι:verb
+μεταμίγνυμι:verb
+μολοβρός:noun
+μᾶλλον:adv
+οἶδα:verb
+πρῶτος:adj
+πόποι:intj
+πύκα:adv
+ταρβοσύνη:noun
+τε:part
+τερπωλή:noun
+τεός:adj
+τηλέμαχος:noun
+τρεῖς:num
+χαλκοῦς:noun
+χορός:noun
+ἀγήρωρ:adj
+ἀγακλειτός:adj
+ἀεκαζόμενος:adj
+ἀνέζομαι:verb
+ἀντίον:noun
+ἀπαυράω:verb
+ἀράω:verb
+ἄκοιτις:noun
+ἄν:part
+ἆ:intj
+ἆρα:part
+Ἀθήνη:propn
+Ἀμφίνομος:propn
+Ἀντίνοος:propn
+Ἀπόλλων:propn
+Ἀρητιάδης:propn
+Ἀρναῖος:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐμπίπλημι:verb
+ἐπήν:cconj
+ἐπιτροχάδη:adv
+ἔρδω:verb
+ἕ:pron
+ἕπομαι:verb
+Ἔχετος:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἤπειρόνδε:adv
+ἰδέ:cconj
+Ἰθάκη:propn
+Ἰκάριος:adj
+Ἰκάριος:propn
+Ἱπποδάμεια:propn
+Ἴασος:adj
+Ἶρος:propn
+ὀδών:noun
+ὅπη:adv
+Ὀδύσσειος:adj
+Ὄλυμπος:propn
+ὤλξ:noun
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+14: πολύμητις
+15: ,
+40: ,
+48: δ᾽
+49: πτωχὸν
+49: ἔσω
+58: ,
+61: ,
+63: ,
+66: ,
+113: ὅττι
+125: ,
+212: ,
+215: ,
+242: ,
+248: ,
+251: ,
+287: .
+293: ἄρ᾽
+314: ,
+320: ,
+357: ,
+366: ,
+387: ,
+389: ,
+403: δαιτὸς
+410: ,
+418: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+60: δʼαὖτις = δ̓ αὖτις
+259: ἐυδαςἈχαιοὺς = ἐϋκνήμιδας
+381: ὑβρίζεις, = ὑβρίξεις
+387: δʼἐχολώσατο = δ̓ ἐχολώσατο
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+259
+
+Lines whose Scansion does not have six Feet:
+

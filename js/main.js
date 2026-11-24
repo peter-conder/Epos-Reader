@@ -24,7 +24,7 @@ import { initEnglish } from './english.js';
 
 /* Epos Reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
-loadLexicon();   // start the big dictionary download now rather than when the first book opens
+loadLexicon('latin');   // start the big Lexicon download now rather than when the first book opens (Greek loads with its first Book)
 initViewport();   // layout tier first: later modules may ask which one they're in
 initLayout();
 initFit();

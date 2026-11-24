@@ -1,0 +1,138 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Δαμαστορίδης:propn
+Δημοπτόλεμος:propn
+Δόλιος:propn
+Εὐηνορίδης:propn
+Εὐρυάδης:propn
+Εὐρυδάμας:propn
+Εὐρύκλεια:propn
+Εὐρύμαχος:propn
+Εὐρύνομος:propn
+Εὔμαιος:propn
+Ζεύς:propn
+Κτήσιππος:propn
+Λαέρτης:propn
+Λαερτιάδης:propn
+Λειώδης:propn
+Λειώκριτος:propn
+Μέδων:propn
+Μέντωρ:propn
+Μελάνθιος:propn
+Μελανθεύς:propn
+Πείσανδρος:propn
+Πηνελόπεια:propn
+Πολυθερσείδης:propn
+Πολυκτορίδης:propn
+Πόλυβος:propn
+Τερπιάδης:propn
+Τηλέμαχος:propn
+Φήμιος:propn
+Φιλοίτιος:propn
+αἴρω:verb
+βιός:noun
+βοείη:noun
+γάρ:part
+γουνόομαι:verb
+διαπρό:adv
+δώδεκα:num
+εἰ:cconj
+εἰ:intj
+εἰσαφικάνω:verb
+εἴδομαι:verb
+εἶδον:verb
+ζάω:verb
+ζώω:verb
+θέειον:noun
+θεειόω:verb
+κάλη:adj
+κίω:verb
+καί:adv
+καί:cconj
+κεῖνος:adj
+κλαυθμός:noun
+μέμαα:verb
+μίγνυμι:verb
+μεταμίγνυμι:verb
+μετόπισθε:adv
+μᾶλλον:adv
+οἶδα:verb
+πέπων:adj
+πατρώιος:adj
+πολυωπός:adj
+πρηνής:adj
+πρῶτος:adj
+πύκα:adv
+τανυσίπτερος:adj
+τε:part
+χράομαι:verb
+ἀγκυλχείλης:adj
+ἀλύσκω:verb
+ἄν:part
+Ἀγέλαος:propn
+Ἀγέλεως:propn
+Ἀθήνη:propn
+Ἀλκιμίδης:propn
+Ἀμφίνομος:propn
+Ἀμφιμέδων:propn
+Ἀντίνοος:propn
+Ἀπόλλων:propn
+ἐγώ:pron
+ἐναντίον:adv
+ἐπήν:cconj
+ἐπιβουκόλος:noun
+ἑξείης:adv
+ἔραζε:adv
+ἔρδω:verb
+ἕ:pron
+ἕπομαι:verb
+Ἑλένη:propn
+Ἔλατος:propn
+ἠέ:cconj
+ἠέλιος:noun
+ἠδέ:cconj
+ἰδέ:cconj
+ἴσκε:verb
+Ἰθάκη:propn
+Ἰθακήσιος:adj
+ὁμοκλέω:verb
+ὅπη:adv
+ὑφορβός:noun
+ὤκιστα:adv
+ὥστε:adv
+ὦ:intj
+
+Words the treebank does not analyse (Line: word):
+22: ,
+61: ,
+109: ,
+136: ,
+139: ,
+151: ,
+178: ,
+191: πολύτλας
+210: ,
+224: ,
+252: ,
+255: ,
+265: ,
+304: ταὶ
+349: μή
+367: ,
+391: ,
+446: ,
+492: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+42: εἷλε· = εἷλεν
+146: ἔδωκε. = ἔδωκεν
+261: δʼἄρα = δ̓ ἄρα
+499: ἀγαπαζόμεναι = ἀγαπαξόμεναι
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

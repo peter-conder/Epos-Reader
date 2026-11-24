@@ -1,0 +1,195 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἴας:propn
+Αἴγισθος:propn
+Αὐτόλυκος:propn
+Δολίος:propn
+Δόλιος:propn
+Εὐπείθης:propn
+Ζεύς:propn
+Θέτις:propn
+Κεφαλλήν:propn
+Κυλλήνη:adj
+Λαέρτης:propn
+Λαερτιάδης:propn
+Λευκάς:propn
+Μέδων:propn
+Μέντωρ:propn
+Μαστορίδης:propn
+Μελανεύς:propn
+Μενέλαος:propn
+Μενοιτιάδης:propn
+Μοῦσα:propn
+Νήρικος:propn
+Πάτροκλος:propn
+Παλλάς:propn
+Παρνασός:propn
+Πηλείδης:propn
+Πηλείων:propn
+Πηλεύς:propn
+Πηληιάδης:propn
+Πηνελόπεια:propn
+Πολυπημονίδης:propn
+Ποσειδεών:propn
+Πύλος:propn
+Σικανία:propn
+Τηλέμαχος:propn
+Τυνδάρεος:propn
+αἴρω:verb
+αἶα:noun
+βιός:noun
+γάρ:part
+γλυκερός:adj
+δεῖπνος:noun
+διαπρό:adp
+διείρομαι:verb
+δώδεκα:num
+εἰ:cconj
+εἰ:intj
+εἴδομαι:verb
+εἶδον:verb
+εὐφρονέων:adj
+ζώω:verb
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κεράω:verb
+κερτόμιος:adj
+κεῖνος:adj
+κεῖσε:adv
+κλαυθμός:noun
+κοῦρος:noun
+κυνέα:noun
+λιστρεύω:verb
+μάλιστα:adv
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μετόπισθε:adv
+νόσφι:adp
+οἶδα:verb
+οὔλω:verb
+πάτρη:noun
+περιφύομαι:verb
+πρῶτος:adj
+πτολίεθρον:noun
+πυρή:noun
+σιτέομαι:verb
+τε:part
+τεός:adj
+χαλκοπάρῃος:adj
+χαρίζομαι:verb
+ἀγακλυτός:adj
+ἀγχίμολον:adp
+ἀγχίμολον:adv
+ἀναγκαῖος:adj
+ἀντίον:adv
+ἀντίον:noun
+ἄκοιτις:noun
+ἄν:cconj
+ἄν:part
+Ἀθήνη:propn
+Ἀλύβας:x
+Ἀμφιμέδων:propn
+Ἀντίλοχος:propn
+Ἀντίνοος:propn
+Ἀπόλλων:propn
+Ἀρκεισιάδης:propn
+Ἀφείδας:propn
+Ἀχιλλεύς:propn
+Ἁλιθέρσης:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐπέοικε:verb
+ἐπεντύνω:verb
+ἐσείδω:verb
+ἔμπεδα:adv
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐπήριτος:propn
+Ἐπειός:adj
+Ἑλλήσποντος:propn
+Ἑρμῆς:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἥφαιστος:propn
+Ἦλις:propn
+Ἰθάκη:propn
+Ἰθακήσιος:adj
+Ἰκάριος:propn
+ὀδών:noun
+ὀπίσσω:adv
+ὁμοκλέω:verb
+Ὄλυμπος:propn
+Ὄσσα:propn
+ὑπνάω:verb
+ὑψιπετήεις:adj
+ὦ:intj
+ᾍδης:noun
+ῥύομαι:verb
+
+Words the treebank does not analyse (Line: word):
+21: ,
+41: ·
+54: ,
+57: ,
+72: ,
+138: ,
+146: ,
+148: ,
+160: ,
+186: ,
+225: ,
+230: ·
+232: πολύτλας
+236: ,
+253: βασιλῆι
+259: ,
+273: ξεινήια,
+281: ,
+289: ,
+292: ·
+341: ·
+360: ,
+366: ἀμφίπολος
+373: αἰειγενετάων
+383: οἱ
+400: ,
+405: ,
+408: ,
+435: .
+456: ,
+463: ,
+466: ·
+492: ·
+495: ·
+496: ,
+506: ,
+530: δ᾽
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+18: Πηλείωνα. = Πηλεΐδαο
+24: σʼἔφαμεν = σ̓ ἔφαμεν
+39: δʼἐν = δ̓ ἐν
+65: σʼἀμφὶ = σ̓ ἀμφὶ
+126: οὔτʼ = οὔ τ̓
+284: γʼἐκίχεις = γ̓ ἐκίχεις
+299: δαὶ = δὲ
+401: σʼἀνήγαγον = σ̓ ἀνήγαγον
+426: ὅδʼ = ὅδ̓
+444: τάδʼ = τάδ̓
+490: δʼἄρα = δ̓ ἄρα
+493: εἴσιδε = ἔσιδε
+497: Ὀδυσῆʼ, = Ὀδυσῆ̓
+501: ἦρχε = ἄρχε
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

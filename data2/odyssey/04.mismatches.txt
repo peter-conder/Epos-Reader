@@ -1,0 +1,225 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἰγύπτιος:adj
+Αἴας:propn
+Αἴγισθος:propn
+Αἴγυπτος:propn
+Αἴγυπτόνδε:adv
+Βοηθοΐδης:propn
+Γυραί:adj
+Γυραί:propn
+Δηί:x
+Δολίος:propn
+Εἰδοθέη:propn
+Εὐπείθης:propn
+Εὐρύκλεια:propn
+Εὐρύμαχος:propn
+Εὔμηλος:propn
+Ζεύς:propn
+Θυέστης:propn
+Θυεστιάδης:propn
+Θῆβαι:propn
+Θῶν:propn
+Καλυψώ:propn
+Κύπρος:propn
+Λέσβος:propn
+Λαέρτης:propn
+Λακεδαίμων:propn
+Λιβύη:propn
+Μάλεια:propn
+Μέδων:propn
+Μέντωρ:propn
+Μεγαπένθης:propn
+Μενέλαος:propn
+Μυρμιδόνες:propn
+Νεστορίδης:propn
+Νοήμων:propn
+Παιήων:propn
+Παλλάς:propn
+Πεισίστρατος:propn
+Πηνελόπεια:propn
+Πολύδαμνα:propn
+Ποσειδεών:propn
+Πρωτεύς:propn
+Πυλόνδε:adv
+Πόλυβος:propn
+Πύλος:propn
+Σάμος:propn
+Σιδόνιος:adj
+Σπάρτηθεν:adv
+Τηλέμαχος:propn
+Τροίαθεν:adv
+Τυδει:x
+Φάρος:propn
+Φεραί:propn
+Φιλομηλεΐδης:propn
+Φρόνιος:propn
+Φυλώ:propn
+αἴρω:verb
+αἶα:noun
+γάρ:part
+γλυκερός:adj
+γουνόομαι:verb
+διείρομαι:verb
+δοιώ:adj
+δολομήτης:noun
+δούλη:noun
+δώδεκα:num
+εἰ:cconj
+εἰ:intj
+εἰνάλιος:adj
+εἶδον:verb
+ζώω:verb
+θάω:verb
+θοῦρις:noun
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+καταβρόχω:verb
+κατευνάω:verb
+κεῖνος:adj
+κλαυθμός:noun
+κτέαρ:noun
+μάλιστα:adv
+μέμαα:verb
+μίγνυμι:verb
+μεσσηγύς:adp
+μετόπισθε:adv
+μᾶλλον:adv
+νέποδες:noun
+νοσφίζομαι:verb
+νόσφι:adp
+νόσφι:adv
+οἰνοχοέω:verb
+οἶδα:verb
+παρέξ:adv
+πεύθομαι:verb
+πολυμνήστη:noun
+ποτιπτύσσω:verb
+πρῶτος:adj
+πόποι:intj
+στορέννυμι:verb
+τί:adv
+τίπτε:adv
+τίπτε:pron
+τε:part
+τεός:adj
+τρεῖς:num
+φοινίκη:noun
+φορμίζω:verb
+χαρίζομαι:verb
+ἀεικέλιος:adj
+ἀκουή:noun
+ἀλύσκω:verb
+ἀμβροσίη:noun
+ἀμολγός:noun
+ἀμφιτρομέω:verb
+ἀνέρομαι:verb
+ἀνωιστί:adv
+ἀπαυράω:verb
+ἀρά:noun
+ἀρνός:noun
+ἄκλαυστος:adj
+ἄν:part
+ἆρα:part
+Ἀδρήστη:propn
+Ἀθήνη:propn
+Ἀλέκτωρ:propn
+Ἀλκάνδρη:propn
+Ἀλκίππη:propn
+Ἀντίλοχος:propn
+Ἀντίνοος:propn
+Ἀπόλλων:propn
+Ἀρκεισιάδης:propn
+Ἀστερίς:propn
+Ἀσφαλίων:propn
+Ἀτρεύς:propn
+Ἀχιλλεύς:propn
+Ἁλοσύδνη:propn
+Ἄντικλος:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐξαιρετός:adj
+ἐπήν:cconj
+ἔρδω:verb
+ἕ:pron
+ἕνεκα:adp
+ἕπομαι:verb
+Ἐρεμβοί:propn
+Ἐτεωνεύς:propn
+Ἑλένη:propn
+Ἑλλάς:propn
+Ἑρμιόνη:propn
+ἠέλιος:noun
+ἠδέ:cconj
+Ἠλύσιος:adj
+Ἥρα:propn
+Ἥφαιστος:propn
+Ἦλις:propn
+ἰδέ:cconj
+Ἰθάκη:propn
+Ἰκάριος:adj
+Ἰφθίμη:propn
+ὅ:pron
+Ὀρέστης:propn
+ὑποδύομαι:verb
+ὑψιπέτηλος:adj
+ὦ:intj
+ᾍδης:noun
+Ῥαδάμανθυς:propn
+
+Words the treebank does not analyse (Line: word):
+28: ,
+34: ,
+37: ,
+61: ,
+78: ,
+170: ,
+178: ·
+204: ,
+216: ,
+260: ,
+261: ,
+262: ,
+289: ,
+296: ,
+375: ,
+394: ,
+429: ,
+439: ·
+453: καὶ
+454: ,
+464: ,
+481: ,
+523: ,
+538: ,
+544: ,
+548: ,
+574: ,
+616: ἐπὶ
+632: ,
+638: ,
+643: ;
+653: ·
+662: ,
+673: ,
+756: ,
+811: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+270: οἷον = οἷν
+287: πίεζε = πίεζεν
+296: κέλευσε = κέλευσεν
+311: ὀνόμαζε· = ὀνόμαζεν
+332: προσέφη = προσέθη
+407: φαινομένηφι = φαινομένηφιν
+534: κατέπεφνε = κατέπεφνεν
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

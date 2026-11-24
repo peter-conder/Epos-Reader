@@ -1,0 +1,154 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+Αἴγισθος:propn
+Εὐπείθης:propn
+Εὐρύκλεια:propn
+Εὐρύμαχος:propn
+Ζάκυνθος:propn
+Ζεύς:propn
+Θόωσα:propn
+Καλυψώ:propn
+Κύκλωψ:propn
+Λαέρτης:propn
+Μέντης:propn
+Μενέλαος:propn
+Μερμερίδης:propn
+Μοῦσα:propn
+Νήιον:propn
+Παλλάς:propn
+Πεισηνορίδης:propn
+Πηνελόπεια:propn
+Πολύφημος:propn
+Ποσειδεών:propn
+Πόλυβος:propn
+Πύλος:propn
+Σάμη:propn
+Σπάρτη:propn
+Σπάρτηνδε:adv
+Τάφιοι:propn
+Τάφος:propn
+Τεμέση:propn
+Τηλέμαχος:propn
+Φήμιος:propn
+Φόρκυς:propn
+αἴρω:verb
+αἶα:noun
+βοητύς:noun
+γάρ:part
+δάμνημι:verb
+διαπέταμαι:verb
+δολομήτης:noun
+εἰ:cconj
+εἴδομαι:verb
+εἶδον:verb
+κίω:verb
+καί:adv
+καί:cconj
+κατακείω:verb
+κεῖνος:adj
+κτέαρ:noun
+λεύκη:noun
+λόγος:noun
+μάκαρος:adj
+μάλιστα:adv
+μάρτυρος:noun
+μέδων:noun
+μίγνυμι:verb
+μᾶλλον:adv
+νεώτατος:adj
+νηπιάα:noun
+νόσφι:adp
+νώνυμνος:adj
+οἶδα:verb
+πατρώιος:adj
+πεύθομαι:verb
+πρῶτος:adj
+πτολίεθρον:noun
+πόποι:intj
+πύκα:adv
+πύλος:noun
+τί:adv
+τίπτε:pron
+τε:part
+τεός:adj
+τηλεκλυτός:adj
+τοῖον:adv
+φέριστος:adj
+φορμίζω:verb
+χαλκοῦς:noun
+χαρίζομαι:verb
+ἀλαόω:verb
+ἀνέρομαι:verb
+ἄκοιτις:noun
+ἄν:part
+Ἀγαμεμνονίδης:propn
+Ἀγχίαλος:propn
+Ἀθήνη:propn
+Ἀθῆναι:propn
+Ἀντίνοος:propn
+Ἄργος:propn
+ἐγώ:pron
+ἐγώγε:pron
+ἐμπάζομαι:verb
+ἐπήν:cconj
+ἑτέρως:adv
+ἔντοσθεν:adp
+ἔρδω:verb
+ἕ:pron
+ἕπομαι:verb
+Ἐφύρα:propn
+Ἑλλάς:propn
+Ἑρμῆς:propn
+ἠέλιος:noun
+ἠδέ:cconj
+ἰδυῖα:verb
+Ἰθάκη:propn
+Ἰθάκηνδε:adv
+Ἰκάριος:adj
+Ἶλος:propn
+ὅπη:adv
+Ὀρέστης:propn
+Ὄλυμπος:propn
+ὦ:intj
+Ὠγυγία:propn
+Ὤπς:propn
+ῥύομαι:verb
+Ῥεῖθρον:propn
+
+Words the treebank does not analyse (Line: word):
+26: παρήμενος·
+47: καὶ
+76: ,
+118: μεθήμενος,
+125: ,
+126: ῥ᾽
+158: ,
+160: ,
+190: ,
+195: ·
+207: εἰς
+216: ·
+231: ,
+246: Δουλιχίῳ
+278: ,
+292: ,
+302: ,
+307: ,
+378: ·
+381: ,
+384: ,
+389: ,
+400: ,
+413: ,
+429: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+129: ταλασίφρoνος = ταλασίφρονος
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+

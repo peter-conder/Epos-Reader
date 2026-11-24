@@ -1,0 +1,179 @@
+Lemmas with no definition yet (shown as "Coming soon."; add them to tools/homer/input/hand_glosses.csv):
+ʽἁλοσύδνη:noun
+̓ἀγχίσης:noun
+Αἰνείας:propn
+Βίας:propn
+Γανυμήδης:propn
+Γυγαίη:propn
+Δάρδανος:propn
+Δαρδανία:propn
+Δευκαλίων:propn
+Δημολέων:propn
+Δημοῦχος:propn
+Δρύοψ:propn
+Ζεύς:propn
+Θέτις:propn
+Θρᾴκη:propn
+Κάπυς:propn
+Καλλικολώνη:propn
+Καύκωνες:propn
+Κλυτίος:propn
+Λάμπος:propn
+Λέλεγες:propn
+Λαομέδων:propn
+Λαόγονος:propn
+Λητώ:propn
+Λυκάων:propn
+Λυρνησσός:propn
+Μούλιος:propn
+Ξάνθος:propn
+Πήδασος:propn
+Παλλάς:propn
+Πείροος:propn
+Πηλείδης:propn
+Πηλείων:propn
+Πηλεύς:propn
+Πολύδωρος:propn
+Ποσειδεών:propn
+Ποσειδῶν:propn
+Πριαμίδης:propn
+Σιμόεις:propn
+Σκάμανδρος:propn
+Τιθωνός:propn
+Τμῶλος:propn
+Φιλητορίδης:propn
+αἰειγενέτης:adj
+αἰνείας:noun
+αἴρω:verb
+γάρ:part
+εἰ:cconj
+εἴδομαι:verb
+εἶδον:verb
+εἷος:cconj
+θοῦρις:adj
+κίω:verb
+καί:adv
+καί:cconj
+καίνυμαι:verb
+κεῖνος:pron
+κοῦρος:noun
+κραδάω:verb
+μάλιστα:adv
+μέμαα:verb
+μέτειμι:verb
+μίγνυμι:verb
+μετόπισθε:adv
+μόριμος:adj
+νέρθε:adv
+νόσφι:adp
+οἶδα:verb
+οὐτάζω:verb
+παραλέγω:verb
+πατρώιος:adj
+πευκάλιμος:adj
+πρῶτος:adj
+πόποι:intj
+σφονδύλιος:noun
+σῶκος:noun
+τίπτε:pron
+τε:part
+τρεῖς:num
+φίλτερος:adj
+χαλκοπάρῃος:adj
+χαλκοῦς:noun
+χαρίζομαι:verb
+ἀλεξητήρ:noun
+ἀντία:adp
+ἀπαυράω:verb
+ἀποτρωπάω:verb
+ἀραιός:adj
+ἀρειή:noun
+ἄν:part
+ἄω:verb
+Ἀίδης:propn
+Ἀγήνωρ:propn
+Ἀγχίσης:propn
+Ἀγχισιάδης:propn
+Ἀθήνη:propn
+Ἀιδωνεύς:propn
+Ἀλαστορίδης:propn
+Ἀντήνωρ:propn
+Ἀπόλλων:propn
+Ἀρηίθοος:propn
+Ἀσσάρακος:propn
+Ἀχιλλεύς:propn
+Ἄρης:propn
+ἐγκέφαλος:noun
+ἐγώ:pron
+ἐμπίπλημι:verb
+ἐναντίον:adv
+ἐξαπονέομαι:verb
+ἐριούνης:noun
+ἐριούνιος:noun
+ἑκατόζυγος:adj
+ἕ:pron
+ἕκατος:noun
+ἕνεκα:adp
+Ἐριχθόνιος:propn
+Ἑρμῆς:propn
+Ἔχεκλος:propn
+Ἕκτωρ:propn
+Ἕρμος:propn
+ἠδέ:cconj
+ἤιος:noun
+ἤτοι:part
+Ἡρακλέης:propn
+Ἥρα:propn
+Ἥφαιστος:propn
+ἱρός:adj
+Ἰδαῖος:adj
+Ἰφιτίων:propn
+Ἱκετάων:propn
+Ἱπποδάμας:propn
+Ἴδη:propn
+Ἶλος:propn
+ὁμοκλέω:verb
+ὅπη:adv
+Ὀτρυντείδης:propn
+Ὀτρυντεύς:propn
+Ὄλυμπος:propn
+ὑπέρμορον:adv
+ὑπίσχομαι:verb
+ὑποκύομαι:verb
+Ὕδη:propn
+Ὕλλος:propn
+ὦ:intj
+ῥύομαι:verb
+Ῥίγμος:propn
+
+Words the treebank does not analyse (Line: word):
+13: ·
+93: ,
+99: ,
+102: ,
+107: ,
+119: ,
+130: ,
+247: ,
+287: ·
+310: ,
+340: ,
+379: ,
+422: ,
+424: ,
+469: ,
+478: ,
+483: ,
+485: ᾽
+489: ,
+
+Treebank words with no match in the Scansion text (cited Line: words):
+
+Words matched to a treebank word spelled differently (Line: printed = treebank):
+
+Lines only the treebank has (no Scansion):
+
+Lines with no Scansion (missing from the Scansion files, or with blank Feet):
+
+Lines whose Scansion does not have six Feet:
+
