@@ -15,12 +15,16 @@ One epic poem: the Aeneid, the Odyssey or the Iliad.
 _Avoid_: Poem, text, title
 
 **Book**:
-One of the numbered divisions of a Work, written in Roman numerals (Aeneid I–XII, Homer I–XXIV).
+One of the numbered divisions of a Work, numbered as its own tradition numbers it: Roman numerals for the Aeneid (I–XII), Greek capitals for the Iliad (Α–Ω) and Greek lower case for the Odyssey (α–ω).
 _Avoid_: Chapter, canto, section
 
 **Line**:
 One numbered verse of a Book.
 _Avoid_: Verse (on its own), row
+
+**Citation**:
+A reference to a Line or range of Lines, written as Work, Book.Line(s), e.g. *Aeneid I.1–25*.
+_Avoid_: Reference, location, address
 
 **Source**:
 An outside project that Epos Reader takes text, translation, lemmas, definitions or scansion from. Every Source is credited.
@@ -63,6 +67,10 @@ The rarer marks Scansion can put on a syllable, under their usual metrical names
 
 ### Reading
 
+**Home**:
+What a tab shows when no Book is open: the carousel of Works to choose from.
+_Avoid_: Start page, landing page, new tab
+
 **Word card**:
 The panel that shows one word's lemma, grammar and definition when the reader picks the word.
 _Avoid_: Gloss, popup, tooltip
@@ -76,7 +84,7 @@ The English of a Work, taken from Perseus.
 _Avoid_: English (as a noun for the text), crib, version
 
 **Parallel translation**:
-The Translation shown next to the original, Line by Line.
+The Translation shown next to the original, passage by passage: each block of English sits beside the range of Lines it translates.
 _Avoid_: Dual view, dual pane, English pane
 
 ### Your own marks
@@ -88,3 +96,7 @@ _Avoid_: Annotation, comment
 **Bookmark**:
 A saved Line, with no text of the reader's own.
 _Avoid_: Favourite, pin, flag
+
+**Notebook**:
+The tab that gathers all of the reader's Notes. Bookmarks are not part of it.
+_Avoid_: Notes page, journal
