@@ -23,7 +23,7 @@ One numbered verse of a Book.
 _Avoid_: Verse (on its own), row
 
 **Citation**:
-A reference to a Line or range of Lines, written as Work, Book.Line(s), e.g. *Aeneid I.1–25*.
+A reference to a Line or range of Lines, written as Work, Book.Line(s), e.g. *Aeneid I.1–25*, *Iliad Α.1–25*. Where space is short the Work is abbreviated *Aen.*, *Il.* or *Od.*
 _Avoid_: Reference, location, address
 
 **Source**:
