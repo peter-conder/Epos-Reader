@@ -1,6 +1,6 @@
-import { ROMANS, WORKS, bookLabel, citation } from './data.js';
+import { ROMANS, WORKS, bookLabel, bookTitle, citation } from './data.js';
 import { $, clamp, el, esc, icon } from './dom.js';
-import { getTab, isNotebook, isText, shared, state, workOf } from './state.js';
+import { getTab, isNotebook, isText, shared, state } from './state.js';
 import { closePopovers, renderAll, setOpen } from './layout.js';
 import { renderReader } from './reader.js';
 import { addNewTab } from './home.js';
@@ -29,9 +29,8 @@ export function showHoverCard(pill) {
     el.hoverCite.textContent = 'New Tab';
     el.hoverDesc.textContent = 'Choose a work to open';
   } else {
-    const work = workOf(tab);
     el.hoverCite.textContent = citation(tab.work, tab.book, tab.range ?? '');
-    el.hoverDesc.textContent = `${work.title} · Book ${bookLabel(tab.work, tab.book)}`;
+    el.hoverDesc.textContent = bookTitle(tab.work, tab.book);
   }
 
   const r = pillAnchor(pill).getBoundingClientRect();

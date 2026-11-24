@@ -1,4 +1,4 @@
-import { citation } from './data.js';
+import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
 import { activeTab, byRecent, isNotebook, isText, markUsed, state, workOf } from './state.js';
 import { visibleLines } from './chunks.js';
@@ -27,7 +27,6 @@ const SETTLE_MS = 260;
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
 const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent)
 
-const RANGE_DASH = '–';
 
 /* What the pill says for a tab */
 const showingEnglish = (tab) => tab.lang === 'en' && tier() === 'compact';

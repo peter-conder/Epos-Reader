@@ -1,4 +1,4 @@
-import { ROMANS, WORKS, bookLabel } from './data.js';
+import { ROMANS, WORKS, bookLabel, bookTitle } from './data.js';
 import { el, esc, icon } from './dom.js';
 import { activeTab, getTab, isText, state } from './state.js';
 import { activateTab, addTab } from './tabs.js';
@@ -38,7 +38,7 @@ function listHtml(works) {
     const rows = ROMANS.slice(0, w.bookCount).map((r) => {
       const open = openTabFor(key, r);
       return `<button class="cl-row${open ? ' is-open' : ''}" data-work="${key}" data-book="${r}"
-        aria-label="${esc(`${w.title}, Book ${bookLabel(key, r)}${open ? ' (open)' : ''}`)}">
+        aria-label="${esc(`${bookTitle(key, r)}${open ? ' (open)' : ''}`)}">
         <span class="cl-book">Book ${bookLabel(key, r)}</span>${open ? '<span class="cl-badge">Open</span>' : ''}</button>`;
     }).join('');
     return `<section class="cl-work" aria-label="${esc(w.title)}">
