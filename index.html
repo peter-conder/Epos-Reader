@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="stylesheet" href="css/styles.css">
 <script>
   /* Set light/dark before the first paint so a dark page doesn't flash white (settings.js takes over from here) */
@@ -40,7 +42,7 @@
      Settings, Notebook, Format Text, the palette swatches and the light/dark switch. -->
 <div class="popover drawer" id="drawer" role="menu">
   <button class="drawer-item" data-action="settings" role="menuitem">
-    <span>Settings &amp; Options</span><svg class="icon"><use href="assets/icons.svg#i-gear"/></svg>
+    <span>Settings &amp; Sources</span><svg class="icon"><use href="assets/icons.svg#i-gear"/></svg>
   </button>
   <button class="drawer-item mobile-only" data-action="notebook" role="menuitem">
     <span>Notebook</span><svg class="icon"><use href="assets/icons.svg#i-notebook"/></svg>
@@ -118,14 +120,16 @@
 
     <div class="view" id="view-settings" hidden>
       <div class="settings-page">
-        <h1 class="settings-title">Reading &amp; Work Options</h1>
-        <p class="settings-subtitle">Reader configuration, color palette &amp; active classical text</p>
-        <div class="settings-section-title">Active Epic</div>
-        <div class="settings-chips" id="settings-chips"></div>
-        <div class="settings-section-title">Color Palette</div>
-        <div class="settings-chips" id="palette-chips"></div>
+        <h1 class="settings-title">Settings &amp; Sources</h1>
+        <p class="settings-subtitle">How Epos Reader behaves, and the projects it's built on.</p>
         <div class="settings-section-title">Tapping a Line Number <span class="settings-section-note">on phones and tablets</span></div>
         <div class="settings-chips" id="linetap-chips"></div>
+        <h2 class="settings-section-title" id="settings-sources">Sources</h2>
+        <p class="settings-lead">Every project Epos Reader takes its text, Translation, Lemmas, definitions or Scansion from.</p>
+        <div id="sources-list"></div>
+        <ul class="licence-notes" id="licence-notes"></ul>
+        <h2 class="settings-section-title">Credits</h2>
+        <div id="credits-list"></div>
       </div>
     </div>
   </div>

@@ -223,3 +223,64 @@ export const bookRef = (workKey, roman, lines = '') => `${bookLabel(workKey, rom
 /* A Citation (CONTEXT.md): "Aeneid I.1–25", or "Aen. I.1–25" with short: true */
 export const citation = (workKey, roman, lines = '', { short = false } = {}) =>
   `${short ? WORKS[workKey].abbr : workName(workKey)} ${bookRef(workKey, roman, lines)}`;
+
+/* ==========================================================
+   SOURCES AND CREDITS (the Settings & Sources page)
+   A Source (CONTEXT.md) is an outside project Epos Reader takes text, Translation, Lemmas, definitions or Scansion
+   from. Credits are everything else the app uses: the Home paintings, the fonts and hand-written glosses.
+   The README's "Sources and credits" is a hand-kept copy of these lists: change both together.
+   ========================================================== */
+const PERSEUS = { name: 'Perseus Digital Library', url: 'https://www.perseus.tufts.edu', by: 'Tufts University' };
+const HYPOTACTIC = { name: 'Hypotactic', url: 'https://hypotactic.com', by: 'David Chamberlain' };
+const LICENCES = {
+  'CC BY-NC-SA 4.0': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  'CC BY-SA 3.0': 'https://creativecommons.org/licenses/by-sa/3.0/',
+  'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0/'
+};
+export const licenceUrl = (licence) => LICENCES[licence];
+
+/* Each item: what it supplies, the Source (name, link, who made it), a note, and its licence where one is stated */
+export const SOURCES = [
+  { language: 'Latin', works: 'Aeneid', items: [
+    { what: 'Text', ...PERSEUS },
+    { what: 'Lemmas and Morphology', name: 'LASLA corpus', url: 'https://lila-erc.eu', by: 'via LiLa: Linking Latin', licence: 'CC BY-NC-SA 4.0' },
+    { what: 'Definitions', name: "Whitaker's Words", url: 'https://archives.nd.edu/words.html', by: 'William Whitaker' },
+    { what: 'Scansion', ...HYPOTACTIC }
+  ] },
+  { language: 'Greek', works: 'Iliad and Odyssey', items: [
+    { what: 'Text', ...HYPOTACTIC, note: 'Checked against the Perseus Digital Library text in the Ancient Greek Dependency Treebank' },
+    { what: 'Lemmas and Morphology', name: 'Ancient Greek Dependency Treebank 2.1', url: 'https://github.com/PerseusDL/treebank_data', by: 'Perseus Digital Library', licence: 'CC BY-SA 3.0' },
+    { what: 'Definitions', name: 'A Greek-English Lexicon', url: 'https://github.com/PerseusDL/lexica', by: 'Liddell, Scott, Jones (Perseus Digital Library)', licence: 'CC BY-SA 4.0' },
+    { what: 'Scansion', ...HYPOTACTIC }
+  ] },
+  { language: 'English', works: 'Parallel translation', items: [
+    { what: 'Translation', name: 'Credit to be added', url: 'https://github.com/peter-conder/Epos-Reader/issues/5',
+      note: 'The English so far covers Aeneid I.1–16 and a few sample Lines. The full Translation, and its credit, are coming.' }
+  ] }
+];
+
+/* What the share-alike and non-commercial licences above mean for Epos Reader */
+export const LICENCE_NOTES = [
+  'The Latin Lemma data is CC BY-NC-SA 4.0, so Epos Reader is non-commercial, and anything built from that data must be shared under the same licence.',
+  'The Greek Lemma data and the Lexicon definitions are share-alike (CC BY-SA), so anything built from them must be shared under the same terms.',
+  "The code is released under the MIT Licence. The data keeps its Sources' own licences."
+];
+
+export const CREDITS = [
+  { group: 'Paintings on Home', items: [
+    { what: 'Aeneid', name: 'Aeneas Carrying Anchises', by: 'Carle van Loo, 1729 · Musée du Louvre, Paris',
+      url: 'https://smartify.org/artworks/charles-andre-known-as-carle-vanloo-aeneas-carrying-anchises' },
+    { what: 'Iliad', name: "Priam Begging Achilles for the Return of Hector's Body", by: 'Alexander Ivanov, 1824',
+      url: 'https://en.wikipedia.org/wiki/A._A._Ivanov' },
+    { what: 'Odyssey', name: "Ulysses deriding Polyphemus – Homer's Odyssey", by: 'J. M. W. Turner, 1829 · The National Gallery, London',
+      url: 'https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-ulysses-deriding-polyphemus-homer-s-odyssey' }
+  ] },
+  { group: 'Fonts', items: [
+    { what: 'Latin and Greek', name: 'Gentium Plus', url: 'https://software.sil.org/gentium/', by: 'SIL International, served by Google Fonts' },
+    { what: 'Everything else', name: 'Roboto', url: 'https://fonts.google.com/specimen/Roboto', by: 'Google Fonts' }
+  ] },
+  { group: 'Hand-written glosses', items: [
+    { what: 'Greek definitions', name: 'Short glosses for some Homeric Lemmas', by: 'written by the author',
+      note: 'Where there is one, it is shown in place of the LSJ definition.' }
+  ] }
+];

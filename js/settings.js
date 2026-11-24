@@ -1,16 +1,43 @@
-import { WORKS } from './data.js';
+import { CREDITS, LICENCE_NOTES, SOURCES, licenceUrl } from './data.js';
 import { el, esc, icon, root } from './dom.js';
-import { activeTab, isText, state } from './state.js';
-import { renderAll } from './layout.js';
-import { addTab } from './tabs.js';
-import { renderReader } from './reader.js';
+import { state } from './state.js';
 
 /* ==========================================================
-   SETTINGS PAGE
+   SETTINGS & SOURCES PAGE: the settings, then every Source and credit (the lists live in data.js)
    ========================================================== */
+const link = (url, text) => url
+  ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(text)}</a>`
+  : esc(text);
 
-export function syncSettingsChips(workKey) {
-  for (const chip of el.settingsChips.children) chip.classList.toggle('active', chip.dataset.work === workKey);
+function creditRow({ what, name, url, by, note, licence }) {
+  return `
+    <li class="src-item">
+      <span class="src-what">${esc(what)}</span>
+      <span class="src-body">
+        <span class="src-name">${link(url, name)}${by ? `<span class="src-by">, ${esc(by)}</span>` : ''}</span>
+        ${note ? `<span class="src-note">${esc(note)}</span>` : ''}
+        ${licence ? `<span class="src-licence">${link(licenceUrl(licence), licence)}</span>` : ''}
+      </span>
+    </li>`;
+}
+
+const creditGroup = (title, sub, items) => `
+  <section class="src-group">
+    <h3 class="src-group-title">${esc(title)}${sub ? `<span class="src-group-sub">${esc(sub)}</span>` : ''}</h3>
+    <ul class="src-list">${items.map(creditRow).join('')}</ul>
+  </section>`;
+
+function renderSources() {
+  el.sourcesList.innerHTML = SOURCES.map((g) => creditGroup(g.language, g.works, g.items)).join('');
+  el.licenceNotes.innerHTML = LICENCE_NOTES.map((n) => `<li>${esc(n)}</li>`).join('');
+  el.creditsList.innerHTML = CREDITS.map((g) => creditGroup(g.group, '', g.items)).join('');
+}
+
+/* Open at the top, or ("About Epos Reader") at the Sources */
+export function scrollSettings(toSources) {
+  const view = el.viewSettings;
+  if (!toSources) { view.scrollTop = 0; return; }
+  view.scrollTop = el.sourcesHeading.getBoundingClientRect().top - view.getBoundingClientRect().top + view.scrollTop - 24;
 }
 
 /* ==========================================================
@@ -54,7 +81,6 @@ export function applyPalette(key) {
     '--secondary': pal.s, '--on-secondary': pal.ons, '--secondary-container': pal.sc, '--on-secondary-container': pal.onsc
   };
   for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
-  for (const chip of el.paletteChips.children) chip.classList.toggle('active', chip.dataset.palette === paletteKey);
   for (const it of [...el.paletteMenu.children, ...el.drawerSwatches.children]) {
     const on = it.dataset.palette === paletteKey;
     it.classList.toggle('active', on);
@@ -68,17 +94,8 @@ export function choosePalette(key) {
   try { localStorage.setItem(PALETTE_KEY, saved); } catch { /* storage unavailable */ }
 }
 
-/* The swatches show the colours of the mode that is on, so what you pick is what you get */
+/* The menus' swatches show the colours of the mode that is on, so what you pick is what you get */
 function renderPaletteChoices() {
-  el.paletteChips.innerHTML = Object.entries(PALETTES).map(([key, p]) => {
-    const pal = rolesOf(p);
-    return `
-    <button class="settings-chip" data-palette="${key}">
-      <span class="palette-swatch"><span class="palette-dot" style="background:${pal.p}"></span><span class="palette-dot" style="background:${pal.c}"></span><span class="palette-dot" style="background:${pal.sc}"></span></span>
-      <span class="settings-chip-title">${esc(p.name)}</span>
-      <span class="settings-chip-sub">${esc(pal.p.toUpperCase())}</span>
-    </button>`;
-  }).join('');
   // The phone menu's row of swatches: each the palette's primary over its container colour
   el.drawerSwatches.innerHTML = Object.entries(PALETTES).map(([key, p]) => {
     const pal = rolesOf(p);
@@ -118,29 +135,9 @@ export function toggleTheme() {
 }
 
 export function initSettings() {
-  el.settingsChips.innerHTML = Object.entries(WORKS).map(([key, w]) => `
-    <button class="settings-chip" data-work="${key}">
-      <span class="settings-chip-title">${esc(w.title)}</span>
-      <span class="settings-chip-sub">${esc(`${w.poet} · ${w.shortLanguage}`)}</span>
-    </button>`).join('');
+  renderSources();
 
-  el.settingsChips.addEventListener('click', (e) => {
-    const chip = e.target.closest('.settings-chip');
-    if (!chip) return;
-    const workKey = chip.dataset.work;
-    const tab = activeTab();
-    if (!isText(tab)) {
-      addTab(workKey, 'I');
-    } else {
-      tab.work = workKey;
-      tab.book = 'I';
-      renderReader(tab);
-      renderAll();
-    }
-    syncSettingsChips(workKey);
-  });
-
-  for (const container of [el.paletteChips, el.paletteMenu, el.drawerSwatches]) {
+  for (const container of [el.paletteMenu, el.drawerSwatches]) {
     container.addEventListener('click', (e) => {
       const it = e.target.closest('[data-palette]');
       if (it) choosePalette(it.dataset.palette);

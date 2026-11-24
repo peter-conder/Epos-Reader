@@ -4,7 +4,7 @@ import { alignProgress, closePopovers, setBook, setOpen, setView } from './layou
 import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
 import { hideWordCard } from './word-card.js';
-import { toggleTheme } from './settings.js';
+import { scrollSettings, toggleTheme } from './settings.js';
 import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
 import { openFormatSheet } from './format-sheet.js';
@@ -57,12 +57,10 @@ export function initToolbar() {
     const action = e.target.closest('[data-action]')?.dataset.action;
     if (action === 'palette') {
       openPaletteMenu();
-    } else if (action === 'settings') {
+    } else if (action === 'settings' || action === 'about') {
       closePaletteMenu();
       setView('settings');
-    } else if (action === 'about') {
-      setOpen(el.drawer, false);
-      closePaletteMenu();
+      scrollSettings(action === 'about');   // About opens the same page, at the Sources
     } else if (action === 'notebook') {
       setOpen(el.drawer, false);
       openNotebook();
