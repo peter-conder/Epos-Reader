@@ -12,8 +12,7 @@ Epos Reader is for students reading epic with a class, self-taught readers readi
 - **Turn on Scansion** to see each syllable marked Long, Short or Elided, with Feet and the Caesuras that Hypotactic marks. Rarer marks (Hiatus, Synizesis, Consonantal i, Lengthened and Hypermetric syllables) are explained when you pick them.
 - **Read with a Parallel translation:** the English beside the original, passage by passage.
 - **Open several tabs**, each on its own Work and Book, and show two side by side as a **Split**.
-- **Write Notes** on any word. The **Notebook** tab gathers all of them.
-- **Bookmark Lines** to come back to.
+- **Write Notes** on any word, and **Bookmark Lines** to come back to. The **Notebook** tab gathers both.
 - **Read on a phone or tablet.** Smaller screens get their own layout, with a bottom bar, a tab grid and sheets for Word cards and text formatting (see [`docs/mobile-layout-plan.md`](docs/mobile-layout-plan.md)).
 - **Make it yours:** text size, colour palette, and light or dark mode.
 
@@ -107,6 +106,10 @@ This project keeps a strict vocabulary: **Work** (not poem), **Book** (not chapt
 - **Issues** are markdown files under `.scratch/<feature>/issues/`, one per ticket, with a `Status:` line (see [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md)).
 - **Agents** working on this repo should start from [`CLAUDE.md`](CLAUDE.md).
 - Before opening a pull request, check the change on a phone size (390×844), a tablet (768×1024) and a desktop (1280×800).
+
+## Licence
+
+The code is released under the [MIT Licence](LICENSE). The data in `data2/` is not covered by it. Each Source keeps its own licence (below), and the Lemma data is CC BY-NC-SA 4.0.
 
 ## Sources and credits
 
