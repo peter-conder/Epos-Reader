@@ -1,4 +1,4 @@
-import { ROMANS, WORKS } from './data.js';
+import { ROMANS, WORKS, bookLabel, citation } from './data.js';
 import { $, clamp, el, esc, icon } from './dom.js';
 import { getTab, isNotebook, isText, shared, state, workOf } from './state.js';
 import { closePopovers, renderAll, setOpen } from './layout.js';
@@ -30,8 +30,8 @@ export function showHoverCard(pill) {
     el.hoverDesc.textContent = 'Choose a work to open';
   } else {
     const work = workOf(tab);
-    el.hoverCite.textContent = `${work.title}.${ROMANS.indexOf(tab.book) + 1}.1`;
-    el.hoverDesc.textContent = `${work.title} · Book ${tab.book}`;
+    el.hoverCite.textContent = citation(tab.work, tab.book, tab.range ?? '');
+    el.hoverDesc.textContent = `${work.title} · Book ${bookLabel(tab.work, tab.book)}`;
   }
 
   const r = pillAnchor(pill).getBoundingClientRect();
@@ -94,7 +94,7 @@ export function showBooks(workKey) {
   el.pickerTitle.textContent = `${work.title} Books`;
   el.booksGrid.dataset.work = workKey;
   el.booksGrid.innerHTML = ROMANS.slice(0, work.bookCount).map((r) =>
-    `<button class="book-cell${r === current ? ' active' : ''}" data-book="${r}">${r}</button>`
+    `<button class="book-cell${r === current ? ' active' : ''}" data-book="${r}">${bookLabel(workKey, r)}</button>`
   ).join('');
   el.workList.hidden = true;
   el.bookPicker.hidden = false;

@@ -1,4 +1,4 @@
-import { ROMANS, WORKS } from './data.js';
+import { ROMANS, WORKS, bookLabel } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
 import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js';
 import { loadBook } from './book-data.js';
@@ -230,7 +230,7 @@ export function scanText(s) {
 }
 
 export function setBookTitles(tab) {
-  tab.ui.titles.forEach((t) => { t.textContent = `Book ${tab.book}`; });
+  tab.ui.titles.forEach((t) => { t.textContent = `Book ${bookLabel(tab.work, tab.book)}`; });
 }
 
 /* English translation beside the original, per reader */

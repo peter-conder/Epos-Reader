@@ -1,4 +1,4 @@
-import { WORKS } from './data.js';
+import { WORKS, bookLabel } from './data.js';
 import { el, esc, icon } from './dom.js';
 import { isNotebook, isText, shared, state } from './state.js';
 import { saveNotes } from './storage.js';
@@ -31,7 +31,7 @@ export function countLabel() {
   return `${n} ${n === 1 ? 'note' : 'notes'}`;
 }
 
-export const noteSource = (n) => `${WORKS[n.work]?.title ?? n.work} · Book ${n.book} · Line ${n.line}`;
+export const noteSource = (n) => `${WORKS[n.work]?.title ?? n.work} · Book ${bookLabel(n.work, n.book)} · Line ${n.line}`;
 
 /* Everything that has to refresh after any change to the notes.
    Edits made on the Notebook page already updated their own card. */

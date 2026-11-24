@@ -57,6 +57,8 @@ export const LEXICON = {
 export const WORKS = {
   aeneid: {
     title: 'The Aeneid',
+    abbr: 'Aen.',
+    numerals: 'roman',
     poet: 'Vergil',
     language: 'Classical Latin',
     shortLanguage: 'Latin',
@@ -101,6 +103,8 @@ export const WORKS = {
   },
   iliad: {
     title: 'The Iliad',
+    abbr: 'Il.',
+    numerals: 'greek-upper',
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
@@ -145,6 +149,8 @@ export const WORKS = {
   },
   odyssey: {
     title: 'The Odyssey',
+    abbr: 'Od.',
+    numerals: 'greek-lower',
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
@@ -189,4 +195,28 @@ export const WORKS = {
   }
 };
 
+/* ==========================================================
+   BOOK NUMBERS
+   A tab, Note or Bookmark stores its Book as a Roman numeral ('I'…'XXIV'), and data files are numbered
+   01.json…24.json. What the reader sees follows each Work's own tradition (CONTEXT.md, "Book"):
+   Roman for the Aeneid, Greek capitals for the Iliad, Greek lower case for the Odyssey.
+   ========================================================== */
+const GREEK_UPPER = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ';
+const GREEK_LOWER = 'αβγδεζηθικλμνξοπρστυφχψω';
 
+/* The Book number as the reader sees it, e.g. bookLabel('iliad', 'I') → 'Α' */
+export function bookLabel(workKey, roman) {
+  const i = ROMANS.indexOf(roman);
+  const style = WORKS[workKey]?.numerals;
+  if (i === -1 || style === 'roman' || !style) return roman;
+  return (style === 'greek-upper' ? GREEK_UPPER : GREEK_LOWER)[i] ?? roman;
+}
+
+/* The Work's name without "The", e.g. "Aeneid" */
+export const workName = (workKey) => (WORKS[workKey]?.title ?? workKey).replace(/^The /, '');
+
+/* A Citation (CONTEXT.md): "Aeneid I.1-25", or "Aen. I.1-25" with short: true. Lines are optional. */
+export function citation(workKey, roman, lines = '', { short = false } = {}) {
+  const work = short ? (WORKS[workKey]?.abbr ?? workName(workKey)) : workName(workKey);
+  return `${work} ${bookLabel(workKey, roman)}${lines ? `.${lines}` : ''}`;
+}

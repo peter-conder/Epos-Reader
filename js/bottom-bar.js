@@ -1,3 +1,4 @@
+import { citation } from './data.js';
 import { clamp, el, root } from './dom.js';
 import { activeTab, byRecent, isNotebook, isText, markUsed, state, workOf } from './state.js';
 import { visibleLines } from './chunks.js';
@@ -11,7 +12,7 @@ import { syncLangButton } from './english.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
-   A pill naming the open tab ("Aeneid · Book I / Lines 34–58") with a thin progress line along the bar's top,
+   A pill naming the open tab ("Aen. I / Lines 34–58") with a thin progress line along the bar's top,
    and a button with the number of open tabs. Swiping the pill sideways drags the neighbouring tab's pill in,
    like Safari's address bar; let go past a third of the way (or flick) and that tab opens.
    The bar and the floating menu button hide while you scroll down through a text, and come back when you
@@ -35,7 +36,7 @@ function labelFor(tab) {
   if (isText(tab)) {
     const lines = visibleLines(tab.ui?.chunkers?.[showingEnglish(tab) ? 1 : 0]);
     return {
-      title: `${workOf(tab).title.replace(/^The /, '')} · Book ${tab.book}`,
+      title: citation(tab.work, tab.book, '', { short: true }),
       sub: lines ? `Lines ${lines[0]}${lines[1] !== lines[0] ? RANGE_DASH + lines[1] : ''}` : ''
     };
   }
@@ -46,7 +47,7 @@ function labelFor(tab) {
 const NEW_SLOT = { new: true };   // past the last tab: swiping on opens the chapter list
 const slotHtml = (tab) => {
   if (!tab) return '<div class="bb-slot" aria-hidden="true"></div>';
-  if (tab === NEW_SLOT) return '<div class="bb-slot bb-slot-new" aria-hidden="true"><span class="bb-title">New Chapter</span></div>';
+  if (tab === NEW_SLOT) return '<div class="bb-slot bb-slot-new" aria-hidden="true"><span class="bb-title">New Book</span></div>';
   const { title, sub } = labelFor(tab);
   return `<div class="bb-slot"><span class="bb-title">${title}</span><span class="bb-sub">${sub}</span></div>`;
 };

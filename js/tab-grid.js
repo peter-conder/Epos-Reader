@@ -1,4 +1,4 @@
-import { WORKS } from './data.js';
+import { WORKS, bookLabel, workName } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
 import { byRecent, isNotebook, isText, state, workOf } from './state.js';
 import { activateTab, closeTab } from './tabs.js';
@@ -36,7 +36,7 @@ function cardHtml(tab) {
   let title, meta, body, kind = '';
   if (isText(tab)) {
     const spot = readingSpot(tab);
-    title = `${workOf(tab).title.replace(/^The /, '')} · Book ${tab.book}`;
+    title = `${workName(tab.work)} · Book ${bookLabel(tab.work, tab.book)}`;
     meta = `Line ${spot.line}`;
     body = spot.lines.map((l) => `<span>${esc(l)}</span>`).join('');
   } else if (isNotebook(tab)) {

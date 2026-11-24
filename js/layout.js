@@ -1,4 +1,4 @@
-import { ROMANS } from './data.js';
+import { ROMANS, bookLabel } from './data.js';
 import { $, clamp, el, root } from './dom.js';
 import { activeTab, groupOf, isText, partnerOf, shared, state, workOf } from './state.js';
 import { beginSplitOpen, isMorphing, playPop, settleMorph } from './motion.js';
@@ -124,11 +124,11 @@ export function syncToolbar() {
   el.splitBtn.dataset.tip = paired ? 'Unavailable in split view' : 'Parallel English';
 }
 
-/* The name in the top bar turns Greek while a Greek text is the open tab */
+/* The name in the top bar ("Epos Reader") writes Epos in Greek while a Greek text is the open tab */
 export function renderBrand() {
   const tab = activeTab();
   const greek = isText(tab) && workOf(tab).shortLanguage === 'Greek';
-  el.brandTitle.textContent = greek ? '\u0395\u03C0\u03BF\u03C2' : 'Epos';
+  el.brandTitle.textContent = greek ? '\u0395\u03C0\u03BF\u03C2 Reader' : 'Epos Reader';
   el.brandTitle.lang = greek ? 'grc' : 'en';
 }
 
@@ -198,7 +198,8 @@ export function renderSegments() {
   // Every pill keeps its numeral (hidden by CSS until it is active) so it can fade in and out with the pill's motion
   el.segments.innerHTML = ROMANS.slice(0, workOf(tab).bookCount).map((r) => {
     const on = r === tab.book;
-    return `<button class="segment${on ? ' active' : ''}" data-book="${r}" aria-label="Book ${r}"${on ? ' aria-current="true"' : ''}>${r}</button>`;
+    const label = bookLabel(tab.work, r);
+    return `<button class="segment${on ? ' active' : ''}" data-book="${r}" aria-label="Book ${label}"${on ? ' aria-current="true"' : ''}>${label}</button>`;
   }).join('');
   growSegments();
 }
