@@ -1,6 +1,6 @@
 # Epos-Reader
 
-A lightweight reader for the Aeneid, Odyssey and Iliad: scansion, translation, lemma data, a notebook, dual view and tabs.
+A reader for the Aeneid, Iliad and Odyssey in the original language: Scansion, Word cards with Lemma and Morphology, Parallel translation, Splits, Notes, Bookmarks and the Notebook. Terms are defined in `CONTEXT.md`.
 
 ## Agent skills
 

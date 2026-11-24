@@ -14,7 +14,7 @@ The code numbers every Work with Roman numerals:
 
 ## Done when
 
-- The Iliad and Odyssey show Greek Book numbers everywhere a Book is named (tab labels, bottom bar, chapter list, Home, word cards, Notes, Bookmarks).
+- The Iliad and Odyssey show Greek Book numbers everywhere a Book is named (tab labels, bottom bar, Book list, Home, word cards, Notes, Bookmarks).
 - Data files keep their plain numbers (`01.json` … `24.json`); only what's displayed changes.
 - Tab labels and the bottom bar use the short Work abbreviations; fuller views use the full name.
 - Saved Notes, Bookmarks and tabs from before the change still load.
@@ -25,5 +25,14 @@ The code numbers every Work with Roman numerals:
 **2026-11-24:** Resolved. Tabs, Notes and Bookmarks still store the Book as a Roman numeral and data files keep their plain numbers, so saved state is unaffected. Only what's displayed changed:
 
 - `js/data.js`: each Work has an `abbr` and a `numerals` style, plus `bookLabel()`, `workName()` and `citation()` helpers.
-- The display sites now use `bookLabel()`: tab pills (`Aen. I.1-25`), bottom bar (`Aen. II`), toolbar segments, Book titles, the chapter list, the Book picker, the hover card, the tab grid, and the source line on Notes and Bookmarks.
+- The display sites now use `bookLabel()`: tab pills (`Aen. I.1–25`), bottom bar (`Aen. II`), toolbar segments, Book titles, the Book list, the Book picker, the hover card, the tab grid, and the source line on Notes and Bookmarks.
 - Checked in Chromium at 1280×800 and 390×844 with no page errors: the Aeneid shows I, II, III…, and the Iliad shows Α, Β, Γ… with "Book Α". The Greek data isn't here yet, so the Iliad was checked with the sample lines in `js/data.js`.
+
+**2026-11-24 (after code review):** Follow-up fixes:
+
+- Home's screen-reader labels now name the first Book in each Work's numbering ("open Book Α").
+- The "*Work* · Book *n*" label comes from one `bookTitle()` helper, so every view says "Iliad · Book Α".
+- Each Work stores its numeral list directly (`numerals: GREEK_UPPER`) rather than a style name.
+- Line ranges use an en dash ("I.1–25"), as in `CONTEXT.md`.
+
+Checked in Chromium at 1280×800, 768×1024 and 390×844, with no page errors. Desktop shows `Il. Α.1–16` and `Α Β Γ`. On tablet and phone, the Iliad stays hidden until its data file exists.
