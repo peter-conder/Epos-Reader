@@ -2,6 +2,8 @@ export const ROMANS = [
   'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII',
   'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV'
 ];
+const GREEK_UPPER = [...'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'];   // Iliad Books
+const GREEK_LOWER = [...'αβγδεζηθικλμνξοπρστυφχψω'];   // Odyssey Books
 
 export const LEXICON = {
   'arma': { lemma: 'arma, -ōrum (n. pl.)', morph: 'Neut. Pl. Acc.', def: 'Arms, weapons of war; warfare, armed deeds.' },
@@ -57,6 +59,8 @@ export const LEXICON = {
 export const WORKS = {
   aeneid: {
     title: 'The Aeneid',
+    abbr: 'Aen.',
+    numerals: ROMANS,   // how its Books are shown (see BOOK NUMBERS below)
     poet: 'Vergil',
     language: 'Classical Latin',
     shortLanguage: 'Latin',
@@ -101,6 +105,8 @@ export const WORKS = {
   },
   iliad: {
     title: 'The Iliad',
+    abbr: 'Il.',
+    numerals: GREEK_UPPER,
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
@@ -145,6 +151,8 @@ export const WORKS = {
   },
   odyssey: {
     title: 'The Odyssey',
+    abbr: 'Od.',
+    numerals: GREEK_LOWER,
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
@@ -189,4 +197,26 @@ export const WORKS = {
   }
 };
 
+/* ==========================================================
+   BOOK NUMBERS AND CITATIONS
+   A tab, Note or Bookmark stores its Book as a Roman numeral ('I'…'XXIV'), and data files are numbered
+   01.json…24.json. What the reader sees follows each Work's own tradition (CONTEXT.md, "Book"):
+   Roman for the Aeneid, Greek capitals for the Iliad, Greek lower case for the Odyssey.
+   ========================================================== */
+export const RANGE_DASH = '–';   // between the first and last Line of a range, as in "I.1–25"
 
+/* The Book number as the reader sees it, e.g. bookLabel('iliad', 'I') → 'Α' */
+export const bookLabel = (workKey, roman) => WORKS[workKey].numerals[ROMANS.indexOf(roman)];
+
+/* The Work's name without "The", e.g. "Aeneid" */
+export const workName = (workKey) => WORKS[workKey].title.replace(/^The /, '');
+
+/* A Book named in full, e.g. "Iliad · Book Α" */
+export const bookTitle = (workKey, roman) => `${workName(workKey)} · Book ${bookLabel(workKey, roman)}`;
+
+/* The part of a Citation after the Work, e.g. "Α.1–25"; lines is optional */
+export const bookRef = (workKey, roman, lines = '') => `${bookLabel(workKey, roman)}${lines ? `.${lines}` : ''}`;
+
+/* A Citation (CONTEXT.md): "Aeneid I.1–25", or "Aen. I.1–25" with short: true */
+export const citation = (workKey, roman, lines = '', { short = false } = {}) =>
+  `${short ? WORKS[workKey].abbr : workName(workKey)} ${bookRef(workKey, roman, lines)}`;

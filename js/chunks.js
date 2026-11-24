@@ -1,3 +1,4 @@
+import { RANGE_DASH } from './data.js';
 import { clamp, el } from './dom.js';
 import { shared, tabRef } from './state.js';
 import { FIT_CANDIDATES } from './fit.js';
@@ -238,7 +239,7 @@ function showRange(ch) {
   const nums = ch.lineNums;
   if (!nums?.length) return;
   const tab = ch.tab;
-  tab.range = `${nums[ch.center * CHUNK]}-${nums[Math.min(nums.length, (ch.center + 1) * CHUNK) - 1]}`;
+  tab.range = `${nums[ch.center * CHUNK]}${RANGE_DASH}${nums[Math.min(nums.length, (ch.center + 1) * CHUNK) - 1]}`;
   for (const ref of el.tabList.querySelectorAll(`.tab[data-tab-id="${tab.id}"] .tab-ref`)) ref.textContent = tabRef(tab);
 }
 

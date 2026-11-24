@@ -1,3 +1,4 @@
+import { bookTitle } from './data.js';
 import { el, esc, icon } from './dom.js';
 import { activeTab, byRecent, getTab, groupOf, isNotebook, isText, markUsed, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
 import { beginSplitClose } from './motion.js';
@@ -14,15 +15,15 @@ import { isMobileTier } from './viewport.js';
    ========================================================== */
 const tabName = (tab) => (isNotebook(tab) ? 'Notebook' : isText(tab) ? workOf(tab).title : 'New Tab');
 
-/* A text tab reads "Aeneid • I.1-25" (work in italics); the notebook and new tabs are just their name */
+/* A text tab reads "Aen. I.1–25", a short Citation (work in italics); the notebook and new tabs are just their name */
 const labelHtml = (tab) => (isText(tab)
-  ? `<span class="tab-title tab-title-work"><em class="tab-work">${esc(workOf(tab).title)}</em><span class="tab-ref">${esc(tabRef(tab))}</span></span>`
+  ? `<span class="tab-title tab-title-work"><em class="tab-work">${esc(workOf(tab).abbr)}</em><span class="tab-ref">${esc(tabRef(tab))}</span></span>`
   : `<span class="tab-title">${tabName(tab)}</span>`);
 
 export function tabHtml(tab, { compact = false, extra = '' } = {}) {
   const text = isText(tab);
   const active = tab.id === state.activeId;
-  const full = text ? `${workOf(tab).title} · Book ${tab.book}` : tabName(tab);
+  const full = text ? bookTitle(tab.work, tab.book) : tabName(tab);
   return `
     <div class="tab${compact ? ' tab-half' : ''}${active ? ' active' : ''}${extra}" data-tab-id="${tab.id}" role="tab" tabindex="0" aria-selected="${active}" aria-label="${esc(full)}">
       <span class="tab-left">

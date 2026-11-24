@@ -1,4 +1,4 @@
-import { WORKS } from './data.js';
+import { WORKS, bookLabel } from './data.js';
 import { $, el, esc, icon } from './dom.js';
 import { getTab, newTabId, state } from './state.js';
 import { loadBook } from './book-data.js';
@@ -30,7 +30,7 @@ const HOME_ART = {
 };
 
 const CAROUSEL_HTML = HOME_WORKS.map((key, i) => `
-  <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(WORKS[key].title)}: open Book I" style="--card-bg: ${HOME_BG[key]}; background-image: url('${HOME_ART[key].src}'); --card-pos: ${HOME_ART[key].pos}">
+  <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(WORKS[key].title)}: open Book ${bookLabel(key, 'I')}" style="--card-bg: ${HOME_BG[key]}; background-image: url('${HOME_ART[key].src}'); --card-pos: ${HOME_ART[key].pos}">
     <span class="home-card-scrim"></span><span class="home-card-title">${esc(WORKS[key].title)}</span>
   </button>`).join('');
 

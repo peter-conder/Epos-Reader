@@ -22,7 +22,7 @@ import { initChapters } from './chapters.js';
 import { closeFormatSheet, initFormatSheet } from './format-sheet.js';
 import { initEnglish } from './english.js';
 
-/* Epos reader: the entry point. Each module sets up its own listeners in its init function;
+/* Epos Reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
 loadLexicon();   // start the big dictionary download now rather than when the first book opens
 initViewport();   // layout tier first: later modules may ask which one they're in
