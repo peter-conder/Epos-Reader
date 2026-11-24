@@ -6,7 +6,6 @@ import { renderTabs, undoClose } from './tabs.js';
 import { renderPassage, setBookTitles } from './reader.js';
 import { closeNote, hideWordCard } from './word-card.js';
 import { refreshNoteMarks, renderNotebook } from './notes.js';
-import { syncSettingsChips } from './settings.js';
 import { renderBottomBar } from './bottom-bar.js';
 import { renderTabGrid } from './tab-grid.js';
 import { isMobileTier } from './viewport.js';
@@ -141,8 +140,6 @@ export function renderAll() {
   renderBottomBar();
   renderTabGrid();
   syncToolbar();
-  const tab = activeTab();
-  if (isText(tab)) syncSettingsChips(tab.work);
 }
 
 /* The active pill is ACTIVE_GROW times as wide as a resting one. Its extra width is taken from the pills on both of

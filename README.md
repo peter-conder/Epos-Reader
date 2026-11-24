@@ -15,6 +15,7 @@ Epos Reader is for students reading epic with a class, self-taught readers readi
 - **Write Notes** on any word, and **Bookmark Lines** to come back to. The **Notebook** tab gathers both.
 - **Read on a phone or tablet.** Smaller screens get their own layout, with a bottom bar, a tab grid and sheets for Word cards and text formatting (see [`docs/mobile-layout-plan.md`](docs/mobile-layout-plan.md)).
 - **Make it yours:** text size, colour palette, and light or dark mode.
+- **See where it all comes from:** the **Settings & Sources** page (also "About Epos Reader" in the menu) credits every Source, painting and font.
 
 Notes, Bookmarks, open tabs and settings are saved in your browser (`localStorage`). They never leave your device.
 
@@ -60,7 +61,7 @@ A few modules to start from:
 | Module | What it does |
 |---|---|
 | `js/book-data.js` | Loads a Book's file and its language's Lexicon, and looks up a word's Lemma, Morphology and definition |
-| `js/data.js` | The list of Works and the Translation |
+| `js/data.js` | The list of Works, the Translation, and the Sources and credits shown on the Settings & Sources page |
 | `js/reader.js`, `js/chunks.js` | Draw a Book's Lines, a chunk at a time, with Scansion |
 | `js/state.js` | Open tabs, Splits, Notes, Bookmarks and settings |
 | `js/viewport.js` | The width tiers (phone, tablet, desktop). Keep its breakpoints in step with the media queries in `css/styles.css` |
@@ -122,11 +123,24 @@ Epos Reader is built on the work of these projects:
 
 | What | Source | Licence |
 |---|---|---|
-| Latin and Greek text, English Translation | [Perseus Digital Library](https://www.perseus.tufts.edu), Tufts University | See Perseus for each text |
+| Latin text | [Perseus Digital Library](https://www.perseus.tufts.edu), Tufts University | See Perseus for each text |
 | Latin Lemmas and Morphology | LASLA corpus, via [LiLa: Linking Latin](https://lila-erc.eu) | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) |
 | Greek Lemmas and Morphology | [Ancient Greek Dependency Treebank 2.1](https://github.com/PerseusDL/treebank_data), Perseus Digital Library | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
 | Greek definitions | [A Greek-English Lexicon](https://github.com/PerseusDL/lexica) (Liddell, Scott, Jones), Perseus Digital Library | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | Scansion (and the printed Greek text) | [Hypotactic](https://hypotactic.com), David Chamberlain | See Hypotactic |
 | Latin definitions | [Whitaker's Words](https://archives.nd.edu/words.html), William Whitaker | See Whitaker's Words |
+| English Translation | Credit to be added: the English so far covers Aeneid I.1–16 and a few sample Lines ([peter-conder/Epos-Reader#5](https://github.com/peter-conder/Epos-Reader/issues/5)) | |
 
-Because the Latin Lemma data is CC BY-NC-SA 4.0, Epos Reader is non-commercial, and anything built from that data must be shared under the same licence. The Greek Lemma data and LSJ definitions are share-alike too (CC BY-SA), so anything built from them must be shared under the same terms. Fonts are [Gentium Plus](https://software.sil.org/gentium/) and [Roboto](https://fonts.google.com/specimen/Roboto), loaded from Google Fonts.
+Because the Latin Lemma data is CC BY-NC-SA 4.0, Epos Reader is non-commercial, and anything built from that data must be shared under the same licence. The Greek Lemma data and LSJ definitions are share-alike too (CC BY-SA), so anything built from them must be shared under the same terms.
+
+The app also uses:
+
+| What | Credit |
+|---|---|
+| Aeneid card on Home | *Aeneas Carrying Anchises*, Carle van Loo, 1729, Musée du Louvre, Paris ([Louvre listing on Smartify](https://smartify.org/artworks/charles-andre-known-as-carle-vanloo-aeneas-carrying-anchises)) |
+| Iliad card on Home | *Priam Begging Achilles for the Return of Hector's Body*, Alexander Ivanov, 1824 ([Ivanov on Wikipedia](https://en.wikipedia.org/wiki/A._A._Ivanov)) |
+| Odyssey card on Home | *Ulysses deriding Polyphemus – Homer's Odyssey*, J. M. W. Turner, 1829, The National Gallery, London ([NG508](https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-ulysses-deriding-polyphemus-homer-s-odyssey)) |
+| Fonts | [Gentium Plus](https://software.sil.org/gentium/) (SIL International) and [Roboto](https://fonts.google.com/specimen/Roboto), loaded from Google Fonts |
+| Hand-written glosses | Short glosses for some Homeric Lemmas, written by the author (`tools/homer/input/hand_glosses.csv`). Where there is one, it is shown in place of the LSJ definition |
+
+These lists are copied from `SOURCES` and `CREDITS` in `js/data.js`, which the Settings & Sources page shows. Change both together.
