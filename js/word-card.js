@@ -11,7 +11,7 @@ import { showChrome } from './bottom-bar.js';
 
 /* Below desktop the card is a bottom sheet rather than a popup by the word (see WORD CARD SHEET in styles.css):
    the selected line is scrolled clear of it, tapping another word swaps what it shows, and the note editor
-   opens inside it. Only one sheet is open at a time, so it closes the Format Text sheet. */
+   is pinned to the top of the screen while it is open (see pinNote). Only one sheet is open at a time, so it closes the Format Text sheet. */
 const asSheet = () => isMobileTier();
 const SHEET_CLEARANCE = 24;   // px kept between the selected line and the sheet's top edge
 const TOP_CLEARANCE = 76;     // …and between it and the top of the screen (the menu button)
@@ -133,24 +133,70 @@ export function openWordNote() {
   shared.noteCtx = { ...shared.wordCtx, noteId: existing?.id };
   el.noteTitle.textContent = `Note on “${shared.wordCtx.word}”`;
   el.noteInput.value = existing?.text ?? '';
-  if (asSheet()) {
-    // In the sheet the note box sits under the definition instead of floating beside the card
-    noteHome ??= el.noteBox.parentElement;
-    el.noteBox.classList.add('in-sheet');
-    el.wordCard.append(el.noteBox);
-    el.noteBox.style.left = el.noteBox.style.top = '';
-  } else placeNoteBox({
+  if (asSheet()) pinNote();
+  else placeNoteBox({
     x: parseFloat(el.wordCard.style.left), y: parseFloat(el.wordCard.style.top),
     w: el.wordCard.offsetWidth, h: el.wordCard.offsetHeight
   });
   el.noteBox.classList.add('open');
   el.cardNote.setAttribute('aria-expanded', 'true');
   el.noteInput.focus({ preventScroll: true });
-  if (asSheet()) {
-    el.noteBox.scrollIntoView({ block: 'nearest' });
-    requestAnimationFrame(() => revealAboveSheet(shared.selectedWord));   // the card grew
-  }
   el.noteInput.setSelectionRange(el.noteInput.value.length, el.noteInput.value.length);
+  if (asSheet()) { fitPinnedNote(); requestAnimationFrame(revealBelowNote); }
+}
+
+/* ---- Pinned note editor (phones and tablets) ----
+   A phone's keyboard covers the bottom of the screen without shrinking the page, so a note written in the
+   bottom sheet would be hidden behind it. While a note is being written the card steps away and the editor is
+   pinned to the top of the screen instead: the word, the text box and a ✓. The text box grows with what is
+   written, down to the keyboard's top edge, which is read from the visual viewport (the part of the page left
+   visible above the keyboard). ✓ saves and brings the card back; dismissing the keyboard leaves the editor up. */
+const PIN_GAP = 10;   // px between the editor and the screen's edges or the keyboard
+
+function pinNote() {
+  noteHome ??= el.noteBox.parentElement;
+  document.body.append(el.noteBox);
+  el.noteBox.classList.add('pinned');
+  el.noteBox.style.left = el.noteBox.style.top = '';
+  document.documentElement.classList.add('note-pinned');
+  visualViewport?.addEventListener('resize', fitPinnedNote);
+  visualViewport?.addEventListener('scroll', fitPinnedNote);
+}
+
+function unpinNote() {
+  if (!el.noteBox.classList.contains('pinned')) return;
+  el.noteBox.classList.remove('pinned');
+  el.noteBox.style.removeProperty('--pin-top');
+  el.noteInput.style.height = '';
+  noteHome.append(el.noteBox);
+  document.documentElement.classList.remove('note-pinned');
+  visualViewport?.removeEventListener('resize', fitPinnedNote);
+  visualViewport?.removeEventListener('scroll', fitPinnedNote);
+}
+
+/* Scrolls the noted word's line out from under the editor, where the pane has room to */
+function revealBelowNote() {
+  const word = shared.selectedWord, pane = word?.closest('.pane');
+  if (!pane || !el.noteBox.classList.contains('pinned')) return;
+  const below = el.noteBox.getBoundingClientRect().bottom + SHEET_CLEARANCE;
+  const dy = (word.closest('.verse') ?? word).getBoundingClientRect().top - below;
+  if (dy >= 0) return;
+  shared.keepCardUntil = performance.now() + 600;
+  pane.scrollBy({ top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+
+/* Keeps the editor at the top of what is visible, and its text box as tall as its text, short of the keyboard */
+function fitPinnedNote() {
+  if (!el.noteBox.classList.contains('pinned')) return;
+  const vv = visualViewport;
+  const top = vv ? vv.offsetTop : 0, visible = vv ? vv.height : innerHeight;
+  el.noteBox.style.setProperty('--pin-top', `${top}px`);
+  const input = el.noteInput;
+  const chrome = el.noteBox.offsetHeight - input.offsetHeight;    // title row and padding
+  const boxTop = el.noteBox.getBoundingClientRect().top - top;   // safe area and gap, inside the visible part
+  const room = Math.max(96, visible - boxTop - chrome - PIN_GAP);
+  input.style.height = 'auto';
+  input.style.height = `${Math.min(room, Math.max(96, input.scrollHeight + 2))}px`;
 }
 
 export function closeNote() {
@@ -158,7 +204,7 @@ export function closeNote() {
   if (!ctx) return;
   shared.noteCtx = null;
   el.noteBox.classList.remove('open');
-  if (el.noteBox.classList.contains('in-sheet')) { el.noteBox.classList.remove('in-sheet'); noteHome.append(el.noteBox); }
+  unpinNote();
   el.cardNote.setAttribute('aria-expanded', 'false');
   if (document.activeElement === el.noteInput) el.noteInput.blur();
 
@@ -178,13 +224,15 @@ export function closeNote() {
 
 export function initWordCard() {
   // A popup by a word would be left behind by a resize. The sheet isn't anchored, and a phone's keyboard opening
-  // for a note resizes the window, so it stays; crossing a tier closes either.
+  // for a note can resize the window, so it stays; crossing a tier closes either.
   addEventListener('resize', () => { if (!asSheet()) hideWordCard(); });
   onTierChange(hideWordCard);
   bindSheetDrag(el.wordCard, '.card-grip, .card-lemma, .card-morph', hideWordCard, asSheet);
   el.wordCard.insertAdjacentHTML('afterbegin', '<div class="card-grip" aria-hidden="true"><span></span></div>');
   el.cardNote.addEventListener('click', openWordNote);
   el.cardUserNote.addEventListener('click', openWordNote);
+  el.noteInput.addEventListener('input', fitPinnedNote);
+  el.noteDone.addEventListener('click', closeNote);   // saves; the card comes back (see .note-pinned in styles.css)
   el.noteInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); closeNote(); }
   });

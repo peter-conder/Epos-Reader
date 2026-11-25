@@ -27,7 +27,7 @@ export const el = {
   hoverCard: $('hover-card'), hoverCite: $('hover-cite'), hoverDesc: $('hover-desc'), hoverSwitch: $('btn-hover-switch'),
   wordCard: $('word-card'), cardLemma: $('card-lemma'), cardMorph: $('card-morph'), cardScan: $('card-scan'), cardDef: $('card-def'),
   cardNote: $('card-note'), cardUserNote: $('card-user-note'), cardUserNoteText: $('card-user-note-text'),
-  noteBox: $('note-box'), noteTitle: $('note-title'), noteInput: $('note-input'),
+  noteBox: $('note-box'), noteTitle: $('note-title'), noteInput: $('note-input'), noteDone: $('note-done'),
   toast: $('toast'),
   bottomBar: $('bottom-bar'), bbPill: $('bb-pill'), bbTrack: $('bb-track'), bbProgress: $('bb-progress-fill'),
   bbCount: $('bb-count'), tabsBtn: $('btn-tabs'),

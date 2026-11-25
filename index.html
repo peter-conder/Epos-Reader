@@ -271,7 +271,12 @@
 
 <!-- NOTE BOX -->
 <div class="popover note-box" id="note-box" role="dialog" aria-label="Note">
-  <div class="note-box-title" id="note-title">Note</div>
+  <div class="note-box-head">
+    <div class="note-box-title" id="note-title">Note</div>
+    <button class="note-done" id="note-done" aria-label="Save note">
+      <svg class="icon"><use href="assets/icons.svg#i-check"/></svg>
+    </button>
+  </div>
   <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
 </div>
 

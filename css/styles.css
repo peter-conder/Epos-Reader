@@ -1251,10 +1251,13 @@
     transition: opacity 180ms ease, transform 240ms var(--ease-spring), visibility 0s linear 240ms;
   }
   .note-box.open { visibility: visible; transition-delay: 0s; }
+  .note-box-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .note-box-title {
+    flex: 1; min-width: 0;
     font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .note-done { display: none; }   /* only on the pinned editor (phones and tablets) */
   .note-input {
     width: 100%; min-height: 120px; max-height: 40vh;
     padding: 10px 12px;
@@ -1921,17 +1924,33 @@
     .card-lemma, .card-morph { touch-action: none; }   /* pulling the card's title down closes it too */
     .card-note, .card-bookmark { top: 30px; }
     .card-def { font-size: 15px; line-height: 1.45; }
-    /* The note editor opens inside the card, under the definition */
-    .note-box.in-sheet {
-      position: static;
-      width: auto;
-      margin-top: 16px;
-      padding: 12px;
-      background: color-mix(in srgb, var(--surface) 70%, var(--primary-container));
-      opacity: 1; visibility: visible; transform: none; pointer-events: auto;
-      box-shadow: none;
-      transition: none;
+    /* ---- Pinned note editor: while a note is written the card steps away and the editor sits at the top of
+       the screen, clear of the keyboard (see pinNote in word-card.js). --pin-top follows the visible part of
+       the page if the browser scrolls it to show the keyboard. ---- */
+    .note-box.pinned {
+      --from: translateY(-12px) scale(0.98);
+      top: calc(var(--pin-top, 0px) + 10px + env(safe-area-inset-top));
+      left: calc(10px + env(safe-area-inset-left)); right: calc(10px + env(safe-area-inset-right));
+      width: auto; max-width: 640px; margin-inline: auto;
+      padding: 10px 10px 12px 16px;
+      border-radius: 24px;
+      box-shadow: var(--shadow-pop);
+      z-index: 270;
     }
+    .note-box.pinned .note-box-title { font-size: 13px; }
+    .note-box.pinned .note-input { min-height: 96px; max-height: none; font-size: 16px; }   /* 16px: iOS doesn't zoom in */
+    .note-box.pinned .note-done {
+      display: grid; place-items: center; flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: var(--radius-full);
+      background: var(--primary); color: var(--on-primary);
+      transition: transform 150ms ease;
+    }
+    .note-box.pinned .note-done:active { transform: scale(0.92); }
+    .note-box.pinned .note-done .icon { width: 22px; height: 22px; stroke-width: 2.6; }
+    /* The card steps down out of the way while the editor is up, and the menu button steps aside */
+    .note-pinned .word-card.visible { visibility: hidden; transform: translateY(105%); transition: transform 280ms var(--chrome-ease), visibility 0s linear 280ms; }
+    .note-pinned #btn-menu { opacity: 0; pointer-events: none; }
     /* Room below the last lines, so even they can be scrolled clear of the card */
     .card-open .pane-original { padding-bottom: 65dvh; transition: none; }   /* at once: the reveal scrolls into it */
 
