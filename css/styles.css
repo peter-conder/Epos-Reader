@@ -1561,8 +1561,8 @@
     #btn-menu {
       margin: 0;
       pointer-events: auto;
-      background: var(--surface);
-      border: 1px solid var(--gray-200);
+      background: var(--primary-container); color: var(--on-primary-container);   /* the theme colour, like the bottom bar */
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
       box-shadow: var(--shadow-pop);
       transition: transform 320ms var(--chrome-ease), opacity 260ms ease, background-color 150ms ease;
     }
@@ -1591,10 +1591,12 @@
       transform-origin: 50% 100%;
       transition: transform 320ms var(--chrome-ease), opacity 260ms ease;
     }
+    /* In the theme's container colour, like the word card and Format text sheet that open over it */
     .bb-piece {
       pointer-events: auto;
-      background: var(--surface);
-      border: 1px solid var(--gray-200);
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
       border-radius: var(--radius-full);
       box-shadow: var(--shadow-pop);
     }
@@ -1603,8 +1605,8 @@
       display: grid; place-items: center;
       transition: background-color 150ms ease, transform 150ms ease;
     }
-    .bb-format:active, .bb-tabs:active { background: var(--gray-200); transform: scale(0.94); }
-    .bb-format > span { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .bb-format:active, .bb-tabs:active { background: color-mix(in srgb, var(--primary-container) 82%, var(--on-primary-container)); transform: scale(0.94); }
+    .bb-format .icon { width: 24px; height: 24px; }
     .bb-main {
       position: relative; flex: 1; min-width: 0;
       display: flex; align-items: center; gap: 2px;
@@ -1636,15 +1638,17 @@
     }
     .bb-title, .bb-sub { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .bb-title { font-size: 14px; font-weight: 600; letter-spacing: -0.1px; }
-    .bb-sub { font-size: 12px; color: var(--gray-600); font-variant-numeric: tabular-nums; }
+    .bb-sub { font-size: 12px; color: color-mix(in srgb, var(--on-primary-container) 72%, transparent); font-variant-numeric: tabular-nums; }
     .bb-sub:empty { display: none; }
     /* Tab-overview button: the number of open tabs in a rounded square */
     .bb-count {
       min-width: 22px; height: 22px; padding: 0 4px;
       display: grid; place-items: center;
-      border: 2px solid currentColor; border-radius: 7px;
+      border: 2px solid var(--primary); border-radius: 7px;
+      color: var(--primary);
       font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
     }
+    .bb-tabs[aria-expanded="true"] .bb-count { border-color: currentColor; color: inherit; }
 
     /* Reading: both fade away where they are, shrinking a little (see the hiding in bottom-bar.js) */
     .chrome-hidden .bottom-bar { opacity: 0; transform: translateX(-50%) scale(0.94); }
@@ -1970,7 +1974,7 @@
       width: 44px; height: 44px; flex-shrink: 0;
       display: grid; place-items: center;
       border-radius: var(--radius-full);
-      background: var(--gray-100);
+      background: color-mix(in srgb, var(--primary-container) 86%, var(--on-primary-container));
       font-size: 13px; font-weight: 800; letter-spacing: 0.5px;
       transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
     }

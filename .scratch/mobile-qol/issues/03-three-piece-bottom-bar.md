@@ -21,3 +21,9 @@ The bottom bar was one translucent pill: EN on the left, the tab's name in the m
 - `css/styles.css`: the bar itself is a transparent row that lets touches through its gaps; each piece has the surface colour, border and shadow. The EN chip has a soft fill, and while it shows, the pill's slots are padded on the right so the tab's name stays centred. `#btn-menu` lost its blur.
 - `js/bottom-bar.js` opens the Format text sheet from `#btn-format`; `js/main.js` doesn't close the sheet for a tap on that button.
 - Checked in Chromium at 390×844 (light and dark) and 768×1024; the Aa button opens the sheet over the bar.
+
+**2026-11-25:** Follow-up: more contrast, in the theme's colour.
+
+- The three pieces and the menu button are filled with `--primary-container`, with text and icons in `--on-primary-container`, matching the word card and Format text sheet. The strong `--primary` marks the EN chip when it is on, the progress line and the tab count's box.
+- The left button shows the toolbar's paintbrush (`i-text`) instead of "Aa".
+- Checked in Chromium at 390×844 in Amber (light and dark), Pine (dark, English showing) and Slate (light), and at 768×1024 in Lavender (dark).
