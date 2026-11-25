@@ -9,6 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Home Screen app. The status bar keeps iOS's own style: "black-translucent" let the text run behind it, but
+     left a gap the height of the status bar at the bottom of the screen (a WebKit bug). Re-add the icon to the
+     Home Screen for a change here to take effect. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Epos Reader">
 <link rel="stylesheet" href="css/styles.css">
 <script>
   /* Set light/dark before the first paint so a dark page doesn't flash white (settings.js takes over from here) */
@@ -24,6 +31,9 @@
 <!-- TOP BAR -->
 <header class="top-bar">
   <div class="top-left">
+    <button class="icon-button" id="btn-page-back" aria-label="Back" hidden>
+      <svg class="icon"><use href="assets/icons.svg#i-arrow-left"/></svg>
+    </button>
     <button class="icon-button" id="btn-menu" aria-label="Main menu" aria-expanded="false" data-tip="Main Menu &amp; Settings">
       <svg class="icon"><use href="assets/icons.svg#i-menu"/></svg>
     </button>
@@ -271,7 +281,12 @@
 
 <!-- NOTE BOX -->
 <div class="popover note-box" id="note-box" role="dialog" aria-label="Note">
-  <div class="note-box-title" id="note-title">Note</div>
+  <div class="note-box-head">
+    <div class="note-box-title" id="note-title">Note</div>
+    <button class="note-done" id="note-done" aria-label="Save note">
+      <svg class="icon"><use href="assets/icons.svg#i-check"/></svg>
+    </button>
+  </div>
   <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
 </div>
 
@@ -313,18 +328,33 @@
 <!-- LINE MENU (phones and tablets): a long press on a line -->
 <div class="popover line-menu" id="line-menu" role="menu" aria-label="Line actions"></div>
 
-<!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
-     Swipe across the pill to move between tabs. -->
+<!-- BOTTOM BAR (phones and tablets): three pieces. Format text on the left; the open tab in the middle, with
+     the EN chip, how far through it you are, and a swipe across it to move between tabs; all tabs on the right. -->
 <nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">
-  <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
-  <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
-  <div class="bb-pill" id="bb-pill" aria-live="polite">
-    <div class="bb-track" id="bb-track"></div>
+  <button class="bb-piece bb-format" id="btn-format" aria-label="Format text">
+    <svg class="icon"><use href="assets/icons.svg#i-text"/></svg>
+  </button>
+  <div class="bb-piece bb-main">
+    <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
+    <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
+    <div class="bb-pill" id="bb-pill" aria-live="polite">
+      <div class="bb-track" id="bb-track"></div>
+    </div>
   </div>
-  <button class="bb-tabs" id="btn-tabs" aria-label="Show all tabs">
+  <button class="bb-piece bb-tabs" id="btn-tabs" aria-label="Show all tabs">
     <span class="bb-count" id="bb-count">1</span>
   </button>
 </nav>
+
+<!-- BOOKMARK RIBBON (phones and tablets): bookmarks the top line, Kindle-style (see mobile-bookmarks.js) -->
+<button class="bm-ribbon" id="bm-ribbon" aria-pressed="false" aria-label="Bookmark the top line" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 0h18v22l-9-6-9 6Z"/></svg>
+</button>
+
+<!-- After jumping to a Bookmark from a dot: the way back -->
+<button class="back-chip" id="back-chip" hidden>
+  <svg class="icon"><use href="assets/icons.svg#i-arrow-left"/></svg><span id="back-chip-text">Back</span>
+</button>
 
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span>Tab closed</span>

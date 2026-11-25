@@ -1,0 +1,14 @@
+{
+  "name": "Epos Reader",
+  "short_name": "Epos Reader",
+  "description": "Read the Aeneid, Iliad and Odyssey in the original language.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#151418",
+  "theme_color": "#151418",
+  "icons": [
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

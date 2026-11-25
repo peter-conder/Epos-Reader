@@ -1,6 +1,6 @@
 import { WORKS, bookTitle } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
-import { byRecent, isNotebook, isText, state, workOf } from './state.js';
+import { readingTabs, isNotebook, isText, state, workOf } from './state.js';
 import { activateTab, closeTab } from './tabs.js';
 import { anchorIndex } from './chunks.js';
 import { countLabel } from './notes.js';
@@ -61,7 +61,7 @@ function cardHtml(tab) {
 
 export function renderTabGrid() {
   if (!tabGridOpen()) return;
-  const tabs = byRecent();
+  const tabs = readingTabs();   // the Notebook is a page on phones and tablets, not a tab
   el.tgCount.textContent = `${tabs.length} ${tabs.length === 1 ? 'Tab' : 'Tabs'}`;
   el.tgList.innerHTML = tabs.map(cardHtml).join('');
 }

@@ -1,0 +1,10 @@
+# Mobile quality-of-life pass
+
+Agreed in a design review on 2026-11-25. Each section is a decision, not a proposal; one ticket each under `issues/`.
+
+1. **Scrollbar.** The drawn, coloured, bouncing thumb goes. Every pane uses the browser's own scrollbar (thin, grey). On desktop the original text keeps a dot per Bookmark on a thin strip just left of the scrollbar; click one to jump. No morphing. On phones and tablets there are no dots, and the system scrollbar fades by itself.
+2. **Writing a note on a phone.** While typing, the word card collapses to a small editor pinned to the top of the screen (word, text box, ✓) that grows down to the keyboard. ✓ saves and returns to the full card; an emptied note is deleted. Dismissing the keyboard keeps you in the editor. Tapping the text below saves and closes both. Notebook notes are unchanged.
+3. **Bottom bar.** Three solid pieces (no glass): a left "Aa" circle that opens Format text; a centre pill with the EN chip at its left end, the tab name and Lines, swipe between tabs and the progress line; a right circle with the open-tab count that opens the tab grid. The menu button is solid to match.
+4. **Hiding while reading.** The bar and menu button fade (opacity and a slight shrink) when you scroll down, or after 3 seconds without a touch. Only in a text tab, and never while a sheet, menu, the tab grid or the note editor is open. They come back on scroll up, at either end, or on a tap outside a word.
+5. **Home Screen app.** A web app manifest and `apple-mobile-web-app-status-bar-style: black-translucent`, so the text can run behind the status bar around the Dynamic Island. Kept only if it helps on a real iPhone (status-bar text is always white; the icon must be re-added).
+6. **Swiping between tabs.** The text pages follow the finger as the pill is dragged, side by side with a small gap, flat (no scaling or shadow). Past the threshold or a flick they finish the slide; otherwise they spring back. Past the last tab the chapter list slides in from the right. With Reduce Motion the switch stays instant. Swiping on the text itself does not switch tabs.

@@ -17,6 +17,8 @@ import { closePaletteMenu, initToolbar, setTools } from './toolbar.js';
 import { initTooltips } from './tooltips.js';
 import { initViewport, onTierChange } from './viewport.js';
 import { initBottomBar } from './bottom-bar.js';
+import { initMobileBookmarks } from './mobile-bookmarks.js';
+import { initPages } from './pages.js';
 import { initTabGrid } from './tab-grid.js';
 import { initChapters } from './chapters.js';
 import { closeFormatSheet, initFormatSheet } from './format-sheet.js';
@@ -54,8 +56,8 @@ document.addEventListener('click', (e) => {
   if (!t.closest('#drawer, #btn-menu, #palette-menu')) { setOpen(el.drawer, false); closePaletteMenu(); }
   if (!t.closest('#flyout, #btn-text')) setOpen(el.flyout, false);
   if (!t.closest('#popups-flyout, #btn-popups')) setOpen(el.popupsFlyout, false);
-  // Tapping anywhere but the sheet (or the menu that opened it) closes the Format Text sheet
-  if (!t.closest('#format-sheet, #drawer, #btn-menu')) closeFormatSheet();
+  // Tapping anywhere but the sheet (or the menu or button that opened it) closes the Format Text sheet
+  if (!t.closest('#format-sheet, #drawer, #btn-menu, #btn-format')) closeFormatSheet();
 });
 
 document.addEventListener('keydown', (e) => {
@@ -71,6 +73,8 @@ initNoteDrag();
 initBookmarks();
 initTooltips();
 initBottomBar();
+initMobileBookmarks();
+initPages();
 initTabGrid();
 initChapters();
 initFormatSheet();

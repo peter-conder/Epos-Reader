@@ -6,7 +6,7 @@ import { activateTab, addTab } from './tabs.js';
 import { scrollToLine } from './chunks.js';
 import { showWordCard, syncCardNote } from './word-card.js';
 import { flashLine, renderBookmarks } from './bookmarks.js';
-import { attachScrollbar } from './scrollbar.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    NOTES
@@ -52,6 +52,8 @@ export function openNotebook() {
     return;
   }
   const tab = { id: 'tab-notebook', kind: 'notebook', partnerId: null, view: el.viewNotebook, fresh: true };
+  // On a phone or tablet the Notebook is a page: its tab lasts only while the page is open (see pages.js)
+  if (isMobileTier()) tab.pageOnly = true;
   el.viewNotebook.dataset.tabId = tab.id;
   state.tabs.push(tab);
   shared.notebookDirty = true;
@@ -127,8 +129,6 @@ export function markNotes(tab, scope) {
 }
 
 export function initNotes() {
-  attachScrollbar(el.notebookPane);
-
   /* New notes start as an empty card at the top, focused and ready to type.
      An empty card that loses focus simply disappears. */
   el.newNoteBtn.addEventListener('click', () => {

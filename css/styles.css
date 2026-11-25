@@ -206,6 +206,7 @@
   /* Main menu: its centre sits over the centre of the tab icons below (12px shell + 10px sidebar + 1px border + 16px tab padding + half an icon) */
   #btn-menu { width: 48px; height: 48px; margin-left: calc(12px + 10px + 1px + 16px + 10px - 16px - 24px); }
   #btn-menu .icon { width: 28px; height: 28px; }
+  #btn-page-back[hidden] { display: none; }
 
   .brand { display: flex; align-items: center; gap: 10px; user-select: none; }
   .brand-icon { width: 32px; height: 32px; display: grid; place-items: center; }
@@ -659,7 +660,7 @@
   }
   .view { height: 100%; overflow-y: auto; }
   .view-reader, .view-notebook { overflow: hidden; }
-  .view-notebook { position: relative; }   /* the notebook's scrollbar rail is placed against it */
+  .view-notebook { position: relative; }
 
   .empty-state {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
@@ -790,61 +791,25 @@
      ========================================================== */
   .workspace { position: relative; display: flex; height: 100%; overflow: hidden; }
 
-  /* The panes' scrollbar is drawn by script (see scrollbar.js): a rail laid over the pane's right padding, placed
-     from script, holding the thumb and, on the original text, the bookmark dots. Only the track, the thumb and the
-     dots' shapes take the pointer. */
-  .sb-rail { position: absolute; width: 20px; z-index: 6; pointer-events: none; display: none; }
-  .sb-track { position: absolute; inset: 0; pointer-events: auto; }
-  .sb-dots { position: absolute; inset: 0; pointer-events: none; }
-
-  /* The thumb: an 8px pill (centre 7px from the rail's left edge). Held, it grows to 14px with a plain ease (no
-     bounce). Its length is set from script; hitting the top or bottom squishes it (shorter and wider, see
-     squish() in scrollbar.js). */
-  .sb-thumb {
-    position: absolute; left: 3px; width: 8px;
-    border-radius: 4px;
-    background: var(--primary);
-    pointer-events: auto; touch-action: none; cursor: default;
-    transition: left 140ms ease, width 140ms ease, border-radius 140ms ease, opacity 90ms ease;
-  }
-  .sb-thumb::before { content: ''; position: absolute; inset: 0 -10px 0 -4px; }   /* a hit area as wide as the rail */
-  .sb-rail.dragging .sb-thumb { left: 0; width: 14px; border-radius: 7px; }
-  body.sb-dragging, body.sb-dragging * { user-select: none !important; }
-  /* Near a bookmark the pill gives way to the bookmark's circle (see updateRailNear in bookmarks.js); it stays while held */
-  .sb-rail.bm-near .sb-thumb { opacity: 0; }
-  /* Each dot is a 34px box drawn by script as an SVG path (a small circle; near a bookmark it morphs pill,
-     loading-indicator shape, circle). Its centre sits on the thumb's pill (left: 7px); top is set from script. */
+  /* The panes use the browser's own scrollbar. On desktop the original text has a thin strip just left of it
+     (see scrollbar.js) with a dot for each bookmark in the Book; click one to jump to its line. */
+  .sb-rail { position: absolute; width: 14px; z-index: 6; pointer-events: none; display: none; }
   .bm-dot {
-    position: absolute; left: 7px;
-    width: 34px; height: 34px; padding: 0;
+    position: absolute; left: 50%;
+    width: 20px; height: 20px; padding: 0;
     transform: translate(-50%, -50%);
-    pointer-events: none;
-    display: grid; place-items: center;
-    transition: left 320ms var(--ease-bouncy), transform 160ms var(--ease-spring);
-  }
-  .bm-dot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .bm-dot path {
-    fill: var(--primary);
-    stroke: var(--surface); stroke-width: 2; paint-order: stroke;   /* a ring that keeps it visible over the thumb */
     pointer-events: auto; cursor: pointer;
-    transition: stroke-width 200ms ease;
+    display: grid; place-items: center;
+    transition: transform 140ms ease;
   }
-  /* Scrolled close to a bookmark: a circle with a bookmark in it, and the thumb's pill hides (.sb-rail.bm-near).
-     It sits left of the pill's centre so that, even enlarged on hover, it keeps clear of the pane's edge:
-     centre -2px, radius 13 x 1.12 hover => its right side stops at about 12.6px of the 20px rail. */
-  .bm-dot.near { left: -2px; }
-  .bm-dot.near path { stroke-width: 0; }
-  @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.12); } }
-  .bm-dot::after {
+  .bm-dot::before {
     content: '';
-    width: 14px; height: 14px;
-    background: var(--on-primary);
-    -webkit-mask: var(--bookmark-fill-icon) center / contain no-repeat;
-            mask: var(--bookmark-fill-icon) center / contain no-repeat;
-    opacity: 0; transform: scale(0.4);
-    transition: opacity 120ms ease, transform 160ms ease;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 2px var(--surface);   /* a ring that keeps it visible over the text's edge */
   }
-  .bm-dot.near::after { opacity: 1; transform: scale(1); transition: opacity 200ms ease 300ms, transform 300ms var(--ease-bouncy) 300ms; }
+  @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.25); } }
 
   .pane {
     height: 100%;
@@ -857,12 +822,12 @@
     overscroll-behavior: contain;
     user-select: text;
     transition: padding 180ms ease;
-    scrollbar-width: none;   /* the browser's scrollbar is hidden; the thumb is drawn by scrollbar.js */
+    scrollbar-width: thin;   /* the browser's own scrollbar, in grey on a clear track so it sits inside the rounded corners */
+    scrollbar-color: var(--gray-400) transparent;
   }
   /* The reading panes keep their place themselves, by line rather than by pixel (see the anchor in chunks.js);
      the browser's own scroll anchoring would fight it when a chunk's estimated height is corrected */
   .pane-original, .pane-translation { overflow-anchor: none; }
-  .pane::-webkit-scrollbar { display: none; }
 
   .pane-original {
     width: 100%; max-width: var(--reader-max); margin: 0 auto; flex-shrink: 0;
@@ -1286,10 +1251,13 @@
     transition: opacity 180ms ease, transform 240ms var(--ease-spring), visibility 0s linear 240ms;
   }
   .note-box.open { visibility: visible; transition-delay: 0s; }
+  .note-box-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .note-box-title {
+    flex: 1; min-width: 0;
     font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .note-done { display: none; }   /* only on the pinned editor (phones and tablets) */
   .note-input {
     width: 100%; min-height: 120px; max-height: 40vh;
     padding: 10px 12px;
@@ -1466,7 +1434,7 @@
   body.pane-dragging, body.pane-dragging * { cursor: grabbing !important; user-select: none !important; }
 
   /* Each pane of a split has an X pinned to its top-right corner, so it rides along with the pane's edge.
-     It sits left of the scrollbar rail (the rightmost 20px of the pane). */
+     It sits left of the scrollbar and the bookmark strip. */
   .pane-close {
     position: absolute; top: 14px; right: 24px;
     z-index: 7;
@@ -1593,14 +1561,26 @@
     #btn-menu {
       margin: 0;
       pointer-events: auto;
-      background: color-mix(in srgb, var(--surface) 86%, transparent);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-              backdrop-filter: blur(16px) saturate(1.4);
-      border: 1px solid var(--gray-200);
+      background: var(--primary-container); color: var(--on-primary-container);   /* the theme colour, like the bottom bar */
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
       box-shadow: var(--shadow-pop);
-      transition: transform 280ms var(--chrome-ease), opacity 200ms ease, background-color 150ms ease;
+      transition: transform 320ms var(--chrome-ease), opacity 260ms ease, background-color 150ms ease;
     }
     .drawer { top: calc(68px + env(safe-area-inset-top)); left: calc(10px + env(safe-area-inset-left)); }
+
+    /* ---- Pages: Settings and the Notebook (see pages.js). A back button stands where the menu button was, and
+       the bottom bar, ribbon and dots step away. Pages take sideways swipes themselves (back from the left edge). ---- */
+    #btn-page-back {
+      width: 48px; height: 48px; margin: 0;
+      pointer-events: auto;
+      background: var(--primary-container); color: var(--on-primary-container);
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
+      box-shadow: var(--shadow-pop);
+    }
+    #btn-page-back .icon { width: 24px; height: 24px; }
+    .page-open #btn-menu { display: none; }
+    .page-open :is(.bottom-bar, .bm-ribbon, .sb-rail) { display: none !important; }
+    :is(#view-settings, .notebook-pane, .cl-body) { touch-action: pan-y; }
 
     /* Panes run edge to edge; their padding keeps the first and last lines clear of the floating controls */
     .pane {
@@ -1613,26 +1593,42 @@
     .empty-state { padding-bottom: var(--bar-room); }
     .toast { bottom: calc(var(--bar-h) + var(--bar-bottom) + 12px); }
 
-    /* Bottom bar */
+    /* Bottom bar: three solid pieces side by side (Format text, the open tab, all tabs) */
     .bottom-bar {
       position: fixed; left: 50%; bottom: var(--bar-bottom);
       transform: translateX(-50%);
       width: min(560px, calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right)));
       height: var(--bar-h);
-      display: flex; align-items: center; gap: 4px;
-      padding: 6px;
-      background: color-mix(in srgb, var(--surface) 86%, transparent);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-              backdrop-filter: blur(16px) saturate(1.4);
-      border: 1px solid var(--gray-200);
+      display: flex; align-items: stretch; gap: 8px;
+      z-index: 60;
+      pointer-events: none;   /* only the pieces take touches, not the gaps between them */
+      transform-origin: 50% 100%;
+      transition: transform 320ms var(--chrome-ease), opacity 260ms ease;
+    }
+    /* In the theme's container colour, like the word card and Format text sheet that open over it */
+    .bb-piece {
+      pointer-events: auto;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
       border-radius: var(--radius-full);
       box-shadow: var(--shadow-pop);
-      overflow: hidden;
-      z-index: 60;
-      transition: transform 280ms var(--chrome-ease), opacity 200ms ease;
     }
-    /* How far through the tab you are: a thin line along the bar's top edge, inside its rounded ends */
-    .bb-progress { position: absolute; top: 0; left: 28px; right: 28px; height: 3px; border-radius: 0 0 3px 3px; overflow: hidden; }
+    .bb-format, .bb-tabs {
+      width: var(--bar-h); flex-shrink: 0;
+      display: grid; place-items: center;
+      transition: background-color 150ms ease, transform 150ms ease;
+    }
+    .bb-format:active, .bb-tabs:active { background: color-mix(in srgb, var(--primary-container) 82%, var(--on-primary-container)); transform: scale(0.94); }
+    .bb-format .icon { width: 24px; height: 24px; }
+    .bb-main {
+      position: relative; flex: 1; min-width: 0;
+      display: flex; align-items: center; gap: 2px;
+      padding: 5px;
+      overflow: hidden;
+    }
+    /* How far through the tab you are: a thin line along the pill's top edge, inside its rounded ends */
+    .bb-progress { position: absolute; top: 0; left: 24px; right: 24px; height: 3px; border-radius: 0 0 3px 3px; overflow: hidden; }
     .bb-progress-fill {
       height: 100%;
       background: var(--primary);
@@ -1656,29 +1652,25 @@
     }
     .bb-title, .bb-sub { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .bb-title { font-size: 14px; font-weight: 600; letter-spacing: -0.1px; }
-    .bb-sub { font-size: 12px; color: var(--gray-600); font-variant-numeric: tabular-nums; }
+    .bb-sub { font-size: 12px; color: color-mix(in srgb, var(--on-primary-container) 72%, transparent); font-variant-numeric: tabular-nums; }
     .bb-sub:empty { display: none; }
     /* Tab-overview button: the number of open tabs in a rounded square */
-    .bb-tabs {
-      width: 44px; height: 44px; flex-shrink: 0;
-      display: grid; place-items: center;
-      border-radius: var(--radius-full);
-      transition: background-color 150ms ease, transform 150ms ease;
-    }
-    .bb-tabs:active { background: var(--gray-200); transform: scale(0.94); }
     .bb-count {
       min-width: 22px; height: 22px; padding: 0 4px;
       display: grid; place-items: center;
-      border: 2px solid currentColor; border-radius: 7px;
+      border: 2px solid var(--primary); border-radius: 7px;
+      color: var(--primary);
       font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums;
     }
+    .bb-tabs[aria-expanded="true"] .bb-count { border-color: currentColor; color: inherit; }
 
-    /* Reading: both float away, down and up */
-    .chrome-hidden .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }
-    .chrome-hidden #btn-menu { transform: translateY(calc(-100% - 24px - env(safe-area-inset-top))); opacity: 0; pointer-events: none; }
+    /* Reading: both fade away where they are, shrinking a little (see the hiding in bottom-bar.js) */
+    .chrome-hidden .bottom-bar { opacity: 0; transform: translateX(-50%) scale(0.94); }
+    .chrome-hidden .bottom-bar .bb-piece { pointer-events: none; }
+    .chrome-hidden #btn-menu { opacity: 0; transform: scale(0.88); pointer-events: none; }
   }
 
-  .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only { display: none; }
+  .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only, .bm-ribbon, .back-chip { display: none; }
 
   /* Where the English stops short of the Latin */
   .trans-more { margin: 24px 0 8px; text-align: center; font-size: 14px; color: var(--gray-600); }
@@ -1827,6 +1819,11 @@
       animation: sheetUp 300ms var(--chrome-ease);
     }
     .chapter-list[hidden] { display: none; }
+    /* A neighbouring tab's page while the bottom bar is swiped: laid over the open page and moved beside it
+       from script (see startPeek in bottom-bar.js) */
+    .tab-view.peeking { position: absolute; inset: 0; width: 100%; }
+    /* Being swiped in from the bottom bar: under the bar, and moved from script rather than rising */
+    .chapter-list.peek { z-index: 55; animation: none; }
     @keyframes sheetUp { from { transform: translateY(24px); opacity: 0; } }
     .cl-header { display: flex; align-items: center; gap: 8px; padding: 14px 12px 10px 20px; }
     .cl-title { flex: 1; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
@@ -1956,31 +1953,49 @@
     .card-lemma, .card-morph { touch-action: none; }   /* pulling the card's title down closes it too */
     .card-note, .card-bookmark { top: 30px; }
     .card-def { font-size: 15px; line-height: 1.45; }
-    /* The note editor opens inside the card, under the definition */
-    .note-box.in-sheet {
-      position: static;
-      width: auto;
-      margin-top: 16px;
-      padding: 12px;
-      background: color-mix(in srgb, var(--surface) 70%, var(--primary-container));
-      opacity: 1; visibility: visible; transform: none; pointer-events: auto;
-      box-shadow: none;
-      transition: none;
+    /* ---- Pinned note editor: while a note is written the card steps away and the editor sits at the top of
+       the screen, clear of the keyboard (see pinNote in word-card.js). --pin-top follows the visible part of
+       the page if the browser scrolls it to show the keyboard. ---- */
+    .note-box.pinned {
+      --from: translateY(-12px) scale(0.98);
+      top: calc(var(--pin-top, 0px) + 10px + env(safe-area-inset-top));
+      left: calc(10px + env(safe-area-inset-left)); right: calc(10px + env(safe-area-inset-right));
+      width: auto; max-width: 640px; margin-inline: auto;
+      padding: 10px 10px 12px 16px;
+      border-radius: 24px;
+      box-shadow: var(--shadow-pop);
+      z-index: 270;
     }
+    .note-box.pinned .note-box-title { font-size: 13px; }
+    .note-box.pinned .note-input { min-height: 96px; max-height: none; font-size: 16px; }   /* 16px: iOS doesn't zoom in */
+    .note-box.pinned .note-done {
+      display: grid; place-items: center; flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: var(--radius-full);
+      background: var(--primary); color: var(--on-primary);
+      transition: transform 150ms ease;
+    }
+    .note-box.pinned .note-done:active { transform: scale(0.92); }
+    .note-box.pinned .note-done .icon { width: 22px; height: 22px; stroke-width: 2.6; }
+    /* The card steps down out of the way while the editor is up, and the menu button steps aside */
+    .note-pinned .word-card.visible { visibility: hidden; transform: translateY(105%); transition: transform 280ms var(--chrome-ease), visibility 0s linear 280ms; }
+    .note-pinned #btn-menu { opacity: 0; pointer-events: none; }
     /* Room below the last lines, so even they can be scrolled clear of the card */
     .card-open .pane-original { padding-bottom: 65dvh; transition: none; }   /* at once: the reveal scrolls into it */
 
-    /* ---- EN button on the bottom bar: swap to the English (phone) or show it beside the Latin (tablet) ---- */
+    /* ---- EN chip at the left of the pill: swap to the English (phone) or show it beside the Latin (tablet) ---- */
     .bb-lang {
       width: 44px; height: 44px; flex-shrink: 0;
       display: grid; place-items: center;
       border-radius: var(--radius-full);
+      background: color-mix(in srgb, var(--primary-container) 86%, var(--on-primary-container));
       font-size: 13px; font-weight: 800; letter-spacing: 0.5px;
       transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
     }
     .bb-lang[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
     .bb-lang:disabled { opacity: 0.35; }
     .bb-lang:active { transform: scale(0.94); }
+    .bb-lang:not([hidden]) + .bb-pill .bb-slot { padding-right: 58px; }   /* the tab's name stays centred on the pill */
 
     /* ---- Line numbers: a tap bookmarks the line (or shows its English); a long press opens the line menu ---- */
     .verse-bm { display: none; }
@@ -2000,6 +2015,54 @@
     .passage { -webkit-touch-callout: none; }
     .verse.pressed { background: color-mix(in srgb, var(--primary-container) 70%, transparent); border-radius: var(--radius-sm); transition: background-color 200ms ease; }
     @media (pointer: coarse) { .pane-original { -webkit-user-select: none; user-select: none; } }
+
+    /* ---- Bookmarks, Kindle-style (see mobile-bookmarks.js) ---- */
+    /* The ribbon hangs from just under the status bar at the top right. Empty it is an outline that fades with the
+       other floating controls; filled (a Bookmarked line on screen) it is solid and stays while you read. */
+    .bm-ribbon {
+      position: fixed; z-index: 58;
+      top: env(safe-area-inset-top); right: calc(12px + env(safe-area-inset-right));
+      width: 44px; height: 44px;
+      display: flex; justify-content: center; align-items: flex-start;
+      color: var(--primary);
+      transition: opacity 260ms ease;
+    }
+    .bm-ribbon[hidden] { display: none; }
+    .bm-ribbon svg { width: 22px; height: 22px; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18)); }
+    .bm-ribbon path {
+      fill: color-mix(in srgb, var(--surface) 70%, transparent);
+      stroke: currentColor; stroke-width: 2; stroke-linejoin: round;
+      transition: fill 160ms ease;
+    }
+    .bm-ribbon.filled path { fill: currentColor; }
+    .bm-ribbon.drop svg { animation: ribbonDrop 360ms var(--ease-bouncy); transform-origin: 50% 0; }
+    @keyframes ribbonDrop { from { transform: scaleY(0.6); } }
+    .chrome-hidden .bm-ribbon:not(.filled) { opacity: 0; pointer-events: none; }
+    :is(.grid-open, .chapters-open, .note-pinned) .bm-ribbon { opacity: 0; pointer-events: none; }
+
+    /* The dots down the right edge: shown with the floating controls, each with a finger-sized target */
+    .sb-rail { width: 24px; transition: opacity 260ms ease; }
+    .chrome-hidden .sb-rail { opacity: 0; }
+    .chrome-hidden .sb-rail .bm-dot { pointer-events: none; }
+    .bm-dot { width: 44px; height: 44px; }
+    .bm-dot::before { width: 10px; height: 10px; }
+
+    /* "Back to line N" after a dot jump: where the "Tab closed" toast appears */
+    .back-chip {
+      position: fixed; z-index: 61;
+      left: 50%; bottom: calc(var(--bar-h) + var(--bar-bottom) + 12px);
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      min-height: 40px; padding: 0 18px 0 14px;
+      background: var(--inverse-surface); color: var(--inverse-on-surface);
+      border-radius: var(--radius-full);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      font-size: 13.5px; font-weight: 600;
+      animation: chipIn 220ms var(--ease-spring);
+    }
+    .back-chip[hidden] { display: none; }
+    .back-chip .icon { width: 18px; height: 18px; }
+    @keyframes chipIn { from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.94); } }
 
     /* While a sheet is up the bottom bar steps away under it */
     :is(.sheet-open, .card-open) .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }

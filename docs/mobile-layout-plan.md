@@ -27,13 +27,16 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 ## Screen layout (compact and medium)
 
 - **Floating hamburger** at top left; no top bar.
-- **Bottom bar** (Safari-style): citation and line range, with a thin progress line along its top edge. A **tab-grid button** sits to its right. **Swiping across the bar** switches between open tabs.
-- Both the hamburger and the bottom bar **hide on scroll down** and come back on scroll up or a tap on the text.
+- **Bottom bar** (Safari-style, three solid pieces, no glass): an **"Aa" circle** on the left opens the Format text sheet; a **pill** in the middle holds the EN chip, the citation and line range, and a thin progress line along its top edge; a **tab-grid circle** on the right shows the number of open tabs. The hamburger is solid to match.
+- **Swiping across the pill** switches between open tabs. The pages follow the finger: the open page and the neighbour's slide side by side with a small gap, flat, and finish the slide or spring back with the pill. Past the last tab the chapter list slides in the same way. With Reduce Motion the switch is instant. Swiping on the text itself does not switch tabs.
+- Both the hamburger and the bottom bar **fade away** (opacity and a slight shrink) while you read a text: on scroll down, or after 3 seconds without a touch. Not over the Notebook or Home, and never while a sheet, menu, the tab grid or the note editor is open. They come back on scroll up, at either end, or on a tap outside a word.
 - The bottom bar stays clear of the home indicator with `env(safe-area-inset-bottom)`.
+- **Home Screen app:** a web app manifest, with iOS's own status bar. `black-translucent` was tried so the text could run behind the status bar, but iOS can't hide the status icons and the setting left a gap the height of the status bar at the bottom of the screen (a WebKit bug), so it was dropped.
+- **Scrollbar:** the browser's own, thin and grey; on phones and tablets the system one fades by itself. Bookmark dots sit beside it (on phones and tablets, between the floating controls).
 
 ## Tabs
 
-- Several tabs can be open; one is shown at a time. The notebook is its own tab.
+- Several tabs can be open; one is shown at a time. The Notebook is a page, not a tab (see Pages below), so it isn't in the tab grid or the swipe order; a Notebook tab saved on desktop is kept and comes back there.
 - **Tab grid:** two columns, most recently used first. Each card shows the citation, last position and a Latin snippet. Close with ✕ or a sideways swipe; the "Tab closed · Undo" toast appears above the bottom bar. Leave with the grid button or "Done".
 - **Ordering:** the most-recently-used order only updates when a tab is opened from the grid or picker, or when you start scrolling in it. A quick swipe to peek and back leaves the order alone, so grid order and swipe order always match.
 
@@ -54,20 +57,28 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
   5. Light/dark mode switch
 - **Format text sheet:** covers the bottom half of the screen, Kindle-style, so the text stays visible while you change it.
 - **Word cards:** a bottom sheet. The selected line scrolls into view above it; tapping another word swaps the card's contents.
+- **Writing a note:** the keyboard would cover the sheet, so while a note is written the card steps away and the editor is pinned to the top of the screen (the word, a text box that grows down to the keyboard, and ✓). ✓ saves and brings the card back; dismissing the keyboard keeps the editor; tapping the text below saves and closes both.
 - **One sheet at a time.** Opening one closes the other. An open sheet covers the bottom bar. Tapping the text above a sheet closes it, except tapping a word, which swaps the word card.
+
+## Pages
+
+- **Settings and the Notebook are pages:** they cover the text with no hamburger, bottom bar, ribbon or dots. A **back button** (← in a circle) stands where the hamburger was and returns to the tab you were reading. Back from the Notebook goes to the most recent tab, or a New Tab if there is none.
+- **Swipe from the left edge** (the first 24px) to go back, as on iOS: the page follows the finger with the view you came from sliding in, dimmed, underneath; past a third of the width or a flick goes back, otherwise it springs back. The chapter list closes the same way. With Reduce Motion the swipe still works, with no slide.
 
 ## English translation
 
 - **Default (compact): swap toggle.** Flips the whole view between Latin and English, keeping your place.
 - **Optional (setting): line-tap mode.** Tapping a line number shows that line's English. The English hides while the Format text sheet is open.
 - **Medium:** the existing side-by-side dual pane.
-- The EN button sits at the left of the bottom bar: it swaps on a phone and opens the side-by-side pane on a tablet. Swapping back without scrolling the English returns to the exact Latin line, even past the end of the English.
+- The EN chip sits at the left end of the bottom bar's pill: it swaps on a phone and opens the side-by-side pane on a tablet. Swapping back without scrolling the English returns to the exact Latin line, even past the end of the English.
 - English exists only for Book I, lines 1–16, so far (`translations` in `js/data.js`). Where it stops, the English pane says so; a line with none says "No English for this line yet."
 
 ## Line numbers and hover-only controls
 
 - **Tap a line number:** shows its English when line-tap mode is on; otherwise toggles the bookmark. Settings says which.
 - **Long press a line:** action menu (bookmark, note, copy).
+- **Corner ribbon (Kindle-style):** a ribbon tab hangs at the top right. Tap it to bookmark the first line you can read at the top of the screen; it is filled while any bookmarked line is on screen, and tapping it then removes the topmost one. Empty, it fades with the other controls; filled, it stays. Not shown while the English is swapped in.
+- **Bookmark dots** run down the right edge with the controls; tapping one puts its line at the top of the screen, and a "Back to line N" chip above the bottom bar returns you (it goes after a screen of scrolling or 8 seconds).
 - A bookmarked line shows its number in the primary colour (even lines that don't usually show one) and a ribbon in the margin; the desktop's margin bookmark marker is hidden below desktop.
 - Tooltips are dropped on touch devices; menu items get visible text labels instead.
 - The tab hover card is retired on mobile; the tab grid replaces it.
@@ -85,7 +96,7 @@ Rotating a tablet, resizing a window, iPad multitasking:
 
 ## Build order
 
-Each phase is its own commit. All eight are done.
+Each phase is its own commit. All eight are done. A later quality-of-life pass (scrollbar, note editor, three-piece bar, fading, Home Screen app, sliding pages) is recorded in `.scratch/mobile-qol/`.
 
 1. **Tier scaffold:** width tiers, `hover`/`pointer` queries, bigger touch targets.
 2. **Line wrapping:** fixed hanging indent and variable-height chunks; no fitting on compact.
@@ -119,3 +130,6 @@ Spot checks: scroll position across a long book, the longest lines wrapping with
 - MDN `pointer` media feature: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer
 - MDN `env()`: https://developer.mozilla.org/en-US/docs/Web/CSS/env
 - Apple Human Interface Guidelines (touch targets): https://developer.apple.com/design/human-interface-guidelines/accessibility
+- Apple, supported meta tags (`apple-mobile-web-app-status-bar-style`): https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+- WebKit bugs on Home Screen apps and the status bar: https://bugs.webkit.org/show_bug.cgi?id=260508, https://bugs.webkit.org/show_bug.cgi?id=301994
+- WebKit bug on the keyboard covering fixed elements: https://bugs.webkit.org/show_bug.cgi?id=191204
