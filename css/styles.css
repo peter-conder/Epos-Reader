@@ -659,7 +659,7 @@
   }
   .view { height: 100%; overflow-y: auto; }
   .view-reader, .view-notebook { overflow: hidden; }
-  .view-notebook { position: relative; }   /* the notebook's scrollbar rail is placed against it */
+  .view-notebook { position: relative; }
 
   .empty-state {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
@@ -790,61 +790,26 @@
      ========================================================== */
   .workspace { position: relative; display: flex; height: 100%; overflow: hidden; }
 
-  /* The panes' scrollbar is drawn by script (see scrollbar.js): a rail laid over the pane's right padding, placed
-     from script, holding the thumb and, on the original text, the bookmark dots. Only the track, the thumb and the
-     dots' shapes take the pointer. */
-  .sb-rail { position: absolute; width: 20px; z-index: 6; pointer-events: none; display: none; }
-  .sb-track { position: absolute; inset: 0; pointer-events: auto; }
-  .sb-dots { position: absolute; inset: 0; pointer-events: none; }
-
-  /* The thumb: an 8px pill (centre 7px from the rail's left edge). Held, it grows to 14px with a plain ease (no
-     bounce). Its length is set from script; hitting the top or bottom squishes it (shorter and wider, see
-     squish() in scrollbar.js). */
-  .sb-thumb {
-    position: absolute; left: 3px; width: 8px;
-    border-radius: 4px;
-    background: var(--primary);
-    pointer-events: auto; touch-action: none; cursor: default;
-    transition: left 140ms ease, width 140ms ease, border-radius 140ms ease, opacity 90ms ease;
-  }
-  .sb-thumb::before { content: ''; position: absolute; inset: 0 -10px 0 -4px; }   /* a hit area as wide as the rail */
-  .sb-rail.dragging .sb-thumb { left: 0; width: 14px; border-radius: 7px; }
-  body.sb-dragging, body.sb-dragging * { user-select: none !important; }
-  /* Near a bookmark the pill gives way to the bookmark's circle (see updateRailNear in bookmarks.js); it stays while held */
-  .sb-rail.bm-near .sb-thumb { opacity: 0; }
-  /* Each dot is a 34px box drawn by script as an SVG path (a small circle; near a bookmark it morphs pill,
-     loading-indicator shape, circle). Its centre sits on the thumb's pill (left: 7px); top is set from script. */
+  /* The panes use the browser's own scrollbar. On desktop the original text has a thin strip just left of it
+     (see scrollbar.js) with a dot for each bookmark in the Book; click one to jump to its line. */
+  .sb-rail { position: absolute; width: 14px; z-index: 6; pointer-events: none; display: none; }
   .bm-dot {
-    position: absolute; left: 7px;
-    width: 34px; height: 34px; padding: 0;
+    position: absolute; left: 50%;
+    width: 20px; height: 20px; padding: 0;
     transform: translate(-50%, -50%);
-    pointer-events: none;
-    display: grid; place-items: center;
-    transition: left 320ms var(--ease-bouncy), transform 160ms var(--ease-spring);
-  }
-  .bm-dot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-  .bm-dot path {
-    fill: var(--primary);
-    stroke: var(--surface); stroke-width: 2; paint-order: stroke;   /* a ring that keeps it visible over the thumb */
     pointer-events: auto; cursor: pointer;
-    transition: stroke-width 200ms ease;
+    display: grid; place-items: center;
+    transition: transform 140ms ease;
   }
-  /* Scrolled close to a bookmark: a circle with a bookmark in it, and the thumb's pill hides (.sb-rail.bm-near).
-     It sits left of the pill's centre so that, even enlarged on hover, it keeps clear of the pane's edge:
-     centre -2px, radius 13 x 1.12 hover => its right side stops at about 12.6px of the 20px rail. */
-  .bm-dot.near { left: -2px; }
-  .bm-dot.near path { stroke-width: 0; }
-  @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.12); } }
-  .bm-dot::after {
+  .bm-dot::before {
     content: '';
-    width: 14px; height: 14px;
-    background: var(--on-primary);
-    -webkit-mask: var(--bookmark-fill-icon) center / contain no-repeat;
-            mask: var(--bookmark-fill-icon) center / contain no-repeat;
-    opacity: 0; transform: scale(0.4);
-    transition: opacity 120ms ease, transform 160ms ease;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 2px var(--surface);   /* a ring that keeps it visible over the text's edge */
   }
-  .bm-dot.near::after { opacity: 1; transform: scale(1); transition: opacity 200ms ease 300ms, transform 300ms var(--ease-bouncy) 300ms; }
+  @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.25); } }
+  @media (max-width: 1024px) { .sb-rail { display: none !important; } }
 
   .pane {
     height: 100%;
@@ -857,12 +822,12 @@
     overscroll-behavior: contain;
     user-select: text;
     transition: padding 180ms ease;
-    scrollbar-width: none;   /* the browser's scrollbar is hidden; the thumb is drawn by scrollbar.js */
+    scrollbar-width: thin;   /* the browser's own scrollbar, in grey on a clear track so it sits inside the rounded corners */
+    scrollbar-color: var(--gray-400) transparent;
   }
   /* The reading panes keep their place themselves, by line rather than by pixel (see the anchor in chunks.js);
      the browser's own scroll anchoring would fight it when a chunk's estimated height is corrected */
   .pane-original, .pane-translation { overflow-anchor: none; }
-  .pane::-webkit-scrollbar { display: none; }
 
   .pane-original {
     width: 100%; max-width: var(--reader-max); margin: 0 auto; flex-shrink: 0;
@@ -1466,7 +1431,7 @@
   body.pane-dragging, body.pane-dragging * { cursor: grabbing !important; user-select: none !important; }
 
   /* Each pane of a split has an X pinned to its top-right corner, so it rides along with the pane's edge.
-     It sits left of the scrollbar rail (the rightmost 20px of the pane). */
+     It sits left of the scrollbar and the bookmark strip. */
   .pane-close {
     position: absolute; top: 14px; right: 24px;
     z-index: 7;

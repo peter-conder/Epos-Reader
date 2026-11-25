@@ -8,8 +8,8 @@ import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks } from
 import { scheduleFit } from './fit.js';
 import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
-import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark, updateRailNear } from './bookmarks.js';
-import { attachScrollbar } from './scrollbar.js';
+import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark } from './bookmarks.js';
+import { attachMarkStrip } from './scrollbar.js';
 import { bottomBarScroll } from './bottom-bar.js';
 import { isMobileTier } from './viewport.js';
 import { lineNumberTap } from './english.js';
@@ -34,14 +34,12 @@ export function createReader(tab) {
     renderedKey: null
   };
   el.panes.append(rootEl);
-  // Each pane gets its own drawn scrollbar; the original text's rail also carries the bookmark dots
-  tab.ui.sb = attachScrollbar(tab.ui.paneOriginal);
-  tab.ui.rail = tab.ui.sb.dots;
-  attachScrollbar(tab.ui.paneTranslation);
+  // The original text's bookmark dots sit on a strip beside its scrollbar (desktop only)
+  tab.ui.rail = attachMarkStrip(tab.ui.paneOriginal).rail;
   bindReader(tab);
   // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
   tab.ro = new ResizeObserver(() => {
-    renderRail(tab);   // the dots follow the scrollbar as the pane is resized
+    renderRail(tab);   // the dots follow the pane's height as it is resized
     scheduleFit(tab, false);
     clearTimeout(tab.fitTimer);
     tab.fitTimer = setTimeout(() => scheduleFit(tab), 150);
@@ -62,7 +60,6 @@ export function bindReader(tab) {
     const word = e.target.closest('.word');
     if (word) showWordCard(word);
   });
-  ui.sb.rail.addEventListener('sbdrag', () => updateRailNear(tab));   // holding or releasing the thumb
   ui.rail.addEventListener('click', (e) => {
     const dot = e.target.closest('.bm-dot');
     if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
@@ -71,7 +68,6 @@ export function bindReader(tab) {
     // A popup anchored to the word would drift away from it; the phone's sheet isn't anchored, so it stays
     if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil && !isMobileTier()) hideWordCard();
     syncChunks(ui.chunkers?.[0]);
-    updateRailNear(tab);
     bottomBarScroll(tab);
   }, { passive: true });
   ui.paneTranslation.addEventListener('scroll', () => { syncChunks(ui.chunkers?.[1]); bottomBarScroll(tab); }, { passive: true });
