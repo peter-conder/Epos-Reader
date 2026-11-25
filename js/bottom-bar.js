@@ -17,8 +17,8 @@ import { openFormatSheet } from './format-sheet.js';
    ("Aen. I / Lines 34–58"), with a thin progress line along its top; on the right a button with the number
    of open tabs, which opens the tab grid. Swiping the pill sideways drags the neighbouring tab's pill in,
    like Safari's address bar; let go past a third of the way (or flick) and that tab opens.
-   The bar and the floating menu button hide while you scroll down through a text, and come back when you
-   scroll up, reach either end, or tap the page.
+   The bar and the floating menu button fade away while you read a text: when you scroll down, or after
+   IDLE_MS without a touch. They come back when you scroll up, reach either end, or tap the page.
    ========================================================== */
 const COMMIT = 0.3;        // share of the pill's width a drag must pass to switch tabs…
 const FLICK = 0.45;        // …or this fast (px per ms) and at least FLICK_MIN px
@@ -28,6 +28,7 @@ const AXIS_SLOP = 8;       // px before a drag counts as sideways or not
 const SETTLE_MS = 260;
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
 const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent)
+const IDLE_MS = 3000;      // no touch or scroll for this long while reading and the bars fade away
 
 
 /* What the pill says for a tab */
@@ -97,8 +98,41 @@ export function refreshBottomBar(tab) {
 }
 
 /* ---------- Hiding while reading ---------- */
-const setChromeHidden = (on) => root.classList.toggle('chrome-hidden', on);
+const setChromeHidden = (on) => {
+  root.classList.toggle('chrome-hidden', on);
+  if (!on) armIdle();
+};
 let lastY = 0, run = 0, read = 0, lastPane = null;
+
+/* The bars only step away while a text is being read: not over the Notebook or Home, and never while
+   something is open on top of the text (a sheet, the word card or its note, the tab grid, the chapter list,
+   the menu or the line menu) */
+const OVERLAYS = ['sheet-open', 'card-open', 'note-pinned', 'grid-open', 'chapters-open'];
+function canHide() {
+  if (!isMobileTier() || !isText(activeTab())) return false;
+  if (OVERLAYS.some((c) => root.classList.contains(c))) return false;
+  return !document.querySelector('#drawer.open, #line-menu.open');
+}
+
+/* Fading after a while without a touch: any touch, key or scroll starts the wait again, and nothing fades
+   while a finger is still down */
+let idleTimer = 0, touching = 0;
+function armIdle() {
+  clearTimeout(idleTimer);
+  if (!isMobileTier()) return;
+  idleTimer = setTimeout(() => { if (!touching && canHide()) root.classList.add('chrome-hidden'); }, IDLE_MS);
+}
+function bindIdle() {
+  addEventListener('pointerdown', () => { touching++; clearTimeout(idleTimer); }, { capture: true, passive: true });
+  const up = () => { touching = Math.max(0, touching - 1); armIdle(); };
+  addEventListener('pointerup', up, { capture: true, passive: true });
+  addEventListener('pointercancel', up, { capture: true, passive: true });
+  addEventListener('keydown', armIdle, { capture: true, passive: true });
+  addEventListener('wheel', armIdle, { capture: true, passive: true });
+  // A reader scrolled by momentum after the finger lifts: wait from where it comes to rest
+  addEventListener('scroll', (e) => { if (e.target instanceof Element && e.target.closest('.pane')) armIdle(); }, { capture: true, passive: true });
+  armIdle();
+}
 
 /* Called on every scroll of a tab's pane: refreshes the line range and progress, and hides or shows the bars */
 export function bottomBarScroll(tab) {
@@ -118,7 +152,7 @@ export function bottomBarScroll(tab) {
   run += dy;
   const atEnd = y <= 0 || y + pane.clientHeight >= pane.scrollHeight - 2;
   if (atEnd || run < -HIDE_AFTER) setChromeHidden(false);
-  else if (run > HIDE_AFTER && isText(tab)) setChromeHidden(true);
+  else if (run > HIDE_AFTER && canHide()) setChromeHidden(true);
 }
 
 /* ---------- Swiping between tabs ---------- */
@@ -180,6 +214,7 @@ function bindSwipe() {
 
 export function initBottomBar() {
   bindSwipe();
+  bindIdle();
   el.formatBtn.addEventListener('click', openFormatSheet);
   el.notebookPane.addEventListener('scroll', () => { const t = activeTab(); if (isNotebook(t)) bottomBarScroll(t); }, { passive: true });
   // A tap on the page (not on something that does its own thing) brings the bars back
