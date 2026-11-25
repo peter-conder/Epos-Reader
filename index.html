@@ -9,6 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Home Screen app: the page runs up behind the status bar, around the Dynamic Island (with viewport-fit=cover);
+     the status bar's text is white over it. Re-add the icon to the Home Screen for a change here to take effect. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Epos Reader">
 <link rel="stylesheet" href="css/styles.css">
 <script>
   /* Set light/dark before the first paint so a dark page doesn't flash white (settings.js takes over from here) */
