@@ -21,6 +21,7 @@ import { initTabGrid } from './tab-grid.js';
 import { initChapters } from './chapters.js';
 import { closeFormatSheet, initFormatSheet } from './format-sheet.js';
 import { initEnglish } from './english.js';
+import { initSession, restoreSession } from './session.js';
 
 /* Epos Reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
@@ -86,4 +87,5 @@ onTierChange(() => {
   setTools(false);
 });
 
-addNewTab();   // a New Tab is always open when the page loads
+initSession();
+if (!restoreSession()) addNewTab();   // reopen the last reading session, or start on a New Tab
