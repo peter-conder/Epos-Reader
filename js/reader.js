@@ -4,7 +4,7 @@ import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js'
 import { loadBook } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
-import { makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
+import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
 import { scheduleFit } from './fit.js';
 import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
@@ -186,6 +186,11 @@ export function renderPassage(tab) {
     ui.chunkers.forEach(mountChunker);
     tab.fitModel = null;   // new text, new widths
     scheduleFit(tab);
+    // A tab brought back from the saved session goes back to its Line once the text has been fitted (see session.js)
+    const place = tab.restoreAt;
+    tab.restoreAt = null;
+    const i = place ? ui.chunkers[0].lineNums.indexOf(place.line) : -1;
+    if (i >= 0) requestAnimationFrame(() => jumpToIndex(ui.chunkers[0], i, place.frac ?? 0));
   });
   return ui.ready;
 }

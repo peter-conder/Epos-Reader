@@ -17,7 +17,7 @@ Epos Reader is for students reading epic with a class, self-taught readers readi
 - **Make it yours:** text size, colour palette, and light or dark mode.
 - **See where it all comes from:** the **Settings & Sources** page (also "About Epos Reader" in the menu) credits every Source, painting and font.
 
-Notes, Bookmarks, open tabs and settings are saved in your browser (`localStorage`). They never leave your device.
+Notes, Bookmarks, settings, and your reading session (open tabs and Splits, your place in each Book, text size and Scansion) are saved in your browser (`localStorage`), so the app reopens where you left it, including as a Home Screen app on a phone. They never leave your device.
 
 ## Run it locally
 
@@ -64,6 +64,7 @@ A few modules to start from:
 | `js/data.js` | The list of Works, the Translation, and the Sources and credits shown on the Settings & Sources page |
 | `js/reader.js`, `js/chunks.js` | Draw a Book's Lines, a chunk at a time, with Scansion |
 | `js/state.js` | Open tabs, Splits, Notes, Bookmarks and settings |
+| `js/session.js` | Saves the reading session when the page is hidden, and reopens it on launch |
 | `js/viewport.js` | The width tiers (phone, tablet, desktop). Keep its breakpoints in step with the media queries in `css/styles.css` |
 
 ## Data format

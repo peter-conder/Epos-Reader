@@ -131,7 +131,8 @@ export function toggleTheme() {
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (document.startViewTransition && !still) document.startViewTransition(() => applyTheme(next));
   else applyTheme(next);
-  try { localStorage.setItem(THEME_KEY, state.theme); } catch { /* storage unavailable */ }
+  // Save `next`, not state.theme: a view transition calls applyTheme later, so state.theme is still the old mode here
+  try { localStorage.setItem(THEME_KEY, next); } catch { /* storage unavailable */ }
 }
 
 export function initSettings() {
