@@ -2007,13 +2007,13 @@
     .bm-ribbon {
       position: fixed; z-index: 58;
       top: env(safe-area-inset-top); right: calc(12px + env(safe-area-inset-right));
-      width: 44px; height: 56px;
+      width: 44px; height: 44px;
       display: flex; justify-content: center; align-items: flex-start;
       color: var(--primary);
       transition: opacity 260ms ease;
     }
     .bm-ribbon[hidden] { display: none; }
-    .bm-ribbon svg { width: 24px; height: 36px; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18)); }
+    .bm-ribbon svg { width: 22px; height: 22px; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18)); }
     .bm-ribbon path {
       fill: color-mix(in srgb, var(--surface) 70%, transparent);
       stroke: currentColor; stroke-width: 2; stroke-linejoin: round;
