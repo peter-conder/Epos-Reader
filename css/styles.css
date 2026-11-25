@@ -1801,6 +1801,11 @@
       animation: sheetUp 300ms var(--chrome-ease);
     }
     .chapter-list[hidden] { display: none; }
+    /* A neighbouring tab's page while the bottom bar is swiped: laid over the open page and moved beside it
+       from script (see startPeek in bottom-bar.js) */
+    .tab-view.peeking { position: absolute; inset: 0; width: 100%; }
+    /* Being swiped in from the bottom bar: under the bar, and moved from script rather than rising */
+    .chapter-list.peek { z-index: 55; animation: none; }
     @keyframes sheetUp { from { transform: translateY(24px); opacity: 0; } }
     .cl-header { display: flex; align-items: center; gap: 8px; padding: 14px 12px 10px 20px; }
     .cl-title { flex: 1; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }

@@ -1,12 +1,14 @@
 import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
-import { activeTab, byRecent, isNotebook, isText, markUsed, state, workOf } from './state.js';
+import { activeTab, byRecent, isNotebook, isText, markUsed, shared, state, workOf } from './state.js';
 import { visibleLines } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
 import { renderAll } from './layout.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
-import { closeChapterList, openChapterList } from './chapters.js';
+import { closeChapterList, endPeekChapterList, openChapterList, peekChapterList } from './chapters.js';
+import { renderReader } from './reader.js';
+import { renderNotebook } from './notes.js';
 import { closeTabGrid } from './tab-grid.js';
 import { syncLangButton } from './english.js';
 import { openFormatSheet } from './format-sheet.js';
@@ -25,7 +27,8 @@ const FLICK = 0.45;        // …or this fast (px per ms) and at least FLICK_MIN
 const FLICK_MIN = 16;
 const EDGE_GIVE = 0.3;     // past the first or last tab the pill moves this much of the drag
 const AXIS_SLOP = 8;       // px before a drag counts as sideways or not
-const SETTLE_MS = 260;
+const SETTLE_MS = 300;
+const PAGE_GAP = 16;       // px between two text pages sliding side by side
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
 const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent)
 const IDLE_MS = 3000;      // no touch or scroll for this long while reading and the bars fade away
@@ -156,6 +159,61 @@ export function bottomBarScroll(tab) {
 }
 
 /* ---------- Swiping between tabs ---------- */
+const stillMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+/* The pages that move with a swipe: the open tab's, and its neighbours' either side, shown beside it.
+   Each page is moved by translateX; `at` is where the open page is, in px (negative: moved left). */
+function startPeek(tab, near) {
+  if (stillMotion.matches) return null;   // with Reduce Motion the switch stays instant
+  const W = el.panes.clientWidth;
+  const pages = [];   // { view, side }: side -1 left of the open page, 1 right of it, 0 the open page
+  const add = (view, side) => {
+    view.style.transition = 'none';
+    pages.push({ view, side });
+  };
+  add(tab.view, 0);
+  near.forEach((n, i) => {
+    const side = i === 0 ? -1 : 1;
+    if (!n) return;
+    if (n === NEW_SLOT) {
+      const list = side === 1 && peekChapterList();
+      if (list) add(list, side);
+      return;
+    }
+    // A tab's page joins the open one in the panes, laid over it and pushed off to its side
+    n.view.hidden = false;
+    n.view.classList.add('peeking');
+    n.fresh = false;   // it slides in, so it doesn't also pop in when it opens
+    if (isText(n)) renderReader(n);
+    else if (isNotebook(n) && shared.notebookDirty) renderNotebook();
+    add(n.view, side);
+  });
+  const peek = {
+    W, pages,
+    move(at, ms = 0) {
+      for (const p of pages) {
+        p.view.style.transition = ms ? `transform ${ms}ms cubic-bezier(0.2, 0, 0, 1)` : 'none';
+        p.view.style.transform = `translateX(${at + p.side * (W + PAGE_GAP)}px)`;
+      }
+    },
+    /* Puts every page back as the layout has it; `keep` is the page that stays on screen (its tab is opened next) */
+    end(keep) {
+      for (const p of pages) {
+        // Straight there: the panes' own springy transform transition mustn't pick up whatever is left of the slide
+        p.view.style.transition = 'none';
+        p.view.style.transform = '';
+        void p.view.offsetWidth;
+        p.view.style.transition = '';
+        if (p.view === el.chapterList) { if (keep !== el.chapterList) endPeekChapterList(); continue; }
+        p.view.classList.remove('peeking');
+        if (p.side !== 0 && p.view !== keep) p.view.hidden = true;
+      }
+    }
+  };
+  peek.move(0);
+  return peek;
+}
+
 function bindSwipe() {
   const pill = el.bbPill, track = el.bbTrack;
   let g = null;   // the drag in progress
@@ -164,13 +222,15 @@ function bindSwipe() {
     track.style.transition = animate ? `transform ${SETTLE_MS}ms cubic-bezier(0.2, 0, 0, 1)` : 'none';
     track.style.transform = `translateX(${dx}px)`;
   };
+  // The pages move the same share of their width as the pill's labels do of theirs
+  const pageAt = (d) => (d.dx / d.w) * (d.peek.W + PAGE_GAP);
 
   pill.addEventListener('pointerdown', (e) => {
     if (e.button !== 0 || g) return;
     const tab = activeTab();
     if (!tab) return;
     g = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, axis: null, w: pill.clientWidth,
-      tab, near: neighbours(tab), samples: [[performance.now(), e.clientX]] };
+      tab, near: neighbours(tab), samples: [[performance.now(), e.clientX]], peek: null };
     pill.setPointerCapture(e.pointerId);
   });
 
@@ -180,6 +240,7 @@ function bindSwipe() {
     if (!g.axis) {
       if (Math.max(Math.abs(dx), Math.abs(dy)) < AXIS_SLOP) return;
       g.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (g.axis === 'x') g.peek = startPeek(g.tab, g.near);
     }
     if (g.axis !== 'x') return;
     const to = dx > 0 ? g.near[0] : g.near[1];
@@ -187,6 +248,7 @@ function bindSwipe() {
     g.samples.push([performance.now(), e.clientX]);
     if (g.samples.length > 5) g.samples.shift();
     place(g.dx, false);
+    g.peek?.move(pageAt(g));
   });
 
   const end = (e, cancelled) => {
@@ -198,14 +260,21 @@ function bindSwipe() {
     const v = t1 > t0 ? (x1 - x0) / (t1 - t0) : 0;
     const to = d.dx > 0 ? d.near[0] : d.near[1];
     const go = !cancelled && to && (Math.abs(d.dx) > d.w * COMMIT || (Math.abs(v) > FLICK && Math.abs(d.dx) > FLICK_MIN && Math.sign(v) === Math.sign(d.dx)));
-    if (!go) { place(0, true); return; }
-    place(Math.sign(d.dx) * d.w, true);
-    // The new tab opens once its pill has slid into place (activating it redraws the bar, centred). A swipe is
-    // only a peek: the order stays as it is until the tab is read in.
+    if (!go) {
+      place(0, true);
+      d.peek?.move(0, SETTLE_MS);
+      if (d.peek) setTimeout(() => { if (activeTab() === d.tab) d.peek.end(null); }, SETTLE_MS);
+      return;
+    }
+    const dir = Math.sign(d.dx);
+    place(dir * d.w, true);
+    d.peek?.move(-dir * (d.peek.W + PAGE_GAP), SETTLE_MS);
+    // The new tab opens once its pill and page have slid into place (activating it redraws the bar, centred).
+    // A swipe is only a peek: the order stays as it is until the tab is read in.
     setTimeout(() => {
-      if (activeTab() !== d.tab) return;
-      if (to === NEW_SLOT) { place(0, false); openChapterList(); }
-      else activateTab(to.id, { promote: false });
+      if (activeTab() !== d.tab) { d.peek?.end(null); return; }
+      if (to === NEW_SLOT) { d.peek?.end(el.chapterList); place(0, false); openChapterList(); }
+      else { d.peek?.end(to.view); activateTab(to.id, { promote: false }); }
     }, SETTLE_MS);
   };
   pill.addEventListener('pointerup', (e) => end(e, false));

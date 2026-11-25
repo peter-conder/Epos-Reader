@@ -47,19 +47,45 @@ function listHtml(works) {
   }).join('');
 }
 
-/* only: list just this work. into: the New Tab to open the chosen book in. */
-export async function openChapterList({ only = null, into = null } = {}) {
-  target = into;
-  el.chapterList.hidden = false;
-  el.chapterList.classList.add('open');
-  document.documentElement.classList.add('chapters-open');
+/* Fills the list (only: just this work). Returns false if the list was closed while the works were asked for. */
+async function fillChapterList(only) {
   el.clBody.innerHTML = '';
   const works = (await availableWorks()).filter((k) => !only || k === only);
-  if (el.chapterList.hidden) return;   // closed while asking
+  if (el.chapterList.hidden) return false;
   el.clTitle.textContent = only ? WORKS[only].title : 'Open a Book';
   el.clBody.innerHTML = listHtml(works);
   el.clBody.scrollTop = 0;
-  el.clBody.querySelector('.cl-row')?.focus({ preventScroll: true });
+  return true;
+}
+
+/* only: list just this work. into: the New Tab to open the chosen book in. */
+export async function openChapterList({ only = null, into = null } = {}) {
+  target = into;
+  // Swiped in from the bottom bar: it is already on screen and filled (see peekChapterList)
+  const peeked = el.chapterList.classList.contains('peek');
+  el.chapterList.classList.remove('peek');
+  el.chapterList.hidden = false;
+  el.chapterList.classList.add('open');
+  document.documentElement.classList.add('chapters-open');
+  if (peeked && el.clBody.firstElementChild) return;
+  if (await fillChapterList(only)) el.clBody.querySelector('.cl-row')?.focus({ preventScroll: true });
+}
+
+/* Shows the list under the bottom bar, without opening it, so a swipe past the last tab can slide it in.
+   The caller moves it; endPeekChapterList hides it again, or openChapterList keeps it. */
+export function peekChapterList() {
+  if (!el.chapterList.hidden) return null;
+  target = null;
+  el.chapterList.classList.add('peek');
+  el.chapterList.hidden = false;
+  fillChapterList(null);
+  return el.chapterList;
+}
+
+export function endPeekChapterList() {
+  if (!el.chapterList.classList.contains('peek')) return;
+  el.chapterList.classList.remove('peek');
+  el.chapterList.hidden = true;
 }
 
 export function closeChapterList() {
