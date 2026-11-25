@@ -12,6 +12,7 @@ import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark } from './b
 import { attachMarkStrip } from './scrollbar.js';
 import { bottomBarScroll } from './bottom-bar.js';
 import { isMobileTier } from './viewport.js';
+import { jumpFromDot } from './mobile-bookmarks.js';
 import { lineNumberTap } from './english.js';
 
 /* ==========================================================
@@ -62,7 +63,9 @@ export function bindReader(tab) {
   });
   ui.rail.addEventListener('click', (e) => {
     const dot = e.target.closest('.bm-dot');
-    if (dot) flashLine(scrollToLine(tab, +dot.dataset.line));
+    if (!dot) return;
+    if (isMobileTier()) jumpFromDot(tab, +dot.dataset.line);   // to the top of the screen, with a way back
+    else flashLine(scrollToLine(tab, +dot.dataset.line));
   });
   ui.paneOriginal.addEventListener('scroll', () => {
     // A popup anchored to the word would drift away from it; the phone's sheet isn't anchored, so it stays

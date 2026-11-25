@@ -809,7 +809,6 @@
     box-shadow: 0 0 0 2px var(--surface);   /* a ring that keeps it visible over the text's edge */
   }
   @media (hover: hover) { .bm-dot:hover { transform: translate(-50%, -50%) scale(1.25); } }
-  @media (max-width: 1024px) { .sb-rail { display: none !important; } }
 
   .pane {
     height: 100%;
@@ -1656,7 +1655,7 @@
     .chrome-hidden #btn-menu { opacity: 0; transform: scale(0.88); pointer-events: none; }
   }
 
-  .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only { display: none; }
+  .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only, .bm-ribbon, .back-chip { display: none; }
 
   /* Where the English stops short of the Latin */
   .trans-more { margin: 24px 0 8px; text-align: center; font-size: 14px; color: var(--gray-600); }
@@ -2001,6 +2000,54 @@
     .passage { -webkit-touch-callout: none; }
     .verse.pressed { background: color-mix(in srgb, var(--primary-container) 70%, transparent); border-radius: var(--radius-sm); transition: background-color 200ms ease; }
     @media (pointer: coarse) { .pane-original { -webkit-user-select: none; user-select: none; } }
+
+    /* ---- Bookmarks, Kindle-style (see mobile-bookmarks.js) ---- */
+    /* The ribbon hangs from just under the status bar at the top right. Empty it is an outline that fades with the
+       other floating controls; filled (a Bookmarked line on screen) it is solid and stays while you read. */
+    .bm-ribbon {
+      position: fixed; z-index: 58;
+      top: env(safe-area-inset-top); right: calc(12px + env(safe-area-inset-right));
+      width: 44px; height: 56px;
+      display: flex; justify-content: center; align-items: flex-start;
+      color: var(--primary);
+      transition: opacity 260ms ease;
+    }
+    .bm-ribbon[hidden] { display: none; }
+    .bm-ribbon svg { width: 24px; height: 36px; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18)); }
+    .bm-ribbon path {
+      fill: color-mix(in srgb, var(--surface) 70%, transparent);
+      stroke: currentColor; stroke-width: 2; stroke-linejoin: round;
+      transition: fill 160ms ease;
+    }
+    .bm-ribbon.filled path { fill: currentColor; }
+    .bm-ribbon.drop svg { animation: ribbonDrop 360ms var(--ease-bouncy); transform-origin: 50% 0; }
+    @keyframes ribbonDrop { from { transform: scaleY(0.6); } }
+    .chrome-hidden .bm-ribbon:not(.filled) { opacity: 0; pointer-events: none; }
+    :is(.grid-open, .chapters-open, .note-pinned) .bm-ribbon { opacity: 0; pointer-events: none; }
+
+    /* The dots down the right edge: shown with the floating controls, each with a finger-sized target */
+    .sb-rail { width: 24px; transition: opacity 260ms ease; }
+    .chrome-hidden .sb-rail { opacity: 0; }
+    .chrome-hidden .sb-rail .bm-dot { pointer-events: none; }
+    .bm-dot { width: 44px; height: 44px; }
+    .bm-dot::before { width: 10px; height: 10px; }
+
+    /* "Back to line N" after a dot jump: where the "Tab closed" toast appears */
+    .back-chip {
+      position: fixed; z-index: 61;
+      left: 50%; bottom: calc(var(--bar-h) + var(--bar-bottom) + 12px);
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 8px;
+      min-height: 40px; padding: 0 18px 0 14px;
+      background: var(--inverse-surface); color: var(--inverse-on-surface);
+      border-radius: var(--radius-full);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+      font-size: 13.5px; font-weight: 600;
+      animation: chipIn 220ms var(--ease-spring);
+    }
+    .back-chip[hidden] { display: none; }
+    .back-chip .icon { width: 18px; height: 18px; }
+    @keyframes chipIn { from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.94); } }
 
     /* While a sheet is up the bottom bar steps away under it */
     :is(.sheet-open, .card-open) .bottom-bar { transform: translate(-50%, calc(100% + var(--bar-bottom) + 12px)); }

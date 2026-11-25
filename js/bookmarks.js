@@ -5,6 +5,7 @@ import { saveBookmarks } from './storage.js';
 import { lineCenter, textTop } from './chunks.js';
 import { jumpToLine, newId, noteSource, updateNotebookHeader } from './notes.js';
 import { stripY } from './scrollbar.js';
+import { syncRibbon } from './mobile-bookmarks.js';
 
 /* ==========================================================
    BOOKMARKS
@@ -35,6 +36,7 @@ export function bookmarksChanged() {
   saveBookmarks(state.bookmarks);
   refreshBookmarkMarks();
   syncCardBookmark();
+  syncRibbon();
   if (!el.viewNotebook.hidden && !el.panes.hidden) { updateNotebookHeader(); renderBookmarks(); }
   else shared.notebookDirty = true;
 }

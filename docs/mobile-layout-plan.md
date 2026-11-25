@@ -32,7 +32,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - Both the hamburger and the bottom bar **fade away** (opacity and a slight shrink) while you read a text: on scroll down, or after 3 seconds without a touch. Not over the Notebook or Home, and never while a sheet, menu, the tab grid or the note editor is open. They come back on scroll up, at either end, or on a tap outside a word.
 - The bottom bar stays clear of the home indicator with `env(safe-area-inset-bottom)`.
 - **Home Screen app:** a web app manifest and `apple-mobile-web-app-status-bar-style: black-translucent` let the text run behind the status bar, around the Dynamic Island (the panes pad their first line clear of it with `env(safe-area-inset-top)`). The status bar's text is white in both themes; an installed icon must be re-added to pick up a change.
-- **Scrollbar:** the browser's own, thin and grey; on phones and tablets the system one fades by itself. Bookmark dots beside it are desktop only.
+- **Scrollbar:** the browser's own, thin and grey; on phones and tablets the system one fades by itself. Bookmark dots sit beside it (on phones and tablets, between the floating controls).
 
 ## Tabs
 
@@ -72,6 +72,8 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 
 - **Tap a line number:** shows its English when line-tap mode is on; otherwise toggles the bookmark. Settings says which.
 - **Long press a line:** action menu (bookmark, note, copy).
+- **Corner ribbon (Kindle-style):** a ribbon tab hangs at the top right. Tap it to bookmark the first line you can read at the top of the screen; it is filled while any bookmarked line is on screen, and tapping it then removes the topmost one. Empty, it fades with the other controls; filled, it stays. Not shown while the English is swapped in.
+- **Bookmark dots** run down the right edge with the controls; tapping one puts its line at the top of the screen, and a "Back to line N" chip above the bottom bar returns you (it goes after a screen of scrolling or 8 seconds).
 - A bookmarked line shows its number in the primary colour (even lines that don't usually show one) and a ribbon in the margin; the desktop's margin bookmark marker is hidden below desktop.
 - Tooltips are dropped on touch devices; menu items get visible text labels instead.
 - The tab hover card is retired on mobile; the tab grid replaces it.

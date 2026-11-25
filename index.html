@@ -343,6 +343,16 @@
   </button>
 </nav>
 
+<!-- BOOKMARK RIBBON (phones and tablets): bookmarks the top line, Kindle-style (see mobile-bookmarks.js) -->
+<button class="bm-ribbon" id="bm-ribbon" aria-pressed="false" aria-label="Bookmark the top line" hidden>
+  <svg viewBox="0 0 24 36" aria-hidden="true"><path d="M3 0h18v33l-9-7-9 7Z"/></svg>
+</button>
+
+<!-- After jumping to a Bookmark from a dot: the way back -->
+<button class="back-chip" id="back-chip" hidden>
+  <svg class="icon"><use href="assets/icons.svg#i-arrow-left"/></svg><span id="back-chip-text">Back</span>
+</button>
+
 <div class="toast" id="toast" role="status" aria-live="polite">
   <span>Tab closed</span>
   <button class="toast-undo" id="toast-undo">Undo</button>

@@ -12,6 +12,7 @@ import { renderNotebook } from './notes.js';
 import { closeTabGrid } from './tab-grid.js';
 import { syncLangButton } from './english.js';
 import { openFormatSheet } from './format-sheet.js';
+import { syncRibbon } from './mobile-bookmarks.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
@@ -73,6 +74,7 @@ const neighbours = (tab) => {
 
 /* Whole bar: the three pills (previous, open, next), the tab count and the progress line */
 export function renderBottomBar() {
+  syncRibbon();
   const tab = activeTab();
   if (!tab) return;
   const [prev, next] = neighbours(tab);
@@ -98,6 +100,7 @@ export function refreshBottomBar(tab) {
   const sub = el.bbTrack.children[1]?.querySelector('.bb-sub');
   if (sub) sub.textContent = labelFor(tab).sub;
   updateProgress(tab);
+  syncRibbon();
 }
 
 /* ---------- Hiding while reading ---------- */

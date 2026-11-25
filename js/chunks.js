@@ -119,6 +119,17 @@ export function visibleLines(ch) {
   return [ch.lineNums[clamp(lineAt(ch, Math.max(0, top)), 0, last)], ch.lineNums[clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)]];
 }
 
+/* Indices of the first and last lines you can read: from just below the top padding (on a phone, clear of the
+   menu button) to just above the bottom padding (the bottom bar). Null before the book has loaded. */
+export function readableRange(ch) {
+  if (!ch?.pitch || !ch.rows?.length || !ch.pane.clientHeight) return null;
+  const top = ch.pane.scrollTop - textTop(ch) + topInset(ch);
+  const pad = parseFloat(getComputedStyle(ch.pane).paddingBottom) || 0;
+  const bottom = ch.pane.scrollTop - textTop(ch) + ch.pane.clientHeight - pad;
+  const last = ch.rows.length - 1;
+  return [clamp(lineAt(ch, Math.max(0, top)), 0, last), clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)];
+}
+
 /* Index of the line the reader was last at the top of (0 at the start, or before the book has loaded).
    Kept while the tab is hidden, so the tab grid can show where each tab is. */
 export const anchorIndex = (ch) => ch?.anchor?.i ?? 0;
