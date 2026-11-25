@@ -9,12 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<!-- Home Screen app: the page runs up behind the status bar, around the Dynamic Island (with viewport-fit=cover);
-     the status bar's text is white over it. Re-add the icon to the Home Screen for a change here to take effect. -->
+<!-- Home Screen app. The status bar keeps iOS's own style: "black-translucent" let the text run behind it, but
+     left a gap the height of the status bar at the bottom of the screen (a WebKit bug). Re-add the icon to the
+     Home Screen for a change here to take effect. -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Epos Reader">
 <link rel="stylesheet" href="css/styles.css">
 <script>
@@ -31,6 +31,9 @@
 <!-- TOP BAR -->
 <header class="top-bar">
   <div class="top-left">
+    <button class="icon-button" id="btn-page-back" aria-label="Back" hidden>
+      <svg class="icon"><use href="assets/icons.svg#i-arrow-left"/></svg>
+    </button>
     <button class="icon-button" id="btn-menu" aria-label="Main menu" aria-expanded="false" data-tip="Main Menu &amp; Settings">
       <svg class="icon"><use href="assets/icons.svg#i-menu"/></svg>
     </button>

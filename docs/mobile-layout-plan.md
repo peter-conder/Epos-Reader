@@ -31,12 +31,12 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - **Swiping across the pill** switches between open tabs. The pages follow the finger: the open page and the neighbour's slide side by side with a small gap, flat, and finish the slide or spring back with the pill. Past the last tab the chapter list slides in the same way. With Reduce Motion the switch is instant. Swiping on the text itself does not switch tabs.
 - Both the hamburger and the bottom bar **fade away** (opacity and a slight shrink) while you read a text: on scroll down, or after 3 seconds without a touch. Not over the Notebook or Home, and never while a sheet, menu, the tab grid or the note editor is open. They come back on scroll up, at either end, or on a tap outside a word.
 - The bottom bar stays clear of the home indicator with `env(safe-area-inset-bottom)`.
-- **Home Screen app:** a web app manifest and `apple-mobile-web-app-status-bar-style: black-translucent` let the text run behind the status bar, around the Dynamic Island (the panes pad their first line clear of it with `env(safe-area-inset-top)`). The status bar's text is white in both themes; an installed icon must be re-added to pick up a change.
+- **Home Screen app:** a web app manifest, with iOS's own status bar. `black-translucent` was tried so the text could run behind the status bar, but iOS can't hide the status icons and the setting left a gap the height of the status bar at the bottom of the screen (a WebKit bug), so it was dropped.
 - **Scrollbar:** the browser's own, thin and grey; on phones and tablets the system one fades by itself. Bookmark dots sit beside it (on phones and tablets, between the floating controls).
 
 ## Tabs
 
-- Several tabs can be open; one is shown at a time. The notebook is its own tab.
+- Several tabs can be open; one is shown at a time. The Notebook is a page, not a tab (see Pages below), so it isn't in the tab grid or the swipe order; a Notebook tab saved on desktop is kept and comes back there.
 - **Tab grid:** two columns, most recently used first. Each card shows the citation, last position and a Latin snippet. Close with ✕ or a sideways swipe; the "Tab closed · Undo" toast appears above the bottom bar. Leave with the grid button or "Done".
 - **Ordering:** the most-recently-used order only updates when a tab is opened from the grid or picker, or when you start scrolling in it. A quick swipe to peek and back leaves the order alone, so grid order and swipe order always match.
 
@@ -59,6 +59,11 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - **Word cards:** a bottom sheet. The selected line scrolls into view above it; tapping another word swaps the card's contents.
 - **Writing a note:** the keyboard would cover the sheet, so while a note is written the card steps away and the editor is pinned to the top of the screen (the word, a text box that grows down to the keyboard, and ✓). ✓ saves and brings the card back; dismissing the keyboard keeps the editor; tapping the text below saves and closes both.
 - **One sheet at a time.** Opening one closes the other. An open sheet covers the bottom bar. Tapping the text above a sheet closes it, except tapping a word, which swaps the word card.
+
+## Pages
+
+- **Settings and the Notebook are pages:** they cover the text with no hamburger, bottom bar, ribbon or dots. A **back button** (← in a circle) stands where the hamburger was and returns to the tab you were reading. Back from the Notebook goes to the most recent tab, or a New Tab if there is none.
+- **Swipe from the left edge** (the first 24px) to go back, as on iOS: the page follows the finger with the view you came from sliding in, dimmed, underneath; past a third of the width or a flick goes back, otherwise it springs back. The chapter list closes the same way. With Reduce Motion the swipe still works, with no slide.
 
 ## English translation
 

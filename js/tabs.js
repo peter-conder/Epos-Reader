@@ -1,6 +1,6 @@
 import { bookTitle } from './data.js';
 import { el, esc, icon } from './dom.js';
-import { activeTab, byRecent, getTab, groupOf, isNotebook, isText, markUsed, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
+import { activeTab, getTab, readingTabs, groupOf, isNotebook, isText, markUsed, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
 import { beginSplitClose } from './motion.js';
 import { closePopovers, renderAll, showUndo } from './layout.js';
 import { createReader, renderReader } from './reader.js';
@@ -121,7 +121,11 @@ export function closeTab(id, opts = {}) {
     snap.autoId = addNewTab().id;
   } else if (id === state.activeId) {
     // Desktop: the neighbour in the sidebar. Below desktop the sidebar's order isn't shown: the most recently used.
-    if (isMobileTier()) activateTab(byRecent()[0].id, { promote: false });
+    if (isMobileTier()) {
+      const next = readingTabs()[0];   // the Notebook is a page there, not a tab to fall back on
+      if (next) activateTab(next.id, { promote: false });
+      else addNewTab();
+    }
     else activateTab((partner ?? state.tabs[Math.max(0, idx - 1)]).id);
   } else {
     renderAll();

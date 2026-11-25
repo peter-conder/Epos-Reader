@@ -9,6 +9,7 @@ import { refreshNoteMarks, renderNotebook } from './notes.js';
 import { renderBottomBar } from './bottom-bar.js';
 import { renderTabGrid } from './tab-grid.js';
 import { isMobileTier } from './viewport.js';
+import { syncPages } from './pages.js';
 
 let lastShown = [];   // ids of the tabs that were on screen after the last render
 
@@ -109,6 +110,7 @@ export function setView(view) {
   closePopovers();
   hideWordCard();
   renderView();
+  syncPages();
 }
 
 /* Toolbar reflects the active tab */
@@ -133,6 +135,7 @@ export function renderBrand() {
 
 export function renderAll() {
   renderView();
+  syncPages();
   if (shared.notebookDirty && !el.viewNotebook.hidden && !el.panes.hidden) renderNotebook();
   renderTabs();
   renderSegments();

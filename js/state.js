@@ -54,6 +54,8 @@ export const isText = (tab) => tab?.kind === 'text';   // a reader; 'new' tabs s
    tab means opening it from the grid or the chapter list, or starting to read in it; a quick swipe to peek at
    one doesn't count, so the order never shuffles under the thumb. Ties keep the sidebar's order. */
 export const byRecent = () => [...state.tabs].sort((a, b) => (b.usedAt ?? 0) - (a.usedAt ?? 0));
+/* The tabs on phones and tablets, most recent first: the Notebook is a page there, not a tab */
+export const readingTabs = () => byRecent().filter((t) => t.kind !== 'notebook');
 export const markUsed = (tab) => { if (tab) tab.usedAt = Date.now() + (++usedSeq) / 1000; };
 let usedSeq = 0;   // two tabs used in the same millisecond still get an order
 

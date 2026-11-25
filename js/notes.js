@@ -6,6 +6,7 @@ import { activateTab, addTab } from './tabs.js';
 import { scrollToLine } from './chunks.js';
 import { showWordCard, syncCardNote } from './word-card.js';
 import { flashLine, renderBookmarks } from './bookmarks.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    NOTES
@@ -51,6 +52,8 @@ export function openNotebook() {
     return;
   }
   const tab = { id: 'tab-notebook', kind: 'notebook', partnerId: null, view: el.viewNotebook, fresh: true };
+  // On a phone or tablet the Notebook is a page: its tab lasts only while the page is open (see pages.js)
+  if (isMobileTier()) tab.pageOnly = true;
   el.viewNotebook.dataset.tabId = tab.id;
   state.tabs.push(tab);
   shared.notebookDirty = true;

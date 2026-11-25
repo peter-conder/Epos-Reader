@@ -206,6 +206,7 @@
   /* Main menu: its centre sits over the centre of the tab icons below (12px shell + 10px sidebar + 1px border + 16px tab padding + half an icon) */
   #btn-menu { width: 48px; height: 48px; margin-left: calc(12px + 10px + 1px + 16px + 10px - 16px - 24px); }
   #btn-menu .icon { width: 28px; height: 28px; }
+  #btn-page-back[hidden] { display: none; }
 
   .brand { display: flex; align-items: center; gap: 10px; user-select: none; }
   .brand-icon { width: 32px; height: 32px; display: grid; place-items: center; }
@@ -1566,6 +1567,20 @@
       transition: transform 320ms var(--chrome-ease), opacity 260ms ease, background-color 150ms ease;
     }
     .drawer { top: calc(68px + env(safe-area-inset-top)); left: calc(10px + env(safe-area-inset-left)); }
+
+    /* ---- Pages: Settings and the Notebook (see pages.js). A back button stands where the menu button was, and
+       the bottom bar, ribbon and dots step away. Pages take sideways swipes themselves (back from the left edge). ---- */
+    #btn-page-back {
+      width: 48px; height: 48px; margin: 0;
+      pointer-events: auto;
+      background: var(--primary-container); color: var(--on-primary-container);
+      border: 1px solid color-mix(in srgb, var(--on-primary-container) 10%, transparent);
+      box-shadow: var(--shadow-pop);
+    }
+    #btn-page-back .icon { width: 24px; height: 24px; }
+    .page-open #btn-menu { display: none; }
+    .page-open :is(.bottom-bar, .bm-ribbon, .sb-rail) { display: none !important; }
+    :is(#view-settings, .notebook-pane, .cl-body) { touch-action: pan-y; }
 
     /* Panes run edge to edge; their padding keeps the first and last lines clear of the floating controls */
     .pane {

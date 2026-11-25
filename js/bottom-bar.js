@@ -1,6 +1,6 @@
 import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
-import { activeTab, byRecent, isNotebook, isText, markUsed, shared, state, workOf } from './state.js';
+import { activeTab, isNotebook, isText, markUsed, readingTabs, shared, state, workOf } from './state.js';
 import { visibleLines } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
@@ -31,7 +31,7 @@ const AXIS_SLOP = 8;       // px before a drag counts as sideways or not
 const SETTLE_MS = 300;
 const PAGE_GAP = 16;       // px between two text pages sliding side by side
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
-const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent)
+const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent in state.js)
 const IDLE_MS = 3000;      // no touch or scroll for this long while reading and the bars fade away
 
 
@@ -67,7 +67,7 @@ function scrollerOf(tab) {
 
 /* The tabs either side of this one in the grid's order (most recent first, left to right) */
 const neighbours = (tab) => {
-  const order = byRecent();
+  const order = readingTabs();
   const i = order.indexOf(tab);
   return [order[i - 1] ?? null, order[i + 1] ?? NEW_SLOT];
 };
@@ -81,9 +81,10 @@ export function renderBottomBar() {
   el.bbTrack.style.transition = 'none';
   el.bbTrack.style.transform = '';
   el.bbTrack.innerHTML = slotHtml(prev) + slotHtml(tab) + slotHtml(next);
-  el.bbCount.textContent = String(state.tabs.length);
+  const count = readingTabs().length;
+  el.bbCount.textContent = String(count);
   syncLangButton();
-  el.tabsBtn.setAttribute('aria-label', `Show all tabs (${state.tabs.length} open)`);
+  el.tabsBtn.setAttribute('aria-label', `Show all tabs (${count} open)`);
   updateProgress(tab);
 }
 
@@ -153,7 +154,7 @@ export function bottomBarScroll(tab) {
   lastY = y;
   if (!dy) return;
   // Reading on in a tab reached by a swipe makes it the most recent (it moves to the front of the grid)
-  if (tab !== byRecent()[0] && (read += Math.abs(dy)) > READ_AFTER) { markUsed(tab); renderBottomBar(); }
+  if (tab !== readingTabs()[0] && (read += Math.abs(dy)) > READ_AFTER) { markUsed(tab); renderBottomBar(); }
   if (Math.sign(dy) !== Math.sign(run)) run = 0;
   run += dy;
   const atEnd = y <= 0 || y + pane.clientHeight >= pane.scrollHeight - 2;
