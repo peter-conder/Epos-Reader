@@ -27,9 +27,12 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 ## Screen layout (compact and medium)
 
 - **Floating hamburger** at top left; no top bar.
-- **Bottom bar** (Safari-style): citation and line range, with a thin progress line along its top edge. A **tab-grid button** sits to its right. **Swiping across the bar** switches between open tabs.
-- Both the hamburger and the bottom bar **hide on scroll down** and come back on scroll up or a tap on the text.
+- **Bottom bar** (Safari-style, three solid pieces, no glass): an **"Aa" circle** on the left opens the Format text sheet; a **pill** in the middle holds the EN chip, the citation and line range, and a thin progress line along its top edge; a **tab-grid circle** on the right shows the number of open tabs. The hamburger is solid to match.
+- **Swiping across the pill** switches between open tabs. The pages follow the finger: the open page and the neighbour's slide side by side with a small gap, flat, and finish the slide or spring back with the pill. Past the last tab the chapter list slides in the same way. With Reduce Motion the switch is instant. Swiping on the text itself does not switch tabs.
+- Both the hamburger and the bottom bar **fade away** (opacity and a slight shrink) while you read a text: on scroll down, or after 3 seconds without a touch. Not over the Notebook or Home, and never while a sheet, menu, the tab grid or the note editor is open. They come back on scroll up, at either end, or on a tap outside a word.
 - The bottom bar stays clear of the home indicator with `env(safe-area-inset-bottom)`.
+- **Home Screen app:** a web app manifest and `apple-mobile-web-app-status-bar-style: black-translucent` let the text run behind the status bar, around the Dynamic Island (the panes pad their first line clear of it with `env(safe-area-inset-top)`). The status bar's text is white in both themes; an installed icon must be re-added to pick up a change.
+- **Scrollbar:** the browser's own, thin and grey; on phones and tablets the system one fades by itself. Bookmark dots beside it are desktop only.
 
 ## Tabs
 
@@ -54,6 +57,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
   5. Light/dark mode switch
 - **Format text sheet:** covers the bottom half of the screen, Kindle-style, so the text stays visible while you change it.
 - **Word cards:** a bottom sheet. The selected line scrolls into view above it; tapping another word swaps the card's contents.
+- **Writing a note:** the keyboard would cover the sheet, so while a note is written the card steps away and the editor is pinned to the top of the screen (the word, a text box that grows down to the keyboard, and ✓). ✓ saves and brings the card back; dismissing the keyboard keeps the editor; tapping the text below saves and closes both.
 - **One sheet at a time.** Opening one closes the other. An open sheet covers the bottom bar. Tapping the text above a sheet closes it, except tapping a word, which swaps the word card.
 
 ## English translation
@@ -61,7 +65,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 - **Default (compact): swap toggle.** Flips the whole view between Latin and English, keeping your place.
 - **Optional (setting): line-tap mode.** Tapping a line number shows that line's English. The English hides while the Format text sheet is open.
 - **Medium:** the existing side-by-side dual pane.
-- The EN button sits at the left of the bottom bar: it swaps on a phone and opens the side-by-side pane on a tablet. Swapping back without scrolling the English returns to the exact Latin line, even past the end of the English.
+- The EN chip sits at the left end of the bottom bar's pill: it swaps on a phone and opens the side-by-side pane on a tablet. Swapping back without scrolling the English returns to the exact Latin line, even past the end of the English.
 - English exists only for Book I, lines 1–16, so far (`translations` in `js/data.js`). Where it stops, the English pane says so; a line with none says "No English for this line yet."
 
 ## Line numbers and hover-only controls
@@ -85,7 +89,7 @@ Rotating a tablet, resizing a window, iPad multitasking:
 
 ## Build order
 
-Each phase is its own commit. All eight are done.
+Each phase is its own commit. All eight are done. A later quality-of-life pass (scrollbar, note editor, three-piece bar, fading, Home Screen app, sliding pages) is recorded in `.scratch/mobile-qol/`.
 
 1. **Tier scaffold:** width tiers, `hover`/`pointer` queries, bigger touch targets.
 2. **Line wrapping:** fixed hanging indent and variable-height chunks; no fitting on compact.
@@ -119,3 +123,6 @@ Spot checks: scroll position across a long book, the longest lines wrapping with
 - MDN `pointer` media feature: https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer
 - MDN `env()`: https://developer.mozilla.org/en-US/docs/Web/CSS/env
 - Apple Human Interface Guidelines (touch targets): https://developer.apple.com/design/human-interface-guidelines/accessibility
+- Apple, supported meta tags (`apple-mobile-web-app-status-bar-style`): https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+- WebKit bugs on Home Screen apps and the status bar: https://bugs.webkit.org/show_bug.cgi?id=260508, https://bugs.webkit.org/show_bug.cgi?id=301994
+- WebKit bug on the keyboard covering fixed elements: https://bugs.webkit.org/show_bug.cgi?id=191204
