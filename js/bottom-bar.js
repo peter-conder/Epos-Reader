@@ -9,11 +9,13 @@ import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { closeChapterList, openChapterList } from './chapters.js';
 import { closeTabGrid } from './tab-grid.js';
 import { syncLangButton } from './english.js';
+import { openFormatSheet } from './format-sheet.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
-   A pill naming the open tab ("Aen. I / Lines 34–58") with a thin progress line along the bar's top,
-   and a button with the number of open tabs. Swiping the pill sideways drags the neighbouring tab's pill in,
+   Three pieces: a Format text button on the left; in the middle the EN chip and a pill naming the open tab
+   ("Aen. I / Lines 34–58"), with a thin progress line along its top; on the right a button with the number
+   of open tabs, which opens the tab grid. Swiping the pill sideways drags the neighbouring tab's pill in,
    like Safari's address bar; let go past a third of the way (or flick) and that tab opens.
    The bar and the floating menu button hide while you scroll down through a text, and come back when you
    scroll up, reach either end, or tap the page.
@@ -178,6 +180,7 @@ function bindSwipe() {
 
 export function initBottomBar() {
   bindSwipe();
+  el.formatBtn.addEventListener('click', openFormatSheet);
   el.notebookPane.addEventListener('scroll', () => { const t = activeTab(); if (isNotebook(t)) bottomBarScroll(t); }, { passive: true });
   // A tap on the page (not on something that does its own thing) brings the bars back
   el.main.addEventListener('click', (e) => {

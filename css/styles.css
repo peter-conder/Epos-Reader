@@ -1561,9 +1561,7 @@
     #btn-menu {
       margin: 0;
       pointer-events: auto;
-      background: color-mix(in srgb, var(--surface) 86%, transparent);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-              backdrop-filter: blur(16px) saturate(1.4);
+      background: var(--surface);
       border: 1px solid var(--gray-200);
       box-shadow: var(--shadow-pop);
       transition: transform 280ms var(--chrome-ease), opacity 200ms ease, background-color 150ms ease;
@@ -1581,26 +1579,39 @@
     .empty-state { padding-bottom: var(--bar-room); }
     .toast { bottom: calc(var(--bar-h) + var(--bar-bottom) + 12px); }
 
-    /* Bottom bar */
+    /* Bottom bar: three solid pieces side by side (Format text, the open tab, all tabs) */
     .bottom-bar {
       position: fixed; left: 50%; bottom: var(--bar-bottom);
       transform: translateX(-50%);
       width: min(560px, calc(100% - 20px - env(safe-area-inset-left) - env(safe-area-inset-right)));
       height: var(--bar-h);
-      display: flex; align-items: center; gap: 4px;
-      padding: 6px;
-      background: color-mix(in srgb, var(--surface) 86%, transparent);
-      -webkit-backdrop-filter: blur(16px) saturate(1.4);
-              backdrop-filter: blur(16px) saturate(1.4);
+      display: flex; align-items: stretch; gap: 8px;
+      z-index: 60;
+      pointer-events: none;   /* only the pieces take touches, not the gaps between them */
+      transition: transform 280ms var(--chrome-ease), opacity 200ms ease;
+    }
+    .bb-piece {
+      pointer-events: auto;
+      background: var(--surface);
       border: 1px solid var(--gray-200);
       border-radius: var(--radius-full);
       box-shadow: var(--shadow-pop);
-      overflow: hidden;
-      z-index: 60;
-      transition: transform 280ms var(--chrome-ease), opacity 200ms ease;
     }
-    /* How far through the tab you are: a thin line along the bar's top edge, inside its rounded ends */
-    .bb-progress { position: absolute; top: 0; left: 28px; right: 28px; height: 3px; border-radius: 0 0 3px 3px; overflow: hidden; }
+    .bb-format, .bb-tabs {
+      width: var(--bar-h); flex-shrink: 0;
+      display: grid; place-items: center;
+      transition: background-color 150ms ease, transform 150ms ease;
+    }
+    .bb-format:active, .bb-tabs:active { background: var(--gray-200); transform: scale(0.94); }
+    .bb-format > span { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .bb-main {
+      position: relative; flex: 1; min-width: 0;
+      display: flex; align-items: center; gap: 2px;
+      padding: 5px;
+      overflow: hidden;
+    }
+    /* How far through the tab you are: a thin line along the pill's top edge, inside its rounded ends */
+    .bb-progress { position: absolute; top: 0; left: 24px; right: 24px; height: 3px; border-radius: 0 0 3px 3px; overflow: hidden; }
     .bb-progress-fill {
       height: 100%;
       background: var(--primary);
@@ -1627,13 +1638,6 @@
     .bb-sub { font-size: 12px; color: var(--gray-600); font-variant-numeric: tabular-nums; }
     .bb-sub:empty { display: none; }
     /* Tab-overview button: the number of open tabs in a rounded square */
-    .bb-tabs {
-      width: 44px; height: 44px; flex-shrink: 0;
-      display: grid; place-items: center;
-      border-radius: var(--radius-full);
-      transition: background-color 150ms ease, transform 150ms ease;
-    }
-    .bb-tabs:active { background: var(--gray-200); transform: scale(0.94); }
     .bb-count {
       min-width: 22px; height: 22px; padding: 0 4px;
       display: grid; place-items: center;
@@ -1954,17 +1958,19 @@
     /* Room below the last lines, so even they can be scrolled clear of the card */
     .card-open .pane-original { padding-bottom: 65dvh; transition: none; }   /* at once: the reveal scrolls into it */
 
-    /* ---- EN button on the bottom bar: swap to the English (phone) or show it beside the Latin (tablet) ---- */
+    /* ---- EN chip at the left of the pill: swap to the English (phone) or show it beside the Latin (tablet) ---- */
     .bb-lang {
       width: 44px; height: 44px; flex-shrink: 0;
       display: grid; place-items: center;
       border-radius: var(--radius-full);
+      background: var(--gray-100);
       font-size: 13px; font-weight: 800; letter-spacing: 0.5px;
       transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
     }
     .bb-lang[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
     .bb-lang:disabled { opacity: 0.35; }
     .bb-lang:active { transform: scale(0.94); }
+    .bb-lang:not([hidden]) + .bb-pill .bb-slot { padding-right: 58px; }   /* the tab's name stays centred on the pill */
 
     /* ---- Line numbers: a tap bookmarks the line (or shows its English); a long press opens the line menu ---- */
     .verse-bm { display: none; }

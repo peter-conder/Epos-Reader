@@ -54,8 +54,8 @@ document.addEventListener('click', (e) => {
   if (!t.closest('#drawer, #btn-menu, #palette-menu')) { setOpen(el.drawer, false); closePaletteMenu(); }
   if (!t.closest('#flyout, #btn-text')) setOpen(el.flyout, false);
   if (!t.closest('#popups-flyout, #btn-popups')) setOpen(el.popupsFlyout, false);
-  // Tapping anywhere but the sheet (or the menu that opened it) closes the Format Text sheet
-  if (!t.closest('#format-sheet, #drawer, #btn-menu')) closeFormatSheet();
+  // Tapping anywhere but the sheet (or the menu or button that opened it) closes the Format Text sheet
+  if (!t.closest('#format-sheet, #drawer, #btn-menu, #btn-format')) closeFormatSheet();
 });
 
 document.addEventListener('keydown', (e) => {

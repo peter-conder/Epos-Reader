@@ -30,7 +30,7 @@ export const el = {
   noteBox: $('note-box'), noteTitle: $('note-title'), noteInput: $('note-input'), noteDone: $('note-done'),
   toast: $('toast'),
   bottomBar: $('bottom-bar'), bbPill: $('bb-pill'), bbTrack: $('bb-track'), bbProgress: $('bb-progress-fill'),
-  bbCount: $('bb-count'), tabsBtn: $('btn-tabs'),
+  bbCount: $('bb-count'), tabsBtn: $('btn-tabs'), formatBtn: $('btn-format'),
   tabGrid: $('tab-grid'), tgCount: $('tg-count'), tgNew: $('tg-new'), tgDone: $('tg-done'), tgList: $('tg-list'),
   langBtn: $('btn-lang'), lineMenu: $('line-menu'), lineTapChips: $('linetap-chips'),
   drawerSwatches: $('drawer-swatches'), swTheme: $('sw-theme'),

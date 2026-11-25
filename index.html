@@ -318,15 +318,18 @@
 <!-- LINE MENU (phones and tablets): a long press on a line -->
 <div class="popover line-menu" id="line-menu" role="menu" aria-label="Line actions"></div>
 
-<!-- BOTTOM BAR (phones and tablets): the open tab, how far through it you are, and all tabs.
-     Swipe across the pill to move between tabs. -->
+<!-- BOTTOM BAR (phones and tablets): three pieces. Format text on the left; the open tab in the middle, with
+     the EN chip, how far through it you are, and a swipe across it to move between tabs; all tabs on the right. -->
 <nav class="bottom-bar" id="bottom-bar" aria-label="Tabs">
-  <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
-  <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
-  <div class="bb-pill" id="bb-pill" aria-live="polite">
-    <div class="bb-track" id="bb-track"></div>
+  <button class="bb-piece bb-format" id="btn-format" aria-label="Format text"><span aria-hidden="true">Aa</span></button>
+  <div class="bb-piece bb-main">
+    <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
+    <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
+    <div class="bb-pill" id="bb-pill" aria-live="polite">
+      <div class="bb-track" id="bb-track"></div>
+    </div>
   </div>
-  <button class="bb-tabs" id="btn-tabs" aria-label="Show all tabs">
+  <button class="bb-piece bb-tabs" id="btn-tabs" aria-label="Show all tabs">
     <span class="bb-count" id="bb-count">1</span>
   </button>
 </nav>
