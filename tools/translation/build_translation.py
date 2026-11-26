@@ -113,7 +113,8 @@ def build_work(work, cfg, fixes, used):
                 text = text.replace(find, replace)
                 used.add((work, n, start, find))
             blocks.append({'from': start, 'text': text})
-        out = {'work': work, 'book': n, 'source': f'{cfg["credit"]}: {cfg["url"]}', 'blocks': blocks}
+        out = {'work': work, 'book': n, 'source': f'{cfg["credit"]}: {cfg["url"]}',
+               'form': 'verse' if cfg['verse'] else 'prose', 'blocks': blocks}
         write_json(DATA / work / f'{n:02d}.en.json', out)
         add_book_source(DATA / work / f'{n:02d}.json', cfg['credit'])
 

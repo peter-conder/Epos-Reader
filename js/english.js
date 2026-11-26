@@ -2,7 +2,7 @@ import { WORKS } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
 import { activeTab, getTab, isText, partnerOf, state } from './state.js';
 import { anchorIndex, jumpToIndex, syncLayout } from './chunks.js';
-import { toggleSplit } from './reader.js';
+import { showEnglish, toggleSplit } from './reader.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { isMarked, toggleBookmark } from './bookmarks.js';
@@ -49,6 +49,11 @@ export function syncLangButton() {
 export function setLang(tab, lang) {
   if (!isText(tab) || !tab.ui?.chunkers) return;
   if ((tab.lang ?? 'la') === lang) return;
+  // The English is fetched the first time it is shown; swap once it is in the pane
+  if (lang === 'en' && tab.ui.englishKey !== tab.ui.renderedKey) {
+    showEnglish(tab).then(() => { if (tab.ui.englishSpans) setLang(tab, lang); });
+    return;
+  }
   const [la, en] = tab.ui.chunkers;
   const [from, to] = lang === 'en' ? [la, en] : [en, la];
   const at = from.anchor ? anchorIndex(from) : null;   // null: still at the top, title showing

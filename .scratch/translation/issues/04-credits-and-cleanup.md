@@ -16,3 +16,5 @@ See `../spec.md`, decisions 12 and 13.
 - [peter-conder/Epos-Reader#5](https://github.com/peter-conder/Epos-Reader/issues/5) is closed by the commit, with a footer.
 
 ## Comments
+
+**2026-11-26 (from issue 02):** The "English is available for lines…" / "No English translation of this book yet." messages are already gone (issue 02 replaced that code). `WORKS[work].translations` is still read by `englishFor` in `js/english.js` until issue 03 lands.

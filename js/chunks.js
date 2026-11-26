@@ -6,6 +6,7 @@ import { hideWordCard } from './word-card.js';
 import { markNotes } from './notes.js';
 import { markBookmarks, renderRail } from './bookmarks.js';
 import { refreshBottomBar } from './bottom-bar.js';
+import { relinkIfNeeded } from './parallel.js';
 
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
@@ -278,6 +279,25 @@ export function jumpToIndex(ch, i, frac = 0) {
   restoreAnchor(ch);   // …then from where it really is
 }
 
+/* Puts the pane at an anchor ({ i, frac }: row i, frac of the way into it, at the top of the pane), or, for null,
+   at scroll offset `top` (the title area above the first row). Used by the Parallel translation's linked scrolling
+   (see parallel.js); unlike jumpToIndex it doesn't remeasure, so it is cheap enough to run on every scroll. */
+export function placeAt(ch, anchor, top = 0) {
+  if (!ch?.rows.length || !ch.pane.clientHeight) return;
+  if (!anchor) {
+    ch.anchor = null;
+    ch.pane.scrollTop = Math.min(top, textTop(ch) - topInset(ch));
+    syncChunks(ch);
+    return;
+  }
+  ch.anchor = { i: clamp(anchor.i, 0, ch.rows.length - 1), frac: clamp(anchor.frac, 0, 1) };
+  restoreAnchor(ch);   // from the estimate, which brings the row's chunk into the page…
+  const kept = ch.anchor;
+  syncChunks(ch);
+  ch.anchor = kept;    // (syncChunks saved it again from where the estimate landed)
+  restoreAnchor(ch);   // …then from where it really is
+}
+
 /* After a fit or a resize: lines may have changed height, or started or stopped wrapping */
 export function syncLayout(tab) {
   const ui = tab.ui;
@@ -289,6 +309,7 @@ export function syncLayout(tab) {
     }
     syncChunks(ch);
   }
+  relinkIfNeeded(tab);
   renderRail(tab);
   refreshBottomBar(tab);   // the line range on screen may have changed
 }

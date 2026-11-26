@@ -28,10 +28,10 @@ The Perseus files are pinned to one commit each, in `fetch_sources.sh` and `buil
 ## Output
 
 ```json
-{"work":"iliad","book":1,"source":"<credit>: <GitHub URL>","blocks":[{"from":1,"text":"…"},{"from":33,"text":"…"}]}
+{"work":"iliad","book":1,"source":"<credit>: <GitHub URL>","form":"prose","blocks":[{"from":1,"text":"…"},{"from":33,"text":"…"}]}
 ```
 
-A block covers its Lines from `from` up to the Line before the next block's `from` (the last block runs to the end of the Book). "Before" means in reading order, which is what the Book file lists. Aeneid X prints Lines 717–718 before 714, so don't compare Line numbers to find a Line's block.
+`form` is `verse` (Williams: `text` has one verse line per `\n`) or `prose` (Murray: paragraphs separated by a blank line). A block covers its Lines from `from` up to the Line before the next block's `from` (the last block runs to the end of the Book). "Before" means in reading order, which is what the Book file lists. Aeneid X prints Lines 717–718 before 714, so don't compare Line numbers to find a Line's block.
 
 ## How it works
 

@@ -15,3 +15,9 @@ Move the phone views in `js/english.js` from per-Line English to blocks (see `..
 - Checked in Chromium with a phone device profile (for example iPhone 13), light and dark, with no page errors.
 
 ## Comments
+
+**2026-11-26 (from issue 02):**
+- The mapping to use is `toEnglish` / `toOriginal` in `js/parallel.js`, which works on chunker anchors.
+- `setLang` already waits for `showEnglish` before swapping, but still jumps row index to row index. Replace that with the mapping.
+- The bottom bar's Line range while the English is showing (`visibleLines` on chunker 1, in `js/bottom-bar.js`) reports block start Lines. It should give the first visible block's start to the last visible block's end.
+- `englishFor` in `js/english.js` still reads the old `WORKS[work].translations`.

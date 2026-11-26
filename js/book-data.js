@@ -58,6 +58,27 @@ export function loadBook(work, book) {
   return p;
 }
 
+/* The Book's Translation (data2/<work>/NN.en.json, built by tools/translation): { blocks: [{ from, text }] }, where
+   a block covers its Lines up to the Line before the next block's `from`. Fetched only once the English is shown.
+   Null when the fetch fails; the failure isn't cached, so asking again retries. */
+const englishCache = new Map();
+export function loadEnglish(work, book) {
+  const key = `${work}:${book}`;
+  if (englishCache.has(key)) {
+    const existing = englishCache.get(key);
+    englishCache.delete(key);   // LRU recency, as for Books
+    englishCache.set(key, existing);
+    return existing;
+  }
+  const num = String(ROMANS.indexOf(book) + 1).padStart(2, '0');
+  const p = fetch(`${DATA_ROOT}/${work}/${num}.en.json`)
+    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .catch(() => { englishCache.delete(key); return null; });
+  englishCache.set(key, p);
+  if (englishCache.size > MAX_CACHED_BOOKS) englishCache.delete(englishCache.keys().next().value);
+  return p;
+}
+
 /* Lemma, grammar and definition for one word */
 export function wordInfo(tab, line, idx) {
   const parts = tab.bookData?.byLine.get(line)?.w[idx]?.a;
