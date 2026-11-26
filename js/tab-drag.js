@@ -1,6 +1,6 @@
 import { el } from './dom.js';
 import { activeTab, getTab, groupOf, partnerOf, shared, state } from './state.js';
-import { beginSplitClose } from './motion.js';
+import { beginSplitClose, prefersReducedMotion } from './motion.js';
 import { renderAll } from './layout.js';
 import { activateTab, pairTabs, renderTabs, unpair } from './tabs.js';
 import { hideHoverCard } from './sidebar.js';
@@ -165,14 +165,14 @@ export function finishTabDrag(cancelled) {
 /* The dragged tab glides into its slot, then hands over to the real one */
 export function landDraggedTab(d) {
   const dest = el.tabList.querySelector(`.tab[data-tab-id="${d.id}"]`);
-  if (!dest) { d.clone.remove(); return; }
+  if (!dest || prefersReducedMotion()) { d.clone.remove(); return; }
   const r = dest.getBoundingClientRect();
   dest.style.visibility = 'hidden';
   const c = d.clone;
-  c.style.transition = 'transform 240ms var(--ease-spring), width 240ms ease';
+  c.style.transition = 'transform 220ms var(--ease-spatial), width 220ms var(--ease-emphasized)';
   c.style.width = `${r.width}px`;
   c.style.transform = `translate(${r.left - d.left}px, ${r.top - d.top}px) scale(1)`;
-  setTimeout(() => { c.remove(); dest.style.visibility = ''; }, 260);
+  setTimeout(() => { c.remove(); dest.style.visibility = ''; }, 240);
 }
 
 export function initTabDrag() {

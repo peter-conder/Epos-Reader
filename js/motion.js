@@ -1,22 +1,23 @@
 import { $, el } from './dom.js';
 import { groupOf } from './state.js';
+import { fitAll } from './fit.js';
 
-/* ---- Pane motion helpers ---- */
-export const SPRING = 'cubic-bezier(0.3, 0.7, 0.4, 1)';
-
-/* Split open/close: flat, side-to-side motion with no scaling, tilt or shadow. Fast out of the gate with a long,
-   cushioned settle and no overshoot. Every part shares one duration so the panes land on the same frame. */
+/* ---- Unified Material Expressive motion tokens ---- */
+export const SPATIAL = 'cubic-bezier(0.2, 0.9, 0.3, 1.12)';
+export const SPRING = SPATIAL;
 export const EMPHASIZED = 'cubic-bezier(0.2, 0, 0, 1)';
 const TRAILING = 'cubic-bezier(0.3, 0, 0, 1)';   // the entering pane starts a touch later, so it trails the edge
-export const PANE_DUR = 500;
+export const PANE_DUR = 420;
+
+const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+export const prefersReducedMotion = () => reducedMotionQuery.matches;
 
 export function playPop(view) {
+  if (prefersReducedMotion()) return;
   view.animate([
-    { opacity: 0, transform: 'translateY(12px) scale(0.93)', offset: 0, easing: SPRING },
-    { opacity: 1, transform: 'translateY(-3px) scale(1.02)', offset: 0.5, easing: SPRING },
-    { transform: 'scale(0.994)', offset: 0.76, easing: SPRING },
-    { transform: 'none', offset: 1 }
-  ], { duration: 470, easing: 'linear' });
+    { opacity: 0, transform: 'translateY(10px) scale(0.96)', offset: 0 },
+    { opacity: 1, transform: 'none', offset: 1 }
+  ], { duration: 280, easing: EMPHASIZED });
 }
 
 /* A frozen copy of a pane, clipped inside the main area, so it can animate out after its tab is gone */
@@ -45,15 +46,14 @@ export function makeGhost(view, rect) {
   return g;
 }
 
-/* A lone pane closing: a small swell, then it bouncily shrinks away (dir: -1 left edge, 1 right edge, 0 centre) */
+/* A lone pane closing: fades and scales down cleanly */
 export function shrinkAway(ghost, dir) {
+  if (prefersReducedMotion()) { ghost.remove(); return; }
   ghost.style.transformOrigin = dir < 0 ? 'left center' : dir > 0 ? 'right center' : 'center';
   ghost.animate([
-    { transform: 'scale(1)', opacity: 1, offset: 0, easing: SPRING },
-    { transform: 'scale(1.045)', opacity: 1, offset: 0.24, easing: 'cubic-bezier(0.55, 0, 0.85, 0.4)' },
-    { transform: 'scale(0.5)', opacity: 1, offset: 0.7, easing: 'ease-in' },
-    { transform: 'scale(0)', opacity: 0, offset: 1 }
-  ], { duration: 520, easing: 'linear' }).onfinish = () => ghost.remove();
+    { transform: 'scale(1)', opacity: 1 },
+    { transform: 'scale(0.94)', opacity: 0 }
+  ], { duration: 220, easing: EMPHASIZED }).onfinish = () => ghost.remove();
 }
 
 /* ---- Split open / close ----
@@ -76,6 +76,7 @@ function runMorph(views, anims, done) {
       anims.forEach((a) => a.cancel());
       void el.panes.offsetWidth;            // the panes take their resting sizes before transitions come back
       el.panes.classList.remove('morphing');
+      fitAll();
     }
   };
   morph = m;
@@ -88,6 +89,7 @@ const restoreStay = (view) => Object.assign(view.style, { flex: view.dataset.fle
 /* Single → split. Call before the layout changes (it records where the open pane is now); the returned
    function is called once the pair is laid out, with the joining view and its side (-1 left, 1 right). */
 export function beginSplitOpen(stay) {
+  if (prefersReducedMotion()) return null;
   settleMorph();
   const pane = stay.querySelector('.pane-original');
   const from = { w: widthOf(stay), pw: pane ? widthOf(pane) : 0 };
@@ -121,6 +123,7 @@ export function beginSplitOpen(stay) {
 /* Split → single. Call while `tab` is still on screen (ghostRect: where it is drawn, if it was dragged);
    the returned function is called once the layout no longer shows it. A lone pane just shrinks away. */
 export function beginSplitClose(tab, ghostRect) {
+  if (prefersReducedMotion()) return null;
   const v = tab.view;
   if (!v || v.hidden || el.panes.hidden) return null;
   const r = ghostRect ?? v.getBoundingClientRect();
@@ -171,6 +174,7 @@ export function beginSplitClose(tab, ghostRect) {
    the returned function is called once the layout no longer shows it. The pane (on a frozen copy, with its X
    and the divider) slides out through the right edge while the original pane eases to its single-view place. */
 export function beginTranslationClose(tab) {
+  if (prefersReducedMotion()) return null;
   const ui = tab.ui;
   if (!ui || ui.root.hidden || el.panes.hidden) return null;
   const pane = ui.paneTranslation, orig = ui.paneOriginal, dv = ui.divider;

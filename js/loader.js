@@ -74,6 +74,6 @@ export function createLoader() {
     requestAnimationFrame(frame);
   };
   path.setAttribute('d', loaderPath(LOADER_RADII[0], R));
-  requestAnimationFrame(frame);
+  if (!still) requestAnimationFrame(frame);
   return wrap;
 }

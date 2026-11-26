@@ -3,7 +3,7 @@ import { state } from './state.js';
 import { alignProgress, closePopovers, setBook, setOpen, setView } from './layout.js';
 import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
-import { hideWordCard } from './word-card.js';
+import { hideWordCard, refreshCardScan } from './word-card.js';
 import { scrollSettings, toggleTheme } from './settings.js';
 import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
@@ -106,7 +106,10 @@ export function initToolbar() {
   bindSwitch(el.swWords, 'words');
   bindSwitch(el.swNotes, 'notes');
   bindSwitch(el.swCaesura, 'caesura', (on) => { root.dataset.caesura = on ? 'on' : 'off'; });
-  bindSwitch(el.swSynizesis, 'synizesis', (on) => { root.dataset.synizesis = on ? 'on' : 'off'; });
+  bindSwitch(el.swRareScansion, 'rareScansion', (on) => {
+    root.dataset.rareScansion = on ? 'on' : 'off';
+    refreshCardScan();
+  });
 
   // Close buttons inside popovers
   document.querySelectorAll('[data-close]').forEach((btn) =>

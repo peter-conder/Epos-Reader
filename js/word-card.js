@@ -42,9 +42,7 @@ export function showWordCard(word) {
   el.cardLemma.textContent = info.lemma;
   el.cardMorph.textContent = info.morph;
   el.cardDef.textContent = info.def;
-  const scan = scanText(tab.bookData?.byLine.get(shared.wordCtx.line)?.w[shared.wordCtx.wordIdx]?.s);
-  el.cardScan.hidden = !scan;
-  el.cardScan.textContent = scan;
+  refreshCardScan(tab);
 
   syncCardNote();
   if (asSheet()) {
@@ -61,6 +59,15 @@ export function showWordCard(word) {
   el.wordCard.classList.remove('visible');
   void el.wordCard.offsetWidth; // replay pop animation
   el.wordCard.classList.add('visible');
+}
+
+export function refreshCardScan(tab = null) {
+  if (!shared.wordCtx) return;
+  const t = tab ?? (shared.selectedWord && getTab(shared.selectedWord.closest('.tab-view')?.dataset.tabId));
+  const s = t?.bookData?.byLine.get(shared.wordCtx.line)?.w[shared.wordCtx.wordIdx]?.s;
+  const scan = scanText(s, { rare: state.scansion && state.popups.rareScansion });
+  el.cardScan.hidden = !scan;
+  el.cardScan.textContent = scan;
 }
 
 /* Scrolls the selected word's pane so its line sits clear of the sheet (and of the menu button) */
@@ -95,7 +102,9 @@ export function positionWordCard(word) {
   const r = word.getBoundingClientRect();
   const left = Math.max(16, Math.min(r.left + r.width / 2 - 160, innerWidth - 340));
   let top = r.top - el.wordCard.offsetHeight - 10;   // sits just above the word, whatever its height
-  if (top < 70) top = r.bottom + 12;
+  let below = false;
+  if (top < 70) { top = r.bottom + 12; below = true; }
+  el.wordCard.style.transformOrigin = below ? 'center top' : 'center bottom';
   el.wordCard.style.left = `${left}px`;
   el.wordCard.style.top = `${top}px`;
 }

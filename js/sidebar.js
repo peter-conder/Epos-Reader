@@ -1,11 +1,13 @@
 import { ROMANS, WORKS, bookLabel, bookTitle, citation } from './data.js';
 import { $, clamp, el, esc, icon } from './dom.js';
 import { getTab, isNotebook, isText, shared, state } from './state.js';
-import { closePopovers, renderAll, setOpen } from './layout.js';
+import { alignProgress, closePopovers, renderAll, setOpen } from './layout.js';
+import { fitAll } from './fit.js';
 import { renderReader } from './reader.js';
 import { addNewTab } from './home.js';
 import { countLabel, openNotebook } from './notes.js';
 import { canHover } from './viewport.js';
+import { prefersReducedMotion } from './motion.js';
 
 let hoverTimer = 0;       // tab hover card
 let hoveredTabId = null;
@@ -59,11 +61,31 @@ export function bubbleTabs() {
   bubbleTimer = setTimeout(() => el.sidebar.classList.remove('bubbling'), 1500);
 }
 
+let sidebarTimer = 0;
+let sidebarWidthEnd = null;   // the running toggle's transitionend listener, so a new toggle can drop it
 export function setSidebarCollapsed(collapsed) {
   hideHoverCard();
-  const opening = !collapsed && el.sidebar.classList.contains('collapsed');
+  const changed = el.sidebar.classList.contains('collapsed') !== collapsed;
+  const opening = !collapsed && changed;
+  if (changed && !prefersReducedMotion()) {
+    el.sidebar.classList.add('animating');
+    clearTimeout(sidebarTimer);
+    if (sidebarWidthEnd) el.sidebar.removeEventListener('transitionend', sidebarWidthEnd);
+    const finish = () => {
+      clearTimeout(sidebarTimer);
+      el.sidebar.removeEventListener('transitionend', sidebarWidthEnd);
+      sidebarWidthEnd = null;
+      el.sidebar.classList.remove('animating');
+      alignProgress();
+      fitAll();
+    };
+    // Not { once: true }: other properties (and children's transitions) end first, and only the width's end counts
+    sidebarWidthEnd = (e) => { if (e.target === el.sidebar && e.propertyName === 'width') finish(); };
+    el.sidebar.addEventListener('transitionend', sidebarWidthEnd);
+    sidebarTimer = setTimeout(finish, 420);
+  }
   el.sidebar.classList.toggle('collapsed', collapsed);
-  if (opening) bubbleTabs();
+  if (opening && !prefersReducedMotion()) bubbleTabs();
   else if (collapsed) el.sidebar.classList.remove('bubbling');
   const label = collapsed ? 'Expand tabs' : 'Collapse tabs';
   collapseBtn.dataset.tip = label;

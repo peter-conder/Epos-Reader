@@ -5,6 +5,7 @@ import { activateTab, addTab } from './tabs.js';
 import { openWorkInTab } from './home.js';
 import { closeTabGrid } from './tab-grid.js';
 import { showChrome } from './bottom-bar.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    CHAPTER LIST (phones and tablets): every book of every work that has data, grouped by work.
@@ -32,7 +33,12 @@ export function availableWorks() {
   return available;
 }
 
+const CLOSE_MS = 220;
+
 let target = null;   // the New Tab the list was opened from, if any
+let closeTimer = 0;
+
+export const chapterListOpen = () => !el.chapterList.hidden && !el.chapterList.classList.contains('closing');
 
 const openTabFor = (work, book) => state.tabs.find((t) => isText(t) && t.work === work && t.book === book);
 
@@ -56,7 +62,7 @@ function listHtml(works) {
 async function fillChapterList(only) {
   el.clBody.innerHTML = '';
   const works = (await availableWorks()).filter((k) => !only || k === only);
-  if (el.chapterList.hidden) return false;
+  if (el.chapterList.hidden || el.chapterList.classList.contains('closing')) return false;
   el.clTitle.textContent = only ? WORKS[only].title : 'Open a Book';
   el.clBody.innerHTML = listHtml(works);
   el.clBody.scrollTop = 0;
@@ -65,6 +71,9 @@ async function fillChapterList(only) {
 
 /* only: list just this work. into: the New Tab to open the chosen book in. */
 export async function openChapterList({ only = null, into = null } = {}) {
+  clearTimeout(closeTimer);
+  closeTimer = 0;
+  el.chapterList.classList.remove('closing');
   target = into;
   // Swiped in from the bottom bar: it is already on screen and filled (see peekChapterList)
   const peeked = el.chapterList.classList.contains('peek');
@@ -80,7 +89,10 @@ export async function openChapterList({ only = null, into = null } = {}) {
 /* Shows the list under the bottom bar, without opening it, so a swipe past the last tab can slide it in.
    The caller moves it; endPeekChapterList hides it again, or openChapterList keeps it. */
 export function peekChapterList() {
-  if (!el.chapterList.hidden) return null;
+  if (chapterListOpen()) return null;
+  clearTimeout(closeTimer);
+  closeTimer = 0;
+  el.chapterList.classList.remove('closing');
   target = null;
   el.chapterList.classList.add('peek');
   el.chapterList.hidden = false;
@@ -94,21 +106,33 @@ export function endPeekChapterList() {
   el.chapterList.hidden = true;
 }
 
-export function closeChapterList() {
-  if (el.chapterList.hidden) return;
-  el.chapterList.classList.remove('open', 'from-peek');
-  el.chapterList.hidden = true;
+export function closeChapterList({ instant = false } = {}) {
+  if (!chapterListOpen()) return;
   document.documentElement.classList.remove('chapters-open');
   target = null;
   showChrome();
+  el.chapterList.classList.remove('open', 'from-peek');
+  if (instant || prefersReducedMotion()) {
+    clearTimeout(closeTimer);
+    closeTimer = 0;
+    el.chapterList.classList.remove('closing');
+    el.chapterList.hidden = true;
+    return;
+  }
+  el.chapterList.classList.add('closing');
+  closeTimer = setTimeout(() => {
+    closeTimer = 0;
+    el.chapterList.classList.remove('closing');
+    el.chapterList.hidden = true;
+  }, CLOSE_MS);
 }
 
 function choose(work, book) {
   const existing = openTabFor(work, book);
   const into = target && getTab(target.id) === target && target.kind === 'new' ? target
     : activeTab()?.kind === 'new' ? activeTab() : null;
+  closeTabGrid({ instant: true });
   closeChapterList();
-  closeTabGrid();
   if (existing) activateTab(existing.id);
   else if (into) { activateTab(into.id); openWorkInTab(into, work, book); }
   else addTab(work, book);
@@ -119,7 +143,7 @@ export function initChapters() {
     const row = e.target.closest('.cl-row');
     if (row) choose(row.dataset.work, row.dataset.book);
   });
-  el.clClose.addEventListener('click', closeChapterList);
+  el.clClose.addEventListener('click', () => closeChapterList());
   el.clClose.innerHTML = icon('close');
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChapterList(); });
 }

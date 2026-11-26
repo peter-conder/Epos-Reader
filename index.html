@@ -1,27 +1,42 @@
 <!DOCTYPE html>
-<html lang="en" data-scansion="off">
+<html lang="en" data-scansion="off" data-rare-scansion="off">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Epos Reader - Classical Poetry Reader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <!-- Home Screen app. The status bar keeps iOS's own style: "black-translucent" let the text run behind it, but
      left a gap the height of the status bar at the bottom of the screen (a WebKit bug). Re-add the icon to the
      Home Screen for a change here to take effect. -->
 <link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" id="meta-theme-color" content="#eef2fc">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Epos Reader">
 <link rel="stylesheet" href="css/styles.css">
 <script>
-  /* Set light/dark before the first paint so a dark page doesn't flash white (settings.js takes over from here) */
+  /* Set light/dark and palette before the first paint so there is no white or monochrome flash (settings.js takes over) */
   try {
-    document.documentElement.dataset.theme = localStorage.getItem('epos.theme.v1')
+    const r = document.documentElement;
+    const t = localStorage.getItem('epos.theme.v1')
       ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    r.dataset.theme = t;
+    const P = {
+      green:    { light: ['#386A42','#FFFFFF','#BAF3BF','#00210B','#526351','#FFFFFF','#D5E8D1','#101F11'], dark: ['#99D5A3','#043918','#20512C','#BAF3BF','#B9CCB6','#243425','#3A4B3A','#D5E8D1'] },
+      red:      { light: ['#8F4A50','#FFFFFF','#FFD9DC','#3B0812','#76565A','#FFFFFF','#FFD9DC','#2C1518'], dark: ['#FFB2B9','#561D24','#723339','#FFD9DC','#E5B9BD','#44292D','#5D3F43','#FFD9DC'] },
+      bluegray: { light: ['#4A5C7A','#FFFFFF','#D3E3FF','#001C39','#565E71','#FFFFFF','#DAE2F9','#131B2C'], dark: ['#B3C8E8','#1B2E49','#334461','#D3E3FF','#BEC6DC','#283041','#3F4759','#DAE2F9'] },
+      yellow:   { light: ['#6B5F00','#FFFFFF','#F8E468','#201C00','#656040','#FFFFFF','#ECE4C0','#201C04'], dark: ['#DCC84F','#383100','#514700','#F8E468','#CFC8A5','#363116','#4D482B','#ECE4C0'] },
+      purple:   { light: ['#8241B2','#FFFFFF','#F0DBFF','#2C0051','#7D5260','#FFFFFF','#FFD8E4','#31111D'], dark: ['#DEB7FF','#4D0A7F','#672698','#F0DBFF','#EFB8C8','#492532','#633B48','#FFD8E4'] },
+      amber:    { light: ['#8F4E00','#FFFFFF','#FFDCC2','#2E1500','#745943','#FFFFFF','#FFDCBE','#2A1706'], dark: ['#FFB77B','#4C2700','#6C3A00','#FFDCC2','#E4C0A6','#422C19','#5A422D','#FFDCBE'] }
+    };
+    const pk = localStorage.getItem('epos.palette.v1');
+    const vals = (P[pk] || P.bluegray)[t === 'dark' ? 'dark' : 'light'];
+    ['--primary','--on-primary','--primary-container','--on-primary-container','--secondary','--on-secondary','--secondary-container','--on-secondary-container']
+      .forEach((k, i) => r.style.setProperty(k, vals[i]));
   } catch { /* storage unavailable */ }
 </script>
 <script src="js/main.js" type="module" defer></script>
@@ -183,8 +198,8 @@
         <span class="switch-text"><span class="switch-title">Caesurae</span><span class="switch-sub">Mark each caesura with ‖ when scansion is on</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
-      <button class="switch-row" id="sw-synizesis" role="switch" aria-checked="true">
-        <span class="switch-text"><span class="switch-title">Synizesis &amp; consonantal i</span><span class="switch-sub">Underline vowels run together into one syllable</span></span>
+      <button class="switch-row" id="sw-rare-scansion" role="switch" aria-checked="false">
+        <span class="switch-text"><span class="switch-title">Rare scansion marks</span><span class="switch-sub">Show hiatus, synizesis, consonantal i, lengthened &amp; hypermetric marks</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
     </div>
@@ -345,7 +360,7 @@
 
 <!-- BOOKMARK RIBBON (phones and tablets): bookmarks the top line, Kindle-style (see mobile-bookmarks.js) -->
 <button class="bm-ribbon" id="bm-ribbon" aria-pressed="false" aria-label="Bookmark the top line" hidden>
-  <span class="bm-shape" aria-hidden="true"></span>
+  <span class="bm-shape" aria-hidden="true"><span class="bm-shaft"></span><svg class="bm-notch" viewBox="0 0 26 10" preserveAspectRatio="none"><path class="bm-notch-fill" d="M0 0h26v10L13 2 0 10Z"/><path class="bm-notch-stroke" d="M1.25 0v7.8L13 0.7l11.75 7.1V0" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="miter"/></svg></span>
 </button>
 
 <!-- After jumping to a Bookmark from a dot: the way back -->

@@ -3,6 +3,7 @@ import { shared, state } from './state.js';
 import { saveNotes } from './storage.js';
 import { hideWordCard } from './word-card.js';
 import { noteById } from './notes.js';
+import { SPATIAL, prefersReducedMotion } from './motion.js';
 
 export function initNoteDrag() {
   /* ---- Dragging notes ----
@@ -103,10 +104,14 @@ export function initNoteDrag() {
 
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && drag) drop(true); });
 
-    /* Layout positions of the other cards, so hit-testing isn't thrown off by their sliding animations */
+    /* Layout positions of the cards, so hit-testing and placement never thrash layout during pointermove */
     function measureSlots() {
+      const prev = drag.card.style.transform;
+      drag.card.style.transform = '';
+      drag.base = rectOf(drag.card);
       drag.slots = new Map(cards().filter((c) => c !== drag.card).map((c) => [c, rectOf(c)]));
       drag.slotScroll = scroller.scrollTop;
+      drag.card.style.transform = prev;
     }
 
     function startDrag(e) {
@@ -117,7 +122,7 @@ export function initNoteDrag() {
       getSelection()?.removeAllRanges();
       const r = rectOf(s.card);
       drag = { ...s, grabX: s.x - r.left, grabY: s.y - r.top, px: e.clientX, py: e.clientY,
-        order: cards(), slots: null, slotScroll: 0, raf: 0 };
+        order: cards(), base: r, slots: null, slotScroll: 0, raf: 0 };
       measureSlots();
       s.card.classList.add('dragging');
       el.noteGrid.classList.add('sorting');
@@ -128,11 +133,10 @@ export function initNoteDrag() {
 
     /* The card follows the cursor: its transform is the gap between where the cursor wants it and where its slot is */
     function place() {
-      const { card } = drag;
-      card.style.transform = '';
-      const base = rectOf(card);
+      const { card, base } = drag;
       const left = drag.px - drag.grabX, top = drag.py - drag.grabY;
-      card.style.transform = `translate(${left - base.left}px, ${top - base.top}px) scale(1.02)`;
+      const shift = drag.slotScroll - scroller.scrollTop;
+      card.style.transform = `translate(${left - base.left}px, ${top - (base.top + shift)}px) scale(1.02)`;
       return { left, top, w: base.width, h: base.height };
     }
 
@@ -158,12 +162,13 @@ export function initNoteDrag() {
       const all = cards();
       if (all.indexOf(over) > all.indexOf(card)) over.after(card); else over.before(card);
       measureSlots();
+      if (prefersReducedMotion()) return;
       for (const c of others) {
         const f = first.get(c), l = drag.slots.get(c);
         const dx = f.left - l.left, dy = f.top - l.top;
         if (!dx && !dy) continue;
         c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
-          { duration: 360, easing: 'cubic-bezier(0.34, 1.3, 0.64, 1)' });
+          { duration: 280, easing: SPATIAL });
       }
     }
 
@@ -195,15 +200,21 @@ export function initNoteDrag() {
       cards().forEach((c) => { if (c !== s.card) c.getAnimations().forEach((a) => a.cancel()); });
       if (cancel) s.order.forEach((c) => el.noteGrid.append(c));
 
-      // The card settles into its slot with a little bounce, then drops back to its resting look
+      // The card settles into its slot with a gentle spring, then drops back to its resting look
       const { card } = s;
-      const from = rectOf(card);
-      card.style.transform = '';
-      const to = rectOf(card);
-      const settle = card.animate(
-        [{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(1.02)` }, { transform: 'none' }],
-        { duration: 380, easing: 'cubic-bezier(0.34, 1.4, 0.64, 1)' });
-      settle.onfinish = settle.oncancel = () => { card.classList.remove('dragging'); endPress(s); };
+      if (prefersReducedMotion()) {
+        card.style.transform = '';
+        card.classList.remove('dragging');
+        endPress(s);
+      } else {
+        const from = rectOf(card);
+        card.style.transform = '';
+        const to = rectOf(card);
+        const settle = card.animate(
+          [{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(1.02)` }, { transform: 'none' }],
+          { duration: 280, easing: SPATIAL });
+        settle.onfinish = settle.oncancel = () => { card.classList.remove('dragging'); endPress(s); };
+      }
 
       if (!cancel) {
         // Reorder by position on the page (a map lookup per note instead of indexOf per comparison)

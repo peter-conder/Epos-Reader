@@ -6,7 +6,7 @@ import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks, syncLayout } from './chunks.js';
 import { scheduleFit } from './fit.js';
-import { hideWordCard, showWordCard } from './word-card.js';
+import { hideWordCard, refreshCardScan, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
 import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark } from './bookmarks.js';
 import { attachMarkStrip } from './scrollbar.js';
@@ -35,11 +35,12 @@ export function createReader(tab) {
     renderedKey: null
   };
   el.panes.append(rootEl);
-  // The original text's bookmark dots sit on a strip beside its scrollbar (desktop only)
+  // The original text's bookmark dots sit on a strip beside its scrollbar
   tab.ui.rail = attachMarkStrip(tab.ui.paneOriginal).rail;
   bindReader(tab);
   // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
   tab.ro = new ResizeObserver(() => {
+    if (el.panes.classList.contains('morphing') || el.sidebar.classList.contains('animating')) return;
     renderRail(tab);   // the dots follow the pane's height as it is resized
     scheduleFit(tab, false);
     clearTimeout(tab.fitTimer);
@@ -218,28 +219,32 @@ export function verseHtml({ n, words }) {
 /* Scansion: each syllable is [text, quantity, flags?]. Quantity is L long, S short, E elided.
    Flags: f foot starts here, c caesura after, h hiatus, z synizesis, r consonantal i,
    d lengthened syllable, m hypermetric (elided into the next line). */
-const SCAN_NOTES = { h: 'hiatus', z: 'synizesis', r: 'consonantal i', d: 'lengthened syllable', m: 'hypermetric' };
+const SCAN_NOTES = { h: 'hiatus', z: 'synizesis', r: 'consonantal i', d: 'lengthened syllable', m: 'hypermetric syllable' };
 
 /* A word's text, split into syllable spans when it has scansion (the spans add no width,
    so the marks can be shown or hidden without refitting the text) */
 export function wordHtml(w) {
   const s = w.s;
   if (!s?.length || s.map((x) => x[0]).join('') !== w.f) return esc(w.f);
-  return s.map(([text, q, x = '']) => {
-    const notes = [...x].map((c) => SCAN_NOTES[c]).filter(Boolean).join(', ');
-    return `<span class="syl" data-q="${q}"${x ? ` data-x="${x}"` : ''}${notes ? ` title="${notes}"` : ''}>${esc(text)}</span>`;
-  }).join('');
+  // No title tooltip for the rare marks: their explanations belong to the Word card, which shows them only when
+  // Rare scansion marks and Scansion are both on
+  return s.map(([text, q, x = '']) =>
+    `<span class="syl" data-q="${q}"${x ? ` data-x="${x}"` : ''}>${esc(text)}</span>`).join('');
 }
 
-/* A word's scansion for the word card, e.g. "vi · rum · que   ⏑ – ⏑" (elided syllables in brackets) */
-export function scanText(s) {
+/* A word's scansion for the word card, e.g. "vi · rum · que   ⏑ – ⏑" (elided syllables in brackets).
+   When rare Scansion marks are enabled, appends any rare metrical notes for this word. */
+export function scanText(s, { rare = false } = {}) {
   if (!s?.length) return '';
   const sylls = s.map(([t, q]) => {
     const bare = t.replace(/[.,;:!?·᾽’‘“”«»—–]/g, '');
     return q === 'E' ? `(${bare})` : bare;
   }).join(' · ');
   const marks = s.filter(([, q]) => q !== 'E').map(([, q]) => (q === 'L' ? '–' : '⏑')).join(' ');
-  return marks ? `${sylls}   ${marks}` : sylls;
+  const base = marks ? `${sylls}   ${marks}` : sylls;
+  if (!rare) return base;
+  const notes = [...new Set(s.flatMap(([,, x = '']) => [...x].map((c) => SCAN_NOTES[c]).filter(Boolean)))];
+  return notes.length ? `${base}\n${notes.join(' · ')}` : base;
 }
 
 export function setBookTitles(tab) {
@@ -289,4 +294,5 @@ export function toggleScansion() {
   el.meterBtn.setAttribute('aria-pressed', String(state.scansion));
   el.swScansion.setAttribute('aria-checked', String(state.scansion));
   state.tabs.forEach((t) => { if (isText(t)) syncLayout(t); });
+  refreshCardScan();
 }

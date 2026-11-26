@@ -72,21 +72,29 @@ export function bindCarousel(carousel, onPick) {
   });
 }
 
-/* Opening a work from a home page: the indicator shows for 0.3 s. The book starts downloading at once,
-   the reader is built hidden behind the indicator at 0.2 s, and it is shown when the indicator goes. */
-const LOAD_BUILD_MS = 200, LOAD_SHOW_MS = 300;
+/* Opening a work from Home: starts downloading at once. If it finishes quickly (e.g. cached), reveal right
+   away; otherwise show the morphing loader until the Book data is ready (with a brief minimum so it doesn't flash). */
+const LOADER_DELAY_MS = 90, LOADER_MIN_MS = 220;
 export function openWithLoader(host, work, book, build, reveal) {
   if (host.classList.contains('loading')) return;   // one work at a time
   host.classList.add('loading');
-  const loader = createLoader();
-  host.append(loader);
-  loadBook(work, book);
-  setTimeout(build, LOAD_BUILD_MS);
-  setTimeout(() => {
-    loader.remove();
-    host.classList.remove('loading');
-    reveal();
-  }, LOAD_SHOW_MS);
+  let loader = null, shownAt = 0;
+  const showTimer = setTimeout(() => {
+    loader = createLoader();
+    host.append(loader);
+    shownAt = performance.now();
+  }, LOADER_DELAY_MS);
+  loadBook(work, book).finally(() => {
+    clearTimeout(showTimer);
+    const finish = () => {
+      build();
+      loader?.remove();
+      host.classList.remove('loading');
+      reveal();
+    };
+    const wait = shownAt ? Math.max(0, LOADER_MIN_MS - (performance.now() - shownAt)) : 0;
+    if (wait > 0) setTimeout(finish, wait); else finish();
+  });
 }
 
 /* "+" opens a new tab on the home page */

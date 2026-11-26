@@ -9,7 +9,7 @@ Epos Reader is for students reading epic with a class, self-taught readers readi
 ## What you can do
 
 - **Pick a word** to open its **Word card**: the Lemma (e.g. *arma* for "armis"), its Morphology in this Line, and the Lexicon's definition.
-- **Turn on Scansion** to see each syllable marked Long, Short or Elided, with Feet and the Caesuras that Hypotactic marks. Rarer marks (Hiatus, Synizesis, Consonantal i, Lengthened and Hypermetric syllables) are explained when you pick them.
+- **Turn on Scansion** to see each syllable marked Long, Short or Elided, with Feet and the Caesuras that Hypotactic marks. Rarer marks (Hiatus, Synizesis, Consonantal i, Lengthened and Hypermetric syllables) are off by default: turn on **Rare scansion marks** in View Options (Format Text on a phone or tablet) to show them in the text and explained on the Word card.
 - **Read with a Parallel translation:** the English beside the original, passage by passage.
 - **Open several tabs**, each on its own Work and Book, and show two side by side as a **Split**.
 - **Write Notes** on any word, and **Bookmark Lines** to come back to. The **Notebook** tab gathers both.
@@ -141,7 +141,7 @@ The app also uses:
 | Aeneid card on Home | *Aeneas Carrying Anchises*, Carle van Loo, 1729, Musée du Louvre, Paris ([Louvre listing on Smartify](https://smartify.org/artworks/charles-andre-known-as-carle-vanloo-aeneas-carrying-anchises)) |
 | Iliad card on Home | *Priam Begging Achilles for the Return of Hector's Body*, Alexander Ivanov, 1824 ([Ivanov on Wikipedia](https://en.wikipedia.org/wiki/A._A._Ivanov)) |
 | Odyssey card on Home | *Ulysses deriding Polyphemus – Homer's Odyssey*, J. M. W. Turner, 1829, The National Gallery, London ([NG508](https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-ulysses-deriding-polyphemus-homer-s-odyssey)) |
-| Fonts | [Gentium Plus](https://software.sil.org/gentium/) (SIL International) and [Roboto](https://fonts.google.com/specimen/Roboto), loaded from Google Fonts |
+| Fonts | [Roboto](https://fonts.google.com/specimen/Roboto) (interface & default reading) and [Gentium Plus](https://software.sil.org/gentium/) (optional serif reading font, SIL International), loaded from Google Fonts |
 | Hand-written glosses | Short glosses for some Homeric Lemmas, written by the author (`tools/homer/input/hand_glosses.csv`). Where there is one, it is shown in place of the LSJ definition |
 
 These lists are copied from `SOURCES` and `CREDITS` in `js/data.js`, which the Settings & Sources page shows. Change both together.

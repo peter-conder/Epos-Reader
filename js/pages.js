@@ -3,8 +3,9 @@ import { activeTab, isNotebook, readingTabs, state } from './state.js';
 import { activateTab, closeTab } from './tabs.js';
 import { addNewTab } from './home.js';
 import { setView } from './layout.js';
-import { closeChapterList } from './chapters.js';
+import { chapterListOpen, closeChapterList } from './chapters.js';
 import { isMobileTier, onTierChange } from './viewport.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    PAGES (phones and tablets)
@@ -23,7 +24,6 @@ const FLICK_MIN = 24;
 const AXIS_SLOP = 8;
 const SETTLE_MS = 280;
 const UNDER_SHIFT = 0.3;  // the page underneath starts this share of the width to the left
-const stillMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 const onSettings = () => state.view === 'settings';
 const onNotebook = () => state.view !== 'settings' && isNotebook(activeTab());
@@ -45,8 +45,8 @@ export function syncPages() {
 /* Where back goes from the Notebook: the tab read most recently, or a New Tab if there is none */
 const backTab = () => readingTabs()[0] ?? null;
 
-export function goBack() {
-  if (!el.chapterList.hidden) { closeChapterList(); return; }
+export function goBack({ instant = false } = {}) {
+  if (chapterListOpen()) { closeChapterList({ instant }); return; }
   if (onSettings()) { setView('reader'); return; }
   if (onNotebook()) {
     const to = backTab();
@@ -60,7 +60,7 @@ export function goBack() {
 /* The page a back swipe would move, and the view that would show underneath */
 function swipeTarget() {
   if (!isMobileTier()) return null;
-  if (!el.chapterList.hidden) {
+  if (chapterListOpen()) {
     return { page: el.chapterList, under: !el.tabGrid.hidden ? el.tabGrid : activeTab()?.view ?? null, z: '70' };
   }
   if (onSettings()) return { page: el.viewSettings, under: activeTab()?.view ?? null, panes: true, z: '40' };
@@ -87,7 +87,7 @@ function beginSwipe(t) {
   set(t.page, { zIndex: t.z, boxShadow: '-12px 0 32px rgba(0, 0, 0, 0.18)', transition: 'none' });
   if (t.under) set(t.under, { transition: 'none' });
   return () => {
-    // Straight back: the panes' springy transform transition mustn't play on the way
+    // Straight back: the panes' transform transition mustn't play on the way
     for (const n of [t.page, t.under]) if (n) { n.style.transition = 'none'; n.style.transform = ''; n.style.filter = ''; }
     void t.page.offsetWidth;
     undo.reverse().forEach((f) => f());
@@ -123,7 +123,7 @@ function bindEdgeSwipe() {
       if (Math.max(Math.abs(dx), Math.abs(dy)) < AXIS_SLOP) return;
       g.axis = dx > Math.abs(dy) ? 'x' : 'y';
       if (g.axis !== 'x') { g = null; return; }
-      if (!stillMotion.matches) g.end = beginSwipe(g.t);
+      if (!prefersReducedMotion()) g.end = beginSwipe(g.t);
     }
     g.dx = dx;
     g.samples.push([performance.now(), e.clientX]);
@@ -142,11 +142,11 @@ function bindEdgeSwipe() {
     const [[t0, x0]] = d.samples, [t1, x1] = d.samples.at(-1);
     const v = t1 > t0 ? (x1 - x0) / (t1 - t0) : 0;
     const go = !cancelled && (d.dx > W() * COMMIT || (v > FLICK && d.dx > FLICK_MIN));
-    if (!d.end) { if (go) goBack(); return; }   // Reduce Motion: no slide, just back
+    if (!d.end) { if (go) goBack({ instant: true }); return; }   // Reduce Motion: no slide, just back
     g = d;   // place() reads the swipe's pages from g
     place(go ? W() : 0, SETTLE_MS);
     g = null;
-    setTimeout(() => { d.end(); if (go) goBack(); }, SETTLE_MS);
+    setTimeout(() => { d.end(); if (go) goBack({ instant: true }); }, SETTLE_MS);
   };
   addEventListener('pointerup', (e) => finish(e, false), { capture: true });
   addEventListener('pointercancel', (e) => finish(e, true), { capture: true });
@@ -156,7 +156,7 @@ function bindEdgeSwipe() {
 let swallowClick = false;
 
 export function initPages() {
-  el.pageBackBtn.addEventListener('click', goBack);
+  el.pageBackBtn.addEventListener('click', () => goBack());
   bindEdgeSwipe();
   // On a desktop-wide window a page-only Notebook becomes an ordinary tab
   onTierChange(() => { if (!isMobileTier()) state.tabs.forEach((t) => { delete t.pageOnly; }); syncPages(); });

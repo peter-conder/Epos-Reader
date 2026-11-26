@@ -36,7 +36,14 @@ export function showUndo(snap) {
    ========================================================== */
 const TRIGGERS = new Map([[el.drawer, el.menuBtn], [el.flyout, el.textBtn], [el.popupsFlyout, el.popupsBtn]]);
 
+const POPOVER_ITEMS = '.drawer-item, .drawer-swatches, .sub-item, .work-item, .flyout-group, .switch-row, .btn-hover-switch, .lm-item';
 export function setOpen(popover, open) {
+  if (open) {
+    let idx = 0;
+    for (const item of popover.querySelectorAll(POPOVER_ITEMS)) {
+      if (getComputedStyle(item).display !== 'none') item.style.setProperty('--i', String(Math.min(idx++, 5)));
+    }
+  }
   popover.classList.toggle('open', open);
   TRIGGERS.get(popover)?.setAttribute('aria-expanded', String(open));
 }

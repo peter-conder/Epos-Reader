@@ -6,6 +6,7 @@ import { anchorIndex } from './chunks.js';
 import { countLabel } from './notes.js';
 import { openChapterList } from './chapters.js';
 import { hideWordCard } from './word-card.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    TAB GRID (phones and tablets): every open tab as a card, most recently used first, opened and closed
@@ -16,8 +17,11 @@ import { hideWordCard } from './word-card.js';
 const SNIPPET_LINES = 3;
 const FLING = 0.35;   // share of a card's width a sideways swipe must pass to close it
 const AXIS_SLOP = 8;
+const CLOSE_MS = 200;
 
-export const tabGridOpen = () => !el.tabGrid.hidden;
+let closeTimer = 0, openTimer = 0;
+
+export const tabGridOpen = () => !el.tabGrid.hidden && !el.tabGrid.classList.contains('closing');
 
 /* Where a text tab is: the line at the top of its pane and the lines from there */
 function readingSpot(tab) {
@@ -67,29 +71,49 @@ export function renderTabGrid() {
 }
 
 export function openTabGrid() {
+  clearTimeout(closeTimer);
+  closeTimer = 0;
+  el.tabGrid.classList.remove('closing');
   hideWordCard();
   el.tabGrid.hidden = false;
+  el.tabGrid.classList.add('opening');
+  clearTimeout(openTimer);
+  openTimer = setTimeout(() => el.tabGrid.classList.remove('opening'), 360);
   document.documentElement.classList.add('grid-open');
   el.tabsBtn.setAttribute('aria-expanded', 'true');
   renderTabGrid();
   el.tgList.querySelector('.is-active')?.scrollIntoView({ block: 'nearest' });
 }
 
-export function closeTabGrid() {
+export function closeTabGrid({ instant = false } = {}) {
   if (!tabGridOpen()) return;
-  el.tabGrid.hidden = true;
   document.documentElement.classList.remove('grid-open');
   el.tabsBtn.setAttribute('aria-expanded', 'false');
+  el.tabGrid.classList.remove('opening');
+  if (instant || prefersReducedMotion()) {
+    clearTimeout(closeTimer);
+    closeTimer = 0;
+    el.tabGrid.classList.remove('closing');
+    el.tabGrid.hidden = true;
+    return;
+  }
+  el.tabGrid.classList.add('closing');
+  closeTimer = setTimeout(() => {
+    closeTimer = 0;
+    el.tabGrid.classList.remove('closing');
+    el.tabGrid.hidden = true;
+  }, CLOSE_MS);
 }
 
 export const toggleTabGrid = () => (tabGridOpen() ? closeTabGrid() : openTabGrid());
 
 /* A card slides out sideways and the tab closes */
 function flingClose(card, dir) {
-  card.style.transition = 'transform 200ms ease-in, opacity 200ms ease-in';
+  if (prefersReducedMotion()) { closeTab(card.dataset.tabId, { skipExit: true }); return; }
+  card.style.transition = 'transform 200ms var(--ease-emphasized), opacity 200ms ease';
   card.style.transform = `translateX(${dir * 110}%)`;
   card.style.opacity = '0';
-  setTimeout(() => closeTab(card.dataset.tabId, { skipExit: true }), 180);
+  setTimeout(() => closeTab(card.dataset.tabId, { skipExit: true }), 200);
 }
 
 function bindCardSwipe() {
@@ -132,7 +156,7 @@ export function initTabGrid() {
   el.tabsBtn.setAttribute('aria-controls', 'tab-grid');
   el.tabsBtn.setAttribute('aria-expanded', 'false');
   el.tabsBtn.addEventListener('click', toggleTabGrid);
-  el.tgDone.addEventListener('click', closeTabGrid);
+  el.tgDone.addEventListener('click', () => closeTabGrid());
   el.tgNew.addEventListener('click', () => openChapterList());
   el.tgNew.insertAdjacentHTML('afterbegin', icon('plus'));
   el.tgList.addEventListener('click', (e) => {

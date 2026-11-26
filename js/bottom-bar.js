@@ -277,12 +277,18 @@ function bindSwipe() {
     const to = d.dx > 0 ? d.near[0] : d.near[1];
     const go = !cancelled && to && (Math.abs(d.dx) > d.w * COMMIT || (Math.abs(v) > FLICK && Math.abs(d.dx) > FLICK_MIN && Math.sign(v) === Math.sign(d.dx)));
     if (!go) {
-      place(0, true);
+      place(0, !stillMotion.matches);
       d.peek?.move(0, SETTLE_MS);
       if (d.peek) {
         finishPending = () => { if (activeTab() === d.tab) d.peek.end(null); };
         settleTimer = setTimeout(flushSettle, SETTLED);
       }
+      return;
+    }
+    if (stillMotion.matches) {
+      place(0, false);
+      if (to === NEW_SLOT) openChapterList();
+      else activateTab(to.id, { promote: false });
       return;
     }
     const dir = Math.sign(d.dx);
@@ -313,8 +319,8 @@ export function initBottomBar() {
   });
   onTierChange(() => {
     setChromeHidden(false);
-    closeTabGrid();
-    closeChapterList();
+    closeTabGrid({ instant: true });
+    closeChapterList({ instant: true });
     renderAll();   // one pane at a time below desktop, both of a split pair above it
   });
 }

@@ -227,8 +227,8 @@ export const CREDITS = [
       url: 'https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-ulysses-deriding-polyphemus-homer-s-odyssey' }
   ] },
   { group: 'Fonts', items: [
-    { what: 'Latin and Greek', name: 'Gentium Plus', url: 'https://software.sil.org/gentium/', by: 'SIL International, served by Google Fonts' },
-    { what: 'Everything else', name: 'Roboto', url: 'https://fonts.google.com/specimen/Roboto', by: 'Google Fonts' }
+    { what: 'Interface & default reading', name: 'Roboto', url: 'https://fonts.google.com/specimen/Roboto', by: 'Google Fonts' },
+    { what: 'Serif reading option (Latin & Greek)', name: 'Gentium Plus', url: 'https://software.sil.org/gentium/', by: 'SIL International, served by Google Fonts' }
   ] },
   { group: 'Hand-written glosses', items: [
     { what: 'Greek definitions', name: 'Short glosses for some Homeric Lemmas', by: 'written by the author',

@@ -1,6 +1,6 @@
 # Phase 3: Unified visual, typography, and motion system
 
-Status: ready-for-agent
+Status: resolved
 
 ## What
 
@@ -14,3 +14,5 @@ Status: ready-for-agent
 - Motion and visual tokens are unified across phone, tablet, and desktop; reduced motion is respected everywhere; verified in light and dark mode across palettes.
 
 ## Comments
+
+- 2026-11-26: Implemented unified typography, Rare Scansion toggle (off by default), light/dark surface tokens, hollow Bookmark ribbon, unified Material Expressive motion system (`--ease-spatial` / `--ease-emphasized`), symmetric sheet/overlay exits, and complete `prefers-reduced-motion` support. Verified with `node --check js/*.js` and headless Chromium across desktop (1280x800), phone (390x844), and reduced-motion tablet (768x1024).
