@@ -12,10 +12,12 @@ export const TIER_QUERIES = {
 };
 const HOVER_QUERY = matchMedia('(hover: hover)');
 const COARSE_QUERY = matchMedia('(pointer: coarse)');
-const tierMedia = Object.entries(TIER_QUERIES).map(([name, q]) => [name, matchMedia(q)]);
+const COMPACT_QUERY = matchMedia(TIER_QUERIES.compact);
+const MOBILE_QUERY = matchMedia('(max-width: 1024px)');
+const tierMedia = [COMPACT_QUERY, MOBILE_QUERY];
 
-/* 'compact' | 'medium' | 'desktop' */
-export const tier = () => tierMedia.find(([, mq]) => mq.matches)?.[0] ?? 'desktop';
+/* 'compact' | 'medium' | 'desktop' — no subpixel gap between 599.98px and 600px */
+export const tier = () => (COMPACT_QUERY.matches ? 'compact' : MOBILE_QUERY.matches ? 'medium' : 'desktop');
 export const isMobileTier = () => tier() !== 'desktop';
 export const canHover = () => HOVER_QUERY.matches;
 export const isCoarse = () => COARSE_QUERY.matches;
@@ -39,5 +41,5 @@ function sync() {
 
 export function initViewport() {
   sync();
-  tierMedia.forEach(([, mq]) => mq.addEventListener('change', sync));
+  tierMedia.forEach((mq) => mq.addEventListener('change', sync));
 }

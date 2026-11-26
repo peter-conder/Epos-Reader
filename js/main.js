@@ -19,10 +19,10 @@ import { initViewport, onTierChange } from './viewport.js';
 import { initBottomBar } from './bottom-bar.js';
 import { initMobileBookmarks } from './mobile-bookmarks.js';
 import { initPages } from './pages.js';
-import { initTabGrid } from './tab-grid.js';
-import { initChapters } from './chapters.js';
-import { closeFormatSheet, initFormatSheet } from './format-sheet.js';
-import { initEnglish } from './english.js';
+import { closeTabGrid, initTabGrid, tabGridOpen } from './tab-grid.js';
+import { chapterListOpen, closeChapterList, initChapters } from './chapters.js';
+import { closeFormatSheet, formatSheetOpen, initFormatSheet } from './format-sheet.js';
+import { closeLineMenu, initEnglish, lineMenuOpen } from './english.js';
 import { initSession, restoreSession } from './session.js';
 
 /* Epos Reader: the entry point. Each module sets up its own listeners in its init function;
@@ -40,7 +40,7 @@ initSettings();
 initToolbar();
 
 /* ==========================================================
-   GLOBAL: outside-click & Escape dismissal
+   GLOBAL: outside-click & layered Escape dismissal
    ========================================================== */
 document.addEventListener('click', (e) => {
   const t = e.target;
@@ -61,10 +61,24 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
-  cancelTabDrag();
-  closePopovers();
-  hideWordCard();
-  hideHoverCard();
+  // Dismiss only the topmost open layer so nested dialogs unwind one step at a time
+  if (shared.dragging) { cancelTabDrag(); return; }
+  if (lineMenuOpen()) { closeLineMenu(); return; }
+  if (chapterListOpen()) { closeChapterList(); return; }
+  if (tabGridOpen()) { closeTabGrid(); el.tabsBtn.focus({ preventScroll: true }); return; }
+  if (formatSheetOpen()) { closeFormatSheet(); el.formatBtn.focus({ preventScroll: true }); return; }
+  if (el.paletteMenu.classList.contains('open')) {
+    closePaletteMenu();
+    document.getElementById('drawer-palette')?.focus({ preventScroll: true });
+    return;
+  }
+  if (el.drawer.classList.contains('open')) { setOpen(el.drawer, false); el.menuBtn.focus({ preventScroll: true }); return; }
+  if (el.flyout.classList.contains('open')) { setOpen(el.flyout, false); el.textBtn.focus({ preventScroll: true }); return; }
+  if (el.popupsFlyout.classList.contains('open')) { setOpen(el.popupsFlyout, false); el.popupsBtn.focus({ preventScroll: true }); return; }
+  if (el.picker.classList.contains('open')) { setOpen(el.picker, false); return; }
+  if (shared.noteCtx) { closeNote(); el.cardNote.focus({ preventScroll: true }); return; }
+  if (el.wordCard.classList.contains('visible')) { hideWordCard({ restoreFocus: true }); return; }
+  if (el.hoverCard.classList.contains('open')) { hideHoverCard(); }
 });
 
 initNotes();

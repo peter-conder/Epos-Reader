@@ -1,6 +1,6 @@
 import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
-import { activeTab, isNotebook, isText, markUsed, readingTabs, shared, state, workOf } from './state.js';
+import { activeTab, isNotebook, isText, markUsed, readingTabs, shared, state } from './state.js';
 import { visibleLines } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
@@ -13,6 +13,7 @@ import { closeTabGrid } from './tab-grid.js';
 import { syncLangButton } from './english.js';
 import { openFormatSheet } from './format-sheet.js';
 import { syncRibbon } from './mobile-bookmarks.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
@@ -48,7 +49,7 @@ function labelFor(tab) {
     };
   }
   if (isNotebook(tab)) return { title: 'Notebook', sub: countLabel() };
-  return { title: 'New Tab', sub: 'Choose a work' };
+  return { title: 'Home', sub: 'Choose a Work' };
 }
 
 const NEW_SLOT = { new: true };   // past the last tab: swiping on opens the chapter list
@@ -164,12 +165,11 @@ export function bottomBarScroll(tab) {
 }
 
 /* ---------- Swiping between tabs ---------- */
-const stillMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
 /* The pages that move with a swipe: the open tab's, and its neighbours' either side, shown beside it.
    Each page is moved by translateX; `at` is where the open page is, in px (negative: moved left). */
 function startPeek(tab, near) {
-  if (stillMotion.matches) return null;   // with Reduce Motion the switch stays instant
+  if (prefersReducedMotion()) return null;   // with Reduce Motion the switch stays instant
   const W = el.panes.clientWidth;
   const pages = [];   // { view, side }: side -1 left of the open page, 1 right of it, 0 the open page
   const add = (view, side) => {
@@ -204,7 +204,7 @@ function startPeek(tab, near) {
     /* Puts every page back as the layout has it; `keep` is the page that stays on screen (its tab is opened next) */
     end(keep) {
       for (const p of pages) {
-        // Straight there: the panes' own springy transform transition mustn't pick up whatever is left of the slide
+        // Straight there: the panes' transform transition mustn't pick up whatever is left of the slide
         p.view.style.transition = 'none';
         p.view.style.transform = '';
         void p.view.offsetWidth;
@@ -277,7 +277,7 @@ function bindSwipe() {
     const to = d.dx > 0 ? d.near[0] : d.near[1];
     const go = !cancelled && to && (Math.abs(d.dx) > d.w * COMMIT || (Math.abs(v) > FLICK && Math.abs(d.dx) > FLICK_MIN && Math.sign(v) === Math.sign(d.dx)));
     if (!go) {
-      place(0, !stillMotion.matches);
+      place(0, !prefersReducedMotion());
       d.peek?.move(0, SETTLE_MS);
       if (d.peek) {
         finishPending = () => { if (activeTab() === d.tab) d.peek.end(null); };
@@ -285,7 +285,7 @@ function bindSwipe() {
       }
       return;
     }
-    if (stillMotion.matches) {
+    if (prefersReducedMotion()) {
       place(0, false);
       if (to === NEW_SLOT) openChapterList();
       else activateTab(to.id, { promote: false });

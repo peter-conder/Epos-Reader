@@ -82,7 +82,6 @@ export function bindSheetDrag(sheet, handles, onClose, enabled = () => true) {
 export function initFormatSheet() {
   el.fsClose.addEventListener('click', () => closeFormatSheet());
   bindSheetDrag(el.formatSheet, '#fs-grip, .fs-header', () => closeFormatSheet());
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFormatSheet(); });
   // Back on a desktop-wide screen the panels go home to the toolbar immediately
   onTierChange(() => closeFormatSheet({ instant: true }));
 }

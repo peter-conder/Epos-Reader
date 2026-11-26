@@ -9,13 +9,14 @@ import { hideHoverCard } from './sidebar.js';
 import { hideWordCard } from './word-card.js';
 import { showChrome } from './bottom-bar.js';
 import { isMobileTier } from './viewport.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
    TABS (sidebar)
    ========================================================== */
-const tabName = (tab) => (isNotebook(tab) ? 'Notebook' : isText(tab) ? workOf(tab).title : 'New Tab');
+const tabName = (tab) => (isNotebook(tab) ? 'Notebook' : isText(tab) ? workOf(tab).title : 'Home');
 
-/* A text tab reads "Aen. I.1–25", a short Citation (work in italics); the notebook and new tabs are just their name */
+/* A text tab reads "Aen. I.1–25", a short Citation (work in italics); the notebook and Home tabs are just their name */
 const labelHtml = (tab) => (isText(tab)
   ? `<span class="tab-title tab-title-work"><em class="tab-work">${esc(workOf(tab).abbr)}</em><span class="tab-ref">${esc(tabRef(tab))}</span></span>`
   : `<span class="tab-title">${tabName(tab)}</span>`);
@@ -98,6 +99,7 @@ export function activateTab(id, { promote = true } = {}) {
   hideWordCard();
   groupOf(tab).forEach(renderReader);
   renderAll();
+  scheduleSessionSave();
 }
 
 export function closeTab(id, opts = {}) {
@@ -107,7 +109,9 @@ export function closeTab(id, opts = {}) {
   const partner = partnerOf(tab);
   // Recorded while the pane is still on screen; played once the layout has closed up behind it
   const playClose = opts.skipExit ? null : beginSplitClose(tab, opts.ghostRect);
+  clearTimeout(tab.fitTimer);
   tab.ro?.disconnect();
+  tab.ui?.markStrip?.disconnect();
   const snap = { tab, idx, partnerId: partner?.id ?? null, autoId: null };
   if (partner) partner.partnerId = null;
   state.tabs.splice(idx, 1);
@@ -116,7 +120,7 @@ export function closeTab(id, opts = {}) {
   hideWordCard();
 
   if (state.tabs.length === 0) {
-    // The tab bar is never empty: closing the last tab leaves a fresh New Tab behind
+    // The tab bar is never empty: closing the last tab leaves a fresh Home tab behind
     state.activeId = null;
     snap.autoId = addNewTab().id;
   } else if (id === state.activeId) {
@@ -132,13 +136,14 @@ export function closeTab(id, opts = {}) {
   }
   playClose?.();
   if (!opts.silent) showUndo(snap);
+  scheduleSessionSave();
 }
 
 /* Put a closed tab back where it was (and into its split, if its partner is still there) */
 export function undoClose({ tab, idx, partnerId, autoId }) {
   if (getTab(tab.id)) return;
   if (isText(tab)) createReader(tab);                       // its old view was thrown away
-  else if (!isNotebook(tab)) el.panes.append(tab.view);     // a New Tab keeps its view
+  else if (!isNotebook(tab)) el.panes.append(tab.view);     // a Home tab keeps its view
   else shared.notebookDirty = true;
   state.tabs.splice(Math.min(idx, state.tabs.length), 0, tab);
   const partner = getTab(partnerId);
@@ -159,15 +164,17 @@ export function pairTabs(targetId, draggedId) {
   state.tabs.splice(state.tabs.indexOf(target) + 1, 0, dragged);
   target.partnerId = dragged.id;
   dragged.partnerId = target.id;
-  // English parallel view isn't available inside a split view
+  // Parallel translation isn't available inside a Split
   for (const t of [target, dragged]) if (isText(t)) t.split = false;
   state.pairPct = 50;
+  scheduleSessionSave();
 }
 
 export function unpair(tab) {
   const p = partnerOf(tab);
   if (p) p.partnerId = null;
   tab.partnerId = null;
+  scheduleSessionSave();
 }
 
 export function initTabs() {

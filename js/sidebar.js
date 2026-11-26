@@ -8,6 +8,7 @@ import { addNewTab } from './home.js';
 import { countLabel, openNotebook } from './notes.js';
 import { canHover } from './viewport.js';
 import { prefersReducedMotion } from './motion.js';
+import { scheduleSessionSave } from './session.js';
 
 let hoverTimer = 0;       // tab hover card
 let hoveredTabId = null;
@@ -28,8 +29,8 @@ export function showHoverCard(pill) {
     el.hoverCite.textContent = 'Notebook';
     el.hoverDesc.textContent = countLabel();
   } else if (!text) {
-    el.hoverCite.textContent = 'New Tab';
-    el.hoverDesc.textContent = 'Choose a work to open';
+    el.hoverCite.textContent = 'Home';
+    el.hoverDesc.textContent = 'Choose a Work to open';
   } else {
     el.hoverCite.textContent = citation(tab.work, tab.book, tab.range ?? '');
     el.hoverDesc.textContent = bookTitle(tab.work, tab.book);
@@ -141,6 +142,7 @@ export function chooseBook(workKey, book) {
   }
   renderReader(tab);
   renderAll();
+  scheduleSessionSave();
 }
 
 export function initSidebar() {

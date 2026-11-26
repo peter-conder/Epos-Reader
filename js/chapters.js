@@ -42,7 +42,7 @@ export const chapterListOpen = () => !el.chapterList.hidden && !el.chapterList.c
 const openTabFor = (work, book) => state.tabs.find((t) => isText(t) && t.work === work && t.book === book);
 
 function listHtml(works) {
-  if (!works.length) return '<p class="cl-empty">No texts are available yet.</p>';
+  if (!works.length) return '<p class="cl-empty">No Works are available yet.</p>';
   return works.map((key) => {
     const w = WORKS[key];
     const rows = ROMANS.slice(0, w.bookCount).map((r) => {
@@ -68,7 +68,7 @@ async function fillChapterList(only) {
   return true;
 }
 
-/* only: list just this work. into: the New Tab to open the chosen book in. */
+/* only: list just this work. into: the Home tab to open the chosen book in. */
 export async function openChapterList({ only = null, into = null } = {}) {
   clearTimeout(closeTimer);
   closeTimer = 0;
@@ -144,5 +144,4 @@ export function initChapters() {
   });
   el.clClose.addEventListener('click', () => closeChapterList());
   el.clClose.innerHTML = icon('close');
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChapterList(); });
 }

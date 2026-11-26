@@ -1,4 +1,4 @@
-import { WORKS, bookLabel } from './data.js';
+import { WORKS } from './data.js';
 import { $, el, esc, icon } from './dom.js';
 import { getTab, newTabId, state } from './state.js';
 import { loadBook } from './book-data.js';
@@ -8,12 +8,13 @@ import { createReader, renderPassage } from './reader.js';
 import { createLoader } from './loader.js';
 import { availableWorks, openChapterList } from './chapters.js';
 import { isMobileTier } from './viewport.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
-   HOME PAGE: a carousel of the works, shown when nothing is open and as the page
-   of every new tab. Hover a card and it grows into the large slot (the others step
+   HOME PAGE: a carousel of the Works, shown when nothing is open and as the page
+   of every Home tab. Hover a card and it grows into the large slot (the others step
    down to medium and small) and keeps that size after the mouse leaves.
-   Clicking a card opens Book I of that work.
+   Clicking a card opens Book I of that Work on desktop, or its Book list on phones and tablets.
    ========================================================== */
 const HOME_WORKS = ['aeneid', 'odyssey', 'iliad'];
 // Flat colours show behind the artwork until it has loaded (and if a file is ever missing)
@@ -30,7 +31,7 @@ const HOME_ART = {
 };
 
 const CAROUSEL_HTML = HOME_WORKS.map((key, i) => `
-  <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(WORKS[key].title)}: open Book ${bookLabel(key, 'I')}" style="--card-bg: ${HOME_BG[key]}; background-image: url('${HOME_ART[key].src}'); --card-pos: ${HOME_ART[key].pos}">
+  <button class="home-card" data-work="${key}" data-rank="${Math.min(i, 2)}" role="listitem" aria-label="${esc(`${WORKS[key].title} — ${WORKS[key].poet}`)}" style="--card-bg: ${HOME_BG[key]}; background-image: url('${HOME_ART[key].src}'); --card-pos: ${HOME_ART[key].pos}">
     <span class="home-card-scrim"></span><span class="home-card-title">${esc(WORKS[key].title)}</span>
   </button>`).join('');
 
@@ -97,19 +98,24 @@ export function openWithLoader(host, work, book, build, reveal) {
   });
 }
 
-/* "+" opens a new tab on the home page */
-export function addNewTab() {
-  const id = newTabId();
+/* Builds a Home tab and appends its view, without activating or rendering (used by addNewTab and restoreSession) */
+export function createNewTab(id = newTabId()) {
   const view = document.createElement('div');
   view.className = 'view empty-state tab-view';
   view.dataset.tabId = id;
   view.hidden = true;
-  view.innerHTML = `<button class="pane-close" aria-label="Close pane" data-tip="Close pane" data-tip-side="bottom">${icon('close')}</button><h2 class="home-title">Select a Text</h2><div class="home-carousel" role="list" aria-label="Choose a work to read">${CAROUSEL_HTML}</div>`;
+  view.innerHTML = `<button class="pane-close" aria-label="Close pane" data-tip="Close pane" data-tip-side="bottom">${icon('close')}</button><h2 class="home-title">Select a Work</h2><div class="home-carousel" role="list" aria-label="Choose a Work to read">${CAROUSEL_HTML}</div>`;
   el.panes.append(view);
   const tab = { id, kind: 'new', partnerId: null, view, fresh: true };
   bindCarousel(view.querySelector('.home-carousel'), (work) => openWorkInTab(tab, work));
+  return tab;
+}
+
+/* "+" opens a new Home tab */
+export function addNewTab() {
+  const tab = createNewTab();
   state.tabs.push(tab);
-  activateTab(id);
+  activateTab(tab.id);
   return tab;
 }
 
@@ -138,6 +144,7 @@ export function openWorkInTab(tab, work, book = 'I') {
     tab.fresh = true;
     old.remove();
     if (state.activeId === tab.id) activateTab(tab.id); else renderAll();
+    scheduleSessionSave();
   });
 }
 
