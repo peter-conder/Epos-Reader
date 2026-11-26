@@ -1,6 +1,6 @@
 # Build the Translation data from Perseus
 
-Status: ready-for-agent
+Status: resolved
 
 ## What
 
@@ -18,3 +18,14 @@ Add `tools/translation/`, which builds `data2/<work>/NN.en.json` for every Book 
 - Each Book JSON's `sources` gains a `translation` entry (decision 13).
 
 ## Comments
+
+**2026-11-26:** Resolved.
+
+- `tools/translation/`: `fetch_sources.sh` downloads the three files at the pinned commits into `sources/` (git-ignored). `build_translation.py` writes the 60 `data2/<work>/NN.en.json` files and adds `sources.translation` to each Book file, leaving the rest of it byte for byte as it was. `check_translation.py` checks them. `README.md` follows `tools/homer/README.md`.
+- Blocks: Aeneid 327, Iliad 425, Odyssey 288 (2.3 MB in all). The longest is Aeneid V.604, at 115 Lines. Issue 02's proportional mapping has to work with blocks that tall.
+- Two things the spec didn't cover:
+  - The Iliad file has Murray's speeches in `<quote>` with the print's quotation marks taken out (the Odyssey and Aeneid files keep them in the text), so the build puts them back as “…” and ‘…’.
+  - `<choice>` keeps the printed spelling (*Pasiphaë*).
+- Aeneid X prints Lines 717–718 before 714. The check uses reading order, and so must the reader (noted in the README).
+- `corrections.csv` starts with five quotation-mark typos found in the Perseus source: Aeneid II.205, II.314, X.598 and XII.591 (Williams's line numbers), and Iliad XXII "sons\" wives". These are to be offered to Perseus.
+- The check passes on every Book. It was also tested to fail on blocks out of order, leftover markup and a missing Book.
