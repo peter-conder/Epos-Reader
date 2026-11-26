@@ -1535,6 +1535,7 @@
      bar for the open tab (see bottom-bar.js). Both float over the text and hide while you read.
      ========================================================== */
   .bottom-bar { display: none; }
+  .top-strip { display: none; }
 
   @media (max-width: 1024px) {
     :root {
@@ -1558,6 +1559,22 @@
     }
     .top-bar > :not(.top-left), .brand { display: none !important; }
     .top-left { width: auto; }
+
+    /* iOS 26 blurs the top ~40pt of a Home Screen web app, fixed buttons included, and there is no switch to turn
+       that off. WebKit leaves it out when an opaque, full-width fixed element sits along the top edge, so in the
+       Home Screen app this strip (as tall as the space above the text, in the colour of the page under it) takes
+       that place. Text scrolls under it and is cut off cleanly. Reports, not Apple docs:
+       github.com/azu/irodr/pull/142, github.com/jmedzen/mdWebview/pull/34 */
+    @media (display-mode: standalone) {
+      .top-strip {
+        display: block;
+        position: fixed; top: 0; left: 0; right: 0; z-index: 49;   /* under the menu button (.top-bar) and ribbon */
+        height: calc(68px + env(safe-area-inset-top));
+        background: var(--surface);
+        pointer-events: none;
+      }
+      :root:has(#view-settings:not([hidden])) .top-strip { background: var(--bg); }
+    }
     #btn-menu {
       margin: 0;
       pointer-events: auto;

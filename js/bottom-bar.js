@@ -29,6 +29,7 @@ const FLICK_MIN = 16;
 const EDGE_GIVE = 0.3;     // past the first or last tab the pill moves this much of the drag
 const AXIS_SLOP = 8;       // px before a drag counts as sideways or not
 const SETTLE_MS = 300;
+const SETTLED = SETTLE_MS + 50;   // ms before the pages are put back: a timer can fire a frame or two before the slide ends
 const PAGE_GAP = 16;       // px between two text pages sliding side by side
 const HIDE_AFTER = 24;     // px of scrolling one way before the bars hide or return
 const READ_AFTER = 40;     // px of scrolling in a tab before it counts as used (see byRecent in state.js)
@@ -267,19 +268,20 @@ function bindSwipe() {
     if (!go) {
       place(0, true);
       d.peek?.move(0, SETTLE_MS);
-      if (d.peek) setTimeout(() => { if (activeTab() === d.tab) d.peek.end(null); }, SETTLE_MS);
+      if (d.peek) setTimeout(() => { if (activeTab() === d.tab) d.peek.end(null); }, SETTLED);
       return;
     }
     const dir = Math.sign(d.dx);
     place(dir * d.w, true);
-    d.peek?.move(-dir * (d.peek.W + PAGE_GAP), SETTLE_MS);
+    // The pages carry on the way the finger went: the open one leaves on that side, its neighbour takes its place
+    d.peek?.move(dir * (d.peek.W + PAGE_GAP), SETTLE_MS);
     // The new tab opens once its pill and page have slid into place (activating it redraws the bar, centred).
     // A swipe is only a peek: the order stays as it is until the tab is read in.
     setTimeout(() => {
       if (activeTab() !== d.tab) { d.peek?.end(null); return; }
       if (to === NEW_SLOT) { d.peek?.end(el.chapterList); place(0, false); openChapterList(); }
       else { d.peek?.end(to.view); activateTab(to.id, { promote: false }); }
-    }, SETTLE_MS);
+    }, SETTLED);
   };
   pill.addEventListener('pointerup', (e) => end(e, false));
   pill.addEventListener('pointercancel', (e) => end(e, true));
