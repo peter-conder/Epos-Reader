@@ -904,6 +904,14 @@
   }
   .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: 0.45em; }
 
+  /* A pane too narrow for the widest Line even at the smallest size (beside the English, or in a Split): its Lines
+     wrap with a hanging indent, as on a phone (see COMPACT below), instead of running out of the pane. fit.js sets
+     data-wrap. The fit's probe lines aren't in .passage, so they are still measured unwrapped. */
+  .reader[data-wrap="on"] .passage { width: auto; }
+  .reader[data-wrap="on"] .passage .verse-words { flex-wrap: wrap; row-gap: 0; min-width: 0; padding-left: 1.25em; }
+  .reader[data-wrap="on"] .passage .verse-words > .word:first-child { margin-left: -1.25em; }
+  .reader[data-wrap="on"] .passage .verse-bm { top: calc(var(--reading-font-size) * var(--reading-line-height) / 2 + 3px); }
+
   /* Bookmark glyph (the margin marker and the word-card button). ::before is the bookmark, ::after the "+".
      Hovering an unbookmarked one opens the bookmark's top-right corner and pops the "+" into it. */
   .bm-glyph { position: relative; display: block; color: inherit; flex-shrink: 0; transition: transform 200ms var(--ease-bouncy), opacity 140ms ease; }

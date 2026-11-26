@@ -68,7 +68,9 @@ export function fitReader(tab, verify = true) {
     ui.root.style.setProperty('--reading-font-size', `${size}rem`);
     ui.root.style.setProperty('--reading-trans-font-size', `${size * 0.86}rem`);
     for (const ch of ui.chunkers) ch.container.style.minWidth = '';
+    ui.root.dataset.wrap = 'off';   // the compact layout wraps by itself
     tab.fitSize = null;   // back on a wider screen, the fit starts over
+    tab.fitWrap = false;
     return;
   }
   // Two windows share the width, so the text sits a step smaller than in a single window
@@ -84,12 +86,16 @@ export function fitReader(tab, verify = true) {
   // Only a few chunks are in the page, so the text block is held to the width of the book's widest
   // line; otherwise it would shift sideways as wider lines scroll in
   const widestAt = (pn, size) => Math.max(0, ...(model.get(pn) ?? []).map(({ k, b }) => k * size + b));
+  // Wrapping: when the widest Line doesn't fit even at the smallest size (a narrow pane beside the English or in a
+  // Split), the original's Lines wrap with a hanging indent, as on a phone (.reader[data-wrap="on"] in styles.css),
+  // instead of running out of the pane. Its text block then just fills the pane.
+  let wrap = false;
   const apply = (size) => {
     ui.root.style.setProperty('--reading-font-size', `${size.toFixed(3)}rem`);
     ui.root.style.setProperty('--reading-trans-font-size', `${(size * 0.86).toFixed(3)}rem`);
-    for (const c of checks) c.verses.style.minWidth = `${Math.ceil(widestAt(c.pn, size))}px`;
+    for (const c of checks) c.verses.style.minWidth = c.wrapping ? '' : `${Math.ceil(widestAt(c.pn, size))}px`;
   };
-  const fits = () => checks.every((c) => c.verses.offsetWidth <= c.pn.clientWidth - c.pad + 1);
+  const fits = () => checks.every((c) => c.wrapping || c.verses.offsetWidth <= c.pn.clientWidth - c.pad + 1);
 
   // Every size change relays out the whole book, so the size is worked out rather than searched for,
   // from widths measured once per text and font (see measureFitModel)
@@ -102,15 +108,21 @@ export function fitReader(tab, verify = true) {
   let size = max;
   for (const c of checks) {
     const room = c.pn.clientWidth - c.pad + 1;
-    for (const { k, b } of model.get(c.pn)) if (k > 0) size = Math.min(size, (room - b) / k);
+    let own = max;
+    for (const { k, b } of model.get(c.pn)) if (k > 0) own = Math.min(own, (room - b) / k);
+    c.wrapping = c.pn === ui.paneOriginal && own < min;
+    wrap ||= c.wrapping;
+    size = Math.min(size, own);
   }
   if (size < max) size = Math.floor(size * FIT_STEP + 1e-9) / FIT_STEP;
   size = clamp(size, min, max);
-  const changed = tab.fitSize == null || Math.abs(size - tab.fitSize) >= 0.0005;
+  const changed = tab.fitSize == null || Math.abs(size - tab.fitSize) >= 0.0005 || wrap !== !!tab.fitWrap;
   if (!changed && (!verify || tab.fitVerified)) return;   // unchanged: no relayout
   if (changed) {
     tab.fitSize = size;
+    tab.fitWrap = wrap;
     tab.fitVerified = false;
+    ui.root.dataset.wrap = wrap ? 'on' : 'off';
     apply(size);
   }
   if (!verify) return;
