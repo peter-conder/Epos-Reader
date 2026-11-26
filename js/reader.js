@@ -14,6 +14,7 @@ import { bottomBarScroll } from './bottom-bar.js';
 import { isMobileTier } from './viewport.js';
 import { jumpFromDot } from './mobile-bookmarks.js';
 import { lineNumberTap } from './english.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -36,7 +37,8 @@ export function createReader(tab) {
   };
   el.panes.append(rootEl);
   // The original text's bookmark dots sit on a strip beside its scrollbar
-  tab.ui.rail = attachMarkStrip(tab.ui.paneOriginal).rail;
+  tab.ui.markStrip = attachMarkStrip(tab.ui.paneOriginal);
+  tab.ui.rail = tab.ui.markStrip.rail;
   bindReader(tab);
   // While a pane is being resized the size is set from the estimate alone; it is checked once things settle
   tab.ro = new ResizeObserver(() => {
@@ -50,7 +52,7 @@ export function createReader(tab) {
   tab.ro.observe(tab.ui.paneTranslation);
 }
 
-/* Events that belong to one reader: word clicks, scrolling, and its translation divider */
+/* Events that belong to one reader: word clicks/keys, scrolling, and its translation divider */
 export function bindReader(tab) {
   const ui = tab.ui;
 
@@ -61,6 +63,11 @@ export function bindReader(tab) {
     if (num && lineNumberTap(num.closest('.verse'))) return;
     const word = e.target.closest('.word');
     if (word) showWordCard(word);
+  });
+  ui.passage.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const word = e.target.closest('.word');
+    if (word) { e.preventDefault(); showWordCard(word); }
   });
   ui.rail.addEventListener('click', (e) => {
     const dot = e.target.closest('.bm-dot');
@@ -124,9 +131,11 @@ export function bindReader(tab) {
     } else if (dv.pct > 80) {
       tab.splitPct = 70;
       animateSplitTo(ui, 70);
+      scheduleSessionSave();
     } else {
       tab.splitPct = clamp(dv.pct, 25, 80);
       ui.paneOriginal.style.width = `${tab.splitPct}%`;
+      scheduleSessionSave();
     }
   };
   ui.divider.addEventListener('pointerup', end);
@@ -135,6 +144,7 @@ export function bindReader(tab) {
     if (!tab.split) return;
     tab.splitPct = 50;
     ui.paneOriginal.style.width = '50%';
+    scheduleSessionSave();
   });
 }
 
@@ -188,10 +198,10 @@ export function renderPassage(tab) {
     ];
     ui.chunkers[0].lineNums = lines.map((l) => l.n);
     ui.chunkers[1].lineNums = trans.map((_, i) => lines[i]?.n ?? i + 1);
-    // Where the English stops short of the Latin, say so at its end
+    // Where the Translation stops short of the original, say so at its end
     ui.transMore ??= ui.paneTranslation.appendChild(Object.assign(document.createElement('p'), { className: 'trans-more' }));
-    ui.transMore.textContent = !trans.length ? 'No English translation of this book yet.'
-      : trans.length < lines.length ? `English is available for lines 1\u2013${trans.length} so far.` : '';
+    ui.transMore.textContent = !trans.length ? 'No Translation of this Book yet.'
+      : trans.length < lines.length ? `Translation is available for Lines 1\u2013${trans.length} so far.` : '';
     ui.chunkers.forEach(mountChunker);
     tab.fitModel = null;   // new text, new widths
     scheduleFit(tab);
@@ -206,13 +216,13 @@ export function renderPassage(tab) {
 
 export function verseHtml({ n, words }) {
   const html = words.map((w, j) =>
-    `<span class="word" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
+    `<span class="word" tabindex="0" role="button" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
   ).join('');
   // --nd (digits in the line number) places the bookmark glyph to the left of the number; the glyph is the first
   // child, so the row's last child stays the words (see lineWidth in fit.js)
   const numbered = n === 1 || n % 5 === 0;
   return `<div class="verse" data-line="${n}"${numbered ? ` style="--nd:${String(n).length}"` : ''}>`
-    + '<i class="verse-bm bm-glyph" data-tip="Bookmark this line"></i>'
+    + `<button class="verse-bm bm-glyph" type="button" aria-label="Bookmark Line ${n}" data-tip="Bookmark this Line"></button>`
     + `<span class="verse-num" data-n="${n}">${numbered ? n : ''}</span><span class="verse-words">${html}</span></div>`;
 }
 
@@ -251,7 +261,7 @@ export function setBookTitles(tab) {
   tab.ui.titles.forEach((t) => { t.textContent = `Book ${bookLabel(tab.work, tab.book)}`; });
 }
 
-/* English translation beside the original, per reader */
+/* Parallel translation beside the original, per reader */
 export function applySplit(tab) {
   const ui = tab.ui, on = !!tab.split;
   ui.root.dataset.split = on ? 'on' : 'off';
@@ -269,9 +279,10 @@ export function toggleSplit() {
   applySplit(tab);
   syncToolbar();
   playPop(tab.ui.paneTranslation);
+  scheduleSessionSave();
 }
 
-/* Close the English pane: it slides out like a closing split tab (see beginTranslationClose in motion.js) */
+/* Close the Translation pane: it slides out like a closing Split tab (see beginTranslationClose in motion.js) */
 export function closeTranslation(tab) {
   if (!tab?.split) return;
   const play = beginTranslationClose(tab);   // while the pane is still on screen
@@ -279,6 +290,7 @@ export function closeTranslation(tab) {
   applySplit(tab);
   syncToolbar();
   play?.();
+  scheduleSessionSave();
 }
 
 export function animateSplitTo(ui, pct) {
@@ -295,4 +307,5 @@ export function toggleScansion() {
   el.swScansion.setAttribute('aria-checked', String(state.scansion));
   state.tabs.forEach((t) => { if (isText(t)) syncLayout(t); });
   refreshCardScan();
+  scheduleSessionSave();
 }

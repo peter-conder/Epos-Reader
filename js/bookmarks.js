@@ -48,7 +48,8 @@ export function refreshBookmarkMarks(tabs = state.tabs) {
     if (!isText(tab)) continue;
     tab.ui.passage.querySelectorAll('.verse.bookmarked').forEach((v) => {
       v.classList.remove('bookmarked');
-      v.firstElementChild.dataset.tip = 'Bookmark this line';
+      v.firstElementChild.dataset.tip = 'Bookmark this Line';
+      v.firstElementChild.setAttribute('aria-label', `Bookmark Line ${v.dataset.line}`);
     });
     markBookmarks(tab, tab.ui.passage);
     renderRail(tab);
@@ -63,7 +64,8 @@ export function markBookmarks(tab, scope) {
     const verse = scope.querySelector(`.verse[data-line="${b.line}"]`);
     if (!verse) continue;
     verse.classList.add('bookmarked');
-    verse.firstElementChild.dataset.tip = 'Remove bookmark';
+    verse.firstElementChild.dataset.tip = 'Remove Bookmark';
+    verse.firstElementChild.setAttribute('aria-label', `Remove Bookmark on Line ${b.line}`);
   }
 }
 
@@ -81,7 +83,7 @@ export function renderRail(tab) {
   const html = marks.map((b) => {
     const y = stripY(pane, top + lineCenter(ch, ch.lineNums.indexOf(b.line)));
     return `<button class="bm-dot" data-line="${b.line}" data-tip="Line ${b.line}" data-tip-side="left"
-      aria-label="Go to line ${b.line}" style="top:${y.toFixed(1)}px"></button>`;
+      aria-label="Go to Line ${b.line}" style="top:${y.toFixed(1)}px"></button>`;
   }).join('');
   if (ui.railHtml !== html) { ui.rail.innerHTML = html; ui.railHtml = html; }
 }
@@ -100,7 +102,8 @@ export function syncCardBookmark() {
   const on = !!(shared.wordCtx && tab && state.bookmarks.some((b) => isMarked(b, tab) && b.line === shared.wordCtx.line));
   el.cardBookmark.classList.toggle('has-bookmark', on);
   el.cardBookmark.setAttribute('aria-pressed', String(on));
-  el.cardBookmark.dataset.tip = on ? 'Remove bookmark' : 'Bookmark this line';
+  el.cardBookmark.dataset.tip = on ? 'Remove Bookmark' : 'Bookmark this Line';
+  el.cardBookmark.setAttribute('aria-label', on ? 'Remove Bookmark' : 'Bookmark this Line');
 }
 
 /* ---- Notebook list ---- */
@@ -111,7 +114,7 @@ export function bookmarkCardHtml(b) {
     <article class="bm-card" data-bm-id="${b.id}" tabindex="0" role="button" aria-label="Go to ${esc(noteSource(b))}">
       <div class="bm-src">${icon('bookmark')}<span>${esc(noteSource(b))}</span></div>
       ${b.text ? `<div class="bm-text">${esc(b.text)}</div>` : ''}
-      <button class="note-del" data-tip="Remove bookmark" aria-label="Remove bookmark">${icon('trash')}</button>
+      <button class="note-del" data-tip="Remove Bookmark" aria-label="Remove Bookmark">${icon('trash')}</button>
     </article>`;
 }
 
@@ -144,7 +147,8 @@ export function initBookmarks() {
   });
 
   el.bmList.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' || e.target !== e.target.closest('.bm-card')) return;
+    if ((e.key !== 'Enter' && e.key !== ' ') || e.target !== e.target.closest('.bm-card')) return;
+    e.preventDefault();
     const b = state.bookmarks.find((x) => x.id === e.target.dataset.bmId);
     if (b) jumpToLine(b.work, b.book, b.line);
   });

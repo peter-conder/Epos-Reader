@@ -30,7 +30,10 @@ export function findWordNote(c) {
 
 export function countLabel() {
   const n = state.notes.filter((x) => !x.draft).length;
-  return `${n} ${n === 1 ? 'note' : 'notes'}`;
+  const b = state.bookmarks.length;
+  const notesText = `${n} ${n === 1 ? 'Note' : 'Notes'}`;
+  const bmText = `${b} ${b === 1 ? 'Bookmark' : 'Bookmarks'}`;
+  return b ? `${notesText} · ${bmText}` : notesText;
 }
 
 export const noteSource = (n) => `${bookTitle(n.work, n.book)} · Line ${n.line}`;
@@ -64,8 +67,9 @@ export function openNotebook() {
 }
 
 export function updateNotebookHeader() {
+  const n = state.notes.filter((x) => !x.draft).length;
   const b = state.bookmarks.length;
-  el.nbCount.textContent = `${countLabel()} · ${b} ${b === 1 ? 'bookmark' : 'bookmarks'}`;
+  el.nbCount.textContent = `${n} ${n === 1 ? 'Note' : 'Notes'} · ${b} ${b === 1 ? 'Bookmark' : 'Bookmarks'}`;
   el.nbBmCount.textContent = String(b);
   el.nbEmpty.hidden = state.notes.length > 0;
   el.noteGrid.hidden = state.notes.length === 0;
@@ -75,7 +79,7 @@ export function noteCardHtml(n) {
   return `
     <article class="note-card" data-note-id="${n.id}">
       <div class="note-edit" data-value="${esc(n.text)}">
-        <textarea class="note-text" rows="1" placeholder="Write a note…" aria-label="Note text">${esc(n.text)}</textarea>
+        <textarea class="note-text" rows="1" placeholder="Write a Note…" aria-label="Note text">${esc(n.text)}</textarea>
       </div>
       ${isTied(n) ? `
       <button class="note-jump" data-tip="Jump to this word in the text">
@@ -172,6 +176,7 @@ export function initNotes() {
     const inText = e.target.classList.contains('note-text');
     if (inText && (e.key === 'Escape' || (e.key === 'Enter' && (e.metaKey || e.ctrlKey)))) {
       e.preventDefault();
+      e.stopPropagation();
       e.target.blur();
     }
   });

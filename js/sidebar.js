@@ -8,6 +8,7 @@ import { addNewTab } from './home.js';
 import { countLabel, openNotebook } from './notes.js';
 import { canHover } from './viewport.js';
 import { prefersReducedMotion } from './motion.js';
+import { scheduleSessionSave } from './session.js';
 
 let hoverTimer = 0;       // tab hover card
 let hoveredTabId = null;
@@ -28,8 +29,8 @@ export function showHoverCard(pill) {
     el.hoverCite.textContent = 'Notebook';
     el.hoverDesc.textContent = countLabel();
   } else if (!text) {
-    el.hoverCite.textContent = 'New Tab';
-    el.hoverDesc.textContent = 'Choose a work to open';
+    el.hoverCite.textContent = 'Home';
+    el.hoverDesc.textContent = 'Choose a Work to open';
   } else {
     el.hoverCite.textContent = citation(tab.work, tab.book, tab.range ?? '');
     el.hoverDesc.textContent = bookTitle(tab.work, tab.book);
@@ -121,8 +122,10 @@ export function showBooks(workKey) {
   el.bookPicker.hidden = false;
 }
 
+let pickerOpener = null;   // what opened the picker, for focus to go back to on Escape
 export function openPicker(tabId, anchor) {
   state.pickerTabId = tabId;
+  pickerOpener = anchor;
   highlightWork(getTab(tabId)?.work);
   showWorkList();
 
@@ -133,6 +136,12 @@ export function openPicker(tabId, anchor) {
   hideHoverCard();
   closePopovers(el.picker);
   setOpen(el.picker, true);
+}
+
+export function closePicker({ restoreFocus = false } = {}) {
+  setOpen(el.picker, false);
+  if (restoreFocus && pickerOpener?.isConnected) pickerOpener.focus({ preventScroll: true });
+  pickerOpener = null;
 }
 
 export function chooseBook(workKey, book) {
@@ -147,6 +156,7 @@ export function chooseBook(workKey, book) {
   }
   renderReader(tab);
   renderAll();
+  scheduleSessionSave();
 }
 
 export function initSidebar() {

@@ -1,6 +1,6 @@
 import { WORKS, bookTitle } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
-import { readingTabs, isNotebook, isText, state, workOf } from './state.js';
+import { readingTabs, isNotebook, isText, state } from './state.js';
 import { activateTab, closeTab } from './tabs.js';
 import { anchorIndex } from './chunks.js';
 import { countLabel } from './notes.js';
@@ -23,15 +23,20 @@ let closeTimer = 0, openTimer = 0;
 
 export const tabGridOpen = () => !el.tabGrid.hidden && !el.tabGrid.classList.contains('closing');
 
-/* Where a text tab is: the line at the top of its pane and the lines from there */
+/* Where a text tab is: the Line at the top of its pane and the Lines from there */
 function readingSpot(tab) {
+  const data = tab.bookData;
+  if (!data) {
+    // Not loaded yet (restored from a previous session) or failed to load: its saved Line, and a snippet only where
+    // the sample Lines really are this Book's (they are Book I's opening)
+    const line = tab.restoreAt?.line ?? 1;
+    const sample = tab.book === 'I' ? (WORKS[tab.work]?.lines ?? []).slice(line - 1, line - 1 + SNIPPET_LINES) : [];
+    return { line, lines: sample };
+  }
   const ch = tab.ui?.chunkers?.[0];
   const i = anchorIndex(ch);
   const n = ch?.lineNums?.[i] ?? 1;
-  const data = tab.bookData;
-  const lines = data
-    ? data.lines.slice(i, i + SNIPPET_LINES).map((l) => l.w.map((w) => w.f).join(' '))
-    : tab.book === 'I' ? (WORKS[tab.work]?.lines ?? []).slice(i, i + SNIPPET_LINES) : [];   // the sample Lines are Book I's
+  const lines = data.lines.slice(i, i + SNIPPET_LINES).map((l) => l.w.map((w) => w.f).join(' '));
   return { line: n, lines };
 }
 
@@ -50,8 +55,8 @@ function cardHtml(tab) {
     body = `${icon('notebook')}`;
   } else {
     kind = ' tg-blank';
-    title = 'New Tab';
-    meta = 'Choose a work';
+    title = 'Home';
+    meta = 'Choose a Work';
     body = `${icon('plus')}`;
   }
   return `<li class="tg-card${kind}${active ? ' is-active' : ''}" data-tab-id="${tab.id}">
@@ -168,6 +173,5 @@ export function initTabGrid() {
     activateTab(card.dataset.tabId);
   });
   bindCardSwipe();
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && el.chapterList.hidden) closeTabGrid(); });
 }
 

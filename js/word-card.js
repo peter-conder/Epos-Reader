@@ -85,15 +85,17 @@ export function revealAboveSheet(word) {
   pane.scrollBy({ top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
 }
 
-export function hideWordCard() {
+export function hideWordCard({ restoreFocus = false } = {}) {
   closeNote();
   shared.wordCtx = null;
   const wasSheet = document.documentElement.classList.contains('card-open');
   document.documentElement.classList.remove('card-open');
   if (wasSheet) showChrome();
   el.wordCard.classList.remove('visible');
-  shared.selectedWord?.classList.remove('selected');
+  const prev = shared.selectedWord;
+  prev?.classList.remove('selected');
   shared.selectedWord = null;
+  if (restoreFocus && prev?.isConnected) prev.focus({ preventScroll: true });
 }
 
 const NOTE_W = 290;
@@ -113,7 +115,7 @@ export function positionWordCard(word) {
 export function syncCardNote() {
   syncCardBookmark();
   const note = shared.wordCtx && findWordNote(shared.wordCtx);
-  const label = note ? 'Edit note' : 'Add note';
+  const label = note ? 'Edit Note' : 'Add Note';
   el.cardNote.classList.toggle('has-note', !!note);
   el.cardNote.dataset.tip = label;
   el.cardNote.setAttribute('aria-label', label);
@@ -239,6 +241,9 @@ export function initWordCard() {
   el.wordCard.insertAdjacentHTML('afterbegin', '<div class="card-grip" aria-hidden="true"><span></span></div>');
   el.cardNote.addEventListener('click', openWordNote);
   el.cardUserNote.addEventListener('click', openWordNote);
+  el.cardUserNote.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openWordNote(); }
+  });
   el.noteInput.addEventListener('input', fitPinnedNote);
   el.noteDone.addEventListener('click', closeNote);   // saves; the card comes back (see .note-pinned in styles.css)
   el.noteInput.addEventListener('keydown', (e) => {

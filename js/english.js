@@ -8,9 +8,11 @@ import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { isMarked, toggleBookmark } from './bookmarks.js';
 import { hideWordCard, openWordNote, showWordCard } from './word-card.js';
 import { findWordNote } from './notes.js';
+import { showToast } from './layout.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
-   ENGLISH AND LINE ACTIONS (phones and tablets)
+   TRANSLATION AND LINE ACTIONS (phones and tablets)
    - The EN button on the bottom bar. On a phone it swaps the whole view between the original language and the Translation,
      keeping your place (the line at the top stays at the top). On a tablet it opens the Parallel translation beside the
      original, as the desktop's Parallel translation does.
@@ -59,8 +61,8 @@ export function setLang(tab, lang) {
   tab.ui.root.dataset.lang = lang;
   hideWordCard();
   syncLayout(tab);                                       // the pane just shown may never have been laid out
-  // Back to the Latin without having moved in the English: return exactly where you were. (Past the end of
-  // the English, the English can only show its last lines, which would otherwise send you back to them.)
+  // Back to the original without having moved in the Translation: return exactly where you were. (Past the end of
+  // the Translation, it can only show its last lines, which would otherwise send you back to them.)
   if (lang === 'la' && tab.swapBack && anchorIndex(en) === tab.swapBack.enAt) {
     const saved = tab.swapBack.la;
     tab.swapBack = null;
@@ -71,6 +73,7 @@ export function setLang(tab, lang) {
   }
   syncLangButton();
   refreshBottomBar(tab);
+  scheduleSessionSave();
 }
 
 function toggleEnglish() {
@@ -87,7 +90,7 @@ function toggleLineEnglish(tab, verse) {
   if (open) open.remove();
   else {
     const en = englishFor(tab, +verse.dataset.line);
-    verse.insertAdjacentHTML('beforeend', `<div class="line-en">${en ? esc(en) : '<em>No English for this line yet.</em>'}</div>`);
+    verse.insertAdjacentHTML('beforeend', `<div class="line-en">${en ? esc(en) : '<em>No Translation for this Line yet.</em>'}</div>`);
   }
   syncLayout(tab);   // the line is taller or shorter now
 }
@@ -103,6 +106,7 @@ export function lineNumberTap(verse) {
 
 /* ---------- Long press: the line menu ---------- */
 let menuFor = null;   // { tab, verse, word }
+export const lineMenuOpen = () => !!menuFor;
 
 function openLineMenu(tab, verse, word, x, y) {
   const line = +verse.dataset.line;
@@ -125,8 +129,9 @@ function openLineMenu(tab, verse, word, x, y) {
   el.lineMenu.querySelector('.lm-item')?.focus({ preventScroll: true });
 }
 
-export function closeLineMenu() {
+export function closeLineMenu({ restoreFocus = false } = {}) {
   if (!menuFor) return;
+  if (restoreFocus) (menuFor.word ?? menuFor.verse.querySelector('.verse-num'))?.focus({ preventScroll: true });
   menuFor.verse.classList.remove('pressed');
   menuFor = null;
   el.lineMenu.classList.remove('open');
@@ -140,19 +145,26 @@ async function lineMenuAction(act) {
   // After this tap has finished: the page's own click handling would otherwise close the card at once
   else if (act === 'note' && word) setTimeout(() => { showWordCard(word); openWordNote(); });
   else if (act === 'copy') {
-    copyText([...verse.querySelectorAll('.word')].map((w) => w.textContent.trim()).join(' '));
+    const lineNum = +verse.dataset.line;
+    const rawWords = tab.bookData?.byLine.get(lineNum)?.w.map((w) => w.f)
+      ?? [...verse.querySelectorAll('.word')].map((w) => w.textContent.trim());
+    const text = rawWords.filter(Boolean).join(' ').replace(/\s+([.,;:!?·])/g, '$1');
+    const ok = await copyText(text);
+    showToast(ok ? 'Line copied' : 'Couldn\u2019t copy Line', { ms: 2000 });
   }
 }
 
 /* The clipboard API exists only on secure (https) pages; elsewhere a selected, off-screen textarea is copied */
 async function copyText(text) {
-  try { await navigator.clipboard.writeText(text); return; } catch { /* no clipboard API here */ }
+  try { await navigator.clipboard.writeText(text); return true; } catch { /* no clipboard API here */ }
   const ta = Object.assign(document.createElement('textarea'), { value: text, readOnly: true });
   Object.assign(ta.style, { position: 'fixed', top: '-200px', opacity: '0' });
   document.body.append(ta);
   ta.select();
-  try { document.execCommand('copy'); } catch { /* copying not allowed */ }
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch { /* copying not allowed */ }
   ta.remove();
+  return ok;
 }
 
 function bindLongPress() {
@@ -209,7 +221,7 @@ function setLineTap(mode) {
   }
 }
 
-/* The Format Text sheet hides lines' English while it is open (see .sheet-open .line-en), so heights change */
+/* The Format Text sheet hides lines' Translation while it is open (see .sheet-open .line-en), so heights change */
 export function relayoutLineEnglish() {
   const tab = activeTab();
   if (isText(tab) && tab.ui?.passage.querySelector('.line-en')) syncLayout(tab);
@@ -229,11 +241,10 @@ export function initEnglish() {
     const item = e.target.closest('[data-act]');
     if (item) lineMenuAction(item.dataset.act);
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLineMenu(); });
   bindLongPress();
   onTierChange(() => {
     closeLineMenu();
-    // The swap is a phone thing: wider screens show the Latin (with the English beside it if that's on)
+    // The swap is a phone thing: wider screens show the original (with the Parallel translation if that's on)
     if (tier() !== 'compact') for (const t of state.tabs) if (t.lang === 'en') setLang(t, 'la');
     // A tablet lets half of a Split turn on its Parallel translation (the Split isn't shown there). Desktop shows the
     // Split again and can't hold both in one pane, so the Parallel translation goes

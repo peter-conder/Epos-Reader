@@ -50,5 +50,5 @@ export function attachMarkStrip(pane) {
   if (pane.parentElement) ro.observe(pane.parentElement);
   [...pane.children].forEach((c) => ro.observe(c));
 
-  return { rail, update };
+  return { rail, update, disconnect: () => ro.disconnect() };
 }

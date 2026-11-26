@@ -9,7 +9,7 @@ Epos Reader is for students reading epic with a class, self-taught readers readi
 ## What you can do
 
 - **Pick a word** to open its **Word card**: the Lemma (e.g. *arma* for "armis"), its Morphology in this Line, and the Lexicon's definition.
-- **Turn on Scansion** to see each syllable marked Long, Short or Elided, with Feet and the Caesuras that Hypotactic marks. Rarer marks (Hiatus, Synizesis, Consonantal i, Lengthened and Hypermetric syllables) are off by default: turn on **Rare scansion marks** in View Options (Format Text on a phone or tablet) to show them in the text and explained on the Word card.
+- **Turn on Scansion** to see each syllable marked Long, Short or Elided, with Feet and the Caesuras that Hypotactic marks. Rarer marks (Hiatus, Synizesis, Consonantal i, Lengthened and Hypermetric syllables) are off by default: turn on **Rare Scansion marks** in View Options (Format Text on a phone or tablet) to show them in the text and explained on the Word card.
 - **Read with a Parallel translation:** the English beside the original, passage by passage.
 - **Open several tabs**, each on its own Work and Book, and show two side by side as a **Split**.
 - **Write Notes** on any word, and **Bookmark Lines** to come back to. The **Notebook** tab gathers both.

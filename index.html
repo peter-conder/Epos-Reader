@@ -100,7 +100,7 @@
       <button class="add-half" id="btn-add-notebook" data-tip="Open Notebook" aria-label="Open Notebook">
         <svg class="icon"><use href="assets/icons.svg#i-book2"/></svg>
       </button>
-      <button class="add-half" id="btn-add-tab" data-tip="Open new tab" aria-label="Open new tab">
+      <button class="add-half" id="btn-add-tab" data-tip="Add a tab" aria-label="Add a tab">
         <svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>
       </button>
     </div>
@@ -110,8 +110,8 @@
   <!-- CENTER: views -->
   <div class="main" id="main">
     <div class="view empty-state" id="view-empty">
-      <h2 class="home-title">Select a Text</h2>
-      <div class="home-carousel" id="home-carousel" role="list" aria-label="Choose a work to read"></div>
+      <h2 class="home-title">Select a Work</h2>
+      <div class="home-carousel" id="home-carousel" role="list" aria-label="Choose a Work to read"></div>
     </div>
 
     <!-- Every open tab owns a view in here; one or two are shown -->
@@ -126,19 +126,19 @@
           <header class="nb-header">
             <div>
               <h1 class="nb-title">Notebook</h1>
-              <p class="nb-count" id="nb-count">0 notes</p>
+              <p class="nb-count" id="nb-count">0 Notes</p>
             </div>
             <button class="btn-new-note" id="btn-new-note"><svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>New Note</button>
           </header>
           <div class="note-grid" id="note-grid" hidden></div>
-          <p class="nb-empty" id="nb-empty">No notes yet. Click a word in any text and use the note icon, or add one here.</p>
+          <p class="nb-empty" id="nb-empty">No Notes yet. Pick a word in any Work and use the Note icon, or add one here.</p>
           <div class="nb-divider" role="separator"><span>Bookmarks</span><span class="nb-divider-count" id="nb-bm-count"></span></div>
           <div class="bm-list" id="bm-list"></div>
-          <p class="nb-empty" id="bm-empty">No bookmarks yet. Click a word and use the bookmark icon in its popup.</p>
+          <p class="nb-empty" id="bm-empty">No Bookmarks yet. Pick a word and use the Bookmark icon in its Word card.</p>
         </section>
       </div>
     </div>
-    <div class="drop-hint" id="drop-hint">Open in split view</div>
+    <div class="drop-hint" id="drop-hint">Open in Split</div>
 
     <div class="view" id="view-settings" hidden>
       <div class="settings-page">
@@ -166,7 +166,7 @@
       <button class="tool-btn" id="btn-split" style="--i: 0" data-tip="Parallel translation" aria-label="Toggle Parallel translation" aria-pressed="false">
         <svg class="icon"><use href="assets/icons.svg#i-split"/></svg>
       </button>
-      <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic scansion" aria-pressed="false">
+      <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic Scansion" aria-pressed="false">
         <svg class="icon"><use href="assets/icons.svg#i-meter"/></svg>
       </button>
       <button class="tool-btn" id="btn-text" style="--i: 2" data-tip="Text Options" aria-label="Text formatting options" aria-expanded="false">
@@ -187,19 +187,19 @@
         <button class="btn-close" data-close="popups-flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
       </div>
       <button class="switch-row" id="sw-words" role="switch" aria-checked="true">
-        <span class="switch-text"><span class="switch-title">Word definitions</span><span class="switch-sub">Show the gloss when you click a word</span></span>
+        <span class="switch-text"><span class="switch-title">Word definitions</span><span class="switch-sub">Show the Word card when you pick a word</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
       <button class="switch-row" id="sw-notes" role="switch" aria-checked="true">
-        <span class="switch-text"><span class="switch-title">Notes in popups</span><span class="switch-sub">Show the note button and saved notes in the gloss</span></span>
+        <span class="switch-text"><span class="switch-title">Notes in Word cards</span><span class="switch-sub">Show the Note button and saved Notes in the Word card</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
       <button class="switch-row" id="sw-caesura" role="switch" aria-checked="true">
-        <span class="switch-text"><span class="switch-title">Caesurae</span><span class="switch-sub">Mark each caesura with ‖ when scansion is on</span></span>
+        <span class="switch-text"><span class="switch-title">Caesurae</span><span class="switch-sub">Mark each Caesura with ‖ when Scansion is on</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
       <button class="switch-row" id="sw-rare-scansion" role="switch" aria-checked="false">
-        <span class="switch-text"><span class="switch-title">Rare scansion marks</span><span class="switch-sub">Show hiatus, synizesis, consonantal i, lengthened &amp; hypermetric marks</span></span>
+        <span class="switch-text"><span class="switch-title">Rare Scansion marks</span><span class="switch-sub">Show Hiatus, Synizesis, Consonantal i, Lengthened &amp; Hypermetric syllables</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
     </div>
@@ -285,7 +285,7 @@
   <div class="card-morph" id="card-morph"></div>
   <div class="card-scan" id="card-scan" hidden></div>
   <div class="card-def" id="card-def"></div>
-  <div class="card-user-note" id="card-user-note" hidden data-tip="Edit note">
+  <div class="card-user-note" id="card-user-note" hidden tabindex="0" role="button" data-tip="Edit Note">
     <svg class="icon"><use href="assets/icons.svg#i-snippet"/></svg>
     <p id="card-user-note-text"></p>
   </div>
@@ -299,14 +299,14 @@
       <svg class="icon"><use href="assets/icons.svg#i-check"/></svg>
     </button>
   </div>
-  <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
+  <textarea class="note-input" id="note-input" rows="5" placeholder="Write a Note…" aria-label="Note text"></textarea>
 </div>
 
 <!-- TAB GRID (phones and tablets): every open tab, most recently used first -->
 <section class="tab-grid" id="tab-grid" aria-label="Open tabs" hidden>
   <header class="tg-header">
     <h2 class="tg-count" id="tg-count">Tabs</h2>
-    <button class="tg-new" id="tg-new" aria-label="Open a Book in a new tab"></button>
+    <button class="tg-new" id="tg-new" aria-label="Open a Book in another tab"></button>
     <button class="tg-done" id="tg-done">Done</button>
   </header>
   <ul class="tg-list" id="tg-list"></ul>

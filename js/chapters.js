@@ -9,10 +9,10 @@ import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    CHAPTER LIST (phones and tablets): every book of every work that has data, grouped by work.
-   Opened from "+" in the tab grid, by swiping past the last tab, or by tapping a work on a New Tab's
-   home page (then only that work is listed). A book that is already open in a tab says "Open", and
-   choosing it goes to that tab instead of opening it twice. Otherwise the book opens in the New Tab it
-   was chosen from (or the open tab, if that is a New Tab), or in a new tab.
+   Opened from "+" in the tab grid, by swiping past the last tab, or by tapping a Work on Home
+   (then only that Work is listed). A Book that is already open in a tab says "Open", and
+   choosing it goes to that tab instead of opening it twice. Otherwise the Book opens in the Home tab it
+   was chosen from (or the open tab, if it shows Home), or in another tab.
    ========================================================== */
 const DATA_ROOT = 'data2';   // as in book-data.js
 
@@ -35,7 +35,8 @@ export function availableWorks() {
 
 const CLOSE_MS = 220;
 
-let target = null;   // the New Tab the list was opened from, if any
+let target = null;   // the Home tab the list was opened from, if any
+let opener = null;   // what had focus when the list opened, for focus to go back to on Escape
 let closeTimer = 0;
 
 export const chapterListOpen = () => !el.chapterList.hidden && !el.chapterList.classList.contains('closing');
@@ -43,7 +44,7 @@ export const chapterListOpen = () => !el.chapterList.hidden && !el.chapterList.c
 const openTabFor = (work, book) => state.tabs.find((t) => isText(t) && t.work === work && t.book === book);
 
 function listHtml(works) {
-  if (!works.length) return '<p class="cl-empty">No texts are available yet.</p>';
+  if (!works.length) return '<p class="cl-empty">No Works are available yet.</p>';
   return works.map((key) => {
     const w = WORKS[key];
     const rows = ROMANS.slice(0, w.bookCount).map((r) => {
@@ -69,12 +70,13 @@ async function fillChapterList(only) {
   return true;
 }
 
-/* only: list just this work. into: the New Tab to open the chosen book in. */
+/* only: list just this work. into: the Home tab to open the chosen book in. */
 export async function openChapterList({ only = null, into = null } = {}) {
   clearTimeout(closeTimer);
   closeTimer = 0;
   el.chapterList.classList.remove('closing');
   target = into;
+  if (!chapterListOpen()) opener = document.activeElement;
   // Swiped in from the bottom bar: it is already on screen and filled (see peekChapterList)
   const peeked = el.chapterList.classList.contains('peek');
   el.chapterList.classList.remove('peek');
@@ -106,10 +108,12 @@ export function endPeekChapterList() {
   el.chapterList.hidden = true;
 }
 
-export function closeChapterList({ instant = false } = {}) {
+export function closeChapterList({ instant = false, restoreFocus = false } = {}) {
   if (!chapterListOpen()) return;
   document.documentElement.classList.remove('chapters-open');
   target = null;
+  if (restoreFocus && opener?.isConnected && opener !== document.body) opener.focus({ preventScroll: true });
+  opener = null;
   showChrome();
   el.chapterList.classList.remove('open', 'from-peek');
   if (instant || prefersReducedMotion()) {
@@ -145,5 +149,4 @@ export function initChapters() {
   });
   el.clClose.addEventListener('click', () => closeChapterList());
   el.clClose.innerHTML = icon('close');
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChapterList(); });
 }

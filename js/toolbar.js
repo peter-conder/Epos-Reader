@@ -1,5 +1,6 @@
 import { $, clamp, el, MIN_FONT, root } from './dom.js';
 import { state } from './state.js';
+import { loadPrefs, savePrefs } from './storage.js';
 import { alignProgress, closePopovers, setBook, setOpen, setView } from './layout.js';
 import { toggleScansion, toggleSplit } from './reader.js';
 import { fitAll } from './fit.js';
@@ -7,6 +8,7 @@ import { hideWordCard, refreshCardScan } from './word-card.js';
 import { scrollSettings, toggleTheme } from './settings.js';
 import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
@@ -42,7 +44,50 @@ export function setTools(open) {
   if (!open) { setOpen(el.flyout, false); setOpen(el.popupsFlyout, false); }
 }
 
+const PREF_VARS = [
+  ['readingFont', '--reading-font'],
+  ['lineHeight', '--reading-line-height'],
+  ['padding', '--reading-padding']
+];
+
+function persistPrefs() {
+  const prefs = { ...state.popups };
+  for (const [key, cssVar] of PREF_VARS) {
+    const active = el.flyout.querySelector(`.pill-group[data-var="${cssVar}"] .pill-opt.active`);
+    if (active) prefs[key] = active.dataset.value;
+  }
+  savePrefs(prefs);
+}
+
+function restorePrefs() {
+  const saved = loadPrefs();
+  for (const [key, cssVar] of PREF_VARS) {
+    const val = saved[key];
+    if (typeof val !== 'string') continue;
+    const group = el.flyout.querySelector(`.pill-group[data-var="${cssVar}"]`);
+    const match = group && [...group.children].find((b) => b.dataset.value === val);
+    if (!match) continue;
+    for (const b of group.children) b.classList.toggle('active', b === match);
+    root.style.setProperty(cssVar, val);
+  }
+  const switches = [
+    ['words', el.swWords],
+    ['notes', el.swNotes],
+    ['caesura', el.swCaesura],
+    ['rareScansion', el.swRareScansion]
+  ];
+  for (const [key, btn] of switches) {
+    if (typeof saved[key] !== 'boolean') continue;
+    state.popups[key] = saved[key];
+    btn.setAttribute('aria-checked', String(saved[key]));
+  }
+  root.dataset.caesura = state.popups.caesura ? 'on' : 'off';
+  root.dataset.rareScansion = state.popups.rareScansion ? 'on' : 'off';
+}
+
 export function initToolbar() {
+  restorePrefs();
+
   el.menuBtn.addEventListener('click', () => {
     const open = !el.drawer.classList.contains('open');
     closePopovers(el.drawer);
@@ -93,14 +138,15 @@ export function initToolbar() {
     });
   }
 
-  // View Options switches. The popup switches close the gloss so it reopens with the new setting;
-  // the scansion switches set an attribute on <html> that the scansion CSS reads.
+  // View Options switches. The Word card switches close the card so it reopens with the new setting;
+  // the Scansion switches set an attribute on <html> that the Scansion CSS reads.
   function bindSwitch(btn, key, onChange = hideWordCard) {
     btn.addEventListener('click', () => {
       const on = !state.popups[key];
       state.popups[key] = on;
       btn.setAttribute('aria-checked', String(on));
       onChange(on);
+      persistPrefs();
     });
   }
   bindSwitch(el.swWords, 'words');
@@ -126,9 +172,10 @@ export function initToolbar() {
     root.style.setProperty('--reader-max', `${Math.round(BASE_READER_MAX * Math.max(1, val / BASE_FIT_REM))}px`);
     alignProgress();   // the book bar is as wide as the pane; the main area didn't resize, so nothing else tells it
     fitAll();
+    scheduleSessionSave();
   });
 
-  // Handle squeezes while shared.dragging, then bounces back
+  // Handle squeezes while dragging, then settles back
   const endSliderDrag = () => {
     el.sizeSlider.classList.remove('dragging');
     root.classList.remove('resizing-text');
@@ -148,6 +195,7 @@ export function initToolbar() {
     const group = opt.parentElement;
     for (const b of group.children) b.classList.toggle('active', b === opt);
     root.style.setProperty(group.dataset.var, opt.dataset.value);
+    persistPrefs();
     fitAll(true);   // a different font or spacing changes how wide the lines are
   });
 }

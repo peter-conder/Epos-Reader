@@ -5,6 +5,7 @@ import { EMPHASIZED, prefersReducedMotion } from './motion.js';
 import { renderAll } from './layout.js';
 import { activateTab, closeTab } from './tabs.js';
 import { hideWordCard } from './word-card.js';
+import { scheduleSessionSave } from './session.js';
 
 /* Split pairs: click a pane to focus its tab, the bar between the two panes, and shared.dragging a pane by its title */
 
@@ -92,10 +93,11 @@ export function initPanes() {
       release(e.pointerId);
       state.pairPct = clamp(state.pairPct, 25, 75);   // bounces back inside the normal range
       apply();
+      scheduleSessionSave();
     };
     dv.addEventListener('pointerup', end);
     dv.addEventListener('pointercancel', end);
-    dv.addEventListener('dblclick', () => { state.pairPct = 50; apply(); });
+    dv.addEventListener('dblclick', () => { state.pairPct = 50; apply(); scheduleSessionSave(); });
   })();
 
   /* Pane shared.dragging: grab a pane by its title and slide it side to side.
@@ -177,6 +179,7 @@ export function initPanes() {
       [state.tabs[i], state.tabs[j]] = [state.tabs[j], state.tabs[i]];
       state.pairPct = 100 - state.pairPct;
       renderAll();
+      scheduleSessionSave();
       if (prefersReducedMotion()) {
         el.panes.classList.remove('instant');
         s.view.classList.remove('drag-live');

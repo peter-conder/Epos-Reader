@@ -1,8 +1,21 @@
 import { WORKS } from './data.js';
 
-/* Notes and bookmarks, saved in localStorage when it is available */
+/* Notes, bookmarks, and reading preferences, saved in localStorage when it is available */
 const NOTES_KEY = 'epos.notes.v1';
 const BOOKMARKS_KEY = 'epos.bookmarks.v1';
+const PREFS_KEY = 'epos.prefs.v1';
+
+export function loadPrefs() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(PREFS_KEY) || '{}');
+    return raw && typeof raw === 'object' && !Array.isArray(raw) ? raw : {};
+  } catch { return {}; }
+}
+
+export function savePrefs(prefs) {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }
+  catch { /* storage unavailable: preferences stay in memory for this session */ }
+}
 
 export function loadNotes() {
   try {

@@ -12,11 +12,12 @@ import { isMobileTier } from './viewport.js';
 import { syncPages } from './pages.js';
 import { closeFormatSheet } from './format-sheet.js';
 import { syncRibbon } from './mobile-bookmarks.js';
+import { scheduleSessionSave } from './session.js';
 
 let lastShown = [];   // ids of the tabs that were on screen after the last render
 
 /* ==========================================================
-   TOAST: "Tab closed" with an Undo button for three seconds
+   TOAST: brief status message, with an optional Undo button (e.g. "Tab closed")
    ========================================================== */
 let toastTimer, pendingUndo = null;
 export function hideToast() {
@@ -24,11 +25,19 @@ export function hideToast() {
   pendingUndo = null;
   el.toast.classList.remove('show');
 }
-export function showUndo(snap) {
-  pendingUndo = snap;
+export function showToast(message, { undo = null, ms = 3000 } = {}) {
+  pendingUndo = undo;
+  const label = el.toast.querySelector('span');
+  if (label) label.textContent = message;
+  const undoBtn = $('toast-undo');
+  if (undoBtn) undoBtn.hidden = !undo;
+  el.toast.classList.toggle('no-action', !undo);
   el.toast.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(hideToast, 3000);
+  toastTimer = setTimeout(hideToast, ms);
+}
+export function showUndo(snap) {
+  showToast('Tab closed', { undo: snap });
 }
 
 /* ==========================================================
@@ -238,6 +247,7 @@ export function setBook(roman) {
   bounceSegments(segs, target);
 
   tab.book = roman;
+  scheduleSessionSave();
   // Building the book is the heavy part. It waits two frames so the pill's first frames are painted and the click
   // answers at once; clicking again before then cancels this and builds only the latest book.
   cancelAnimationFrame(bookRender);

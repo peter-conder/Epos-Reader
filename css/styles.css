@@ -738,10 +738,8 @@
   }
   .home-card.hot .home-card-title { opacity: 1; transform: none; transition-delay: 90ms; }
   /* Hovered: lifted by a shadow. Focused: a ring set off from the card by a small gap. */
-  .home-card:focus-visible { z-index: 1; }
-  @media (hover: hover) { .home-card:hover { z-index: 1; } }
-  @media (hover: hover) { .home-card:hover { box-shadow: var(--shadow-3); } }
-  .home-card:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
+  @media (hover: hover) { .home-card:hover { z-index: 1; box-shadow: var(--shadow-3); } }
+  .home-card:focus-visible { z-index: 1; outline: 3px solid var(--secondary); outline-offset: 3px; }
 
   /* Switch Work picker (opened from a tab's hover card) */
   .picker {
@@ -944,6 +942,7 @@
   }
   @media (hover: hover) { .verse:hover .verse-bm { opacity: 0.35; } }
   @media (hover: hover) { .verse-bm:hover { opacity: 1; transform: scale(1.2); } }
+  .verse-bm:focus-visible { opacity: 1; }
   .verse.bookmarked .verse-bm { opacity: 1; }
   .verse.bookmarked .verse-bm::before { -webkit-mask-image: var(--bookmark-fill-icon); mask-image: var(--bookmark-fill-icon); }
   @media (hover: hover) { .verse:not(.bookmarked) .verse-bm:hover::before { -webkit-mask-image: var(--bookmark-add-icon); mask-image: var(--bookmark-add-icon); } }
@@ -1232,6 +1231,7 @@
     z-index: 550;
   }
   .toast.show { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); transition-delay: 0s; }
+  .toast.no-action { padding: 10px 22px; }
   .toast-undo {
     height: 34px; padding: 0 18px;
     border-radius: var(--radius-full);
@@ -2151,6 +2151,28 @@
     :is(.grid-open, .chapters-open) #btn-menu { opacity: 0; pointer-events: none; }
     .bb-tabs[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); }
     .bb-slot-new .bb-title { color: var(--primary); }
+
+    /* Pointer hover and active polish on tablet/narrow-desktop controls */
+    .cl-close, .tg-close, .fs-close, .back-chip { transition: background-color 150ms ease, transform 150ms var(--ease-spatial); }
+    .cl-close:active, .tg-close:active, .fs-close:active { transform: scale(0.92); }
+    .back-chip:active { transform: translateX(-50%) scale(0.96); }
+    @media (hover: hover) {
+      :is(#btn-menu, #btn-page-back, .bb-format, .bb-tabs, .cl-close, .tg-new):hover {
+        background: color-mix(in srgb, var(--primary-container) 86%, var(--hover-shade));
+      }
+      .bb-tabs[aria-expanded="true"]:hover, .tg-done:hover {
+        background: color-mix(in srgb, var(--primary) 88%, var(--hover-shade));
+      }
+      .bb-lang:not(:disabled):not([aria-pressed="true"]):hover {
+        background: color-mix(in srgb, var(--primary-container) 78%, var(--on-primary-container));
+      }
+      .tg-card:hover { border-color: var(--gray-300); box-shadow: var(--shadow-3); }
+      .tg-close:hover { background: color-mix(in srgb, var(--text) 16%, transparent); }
+      .cl-row:hover { background: var(--gray-100); border-color: var(--gray-300); }
+      .fs-close:hover { background: var(--gray-200); }
+      .lm-item:hover { background: color-mix(in srgb, var(--on-primary-container) 10%, transparent); }
+      .back-chip:hover { opacity: 0.92; }
+    }
   }
 
   /* Tablet (medium, 600–1024px): rounded cards for side-by-side Parallel translation and 3-column Tab Grid */
