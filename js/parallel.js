@@ -1,4 +1,5 @@
-import { placeAt } from './chunks.js';
+import { placeAt, syncChunks, textTop } from './chunks.js';
+import { aligned } from './align.js';
 
 /* ==========================================================
    PARALLEL TRANSLATION: linked scrolling
@@ -7,6 +8,8 @@ import { placeAt } from './chunks.js';
    the pane and how far into it. The Line at the top of the original maps to the block that contains it, at the same
    fraction of the block as the Line is of the block's Lines; the English maps back the same way. Exact at block
    edges, proportional within a block.
+   Once the passages are aligned (align.js), each block sits level with its Lines and both panes have the same
+   layout, so they are simply linked pixel for pixel. The anchor mapping is still what the phone's swap uses.
 
    Each pane's scroll moves the other. A scroll that the link itself caused would otherwise come straight back as
    the other pane's own scroll, so for a moment after the link moves a pane, that pane's scrolls don't move the
@@ -57,6 +60,13 @@ export function follow(tab, from) {
   const a = lead.anchor;
   const target = !a ? null : from === 0 ? toEnglish(ui.englishSpans, a) : toOriginal(ui.englishSpans, a);
   other.pane.dataset.linkedAt = performance.now();
+  // Aligned (align.js): the panes are laid out block for block, so they scroll together pixel for pixel
+  if (aligned(tab)) {
+    const y = lead.pane.scrollTop - textTop(lead) + textTop(other);
+    if (Math.abs(other.pane.scrollTop - y) > 0.5) other.pane.scrollTop = y;
+    syncChunks(other);
+    return;
+  }
   placeAt(other, target, lead.pane.scrollTop);
 }
 

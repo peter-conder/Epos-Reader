@@ -7,6 +7,7 @@ import { markNotes } from './notes.js';
 import { markBookmarks, renderRail } from './bookmarks.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { relinkIfNeeded } from './parallel.js';
+import { alignBlocks, applyAlign } from './align.js';
 
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
@@ -25,8 +26,8 @@ import { relinkIfNeeded } from './parallel.js';
    of the pane and how far into it the pane starts. After anything that can move lines
    (new chunks, a refit, a resize) the anchor is put back where it was.
    ========================================================== */
-const CHUNK = 25;     // lines per chunk
-const ROW_GAP = 3;    // gap between lines and between chunks, as in .verses and .verse-chunk
+export const CHUNK = 25;     // lines per chunk
+export const ROW_GAP = 3;    // gap between lines and between chunks, as in .verses and .verse-chunk
 
 export function makeChunker(tab, container, pane, rows, scores, pitch = 0) {
   // The lines most likely to be the widest, measured for the fit instead of the whole text
@@ -47,8 +48,8 @@ export function mountChunker(ch) {
 /* ---------- Geometry. Positions are in the text block's own space: 0 is the top of its first line. ---------- */
 const chunkCount = (ch) => Math.ceil(ch.rows.length / CHUNK);
 const linesIn = (ch, k) => Math.min(CHUNK, ch.rows.length - k * CHUNK);
-/* n rows take n·pitch less one gap */
-const chunkHeight = (ch, k) => ch.heights[k] ?? linesIn(ch, k) * ch.pitch - ROW_GAP;
+/* n rows take n·pitch less one gap. Beside the English every chunk's height is known in advance (align.js). */
+const chunkHeight = (ch, k) => ch.heights[k] ?? ch.known?.[k] ?? linesIn(ch, k) * ch.pitch - ROW_GAP;
 const chunkPitch = (ch, k) => (chunkHeight(ch, k) + ROW_GAP) / linesIn(ch, k);
 
 function chunkTop(ch, k) {
@@ -241,6 +242,7 @@ export function showWindow(ch, c) {
       node.className = 'verse-chunk';
       node.innerHTML = ch.rows.slice(k * CHUNK, (k + 1) * CHUNK).join('');
       if (ch.container === ch.tab.ui.passage) { markNotes(ch.tab, node); markBookmarks(ch.tab, node); }
+      applyAlign(ch, node, k);
       ch.container.insertBefore(node, next);
       ch.nodes.set(k, node);
     }
@@ -308,13 +310,15 @@ export function placeAt(ch, anchor, top = 0) {
 export function syncLayout(tab) {
   const ui = tab.ui;
   if (!ui?.chunkers || ui.root.hidden) return;
+  const realigned = alignBlocks(tab);   // beside the English, passages line up across the panes (align.js)
   for (const ch of ui.chunkers) {
-    if (measureChunks(ch, true)) {
+    if (measureChunks(ch, true) || realigned) {
       sizeSpacers(ch);
       restoreAnchor(ch);
     }
     syncChunks(ch);
   }
+  if (realigned) ui.needsLink = true;   // the English moved under the original: put it level again
   relinkIfNeeded(tab);
   renderRail(tab);
   refreshBottomBar(tab);   // the line range on screen may have changed
