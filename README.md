@@ -4,7 +4,7 @@ Read the great classical epics in the original language: Vergil's **Aeneid**, an
 
 Epos Reader is for students reading epic with a class, self-taught readers reading for pleasure, and the author's own study. It is free, it's a plain website (no accounts, no build step), and it credits every Source it draws on.
 
-> **Status:** All three Works are in, with Lemmas, Morphology and Scansion: the Aeneid (12 Books, 9,896 Lines), the Iliad (24 Books, 15,682 Lines) and the Odyssey (24 Books, 12,110 Lines). Proper nouns without a gloss show "Proper name.", and other Homeric Lemmas still awaiting a gloss show "No definition yet." The Translation covers Aeneid I.1–16 so far.
+> **Status:** All three Works are in, with Lemmas, Morphology and Scansion: the Aeneid (12 Books, 9,896 Lines), the Iliad (24 Books, 15,682 Lines) and the Odyssey (24 Books, 12,110 Lines). Proper nouns without a gloss show "Proper name.", and other Homeric Lemmas still awaiting a gloss show "No definition yet." The full Translation is in for all three: A. T. Murray for Homer and Theodore C. Williams for Vergil.
 
 ## What you can do
 
@@ -46,13 +46,14 @@ index.html        The single page
 css/styles.css    All styles, including the phone and tablet layouts
 js/               ES modules; main.js is the entry point
 data2/
-  aeneid/         One file per Book: 01.json … 12.json
-  iliad/          01.json … 24.json
-  odyssey/        01.json … 24.json
+  aeneid/         One file per Book: 01.json … 12.json, and its Translation: 01.en.json … 12.en.json
+  iliad/          01.json … 24.json, 01.en.json … 24.en.json
+  odyssey/        01.json … 24.json, 01.en.json … 24.en.json
   lexicon/        One Lexicon per language: latin.json, greek.json
 assets/           Icons and Home carousel images
 docs/             Design notes (mobile layout plan)
 tools/homer/      The script that builds the Homer data (see its README)
+tools/translation/ The script that builds the Translation from Perseus (see its README)
 CONTEXT.md        The glossary: what every term in this project means
 ```
 
@@ -60,8 +61,9 @@ A few modules to start from:
 
 | Module | What it does |
 |---|---|
-| `js/book-data.js` | Loads a Book's file and its language's Lexicon, and looks up a word's Lemma, Morphology and definition |
-| `js/data.js` | The list of Works, the Translation, and the Sources and credits shown on the Settings & Sources page |
+| `js/book-data.js` | Loads a Book's file, its Translation and its language's Lexicon, and looks up a word's Lemma, Morphology and definition |
+| `js/data.js` | The list of Works, and the Sources and credits shown on the Settings & Sources page |
+| `js/parallel.js` | Links the Translation's passages to the original's Lines, for the Parallel translation's linked scrolling and the phone's swap |
 | `js/reader.js`, `js/chunks.js` | Draw a Book's Lines, a chunk at a time, with Scansion |
 | `js/state.js` | Open tabs, Splits, Notes, Bookmarks and settings |
 | `js/session.js` | Saves the reading session when the page is hidden, and reopens it on launch |
@@ -77,7 +79,7 @@ Adding a Work means adding one JSON file per Book under `data2/<work>/`, plus a 
 {
   "work": "aeneid",
   "book": 1,
-  "sources": { "text": "…", "lemmas": "…", "scansion": "…", "definitions": "…" },
+  "sources": { "text": "…", "lemmas": "…", "scansion": "…", "definitions": "…", "translation": "…" },
   "lines": [
     { "n": 1, "w": [
       { "f": "Arma",
@@ -104,6 +106,14 @@ A missing or `null` definition shows as "No definition yet." (or "Proper name." 
 
 The Greek Lexicon (`data2/lexicon/greek.json`) has the same shape, keyed by the Greek Lemma, e.g. `"θυμός:noun"`. Homer's Book files are built by [`tools/homer/`](tools/homer/README.md). In them, an elided word is its own word with one Elided syllable (`δ᾽`), and a word the treebank analyses as two (`οὐδέ`) has two entries in `a`.
 
+**A Book's Translation** (`data2/iliad/01.en.json`) is one block per Perseus passage, built by [`tools/translation/`](tools/translation/README.md):
+
+```json
+{ "work": "iliad", "book": 1, "source": "…", "form": "prose", "blocks": [{ "from": 1, "text": "The wrath sing, goddess, …" }, { "from": 33, "text": "…" }] }
+```
+
+A block covers its Lines from `from` up to the Line before the next block's `from`, in reading order. `form` is `verse` for Williams (one verse line per `\n`) and `prose` for Murray.
+
 ## Words we use
 
 This project keeps a strict vocabulary: **Work** (not poem), **Book** (not chapter), **Line**, **Citation** (*Aeneid I.1–25*, or *Aen. I.1–25* where space is short), **Word card** (not gloss), **Split** versus **Parallel translation**, and so on. Every term is defined in [`CONTEXT.md`](CONTEXT.md). Please use those words in code, issues and commit messages.
@@ -116,7 +126,7 @@ This project keeps a strict vocabulary: **Work** (not poem), **Book** (not chapt
 
 ## Licence
 
-The code is released under the [MIT Licence](LICENSE). The data in `data2/` is not covered by it. Each Source keeps its own licence (below): the Latin Lemma data is CC BY-NC-SA 4.0, and the Greek Lemma data and definitions are CC BY-SA.
+The code is released under the [MIT Licence](LICENSE). The data in `data2/` is not covered by it. Each Source keeps its own licence (below): the Latin Lemma data is CC BY-NC-SA 4.0, and the Greek Lemma data, the Greek definitions and the Translation are CC BY-SA.
 
 ## Sources and credits
 
@@ -130,9 +140,11 @@ Epos Reader is built on the work of these projects:
 | Greek definitions | [A Greek-English Lexicon](https://github.com/PerseusDL/lexica) (Liddell, Scott, Jones), Perseus Digital Library | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | Scansion (and the printed Greek text) | [Hypotactic](https://hypotactic.com), David Chamberlain | See Hypotactic |
 | Latin definitions | [Whitaker's Words](https://archives.nd.edu/words.html), William Whitaker | See Whitaker's Words |
-| English Translation | Credit to be added: the English so far covers Aeneid I.1–16 and a few sample Lines ([peter-conder/Epos-Reader#5](https://github.com/peter-conder/Epos-Reader/issues/5)) | |
+| Iliad Translation | *The Iliad*, tr. A. T. Murray (Loeb Classical Library, 1924–25), [Perseus Digital Library](https://github.com/PerseusDL/canonical-greekLit/blob/6d7829caf172d43a109e89f918dfb18fbf48e3d1/data/tlg0012/tlg001/tlg0012.tlg001.perseus-eng3.xml). Typos fixed in the Perseus text are listed in [`tools/translation/corrections.csv`](tools/translation/corrections.csv) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Odyssey Translation | *The Odyssey*, tr. A. T. Murray (Loeb Classical Library, 1919), [Perseus Digital Library](https://github.com/PerseusDL/canonical-greekLit/blob/6d7829caf172d43a109e89f918dfb18fbf48e3d1/data/tlg0012/tlg002/tlg0012.tlg002.perseus-eng3.xml) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Aeneid Translation | *The Aeneid of Virgil*, tr. Theodore C. Williams (Houghton Mifflin, 1910), [Perseus Digital Library](https://github.com/PerseusDL/canonical-latinLit/blob/73723c273e0a3da6189d0fe09c0e6d724d87376b/data/phi0690/phi003/phi0690.phi003.perseus-eng2.xml). Typos fixed in the Perseus text are listed in [`tools/translation/corrections.csv`](tools/translation/corrections.csv) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 
-Because the Latin Lemma data is CC BY-NC-SA 4.0, Epos Reader is non-commercial, and anything built from that data must be shared under the same licence. The Greek Lemma data and LSJ definitions are share-alike too (CC BY-SA), so anything built from them must be shared under the same terms.
+Because the Latin Lemma data is CC BY-NC-SA 4.0, Epos Reader is non-commercial, and anything built from that data must be shared under the same licence. The Greek Lemma data, the LSJ definitions and the Translation are share-alike too (CC BY-SA), so anything built from them must be shared under the same terms.
 
 The app also uses:
 

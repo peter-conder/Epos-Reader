@@ -18,3 +18,10 @@ See `../spec.md`, decisions 12 and 13.
 ## Comments
 
 **2026-11-26 (from issue 02):** The "English is available for lines…" / "No English translation of this book yet." messages are already gone (issue 02 replaced that code). `WORKS[work].translations` is still read by `englishFor` in `js/english.js` until issue 03 lands.
+
+**2026-11-26:** Done in the repo. Closing peter-conder/Epos-Reader#5 on GitHub is waiting for the author's go-ahead.
+
+- `js/data.js`: the three sample `translations` arrays are gone (nothing read them after issue 03). `WORKS[work].lines` stays, since `js/bookmarks.js` and `js/tab-grid.js` still use it as a fallback. `SOURCES` has an English group with one item per Translation, each linking to its Perseus file at the pinned commit (`PERSEUS_GREEK`, `PERSEUS_LATIN`), marked CC BY-SA 4.0, with a note about `corrections.csv` on the Iliad and Aeneid (where the fixes are). `LICENCE_NOTES` counts the Translation as share-alike.
+- `README.md`: the status line, the Licence paragraph and the share-alike paragraph now include the Translation. The Sources table has one row per Translation, and the file layout lists the `NN.en.json` files and `tools/translation/`. The module table drops "the Translation" from `js/data.js` and adds `js/parallel.js`. The data format section documents `sources.translation` and the `NN.en.json` shape.
+- `CONTEXT.md`: **Translation** now reads "The English of a Work, taken from Perseus: A. T. Murray for Homer, Theodore C. Williams for Vergil."
+- Checked: the Settings & Sources page renders the three items with their licence links, with no page errors.

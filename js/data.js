@@ -35,24 +35,6 @@ export const WORKS = {
       'ostia, dives opum studiisque asperrima belli;',
       'quam Iuno fertur terris magis omnibus unam',
       'posthabita coluisse Samo; hic illius arma.'
-    ],
-    translations: [
-      'I sing of arms and the man, who first from the shores of Troy',
-      'driven by fate, came to Italy and the Lavinian shores,',
-      'much tossed about both on land and on the deep',
-      'by the power of the gods, on account of the mindful anger of savage Juno;',
-      'and having suffered many hardships also in war, until he could found a city,',
-      'and bring his gods to Latium; whence came the Latin race,',
-      'and the Alban fathers, and the walls of lofty Rome.',
-      'O Muse, recount to me the causes, by what divine majesty wounded,',
-      'or grieving at what, the queen of the gods compelled a man renowned for piety',
-      'to undergo so many misfortunes, to enter into so many trials.',
-      'Can there be such resentful fury in heavenly minds?',
-      'An ancient city once stood, settled by Tyrian colonists,',
-      'Carthage, facing Italy and the Tiber mouths from afar,',
-      'rich in resources and fierce in the pursuits of war;',
-      'which alone, they say, Juno cherished more than all other lands,',
-      'holding even Samos second; here were her arms and armor.'
     ]
   },
   iliad: {
@@ -82,24 +64,6 @@ export const WORKS = {
       'στέμματ᾽ ἔχων ἐν χερσὶν ἑκηβόλου Ἀπόλλωνος',
       'χρυσέῳ ἀνὰ σκήπτρῳ, καὶ λίσσετο πάντας Ἀχαιούς,',
       'Ἀτρεΐδα δὲ μάλιστα δύω, κοσμήτορε λαῶν.'
-    ],
-    translations: [
-      'Sing, goddess, the wrath of Achilles, son of Peleus,',
-      'destructive, which brought countless woes upon the Achaeans,',
-      'and hurled down to Hades many valiant souls',
-      'of heroes, and made them prey for dogs',
-      'and all birds of prey, while the will of Zeus was fulfilled,',
-      'from the day when first they stood divided in strife,',
-      'the son of Atreus, lord of men, and godlike Achilles.',
-      'Which of the gods then provoked them to clash in bitter conflict?',
-      'The son of Leto and Zeus; for in anger at the king',
-      'he stirred up a foul plague throughout the army, and the people perished,',
-      'because the son of Atreus had dishonored Chryses the priest;',
-      'for he had come to the swift ships of the Achaeans',
-      'to ransom his daughter, bearing boundless ransom,',
-      'holding in his hands the fillets of far-shooting Apollo',
-      'upon a golden staff, and beseeched all the Achaeans,',
-      'and chief of all the two sons of Atreus, marshals of the host.'
     ]
   },
   odyssey: {
@@ -129,24 +93,6 @@ export const WORKS = {
       'νύμφη πότνι᾽ ἔρυκε Καλυψὼ δῖα θεάων',
       'ἐν σπέσσι γλαφυροῖσι, λιλαιομένη πόσιν εἶναι.',
       'Ἀλλ᾽ ὅτε δὴ ἔτος ἦλθε περιπλομένων ἐνιαυτῶν.'
-    ],
-    translations: [
-      'Tell me, O Muse, of the man of many turns, who wander\'d far',
-      'and wide, after he sacked the sacred citadel of Troy;',
-      'he saw the cities of many men and learned their minds,',
-      'and suffered many griefs upon the deep within his heart,',
-      'striving to preserve his own life and the homecoming of his companions.',
-      'Yet even so he could not save his comrades, eager though he was;',
-      'for by their own recklessness they were destroyed,',
-      'fools, who devoured the cattle of Hyperion the Sun God;',
-      'and he took away the day of their homecoming.',
-      'Of these things, goddess, daughter of Zeus, speak also to us.',
-      'Now all the rest, as many as fled steep destruction,',
-      'were at home, having escaped both war and sea;',
-      'him alone, yearning for his homeland and for his wife,',
-      'the queenly nymph Calypso, bright among goddesses, detained',
-      'within hollow caves, longing that he should be her husband.',
-      'Yet when the year came round in the circling courses of time.'
     ]
   }
 };
@@ -182,6 +128,9 @@ export const citation = (workKey, roman, lines = '', { short = false } = {}) =>
    The README's "Sources and credits" is a hand-kept copy of these lists: change both together.
    ========================================================== */
 const PERSEUS = { name: 'Perseus Digital Library', url: 'https://www.perseus.tufts.edu', by: 'Tufts University' };
+/* The Translation's Perseus files, at the versions tools/translation builds from */
+const PERSEUS_GREEK = 'https://github.com/PerseusDL/canonical-greekLit/blob/6d7829caf172d43a109e89f918dfb18fbf48e3d1/data/tlg0012';
+const PERSEUS_LATIN = 'https://github.com/PerseusDL/canonical-latinLit/blob/73723c273e0a3da6189d0fe09c0e6d724d87376b/data/phi0690';
 const HYPOTACTIC = { name: 'Hypotactic', url: 'https://hypotactic.com', by: 'David Chamberlain' };
 const LICENCES = {
   'CC BY-NC-SA 4.0': 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
@@ -204,16 +153,22 @@ export const SOURCES = [
     { what: 'Definitions', name: 'A Greek-English Lexicon', url: 'https://github.com/PerseusDL/lexica', by: 'Liddell, Scott, Jones (Perseus Digital Library)', licence: 'CC BY-SA 4.0' },
     { what: 'Scansion', ...HYPOTACTIC }
   ] },
-  { language: 'English', works: 'Parallel translation', items: [
-    { what: 'Translation', name: 'Credit to be added', url: 'https://github.com/peter-conder/Epos-Reader/issues/5',
-      note: 'The English so far covers Aeneid I.1–16 and a few sample Lines. The full Translation, and its credit, are coming.' }
+  { language: 'English', works: 'Translation', items: [
+    { what: 'Iliad', name: 'The Iliad, tr. A. T. Murray', url: `${PERSEUS_GREEK}/tlg001/tlg0012.tlg001.perseus-eng3.xml`,
+      by: 'Loeb Classical Library, 1924–25 · Perseus Digital Library', licence: 'CC BY-SA 4.0',
+      note: 'Typos fixed in the Perseus text are listed in tools/translation/corrections.csv.' },
+    { what: 'Odyssey', name: 'The Odyssey, tr. A. T. Murray', url: `${PERSEUS_GREEK}/tlg002/tlg0012.tlg002.perseus-eng3.xml`,
+      by: 'Loeb Classical Library, 1919 · Perseus Digital Library', licence: 'CC BY-SA 4.0' },
+    { what: 'Aeneid', name: 'The Aeneid of Virgil, tr. Theodore C. Williams', url: `${PERSEUS_LATIN}/phi003/phi0690.phi003.perseus-eng2.xml`,
+      by: 'Houghton Mifflin, 1910 · Perseus Digital Library', licence: 'CC BY-SA 4.0',
+      note: 'Typos fixed in the Perseus text are listed in tools/translation/corrections.csv.' }
   ] }
 ];
 
 /* What the share-alike and non-commercial licences above mean for Epos Reader */
 export const LICENCE_NOTES = [
   'The Latin Lemma data is CC BY-NC-SA 4.0, so Epos Reader is non-commercial, and anything built from that data must be shared under the same licence.',
-  'The Greek Lemma data and the Lexicon definitions are share-alike (CC BY-SA), so anything built from them must be shared under the same terms.',
+  'The Greek Lemma data, the Lexicon definitions and the Translation are share-alike (CC BY-SA), so anything built from them must be shared under the same terms.',
   "The code is released under the MIT Licence. The data keeps its Sources' own licences."
 ];
 
