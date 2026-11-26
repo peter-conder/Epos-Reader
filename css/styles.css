@@ -1960,6 +1960,11 @@
       transition: transform 260ms var(--chrome-ease);
       animation: sheetUp 260ms var(--chrome-ease);
     }
+    /* Dark mode: the sheet's shadow barely shows on a dark page, so lift its surface a step and draw its top edge */
+    :root[data-theme="dark"] .format-sheet {
+      background: color-mix(in srgb, var(--surface) 90%, #fff);
+      border-top-color: var(--gray-300);
+    }
     .format-sheet[hidden] { display: none; }
     .format-sheet.closing { animation: sheetDown 240ms var(--chrome-ease) forwards; pointer-events: none; }
     .fs-grip { display: grid; place-items: center; height: 22px; flex-shrink: 0; touch-action: none; cursor: grab; }
@@ -2205,6 +2210,7 @@
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      animation-delay: 0ms !important;   /* staggered entrances (fill: backwards) would otherwise sit invisible */
       transition-duration: 0.01ms !important;
       transition-delay: 0ms !important;
       scroll-behavior: auto !important;

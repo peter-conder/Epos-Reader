@@ -226,10 +226,10 @@ const SCAN_NOTES = { h: 'hiatus', z: 'synizesis', r: 'consonantal i', d: 'length
 export function wordHtml(w) {
   const s = w.s;
   if (!s?.length || s.map((x) => x[0]).join('') !== w.f) return esc(w.f);
-  return s.map(([text, q, x = '']) => {
-    const notes = [...x].map((c) => SCAN_NOTES[c]).filter(Boolean).join(', ');
-    return `<span class="syl" data-q="${q}"${x ? ` data-x="${x}"` : ''}${notes ? ` title="${notes}"` : ''}>${esc(text)}</span>`;
-  }).join('');
+  // No title tooltip for the rare marks: their explanations belong to the Word card, which shows them only when
+  // Rare scansion marks and Scansion are both on
+  return s.map(([text, q, x = '']) =>
+    `<span class="syl" data-q="${q}"${x ? ` data-x="${x}"` : ''}>${esc(text)}</span>`).join('');
 }
 
 /* A word's scansion for the word card, e.g. "vi · rum · que   ⏑ – ⏑" (elided syllables in brackets).
