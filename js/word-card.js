@@ -7,6 +7,7 @@ import { syncCardBookmark } from './bookmarks.js';
 import { isMobileTier, onTierChange } from './viewport.js';
 import { bindSheetDrag, closeFormatSheet } from './format-sheet.js';
 import { showChrome } from './bottom-bar.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* Below desktop the card is a bottom sheet rather than a popup by the word (see WORD CARD SHEET in styles.css):
    the selected line is scrolled clear of it, tapping another word swaps what it shows, and the note editor
@@ -82,7 +83,7 @@ export function revealAboveSheet(word) {
   else if (line.top < TOP_CLEARANCE) dy = line.top - TOP_CLEARANCE;
   if (Math.abs(dy) < 1) return;
   shared.keepCardUntil = performance.now() + 600;
-  pane.scrollBy({ top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  pane.scrollBy({ top: dy, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
 }
 
 export function hideWordCard({ restoreFocus = false } = {}) {
@@ -192,7 +193,7 @@ function revealBelowNote() {
   const dy = (word.closest('.verse') ?? word).getBoundingClientRect().top - below;
   if (dy >= 0) return;
   shared.keepCardUntil = performance.now() + 600;
-  pane.scrollBy({ top: dy, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  pane.scrollBy({ top: dy, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
 }
 
 /* Keeps the editor at the top of what is visible, and its text box as tall as its text, short of the keyboard */

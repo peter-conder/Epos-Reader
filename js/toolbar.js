@@ -50,6 +50,22 @@ const PREF_VARS = [
   ['padding', '--reading-padding']
 ];
 
+/* The View Options switches: the state.popups key each one flips, the <html> data attribute the Scansion CSS reads
+   (if any), and what else has to happen when it flips. The Word card switches close the card so it reopens with
+   the new setting. A function, as el is filled in at start-up. */
+const SWITCHES = () => [
+  { key: 'words', btn: el.swWords, then: hideWordCard },
+  { key: 'notes', btn: el.swNotes, then: hideWordCard },
+  { key: 'caesura', btn: el.swCaesura, attr: 'caesura' },
+  { key: 'rareScansion', btn: el.swRareScansion, attr: 'rareScansion', then: refreshCardScan }
+];
+
+function showSwitch({ key, btn, attr }) {
+  const on = state.popups[key];
+  btn.setAttribute('aria-checked', String(on));
+  if (attr) root.dataset[attr] = on ? 'on' : 'off';
+}
+
 function persistPrefs() {
   const prefs = { ...state.popups };
   for (const [key, cssVar] of PREF_VARS) {
@@ -70,19 +86,10 @@ function restorePrefs() {
     for (const b of group.children) b.classList.toggle('active', b === match);
     root.style.setProperty(cssVar, val);
   }
-  const switches = [
-    ['words', el.swWords],
-    ['notes', el.swNotes],
-    ['caesura', el.swCaesura],
-    ['rareScansion', el.swRareScansion]
-  ];
-  for (const [key, btn] of switches) {
-    if (typeof saved[key] !== 'boolean') continue;
-    state.popups[key] = saved[key];
-    btn.setAttribute('aria-checked', String(saved[key]));
+  for (const sw of SWITCHES()) {
+    if (typeof saved[sw.key] === 'boolean') state.popups[sw.key] = saved[sw.key];
+    showSwitch(sw);
   }
-  root.dataset.caesura = state.popups.caesura ? 'on' : 'off';
-  root.dataset.rareScansion = state.popups.rareScansion ? 'on' : 'off';
 }
 
 export function initToolbar() {
@@ -138,24 +145,15 @@ export function initToolbar() {
     });
   }
 
-  // View Options switches. The Word card switches close the card so it reopens with the new setting;
-  // the Scansion switches set an attribute on <html> that the Scansion CSS reads.
-  function bindSwitch(btn, key, onChange = hideWordCard) {
-    btn.addEventListener('click', () => {
-      const on = !state.popups[key];
-      state.popups[key] = on;
-      btn.setAttribute('aria-checked', String(on));
-      onChange(on);
+  // View Options switches (see SWITCHES)
+  for (const sw of SWITCHES()) {
+    sw.btn.addEventListener('click', () => {
+      state.popups[sw.key] = !state.popups[sw.key];
+      showSwitch(sw);
+      sw.then?.();
       persistPrefs();
     });
   }
-  bindSwitch(el.swWords, 'words');
-  bindSwitch(el.swNotes, 'notes');
-  bindSwitch(el.swCaesura, 'caesura', (on) => { root.dataset.caesura = on ? 'on' : 'off'; });
-  bindSwitch(el.swRareScansion, 'rareScansion', (on) => {
-    root.dataset.rareScansion = on ? 'on' : 'off';
-    refreshCardScan();
-  });
 
   // Close buttons inside popovers
   document.querySelectorAll('[data-close]').forEach((btn) =>

@@ -3,7 +3,7 @@ import { shared, state } from './state.js';
 import { saveNotes } from './storage.js';
 import { hideWordCard } from './word-card.js';
 import { noteById } from './notes.js';
-import { SPATIAL, prefersReducedMotion } from './motion.js';
+import { EMPHASIZED, prefersReducedMotion } from './motion.js';
 
 export function initNoteDrag() {
   /* ---- Dragging notes ----
@@ -168,7 +168,7 @@ export function initNoteDrag() {
         const dx = f.left - l.left, dy = f.top - l.top;
         if (!dx && !dy) continue;
         c.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
-          { duration: 280, easing: SPATIAL });
+          { duration: 280, easing: EMPHASIZED });
       }
     }
 
@@ -212,7 +212,7 @@ export function initNoteDrag() {
         const to = rectOf(card);
         const settle = card.animate(
           [{ transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(1.02)` }, { transform: 'none' }],
-          { duration: 280, easing: SPATIAL });
+          { duration: 280, easing: EMPHASIZED });
         settle.onfinish = settle.oncancel = () => { card.classList.remove('dragging'); endPress(s); };
       }
 

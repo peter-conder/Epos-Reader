@@ -57,14 +57,18 @@ export function goBack({ instant = false } = {}) {
 
 /* ---- Swipe from the left edge ---- */
 
+/* z-index of the page being swiped away, above the view sliding in under it */
+const Z_CHAPTER_LIST = '70';   // as .chapter-list in styles.css: it stays over the bottom bar during the swipe
+const Z_PAGE = '40';           // the Notebook or Settings page
+
 /* The page a back swipe would move, and the view that would show underneath */
 function swipeTarget() {
   if (!isMobileTier()) return null;
   if (chapterListOpen()) {
-    return { page: el.chapterList, under: !el.tabGrid.hidden ? el.tabGrid : activeTab()?.view ?? null, z: '70' };
+    return { page: el.chapterList, under: !el.tabGrid.hidden ? el.tabGrid : activeTab()?.view ?? null, z: Z_CHAPTER_LIST };
   }
-  if (onSettings()) return { page: el.viewSettings, under: activeTab()?.view ?? null, panes: true, z: '40' };
-  if (onNotebook()) return { page: el.viewNotebook, under: backTab()?.view ?? null, z: '40' };
+  if (onSettings()) return { page: el.viewSettings, under: activeTab()?.view ?? null, panes: true, z: Z_PAGE };
+  if (onNotebook()) return { page: el.viewNotebook, under: backTab()?.view ?? null, z: Z_PAGE };
   return null;
 }
 

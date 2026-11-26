@@ -15,6 +15,7 @@ export const WORKS = {
     poet: 'Vergil',
     language: 'Classical Latin',
     shortLanguage: 'Latin',
+    langCode: 'LA',     // on the phone's language button
     formLabel: 'Classical Latin Form',
     lexicon: 'latin',   // data2/lexicon/<name>.json
     bookCount: 12,
@@ -62,6 +63,7 @@ export const WORKS = {
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
+    langCode: 'GR',     // on the phone's language button
     formLabel: 'Homeric Greek Form',
     lexicon: 'greek',
     bookCount: 24,
@@ -109,6 +111,7 @@ export const WORKS = {
     poet: 'Homer',
     language: 'Ancient Greek',
     shortLanguage: 'Greek',
+    langCode: 'GR',     // on the phone's language button
     formLabel: 'Homeric Greek Form',
     lexicon: 'greek',
     bookCount: 24,

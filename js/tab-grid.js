@@ -3,10 +3,9 @@ import { clamp, el, esc, icon } from './dom.js';
 import { readingTabs, isNotebook, isText, state } from './state.js';
 import { activateTab, closeTab } from './tabs.js';
 import { anchorIndex } from './chunks.js';
-import { countLabel } from './notes.js';
 import { openChapterList } from './chapters.js';
 import { hideWordCard } from './word-card.js';
-import { prefersReducedMotion } from './motion.js';
+import { closingLayer, prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    TAB GRID (phones and tablets): every open tab as a card, most recently used first, opened and closed
@@ -17,9 +16,10 @@ import { prefersReducedMotion } from './motion.js';
 const SNIPPET_LINES = 3;
 const FLING = 0.35;   // share of a card's width a sideways swipe must pass to close it
 const AXIS_SLOP = 8;
-const CLOSE_MS = 200;
 
-let closeTimer = 0, openTimer = 0;
+let openTimer = 0;
+let gridLayer = null;   // made on first use: el is filled in at start-up
+const layer = () => (gridLayer ??= closingLayer(el.tabGrid));
 
 export const tabGridOpen = () => !el.tabGrid.hidden && !el.tabGrid.classList.contains('closing');
 
@@ -51,7 +51,7 @@ function cardHtml(tab) {
   } else if (isNotebook(tab)) {
     kind = ' tg-notebook';
     title = 'Notebook';
-    meta = countLabel();
+    meta = '';   // the counts are on the Notebook page itself
     body = `${icon('notebook')}`;
   } else {
     kind = ' tg-blank';
@@ -76,9 +76,7 @@ export function renderTabGrid() {
 }
 
 export function openTabGrid() {
-  clearTimeout(closeTimer);
-  closeTimer = 0;
-  el.tabGrid.classList.remove('closing');
+  layer().cancel();
   hideWordCard();
   el.tabGrid.hidden = false;
   el.tabGrid.classList.add('opening');
@@ -95,19 +93,7 @@ export function closeTabGrid({ instant = false } = {}) {
   document.documentElement.classList.remove('grid-open');
   el.tabsBtn.setAttribute('aria-expanded', 'false');
   el.tabGrid.classList.remove('opening');
-  if (instant || prefersReducedMotion()) {
-    clearTimeout(closeTimer);
-    closeTimer = 0;
-    el.tabGrid.classList.remove('closing');
-    el.tabGrid.hidden = true;
-    return;
-  }
-  el.tabGrid.classList.add('closing');
-  closeTimer = setTimeout(() => {
-    closeTimer = 0;
-    el.tabGrid.classList.remove('closing');
-    el.tabGrid.hidden = true;
-  }, CLOSE_MS);
+  layer().close({ instant });
 }
 
 export const toggleTabGrid = () => (tabGridOpen() ? closeTabGrid() : openTabGrid());
@@ -149,7 +135,7 @@ function bindCardSwipe() {
     if (d.axis !== 'x') return;
     d.card.dataset.swiped = '1';   // the click that ends the drag doesn't open it
     if (Math.abs(d.dx) > d.w * FLING) { flingClose(d.card, Math.sign(d.dx)); return; }
-    d.card.style.transition = 'transform 220ms var(--ease-spring), opacity 220ms ease';
+    d.card.style.transition = 'transform 220ms var(--ease-spatial), opacity 220ms ease';
     d.card.style.transform = '';
     d.card.style.opacity = '';
   };

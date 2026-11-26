@@ -41,8 +41,7 @@ export function syncLangButton() {
   if (!text) return;
   const onPhone = tier() === 'compact';
   const on = onPhone ? tab.lang === 'en' : !!tab.split;
-  const langName = workOf(tab).shortLanguage;
-  const langCode = langName === 'Greek' ? 'GR' : 'LA';
+  const { shortLanguage: langName, langCode } = workOf(tab);
   el.langBtn.setAttribute('aria-pressed', String(on));
   el.langBtn.disabled = false;
   el.langBtn.textContent = onPhone && on ? langCode : 'EN';

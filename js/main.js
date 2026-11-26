@@ -1,4 +1,4 @@
-import { el } from './dom.js';
+import { $, el } from './dom.js';
 import { activeTab, isText, shared, workOf } from './state.js';
 import { loadLexicon } from './book-data.js';
 import { closePopovers, initLayout, setOpen } from './layout.js';
@@ -69,7 +69,7 @@ document.addEventListener('keydown', (e) => {
   if (formatSheetOpen()) { closeFormatSheet(); el.formatBtn.focus({ preventScroll: true }); return; }
   if (el.paletteMenu.classList.contains('open')) {
     closePaletteMenu();
-    document.getElementById('drawer-palette')?.focus({ preventScroll: true });
+    $('drawer-palette')?.focus({ preventScroll: true });
     return;
   }
   if (el.drawer.classList.contains('open')) { setOpen(el.drawer, false); el.menuBtn.focus({ preventScroll: true }); return; }

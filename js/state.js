@@ -1,5 +1,6 @@
 import { WORKS, bookRef } from './data.js';
 import { loadNotes, loadBookmarks } from './storage.js';
+import { isMobileTier } from './viewport.js';
 
 /* ==========================================================
    STATE
@@ -45,6 +46,11 @@ export const tabRef = (tab) => bookRef(tab.work, tab.book, tab.range ?? '');
 
 export const getTab = (id) => state.tabs.find((t) => t.id === id);
 export const activeTab = () => getTab(state.activeId);
+/* A text tab on screen in the reader (not behind the Notebook or Settings page) */
+export const readingText = (tab = activeTab()) => state.view === 'reader' && isText(tab);
+/* The tab's Split partner as this screen shows it: phones and tablets show one tab at a time, so none there
+   (the pair is kept for when the window is wide again) */
+export const shownPartner = (tab) => (isMobileTier() ? undefined : partnerOf(tab));
 export const partnerOf = (tab) => (tab?.partnerId ? getTab(tab.partnerId) : undefined);
 export const workOf = (tab) => WORKS[tab?.work] ?? WORKS.aeneid;
 export const isNotebook = (tab) => tab?.kind === 'notebook';

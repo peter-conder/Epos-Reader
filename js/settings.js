@@ -1,6 +1,7 @@
 import { CREDITS, LICENCE_NOTES, SOURCES, licenceUrl } from './data.js';
 import { el, esc, icon, root } from './dom.js';
 import { state } from './state.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    SETTINGS & SOURCES PAGE: the settings, then every Source and credit (the lists live in data.js)
@@ -100,7 +101,7 @@ export function applyPalette(key) {
 export function choosePalette(key) {
   const next = PALETTES[key] ? key : 'bluegray';
   if (next === currentPalette) return;
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still = prefersReducedMotion();
   if (document.startViewTransition && !still) document.startViewTransition(() => applyPalette(next));
   else applyPalette(next);
   try { localStorage.setItem(PALETTE_KEY, next); } catch { /* storage unavailable */ }
@@ -140,7 +141,7 @@ export function toggleTheme() {
   const next = state.theme === 'dark' ? 'light' : 'dark';
   // The browser cross-fades one snapshot of the old page into the new one, so the colours switch in a single
   // style pass. A transition on every word and syllable instead made the switch stutter.
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const still = prefersReducedMotion();
   if (document.startViewTransition && !still) document.startViewTransition(() => applyTheme(next));
   else applyTheme(next);
   // Save `next`, not state.theme: a view transition calls applyTheme later, so state.theme is still the old mode here

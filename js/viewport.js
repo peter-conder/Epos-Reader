@@ -8,12 +8,13 @@ import { root } from './dom.js';
    ========================================================== */
 export const TIER_QUERIES = {
   compact: '(max-width: 599.98px)',
-  medium: '(min-width: 600px) and (max-width: 1024px)'
+  medium: '(min-width: 600px) and (max-width: 1024px)',
+  mobile: '(max-width: 1024px)'   // phone or tablet: one query, so no subpixel width between the two falls through
 };
 const HOVER_QUERY = matchMedia('(hover: hover)');
 const COARSE_QUERY = matchMedia('(pointer: coarse)');
 const COMPACT_QUERY = matchMedia(TIER_QUERIES.compact);
-const MOBILE_QUERY = matchMedia('(max-width: 1024px)');
+const MOBILE_QUERY = matchMedia(TIER_QUERIES.mobile);
 const tierMedia = [COMPACT_QUERY, MOBILE_QUERY];
 
 /* 'compact' | 'medium' | 'desktop' — no subpixel gap between 599.98px and 600px */

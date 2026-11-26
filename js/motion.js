@@ -2,15 +2,51 @@ import { $, el } from './dom.js';
 import { groupOf } from './state.js';
 import { fitAll } from './fit.js';
 
-/* ---- Unified Material Expressive motion tokens ---- */
-export const SPATIAL = 'cubic-bezier(0.2, 0.9, 0.3, 1.12)';
-export const SPRING = SPATIAL;
-export const EMPHASIZED = 'cubic-bezier(0.2, 0, 0, 1)';
+/* ---- Unified Material Expressive motion tokens, read from the CSS (:root in styles.css) so both use one curve.
+   The stylesheet loads before this module runs. ---- */
+const cssToken = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim() || 'ease';
+export const EMPHASIZED = cssToken('--ease-emphasized');   // structural movement: decelerates, no overshoot
 const TRAILING = 'cubic-bezier(0.3, 0, 0, 1)';   // the entering pane starts a touch later, so it trails the edge
 export const PANE_DUR = 420;
 
 const reducedMotionQuery = matchMedia('(prefers-reduced-motion: reduce)');
 export const prefersReducedMotion = () => reducedMotionQuery.matches;
+
+/* How long a node's current CSS animation runs, delay included, in ms (the longest when there are several) */
+function animationMs(node) {
+  const cs = getComputedStyle(node);
+  const ms = (v) => parseFloat(v) * (v.trim().endsWith('ms') ? 1 : 1000) || 0;
+  const durs = cs.animationDuration.split(','), delays = cs.animationDelay.split(',');
+  return Math.max(0, ...durs.map((d, i) => ms(d) + ms(delays[i] ?? '0s')));
+}
+
+/* A sheet or overlay that plays its .closing animation (in the CSS) before it is hidden. The wait is read from
+   that animation, so no duration is copied into the JS. close() hides it (at once when asked, or with reduced
+   motion); cancel() stops a close that is still playing, for a layer opened again mid-exit. */
+export function closingLayer(node, onHidden = () => {}) {
+  let timer = 0;
+  const finish = () => {
+    clearTimeout(timer);
+    timer = 0;
+    node.classList.remove('closing');
+    node.hidden = true;
+    onHidden();
+  };
+  return {
+    close({ instant = false } = {}) {
+      if (instant || prefersReducedMotion()) { finish(); return; }
+      node.classList.add('closing');
+      clearTimeout(timer);
+      timer = setTimeout(finish, animationMs(node));
+    },
+    cancel() {
+      if (!timer) return;
+      clearTimeout(timer);
+      timer = 0;
+      node.classList.remove('closing');
+    }
+  };
+}
 
 export function playPop(view) {
   if (prefersReducedMotion()) return;
