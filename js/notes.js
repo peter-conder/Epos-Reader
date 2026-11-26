@@ -79,7 +79,7 @@ export function noteCardHtml(n) {
   return `
     <article class="note-card" data-note-id="${n.id}">
       <div class="note-edit" data-value="${esc(n.text)}">
-        <textarea class="note-text" rows="1" placeholder="Write a note…" aria-label="Note text">${esc(n.text)}</textarea>
+        <textarea class="note-text" rows="1" placeholder="Write a Note…" aria-label="Note text">${esc(n.text)}</textarea>
       </div>
       ${isTied(n) ? `
       <button class="note-jump" data-tip="Jump to this word in the text">

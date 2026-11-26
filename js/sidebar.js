@@ -122,8 +122,10 @@ export function showBooks(workKey) {
   el.bookPicker.hidden = false;
 }
 
+let pickerOpener = null;   // what opened the picker, for focus to go back to on Escape
 export function openPicker(tabId, anchor) {
   state.pickerTabId = tabId;
+  pickerOpener = anchor;
   highlightWork(getTab(tabId)?.work);
   showWorkList();
 
@@ -134,6 +136,12 @@ export function openPicker(tabId, anchor) {
   hideHoverCard();
   closePopovers(el.picker);
   setOpen(el.picker, true);
+}
+
+export function closePicker({ restoreFocus = false } = {}) {
+  setOpen(el.picker, false);
+  if (restoreFocus && pickerOpener?.isConnected) pickerOpener.focus({ preventScroll: true });
+  pickerOpener = null;
 }
 
 export function chooseBook(workKey, book) {

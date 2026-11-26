@@ -77,7 +77,7 @@ export function jumpFromDot(tab, line) {
   hideBack();
   back = { tab, i: from?.i ?? null, frac: from?.frac ?? 0, line: fromLine, landed: ch.pane.scrollTop };
   back.timer = setTimeout(hideBack, BACK_MS);
-  el.backChipText.textContent = `Back to line ${fromLine}`;
+  el.backChipText.textContent = `Back to Line ${fromLine}`;
   el.backChip.hidden = false;
   syncRibbon();
 }

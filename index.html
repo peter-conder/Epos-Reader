@@ -100,7 +100,7 @@
       <button class="add-half" id="btn-add-notebook" data-tip="Open Notebook" aria-label="Open Notebook">
         <svg class="icon"><use href="assets/icons.svg#i-book2"/></svg>
       </button>
-      <button class="add-half" id="btn-add-tab" data-tip="Open new tab" aria-label="Open new tab">
+      <button class="add-half" id="btn-add-tab" data-tip="Add a tab" aria-label="Add a tab">
         <svg class="icon"><use href="assets/icons.svg#i-plus"/></svg>
       </button>
     </div>
@@ -166,7 +166,7 @@
       <button class="tool-btn" id="btn-split" style="--i: 0" data-tip="Parallel translation" aria-label="Toggle Parallel translation" aria-pressed="false">
         <svg class="icon"><use href="assets/icons.svg#i-split"/></svg>
       </button>
-      <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic scansion" aria-pressed="false">
+      <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic Scansion" aria-pressed="false">
         <svg class="icon"><use href="assets/icons.svg#i-meter"/></svg>
       </button>
       <button class="tool-btn" id="btn-text" style="--i: 2" data-tip="Text Options" aria-label="Text formatting options" aria-expanded="false">
@@ -199,7 +199,7 @@
         <span class="switch" aria-hidden="true"></span>
       </button>
       <button class="switch-row" id="sw-rare-scansion" role="switch" aria-checked="false">
-        <span class="switch-text"><span class="switch-title">Rare scansion marks</span><span class="switch-sub">Show hiatus, synizesis, consonantal i, lengthened &amp; hypermetric marks</span></span>
+        <span class="switch-text"><span class="switch-title">Rare Scansion marks</span><span class="switch-sub">Show Hiatus, Synizesis, Consonantal i, Lengthened &amp; Hypermetric syllables</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
     </div>
@@ -285,7 +285,7 @@
   <div class="card-morph" id="card-morph"></div>
   <div class="card-scan" id="card-scan" hidden></div>
   <div class="card-def" id="card-def"></div>
-  <div class="card-user-note" id="card-user-note" hidden tabindex="0" role="button" data-tip="Edit note">
+  <div class="card-user-note" id="card-user-note" hidden tabindex="0" role="button" data-tip="Edit Note">
     <svg class="icon"><use href="assets/icons.svg#i-snippet"/></svg>
     <p id="card-user-note-text"></p>
   </div>
@@ -299,14 +299,14 @@
       <svg class="icon"><use href="assets/icons.svg#i-check"/></svg>
     </button>
   </div>
-  <textarea class="note-input" id="note-input" rows="5" placeholder="Write a note…" aria-label="Note text"></textarea>
+  <textarea class="note-input" id="note-input" rows="5" placeholder="Write a Note…" aria-label="Note text"></textarea>
 </div>
 
 <!-- TAB GRID (phones and tablets): every open tab, most recently used first -->
 <section class="tab-grid" id="tab-grid" aria-label="Open tabs" hidden>
   <header class="tg-header">
     <h2 class="tg-count" id="tg-count">Tabs</h2>
-    <button class="tg-new" id="tg-new" aria-label="Open a Book in a new tab"></button>
+    <button class="tg-new" id="tg-new" aria-label="Open a Book in another tab"></button>
     <button class="tg-done" id="tg-done">Done</button>
   </header>
   <ul class="tg-list" id="tg-list"></ul>

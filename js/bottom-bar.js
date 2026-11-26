@@ -14,6 +14,7 @@ import { syncLangButton } from './english.js';
 import { openFormatSheet } from './format-sheet.js';
 import { syncRibbon } from './mobile-bookmarks.js';
 import { prefersReducedMotion } from './motion.js';
+import { scheduleSessionSave } from './session.js';
 
 /* ==========================================================
    BOTTOM BAR (phones and tablets, in place of the sidebar)
@@ -156,7 +157,7 @@ export function bottomBarScroll(tab) {
   lastY = y;
   if (!dy) return;
   // Reading on in a tab reached by a swipe makes it the most recent (it moves to the front of the grid)
-  if (tab !== readingTabs()[0] && (read += Math.abs(dy)) > READ_AFTER) { markUsed(tab); renderBottomBar(); }
+  if (tab !== readingTabs()[0] && (read += Math.abs(dy)) > READ_AFTER) { markUsed(tab); renderBottomBar(); scheduleSessionSave(); }
   if (Math.sign(dy) !== Math.sign(run)) run = 0;
   run += dy;
   const atEnd = y <= 0 || y + pane.clientHeight >= pane.scrollHeight - 2;

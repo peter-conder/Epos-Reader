@@ -62,10 +62,11 @@ export function restoreSession() {
     const usedAt = Number.isFinite(saved.usedAt) ? saved.usedAt : 0;
     if (saved.kind === 'text' && WORKS[saved.work] && typeof saved.book === 'string') {
       const validBook = ROMANS.slice(0, WORKS[saved.work].bookCount).includes(saved.book) ? saved.book : 'I';
-      const splitPct = Number.isFinite(saved.splitPct) ? clamp(saved.splitPct, 25, 75) : 50;
+      const splitPct = Number.isFinite(saved.splitPct) ? clamp(saved.splitPct, 25, 80) : 50;   // as the divider allows (reader.js)
       const lang = saved.lang === 'en' && tier() === 'compact' ? 'en' : 'la';
       const tab = Object.assign(newTextTab(saved.work, validBook), {
-        id: saved.id, split: !!saved.split, splitPct, lang, usedAt, restoreAt: saved.place ?? null
+        // A saved place belongs to the saved Book: when that Book was invalid and became Book I, start at its top
+        id: saved.id, split: !!saved.split, splitPct, lang, usedAt, restoreAt: validBook === saved.book ? saved.place ?? null : null
       });
       createReader(tab);
       tab.ui.root.dataset.lang = lang;

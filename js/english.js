@@ -129,8 +129,9 @@ function openLineMenu(tab, verse, word, x, y) {
   el.lineMenu.querySelector('.lm-item')?.focus({ preventScroll: true });
 }
 
-export function closeLineMenu() {
+export function closeLineMenu({ restoreFocus = false } = {}) {
   if (!menuFor) return;
+  if (restoreFocus) (menuFor.word ?? menuFor.verse.querySelector('.verse-num'))?.focus({ preventScroll: true });
   menuFor.verse.classList.remove('pressed');
   menuFor = null;
   el.lineMenu.classList.remove('open');

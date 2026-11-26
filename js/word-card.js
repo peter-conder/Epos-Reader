@@ -115,7 +115,7 @@ export function positionWordCard(word) {
 export function syncCardNote() {
   syncCardBookmark();
   const note = shared.wordCtx && findWordNote(shared.wordCtx);
-  const label = note ? 'Edit note' : 'Add note';
+  const label = note ? 'Edit Note' : 'Add Note';
   el.cardNote.classList.toggle('has-note', !!note);
   el.cardNote.dataset.tip = label;
   el.cardNote.setAttribute('aria-label', label);

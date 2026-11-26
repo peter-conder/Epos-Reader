@@ -206,7 +206,7 @@ export const SOURCES = [
   ] },
   { language: 'English', works: 'Parallel translation', items: [
     { what: 'Translation', name: 'Credit to be added', url: 'https://github.com/peter-conder/Epos-Reader/issues/5',
-      note: 'The English so far covers Aeneid I.1–16 and a few sample Lines. The full Translation, and its credit, are coming.' }
+      note: 'The Translation so far covers Aeneid I.1–16 and a few sample Lines. The rest of it, and its credit, are coming.' }
   ] }
 ];
 
