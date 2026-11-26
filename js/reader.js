@@ -1,7 +1,7 @@
-import { ROMANS, WORKS, bookLabel } from './data.js';
+import { ROMANS, bookLabel } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
 import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js';
-import { loadBook } from './book-data.js';
+import { loadBook, loadEnglish } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
@@ -14,6 +14,7 @@ import { bottomBarScroll } from './bottom-bar.js';
 import { isMobileTier } from './viewport.js';
 import { jumpFromDot } from './mobile-bookmarks.js';
 import { lineNumberTap } from './english.js';
+import { blockRows, paneScrolled, trackDriver } from './parallel.js';
 
 /* ==========================================================
    READERS: one per text tab
@@ -71,9 +72,15 @@ export function bindReader(tab) {
     // A popup anchored to the word would drift away from it; the phone's sheet isn't anchored, so it stays
     if (shared.selectedWord && ui.paneOriginal.contains(shared.selectedWord) && performance.now() >= shared.keepCardUntil && !isMobileTier()) hideWordCard();
     syncChunks(ui.chunkers?.[0]);
+    paneScrolled(tab, 0);   // the English follows (see parallel.js)
     bottomBarScroll(tab);
   }, { passive: true });
-  ui.paneTranslation.addEventListener('scroll', () => { syncChunks(ui.chunkers?.[1]); bottomBarScroll(tab); }, { passive: true });
+  ui.paneTranslation.addEventListener('scroll', () => {
+    syncChunks(ui.chunkers?.[1]);
+    paneScrolled(tab, 1);   // and the original follows the English
+    bottomBarScroll(tab);
+  }, { passive: true });
+  trackDriver(tab);
 
   // Divider: rubber-bands past 80%, snaps the translation closed past 89%
   const dv = { active: false, rect: null, pct: 50, raf: 0 };
@@ -168,31 +175,27 @@ export function renderPassage(tab) {
         renderPassage(tab);
       });
       ui.translation.innerHTML = '';
-      if (ui.transMore) ui.transMore.textContent = '';
+      ui.englishKey = null;
       return;
     }
-    const work = WORKS[tab.work];
     const lines = data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }));
-    // The sample translation is of Book I's opening lines; other books have none yet (it used to be shown for every book)
-    const trans = tab.book === 'I' ? work.translations ?? [] : [];
 
     // Only a few chunks of each pane are ever in the page (see CHUNKS below)
     const prev = ui.chunkers ?? [];
     // Widest-line guess for the fit: letters, plus about two letters' worth of padding and gap per word
     const verseScore = (l) => l.words.reduce((s, w) => s + w.f.length + 2, 0);
+    // The English pane starts empty: its Book's Translation is fetched the first time it is shown (showEnglish)
     ui.chunkers = [
       makeChunker(tab, ui.passage, ui.paneOriginal, lines.map(verseHtml), lines.map(verseScore), prev[0]?.pitch),
-      makeChunker(tab, ui.translation, ui.paneTranslation,
-        trans.map((t) => `<div class="translation-line">${esc(t)}</div>`), trans.map((t) => t.length), prev[1]?.pitch)
+      makeChunker(tab, ui.translation, ui.paneTranslation, [], [], prev[1]?.pitch)
     ];
     ui.chunkers[0].lineNums = lines.map((l) => l.n);
-    ui.chunkers[1].lineNums = trans.map((_, i) => lines[i]?.n ?? i + 1);
-    // Where the English stops short of the Latin, say so at its end
-    ui.transMore ??= ui.paneTranslation.appendChild(Object.assign(document.createElement('p'), { className: 'trans-more' }));
-    ui.transMore.textContent = !trans.length ? 'No English translation of this book yet.'
-      : trans.length < lines.length ? `English is available for lines 1\u2013${trans.length} so far.` : '';
+    ui.chunkers[1].lineNums = [];
+    ui.englishKey = null;
+    ui.englishSpans = null;
     ui.chunkers.forEach(mountChunker);
     tab.fitModel = null;   // new text, new widths
+    if (wantsEnglish(tab)) showEnglish(tab);
     scheduleFit(tab);
     // A tab brought back from the saved session goes back to its Line once the text has been fitted (see session.js)
     const place = tab.restoreAt;
@@ -201,6 +204,49 @@ export function renderPassage(tab) {
     if (i >= 0) requestAnimationFrame(() => jumpToIndex(ui.chunkers[0], i, place.frac ?? 0));
   });
   return ui.ready;
+}
+
+/* The English is wanted once it is on screen: beside the original, or swapped in for it on a phone */
+const wantsEnglish = (tab) => !!tab.split || tab.lang === 'en';
+
+/* Loads the open Book's Translation into the English pane, once per Book. Resolves when it is in the pane (or
+   failed: the pane then offers to try again). One block per Perseus passage (see parallel.js). */
+export function showEnglish(tab) {
+  const ui = tab.ui;
+  const key = ui.renderedKey;
+  if (!ui.chunkers || !key) return ui.ready ?? Promise.resolve();
+  if (ui.englishKey === key) return ui.englishReady;
+  ui.englishKey = key;
+  ui.translation.innerHTML = '<p class="trans-status">Loading the English\u2026</p>';
+  ui.englishReady = loadEnglish(tab.work, tab.book).then((en) => {
+    if (ui.renderedKey !== key || ui.englishKey !== key) return;   // the tab moved on while this loaded
+    if (!en?.blocks?.length) {
+      ui.englishKey = null;
+      ui.translation.innerHTML = `<div class="load-error"><p>Couldn\u2019t load the English for Book ${esc(bookLabel(tab.work, tab.book))}.</p><button class="load-retry" type="button">Try again</button></div>`;
+      ui.translation.querySelector('.load-retry').addEventListener('click', () => showEnglish(tab));
+      return;
+    }
+    const verse = en.form === 'verse';
+    const ch = makeChunker(tab, ui.translation, ui.paneTranslation, en.blocks.map((b) => blockHtml(b, verse)), [], ui.chunkers[1]?.pitch);
+    ch.lineNums = en.blocks.map((b) => b.from);
+    ui.englishSpans = blockRows(ui.chunkers[0].lineNums, en.blocks);
+    ui.englishBlocks = en.blocks;
+    ui.englishForm = en.form;
+    ui.chunkers[1] = ch;
+    mountChunker(ch);
+    tab.fitModel?.delete(ui.paneTranslation);
+    ui.needsLink = true;   // start from where the original is, once laid out (see syncLayout)
+    scheduleFit(tab);
+  });
+  return ui.englishReady;
+}
+
+/* One English block: Williams keeps his verse lines, Murray is prose */
+export function blockHtml(b, verse) {
+  const inner = verse
+    ? b.text.split('\n').map((l) => `<div class="trans-l">${esc(l)}</div>`).join('')
+    : b.text.split('\n\n').map((p) => `<p>${esc(p)}</p>`).join('');
+  return `<div class="trans-block${verse ? ' trans-verse' : ''}" data-from="${b.from}">${inner}</div>`;
 }
 
 export function verseHtml({ n, words }) {
@@ -262,6 +308,9 @@ export function toggleSplit() {
   tab.split = true;
   if (tab.splitPct > 75 || tab.splitPct < 25) tab.splitPct = 50;
   applySplit(tab);
+  tab.ui.needsLink = true;   // the English has been out of sight, so it starts again from the original
+  showEnglish(tab);
+  scheduleFit(tab);
   syncToolbar();
   playPop(tab.ui.paneTranslation);
 }

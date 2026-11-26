@@ -904,6 +904,14 @@
   }
   .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: 0.45em; }
 
+  /* A pane too narrow for the widest Line even at the smallest size (beside the English, or in a Split): its Lines
+     wrap with a hanging indent, as on a phone (see COMPACT below), instead of running out of the pane. fit.js sets
+     data-wrap. The fit's probe lines aren't in .passage, so they are still measured unwrapped. */
+  .reader[data-wrap="on"] .passage { width: auto; }
+  .reader[data-wrap="on"] .passage .verse-words { flex-wrap: wrap; row-gap: 0; min-width: 0; padding-left: 1.25em; }
+  .reader[data-wrap="on"] .passage .verse-words > .word:first-child { margin-left: -1.25em; }
+  .reader[data-wrap="on"] .passage .verse-bm { top: calc(var(--reading-font-size) * var(--reading-line-height) / 2 + 3px); }
+
   /* Bookmark glyph (the margin marker and the word-card button). ::before is the bookmark, ::after the "+".
      Hovering an unbookmarked one opens the bookmark's top-right corner and pops the "+" into it. */
   .bm-glyph { position: relative; display: block; color: inherit; flex-shrink: 0; transition: transform 200ms var(--ease-bouncy), opacity 140ms ease; }
@@ -940,19 +948,23 @@
   .verse.flash { animation: lineFlash 1200ms ease-out; }
   @keyframes lineFlash { 0%, 35% { background: var(--primary-container); } 100% { background: transparent; } }
 
-  /* Min-height = one verse row (text line + word padding/margin) so the
-     English lines stay level with the original. */
-  .translation-line {
-    display: flex; align-items: baseline;
-    min-height: calc(var(--reading-font-size) * var(--reading-line-height) + 6px);
-    padding: 0 4px;
+  /* The English: one block per Perseus passage, beside the range of Lines it translates (see parallel.js). It wraps
+     at a reading measure rather than being fitted like the original; the gap between blocks is padding, so the
+     chunker measures it as part of the block. */
+  .verses.translation { width: auto; max-width: 34em; }
+  .trans-block {
+    padding: 0 4px 1.1em;
     font-family: var(--reading-font);
     font-size: var(--reading-trans-font-size);
-    line-height: var(--reading-line-height);
-    font-style: italic;
-    white-space: nowrap;
+    line-height: 1.6;
     color: var(--secondary);
+    overflow-wrap: break-word;
   }
+  .trans-block p { margin: 0; }
+  .trans-block p + p { margin-top: 0.6em; }
+  /* Williams's verse: one line per line, a wrapped line hanging under it */
+  .trans-l { padding-left: 1.5em; text-indent: -1.5em; }
+  .trans-status { margin: 24px 0; text-align: center; font-size: 14px; color: var(--gray-600); }
 
   .word {
     position: relative;
@@ -1684,8 +1696,6 @@
   .tab-grid, .chapter-list, .format-sheet, #drawer .mobile-only, .bm-ribbon, .back-chip { display: none; }
 
   /* Where the English stops short of the Latin */
-  .trans-more { margin: 24px 0 8px; text-align: center; font-size: 14px; color: var(--gray-600); }
-  .trans-more:empty { display: none; }
   .load-error { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 16px; text-align: center; color: var(--text-muted); font-size: 15px; }
   .load-retry {
     height: 40px; padding: 0 20px; border-radius: var(--radius-full);
@@ -1728,11 +1738,13 @@
     padding-left: 44px;
     font-family: var(--reading-font);
     font-size: var(--reading-trans-font-size);
-    font-style: italic;
     line-height: 1.4;
     color: var(--secondary);
     animation: itemIn 260ms var(--ease-bouncy);
   }
+  /* The passage's Lines over its English: the passage is longer than the Line that was tapped */
+  .line-en-head { margin-bottom: 4px; font-family: 'Roboto', system-ui, sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; color: var(--gray-600); }
+  .line-en .trans-block { padding: 0; font-size: inherit; }
   .sheet-open .line-en { display: none; }
   .card-grip { display: none; }
 
@@ -2130,7 +2142,7 @@
     .reader .pane-original { width: 100% !important; }
     .reader[data-lang="en"] .pane-original { display: none; }
     .reader[data-lang="en"] .pane-translation { display: block !important; flex: 1 1 auto; width: 100%; }
-    .translation-line { white-space: normal; min-height: 0; padding: 0 0 6px; line-height: 1.45; }
+    .verses.translation { max-width: none; }
     .line-en { padding-left: 34px; }
 
     /* The bookmark marker sits beside the line's first row, not the middle of a wrapped line */

@@ -80,7 +80,7 @@ Two text tabs shown side by side, each with its own Work and Book.
 _Avoid_: Dual view, dual pane, pair
 
 **Translation**:
-The English of a Work, taken from Perseus.
+The English of a Work, taken from Perseus: A. T. Murray for Homer, Theodore C. Williams for Vergil.
 _Avoid_: English (as a noun for the text), crib, version
 
 **Parallel translation**:
