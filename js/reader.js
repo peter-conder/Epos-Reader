@@ -193,7 +193,6 @@ export function renderPassage(tab) {
     ui.chunkers[1].lineNums = [];
     ui.englishKey = null;
     ui.englishSpans = null;
-    ui.blockStarts = null;
     ui.chunkers.forEach(mountChunker);
     tab.fitModel = null;   // new text, new widths
     if (wantsEnglish(tab)) showEnglish(tab);
@@ -233,9 +232,6 @@ export function showEnglish(tab) {
     ui.englishSpans = blockRows(ui.chunkers[0].lineNums, en.blocks);
     ui.englishBlocks = en.blocks;
     ui.englishForm = en.form;
-    // The original breaks into the same passages, so you can see which Lines each block translates
-    ui.blockStarts = new Set(en.blocks.slice(1).map((b) => b.from));
-    markBlockStarts(tab, ui.passage);
     ui.chunkers[1] = ch;
     mountChunker(ch);
     tab.fitModel?.delete(ui.paneTranslation);
@@ -243,15 +239,6 @@ export function showEnglish(tab) {
     scheduleFit(tab);
   });
   return ui.englishReady;
-}
-
-/* Marks the Lines inside `scope` (the passage, or one chunk as it is added) that start a passage of the
-   Translation. Beside the English (data-split="on") each gets a gap above it, as the English blocks do; elsewhere
-   the class does nothing, so the Latin reads unbroken. */
-export function markBlockStarts(tab, scope) {
-  const starts = tab.ui?.blockStarts;
-  if (!starts) return;
-  for (const v of scope.querySelectorAll('.verse')) v.classList.toggle('block-start', starts.has(+v.dataset.line));
 }
 
 /* One English block: Williams keeps his verse lines, Murray is prose */
