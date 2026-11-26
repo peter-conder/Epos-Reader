@@ -60,9 +60,11 @@ export function goBack() {
 /* The page a back swipe would move, and the view that would show underneath */
 function swipeTarget() {
   if (!isMobileTier()) return null;
-  if (!el.chapterList.hidden) return { page: el.chapterList, under: activeTab()?.view ?? null };
-  if (onSettings()) return { page: el.viewSettings, under: activeTab()?.view ?? null, panes: true };
-  if (onNotebook()) return { page: el.viewNotebook, under: backTab()?.view ?? null };
+  if (!el.chapterList.hidden) {
+    return { page: el.chapterList, under: !el.tabGrid.hidden ? el.tabGrid : activeTab()?.view ?? null, z: '70' };
+  }
+  if (onSettings()) return { page: el.viewSettings, under: activeTab()?.view ?? null, panes: true, z: '40' };
+  if (onNotebook()) return { page: el.viewNotebook, under: backTab()?.view ?? null, z: '40' };
   return null;
 }
 
@@ -82,7 +84,7 @@ function beginSwipe(t) {
     undo.push(() => { t.under.hidden = true; t.under.classList.remove('peeking'); });
   }
   if (t.page === el.viewSettings) set(t.page, { position: 'absolute', inset: '0', background: 'var(--bg)' });
-  set(t.page, { zIndex: '40', boxShadow: '-12px 0 32px rgba(0, 0, 0, 0.18)', transition: 'none' });
+  set(t.page, { zIndex: t.z, boxShadow: '-12px 0 32px rgba(0, 0, 0, 0.18)', transition: 'none' });
   if (t.under) set(t.under, { transition: 'none' });
   return () => {
     // Straight back: the panes' springy transform transition mustn't play on the way

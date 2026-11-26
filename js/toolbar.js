@@ -7,7 +7,6 @@ import { hideWordCard } from './word-card.js';
 import { scrollSettings, toggleTheme } from './settings.js';
 import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
-import { openFormatSheet } from './format-sheet.js';
 
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
@@ -64,9 +63,6 @@ export function initToolbar() {
     } else if (action === 'notebook') {
       setOpen(el.drawer, false);
       openNotebook();
-    } else if (action === 'format') {
-      setOpen(el.drawer, false);
-      openFormatSheet();
     }
   });
   // Phones and tablets: light/dark is a switch in the menu, and scansion a switch in the Format Text sheet

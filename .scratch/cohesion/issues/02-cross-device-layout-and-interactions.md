@@ -1,6 +1,6 @@
 # Phase 2: Cross-device layout, swipe, and interaction fixes
 
-Status: ready-for-agent
+Status: resolved
 
 ## What
 
@@ -17,3 +17,11 @@ Status: ready-for-agent
 - Verified in headless browser at 390×844, 768×1024, and 1280×800 with no layout overlap or console errors.
 
 ## Comments
+
+**2026-11-26:** Resolved.
+- Fixed edge-swipe z-index & Tab Grid underlay (`js/pages.js`), horizontal swipe-in `sheetUp` replay (`js/chapters.js`, `css/styles.css`), rapid-swipe settle timer race & Settings `canHide()` (`js/bottom-bar.js`), and `.back-chip` overlay hiding (`js/mobile-bookmarks.js`, `css/styles.css`).
+- Removed duplicate Format Text row from `#drawer` (`index.html`, `js/toolbar.js`).
+- Parameterized Scansion `--word-px` / `--word-gap` and added compact wrapped row spacing + `syncLayout` on `toggleScansion`; hid Pane Margins below 600px and kept compact margins fixed with 28px right clearance for the flush-right 24px Bookmark dot strip; relaxed compact bottom-bar pill padding; made Notebook grids 1-column on narrow screens.
+- Gave tablet (`600–1024px`) Parallel translation rounded cards with outer padding, scaled Tab Grid to 3 columns at `>= 720px`, and ignored desktop Splits below desktop in `js/fit.js`, `js/english.js`, and `js/reader.js`.
+- Fixed Greek `GR`/`Greek` labels, wheel forwarding over mobile overlays, `chooseBook()` / `setBook()` scroll resets, Format Text dismissal on navigation, `swallowClick` timeout, `jumpToLine()` compact Translation reset, `visibleLines()` `topInset()`, mobile Undo `autoId`, desktop Settings chrome/brand/toolbar states, flyout/picker viewport clamping, and 3-digit `.verse-bm` gutter clearance.
+- Verified in headless Chromium at 1280×800, 768×1024, and 390×844 with 0 errors.

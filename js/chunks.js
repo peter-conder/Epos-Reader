@@ -113,8 +113,8 @@ export function lineCenter(ch, i) {
 export function visibleLines(ch) {
   if (!ch?.pitch || !ch.lineNums?.length || !ch.pane.clientHeight) return null;
   const pad = parseFloat(getComputedStyle(ch.pane).paddingBottom) || 0;
-  const top = ch.pane.scrollTop - textTop(ch);
-  const bottom = top + ch.pane.clientHeight - pad;
+  const top = ch.pane.scrollTop - textTop(ch) + topInset(ch);
+  const bottom = ch.pane.scrollTop - textTop(ch) + ch.pane.clientHeight - pad;
   const last = ch.rows.length - 1;
   return [ch.lineNums[clamp(lineAt(ch, Math.max(0, top)), 0, last)], ch.lineNums[clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)]];
 }

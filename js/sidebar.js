@@ -105,7 +105,7 @@ export function openPicker(tabId, anchor) {
   showWorkList();
 
   const r = anchor.getBoundingClientRect();
-  el.picker.style.top = `${clamp(r.top - 20, 72, innerHeight - 380)}px`;
+  el.picker.style.top = `${clamp(r.top - 20, 72, Math.max(72, innerHeight - 380))}px`;
   el.picker.style.left = `${r.right + 14}px`;
 
   hideHoverCard();
@@ -119,6 +119,10 @@ export function chooseBook(workKey, book) {
   if (!tab) return;
   tab.work = workKey;
   tab.book = book;
+  if (tab.ui) {
+    tab.ui.paneOriginal.scrollTop = 0;
+    tab.ui.paneTranslation.scrollTop = 0;
+  }
   renderReader(tab);
   renderAll();
 }

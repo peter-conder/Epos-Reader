@@ -68,6 +68,7 @@ export async function openChapterList({ only = null, into = null } = {}) {
   // Swiped in from the bottom bar: it is already on screen and filled (see peekChapterList)
   const peeked = el.chapterList.classList.contains('peek');
   el.chapterList.classList.remove('peek');
+  el.chapterList.classList.toggle('from-peek', peeked);
   el.chapterList.hidden = false;
   el.chapterList.classList.add('open');
   document.documentElement.classList.add('chapters-open');
@@ -94,7 +95,7 @@ export function endPeekChapterList() {
 
 export function closeChapterList() {
   if (el.chapterList.hidden) return;
-  el.chapterList.classList.remove('open');
+  el.chapterList.classList.remove('open', 'from-peek');
   el.chapterList.hidden = true;
   document.documentElement.classList.remove('chapters-open');
   target = null;

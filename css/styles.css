@@ -541,6 +541,8 @@
   }
   #flyout { top: 174px; }
   #popups-flyout { top: 230px; }
+  #flyout:not(.in-sheet) { max-height: calc(100vh - 190px); overflow-y: auto; }
+  #popups-flyout:not(.in-sheet) { max-height: calc(100vh - 246px); overflow-y: auto; }
   .flyout-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 4px 8px 0 12px;
@@ -895,14 +897,14 @@
     line-height: var(--reading-line-height);
   }
   .verse-num {
-    width: 44px; flex-shrink: 0;
+    width: 48px; flex-shrink: 0;
     padding-right: 16px;
     font-size: 0.84rem; font-weight: 500;
     color: var(--secondary);
     text-align: right;
     user-select: none;
   }
-  .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: 0.45em; }
+  .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: var(--word-gap, 0.45em); }
 
   /* Bookmark glyph (the margin marker and the word-card button). ::before is the bookmark, ::after the "+".
      Hovering an unbookmarked one opens the bookmark's top-right corner and pops the "+" into it. */
@@ -919,13 +921,13 @@
     transition: transform 320ms var(--ease-bouncy);
   }
 
-  /* In the margin, left of the line (and of its number, when it has one). The gutter's number ends 28px from the
+  /* In the margin, left of the line (and of its number, when it has one). The gutter's number ends 32px from the
      line's left edge, is --nd digits wide (set on numbered lines, `ch` is read in the number's own font), and
      the glyph's box sits a 4px gap before it. Positioned against the whole row and absolute, so it is centred on
      the line and adds nothing to the row height the chunker measures. */
   .verse-bm {
     position: absolute; top: 50%; margin-top: -12px;
-    left: calc(28px - var(--nd, 0) * 1ch - 4px - 24px);
+    left: calc(32px - var(--nd, 0) * 1ch - 4px - 24px);
     width: 24px; height: 24px;
     font-size: 0.84rem; font-weight: 500;
     color: var(--primary);
@@ -957,7 +959,7 @@
   .word {
     position: relative;
     display: inline-block;
-    padding: 2px 6px;
+    padding: 2px var(--word-px, 6px);
     margin: 1px 0;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -987,7 +989,7 @@
   .word.selected.has-note::after { background: var(--on-primary); }
 
   /* Scansion. Each scanned word is split into .syl spans (data-q: L long, S short, E elided;
-     data-x: flags, see SCAN_NOTES in app.js). Every mark is absolutely positioned, so turning
+     data-x: flags, see SCAN_NOTES in reader.js). Every mark is absolutely positioned, so turning
      scansion on or off never changes a line's width.
        .syl::before   quantity mark above the syllable (bar = long, dot = short)
        .syl::after    foot boundary, before a syllable that starts a foot
@@ -1036,12 +1038,12 @@
     background: color-mix(in srgb, var(--secondary) 45%, transparent);
     pointer-events: none;
   }
-  [data-scansion="on"] .syl[data-x*="f"]:first-child::after { left: calc(-6px - 0.225em - 0.5px); }
+  [data-scansion="on"] .syl[data-x*="f"]:first-child::after { left: calc(-1 * var(--word-px, 6px) - var(--word-gap, 0.45em) / 2 - 0.5px); }
   [data-scansion="on"] .verse-words > .word:first-child > .syl:first-child::after { display: none; }
 
   [data-scansion="on"] .word[data-caesura]::before {
     content: '';
-    position: absolute; right: calc(-0.225em - 2px); top: 8%; bottom: 4%;
+    position: absolute; right: calc(-1 * var(--word-gap, 0.45em) / 2 - 2px); top: 8%; bottom: 4%;
     width: 4px;
     border-inline: 1px solid var(--primary);
     pointer-events: none;
@@ -1291,8 +1293,9 @@
   .btn-new-note .icon { width: 18px; height: 18px; }
   .nb-empty { padding: 56px 16px; text-align: center; font-size: 15px; line-height: 1.5; color: var(--gray-400); }
 
-  /* 2 columns by default, 3 and 4 as the pane gets wider */
-  .note-grid, .bm-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  /* 1 column on phones, 2, 3 and 4 as the pane gets wider */
+  .note-grid, .bm-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @container (min-width: 520px)  { .note-grid, .bm-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; } }
   @container (min-width: 820px)  { .note-grid, .bm-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @container (min-width: 1180px) { .note-grid, .bm-list { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
@@ -1725,7 +1728,7 @@
     flex-basis: 100%;
     contain: inline-size;   /* never widens the text block, which is sized to its widest line */
     margin: 2px 0 10px;
-    padding-left: 44px;
+    padding-left: 48px;
     font-family: var(--reading-font);
     font-size: var(--reading-trans-font-size);
     font-style: italic;
@@ -1842,6 +1845,7 @@
     .tab-view.peeking { position: absolute; inset: 0; width: 100%; }
     /* Being swiped in from the bottom bar: under the bar, and moved from script rather than rising */
     .chapter-list.peek { z-index: 55; animation: none; }
+    .chapter-list.from-peek { animation: none; }
     @keyframes sheetUp { from { transform: translateY(24px); opacity: 0; } }
     .cl-header { display: flex; align-items: center; gap: 8px; padding: 14px 12px 10px 20px; }
     .cl-title { flex: 1; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
@@ -2071,11 +2075,11 @@
     .chrome-hidden .bm-ribbon:not(.filled) { opacity: 0; pointer-events: none; }
     :is(.grid-open, .chapters-open, .note-pinned) .bm-ribbon { opacity: 0; pointer-events: none; }
 
-    /* The dots down the right edge: shown with the floating controls, each with a finger-sized target */
+    /* The dots down the right edge: flush-right 24px hit strip so dots never steal taps from words */
     .sb-rail { width: 24px; transition: opacity 260ms ease; }
     .chrome-hidden .sb-rail { opacity: 0; }
     .chrome-hidden .sb-rail .bm-dot { pointer-events: none; }
-    .bm-dot { width: 44px; height: 44px; }
+    .bm-dot { width: 24px; height: 40px; }
     .bm-dot::before { width: 10px; height: 10px; }
 
     /* "Back to line N" after a dot jump: where the "Tab closed" toast appears */
@@ -2092,6 +2096,7 @@
       animation: chipIn 220ms var(--ease-spring);
     }
     .back-chip[hidden] { display: none; }
+    :is(.page-open, .grid-open, .chapters-open, .sheet-open, .card-open, .note-pinned) .back-chip { display: none; }
     .back-chip .icon { width: 18px; height: 18px; }
     @keyframes chipIn { from { opacity: 0; transform: translateX(-50%) translateY(10px) scale(0.94); } }
 
@@ -2104,6 +2109,19 @@
     .bb-slot-new .bb-title { color: var(--primary); }
   }
 
+  /* Tablet (medium, 600–1024px): rounded cards for side-by-side Parallel translation and 3-column Tab Grid */
+  @media (min-width: 600px) and (max-width: 1024px) {
+    .reader[data-split="on"] .workspace { padding: 12px; background: var(--bg); }
+    .reader[data-split="on"] .pane {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-pane);
+    }
+  }
+  @media (min-width: 720px) and (max-width: 1024px) {
+    .tg-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
   @media (max-width: 1024px) and (prefers-reduced-motion: reduce) {
     .bottom-bar, #btn-menu, .bb-progress-fill { transition-duration: 0ms; }
   }
@@ -2112,7 +2130,17 @@
      13. COMPACT (phones: below 600px, as in js/viewport.js)
      ========================================================== */
   @media (max-width: 599.98px) {
-    :root { --reading-padding: 16px; --hang: 1.25em; }
+    :root { --hang: 1.25em; --word-px: 4px; --word-gap: 0.25em; }
+
+    /* Phone margins stay fixed (the desktop/tablet Pane Margins control is hidden below 600px);
+       the original pane leaves extra right room for the flush-right Bookmark dot strip. */
+    .flyout-margins { display: none; }
+    .pane { padding-inline: 16px; }
+    .pane-original { padding-right: 28px; }
+
+    /* Small phones need the full pill width so Citations and Line ranges don't truncate */
+    .bb-slot { padding-inline: 8px; }
+    .bb-lang:not([hidden]) + .bb-pill .bb-slot { padding-right: 12px; }
 
     /* Long lines wrap instead of shrinking (fit.js leaves compact alone). The words' box is pulled
        --hang to the left of the padding, so the first row starts flush and every row after it is
@@ -2120,8 +2148,9 @@
        always a whole number of rows. */
     .verses { width: auto; }
     .verse-num { width: 34px; padding-right: 10px; }
-    .verse-words { flex-wrap: wrap; row-gap: 0; column-gap: 0.25em; min-width: 0; padding-left: var(--hang); }
-    .word { padding-inline: 4px; }
+    .verse-words { flex-wrap: wrap; row-gap: 0; column-gap: var(--word-gap); min-width: 0; padding-left: var(--hang); }
+    [data-scansion="on"] .verse-words { row-gap: 8px; padding-top: 6px; }
+    .word { padding-inline: var(--word-px); }
     .verse-words > .word:first-child { margin-left: calc(-1 * var(--hang)); }
 
     /* No room beside the text for the English: the EN button swaps the whole view to it instead */
@@ -2132,7 +2161,4 @@
     .reader[data-lang="en"] .pane-translation { display: block !important; flex: 1 1 auto; width: 100%; }
     .translation-line { white-space: normal; min-height: 0; padding: 0 0 6px; line-height: 1.45; }
     .line-en { padding-left: 34px; }
-
-    /* The bookmark marker sits beside the line's first row, not the middle of a wrapped line */
-    .verse-bm { top: calc(var(--reading-font-size) * var(--reading-line-height) / 2 + 3px); }
   }
