@@ -2115,6 +2115,7 @@
 
     /* The dots down the right edge: flush-right 24px hit strip so dots never steal taps from words */
     .sb-rail { width: 24px; transition: opacity 260ms ease; }
+    .pane-original { padding-right: max(var(--reading-padding), 28px); }   /* Compact Pane Margins (20px) would put words under the dots */
     .chrome-hidden .sb-rail { opacity: 0; }
     .chrome-hidden .sb-rail .bm-dot { pointer-events: none; }
     .bm-dot { width: 24px; height: 40px; }
