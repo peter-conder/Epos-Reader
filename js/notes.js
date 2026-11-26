@@ -7,6 +7,8 @@ import { scrollToLine } from './chunks.js';
 import { showWordCard, syncCardNote } from './word-card.js';
 import { flashLine, renderBookmarks } from './bookmarks.js';
 import { isMobileTier } from './viewport.js';
+import { closeFormatSheet } from './format-sheet.js';
+import { setLang } from './english.js';
 
 /* ==========================================================
    NOTES
@@ -46,6 +48,7 @@ export function noteChanged(fromNotebook = false) {
 
 /* ---- Notebook tab ---- */
 export function openNotebook() {
+  closeFormatSheet();
   const existing = state.tabs.find(isNotebook);
   if (existing) {
     activateTab(existing.id);
@@ -96,15 +99,15 @@ export async function jumpToLine(work, book, line, wordIdx = null) {
   let tab = state.tabs.find((t) => isText(t) && t.work === work && t.book === book);
   if (tab) activateTab(tab.id); else tab = addTab(work, book);
   await tab.ui.ready;
+  if (tab.lang === 'en') setLang(tab, 'la');
 
   shared.keepCardUntil = performance.now() + 600;
-  // Deferred so the click that started the jump can't dismiss the gloss we are about to open,
+  // Deferred so the click that started the jump can't dismiss the Word card we are about to open,
   // and so the text has been fitted (which sets the row height the scroll position is worked out from).
   requestAnimationFrame(() => {
     const verse = scrollToLine(tab, line);   // the line's chunk may not have been in the page
     if (!verse) return;
     const word = wordIdx != null ? verse.querySelector(`.word[data-i="${wordIdx}"]`) : null;
-    verse.scrollIntoView({ block: 'center' });
     if (word) showWordCard(word); else flashLine(verse);
   });
 }

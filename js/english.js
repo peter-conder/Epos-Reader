@@ -1,8 +1,8 @@
 import { WORKS } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
-import { activeTab, getTab, isText, partnerOf, state } from './state.js';
+import { activeTab, getTab, isText, partnerOf, state, workOf } from './state.js';
 import { anchorIndex, jumpToIndex, syncLayout } from './chunks.js';
-import { toggleSplit } from './reader.js';
+import { applySplit, toggleSplit } from './reader.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { isMarked, toggleBookmark } from './bookmarks.js';
@@ -11,11 +11,11 @@ import { findWordNote } from './notes.js';
 
 /* ==========================================================
    ENGLISH AND LINE ACTIONS (phones and tablets)
-   - The EN button on the bottom bar. On a phone it swaps the whole view between the Latin and the English,
-     keeping your place (the line at the top stays at the top). On a tablet it opens the English beside the
-     Latin, as the desktop's Parallel English does.
-   - Tapping a line number bookmarks the line, or, with "Show its English" chosen in Settings, opens that
-     line's English under it (hidden while the Format Text sheet is open, so you can see the text you are
+   - The EN button on the bottom bar. On a phone it swaps the whole view between the original language and the Translation,
+     keeping your place (the line at the top stays at the top). On a tablet it opens the Parallel translation beside the
+     original, as the desktop's Parallel translation does.
+   - Tapping a line number bookmarks the line, or, with "Show its Translation" chosen in Settings, opens that
+     line's Translation under it (hidden while the Format Text sheet is open, so you can see the text you are
      formatting).
    - A long press on a line opens a menu: bookmark it, add a note, copy it.
    ========================================================== */
@@ -39,11 +39,14 @@ export function syncLangButton() {
   if (!text) return;
   const onPhone = tier() === 'compact';
   const on = onPhone ? tab.lang === 'en' : !!tab.split;
-  const unavailable = !onPhone && !!partnerOf(tab);
+  const langName = workOf(tab).shortLanguage;
+  const langCode = langName === 'Greek' ? 'GR' : 'LA';
   el.langBtn.setAttribute('aria-pressed', String(on));
-  el.langBtn.disabled = unavailable;
-  el.langBtn.textContent = onPhone && on ? 'LA' : 'EN';
-  el.langBtn.setAttribute('aria-label', onPhone ? (on ? 'Show the Latin' : 'Show the English') : (on ? 'Hide the English' : 'Show the English beside the Latin'));
+  el.langBtn.disabled = false;
+  el.langBtn.textContent = onPhone && on ? langCode : 'EN';
+  el.langBtn.setAttribute('aria-label', onPhone
+    ? (on ? `Show the ${langName}` : 'Show the Translation')
+    : (on ? 'Hide the Parallel translation' : `Show the Parallel translation beside the ${langName}`));
 }
 
 export function setLang(tab, lang) {
@@ -153,7 +156,7 @@ async function copyText(text) {
 }
 
 function bindLongPress() {
-  let press = null, swallowClick = false;
+  let press = null, swallowClick = false, swallowTimer = 0;
   const cancel = () => { if (press) { clearTimeout(press.timer); press = null; } };
   el.panes.addEventListener('pointerdown', (e) => {
     if (e.pointerType !== 'touch' || !isMobileTier()) return;
@@ -163,6 +166,8 @@ function bindLongPress() {
     press = { x: e.clientX, y: e.clientY, id: e.pointerId, timer: setTimeout(() => {
       press = null;
       swallowClick = true;   // the finger lifting must not also open the word card
+      clearTimeout(swallowTimer);
+      swallowTimer = setTimeout(() => { swallowClick = false; }, 400);
       navigator.vibrate?.(8);
       openLineMenu(tab, verse, e.target.closest('.word'), e.clientX, e.clientY);
     }, LONG_PRESS_MS) };
@@ -176,7 +181,7 @@ function bindLongPress() {
   // Android's own long-press menu (and text selection) would open on top of ours
   el.panes.addEventListener('contextmenu', (e) => { if (isMobileTier() && e.target.closest('.passage')) e.preventDefault(); });
   document.addEventListener('click', (e) => {
-    if (swallowClick) { swallowClick = false; e.stopPropagation(); e.preventDefault(); return; }
+    if (swallowClick) { clearTimeout(swallowTimer); swallowClick = false; e.stopPropagation(); e.preventDefault(); return; }
     if (menuFor && !e.target.closest('#line-menu')) closeLineMenu();
   }, true);
 }
@@ -184,8 +189,8 @@ function bindLongPress() {
 /* ---------- Setting: what a tap on a line number does ---------- */
 function renderLineTapChoices() {
   const opts = [
-    ['bookmark', 'Bookmark the line', 'Tap again to remove it'],
-    ['english', 'Show its English', 'Under the line, until you tap again']
+    ['bookmark', 'Bookmark the Line', 'Tap again to remove it'],
+    ['english', 'Show its Translation', 'Under the Line, until you tap again']
   ];
   el.lineTapChips.innerHTML = opts.map(([key, title, sub]) => `
     <button class="settings-chip${state.lineTap === key ? ' active' : ''}" data-linetap="${key}" aria-pressed="${state.lineTap === key}">
@@ -230,6 +235,9 @@ export function initEnglish() {
     closeLineMenu();
     // The swap is a phone thing: wider screens show the Latin (with the English beside it if that's on)
     if (tier() !== 'compact') for (const t of state.tabs) if (t.lang === 'en') setLang(t, 'la');
+    // A tablet lets half of a Split turn on its Parallel translation (the Split isn't shown there). Desktop shows the
+    // Split again and can't hold both in one pane, so the Parallel translation goes
+    if (tier() === 'desktop') for (const t of state.tabs) if (t.split && partnerOf(t)) { t.split = false; if (t.ui) applySplit(t); }
     syncLangButton();
   });
 }

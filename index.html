@@ -57,9 +57,6 @@
   <button class="drawer-item mobile-only" data-action="notebook" role="menuitem">
     <span>Notebook</span><svg class="icon"><use href="assets/icons.svg#i-notebook"/></svg>
   </button>
-  <button class="drawer-item mobile-only" data-action="format" role="menuitem" aria-haspopup="dialog">
-    <span>Format Text</span><svg class="icon"><use href="assets/icons.svg#i-format-size"/></svg>
-  </button>
   <div class="drawer-swatches mobile-only" id="drawer-swatches" role="radiogroup" aria-label="Color palette"></div>
   <button class="switch-row drawer-theme mobile-only" id="sw-theme" role="switch" aria-checked="false">
     <span class="switch-text"><span class="switch-title">Dark Mode</span></span>
@@ -151,7 +148,7 @@
         <svg class="icon icon-open"><use href="assets/icons.svg#i-format-size"/></svg>
         <svg class="icon icon-close"><use href="assets/icons.svg#i-close"/></svg>
       </button>
-      <button class="tool-btn" id="btn-split" style="--i: 0" data-tip="Parallel English" aria-label="Toggle parallel translation" aria-pressed="false">
+      <button class="tool-btn" id="btn-split" style="--i: 0" data-tip="Parallel translation" aria-label="Toggle Parallel translation" aria-pressed="false">
         <svg class="icon"><use href="assets/icons.svg#i-split"/></svg>
       </button>
       <button class="tool-btn" id="btn-meter" style="--i: 1" data-tip="Poetic Scansion" aria-label="Toggle poetic scansion" aria-pressed="false">
@@ -225,7 +222,7 @@
           <button class="pill-opt" data-value="2.2" data-tip="Loose" aria-label="Loose line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls4"/></svg></button>
         </div>
       </div>
-      <div class="flyout-group">
+      <div class="flyout-group flyout-margins">
         <span class="flyout-label">Pane Margins</span>
         <div class="pill-group" data-var="--reading-padding">
           <button class="pill-opt" data-value="20px" data-tip="Compact" aria-label="Compact margins"><svg class="icon"><use href="assets/icons.svg#i-mg1"/></svg></button>
@@ -336,7 +333,7 @@
   </button>
   <div class="bb-piece bb-main">
     <div class="bb-progress" aria-hidden="true"><div class="bb-progress-fill" id="bb-progress-fill"></div></div>
-    <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the English">EN</button>
+    <button class="bb-lang" id="btn-lang" aria-pressed="false" aria-label="Show the Translation">EN</button>
     <div class="bb-pill" id="bb-pill" aria-live="polite">
       <div class="bb-track" id="bb-track"></div>
     </div>

@@ -4,7 +4,7 @@ import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js'
 import { loadBook } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
-import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
+import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks, syncLayout } from './chunks.js';
 import { scheduleFit } from './fit.js';
 import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
@@ -257,7 +257,7 @@ export function applySplit(tab) {
 
 export function toggleSplit() {
   const tab = activeTab();
-  if (!isText(tab) || partnerOf(tab)) return;
+  if (!isText(tab) || (!isMobileTier() && partnerOf(tab))) return;
   if (tab.split) { closeTranslation(tab); return; }
   tab.split = true;
   if (tab.splitPct > 75 || tab.splitPct < 25) tab.splitPct = 50;
@@ -288,4 +288,5 @@ export function toggleScansion() {
   el.meterBtn.classList.toggle('active', state.scansion);
   el.meterBtn.setAttribute('aria-pressed', String(state.scansion));
   el.swScansion.setAttribute('aria-checked', String(state.scansion));
+  state.tabs.forEach((t) => { if (isText(t)) syncLayout(t); });
 }

@@ -20,7 +20,7 @@ let back = null;        // { tab, i, frac, line, landed, timer }: where a dot ju
 /* The reader the ribbon works on, with its Latin chunker, or null */
 function current() {
   const tab = activeTab();
-  if (!isMobileTier() || !isText(tab) || (tab.lang === 'en' && tier() === 'compact')) return null;
+  if (!isMobileTier() || state.view !== 'reader' || !isText(tab) || (tab.lang === 'en' && tier() === 'compact')) return null;
   const ch = tab.ui?.chunkers?.[0];
   return ch?.lineNums ? { tab, ch } : null;
 }

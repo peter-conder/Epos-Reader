@@ -115,9 +115,9 @@ let lastY = 0, run = 0, read = 0, lastPane = null;
 /* The bars only step away while a text is being read: not over the Notebook or Home, and never while
    something is open on top of the text (a sheet, the word card or its note, the tab grid, the chapter list,
    the menu or the line menu) */
-const OVERLAYS = ['sheet-open', 'card-open', 'note-pinned', 'grid-open', 'chapters-open'];
+const OVERLAYS = ['sheet-open', 'card-open', 'note-pinned', 'grid-open', 'chapters-open', 'page-open'];
 function canHide() {
-  if (!isMobileTier() || !isText(activeTab())) return false;
+  if (!isMobileTier() || state.view !== 'reader' || !isText(activeTab())) return false;
   if (OVERLAYS.some((c) => root.classList.contains(c))) return false;
   return !document.querySelector('#drawer.open, #line-menu.open');
 }
@@ -222,6 +222,16 @@ function startPeek(tab, near) {
 function bindSwipe() {
   const pill = el.bbPill, track = el.bbTrack;
   let g = null;   // the drag in progress
+  let settleTimer = 0, finishPending = null;
+
+  const flushSettle = () => {
+    if (!settleTimer) return;
+    clearTimeout(settleTimer);
+    settleTimer = 0;
+    const fn = finishPending;
+    finishPending = null;
+    fn?.();
+  };
 
   const place = (dx, animate) => {
     track.style.transition = animate ? `transform ${SETTLE_MS}ms cubic-bezier(0.2, 0, 0, 1)` : 'none';
@@ -232,6 +242,7 @@ function bindSwipe() {
 
   pill.addEventListener('pointerdown', (e) => {
     if (e.button !== 0 || g) return;
+    flushSettle();
     const tab = activeTab();
     if (!tab) return;
     g = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, axis: null, w: pill.clientWidth,
@@ -268,7 +279,10 @@ function bindSwipe() {
     if (!go) {
       place(0, true);
       d.peek?.move(0, SETTLE_MS);
-      if (d.peek) setTimeout(() => { if (activeTab() === d.tab) d.peek.end(null); }, SETTLED);
+      if (d.peek) {
+        finishPending = () => { if (activeTab() === d.tab) d.peek.end(null); };
+        settleTimer = setTimeout(flushSettle, SETTLED);
+      }
       return;
     }
     const dir = Math.sign(d.dx);
@@ -277,11 +291,12 @@ function bindSwipe() {
     d.peek?.move(dir * (d.peek.W + PAGE_GAP), SETTLE_MS);
     // The new tab opens once its pill and page have slid into place (activating it redraws the bar, centred).
     // A swipe is only a peek: the order stays as it is until the tab is read in.
-    setTimeout(() => {
+    finishPending = () => {
       if (activeTab() !== d.tab) { d.peek?.end(null); return; }
       if (to === NEW_SLOT) { d.peek?.end(el.chapterList); place(0, false); openChapterList(); }
       else { d.peek?.end(to.view); activateTab(to.id, { promote: false }); }
-    }, SETTLED);
+    };
+    settleTimer = setTimeout(flushSettle, SETTLED);
   };
   pill.addEventListener('pointerup', (e) => end(e, false));
   pill.addEventListener('pointercancel', (e) => end(e, true));

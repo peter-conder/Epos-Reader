@@ -6,10 +6,12 @@ import { renderTabs, undoClose } from './tabs.js';
 import { renderPassage, setBookTitles } from './reader.js';
 import { closeNote, hideWordCard } from './word-card.js';
 import { refreshNoteMarks, renderNotebook } from './notes.js';
-import { renderBottomBar } from './bottom-bar.js';
+import { renderBottomBar, showChrome } from './bottom-bar.js';
 import { renderTabGrid } from './tab-grid.js';
 import { isMobileTier } from './viewport.js';
 import { syncPages } from './pages.js';
+import { closeFormatSheet } from './format-sheet.js';
+import { syncRibbon } from './mobile-bookmarks.js';
 
 let lastShown = [];   // ids of the tabs that were on screen after the last render
 
@@ -83,7 +85,7 @@ export function renderView() {
     if (!(playOpen && t === joined[0])) playPop(t.view);
   });
   lastShown = ids;
-  el.progress.hidden = !hasTabs || !isText(tab);
+  el.progress.hidden = settings || !hasTabs || !isText(tab);
   alignProgress();
 }
 
@@ -108,27 +110,34 @@ export function alignProgress() {
 export function setView(view) {
   state.view = view;
   closePopovers();
+  closeFormatSheet();
   hideWordCard();
+  if (view === 'reader') showChrome();
   renderView();
   syncPages();
+  renderBrand();
+  syncToolbar();
+  syncRibbon();
 }
 
 /* Toolbar reflects the active tab */
 export function syncToolbar() {
   const tab = activeTab();
-  const paired = !!partnerOf(tab);
-  const on = !!(isText(tab) && tab.split) && !paired;
+  const text = state.view === 'reader' && isText(tab);
+  const paired = text && !!partnerOf(tab);
+  const disabled = !text || paired;
+  const on = text && !!tab.split && !paired;
   el.splitBtn.classList.toggle('active', on);
-  el.splitBtn.classList.toggle('disabled', paired);
+  el.splitBtn.classList.toggle('disabled', disabled);
   el.splitBtn.setAttribute('aria-pressed', String(on));
-  el.splitBtn.setAttribute('aria-disabled', String(paired));
-  el.splitBtn.dataset.tip = paired ? 'Unavailable in split view' : 'Parallel English';
+  el.splitBtn.setAttribute('aria-disabled', String(disabled));
+  el.splitBtn.dataset.tip = paired ? 'Unavailable in Split' : !text ? 'Open a Book first' : 'Parallel translation';
 }
 
 /* The name in the top bar ("Epos Reader") writes Epos in Greek while a Greek text is the open tab */
 export function renderBrand() {
   const tab = activeTab();
-  const greek = isText(tab) && workOf(tab).shortLanguage === 'Greek';
+  const greek = state.view === 'reader' && isText(tab) && workOf(tab).shortLanguage === 'Greek';
   el.brandTitle.textContent = greek ? '\u0395\u03C0\u03BF\u03C2 Reader' : 'Epos Reader';
   el.brandTitle.lang = greek ? 'grc' : 'en';
 }
@@ -230,6 +239,7 @@ export function setBook(roman) {
       // Another tab was opened meanwhile: activating it already rendered its own current book
       if (activeTab() !== tab || tab.book !== roman) return;
       tab.ui.paneOriginal.scrollTop = 0;
+      tab.ui.paneTranslation.scrollTop = 0;
       renderPassage(tab);
       setBookTitles(tab);
       renderTabs();

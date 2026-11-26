@@ -124,7 +124,7 @@ export function closeTab(id, opts = {}) {
     if (isMobileTier()) {
       const next = readingTabs()[0];   // the Notebook is a page there, not a tab to fall back on
       if (next) activateTab(next.id, { promote: false });
-      else addNewTab();
+      else snap.autoId = addNewTab().id;
     }
     else activateTab((partner ?? state.tabs[Math.max(0, idx - 1)]).id);
   } else {

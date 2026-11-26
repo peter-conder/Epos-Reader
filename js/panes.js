@@ -33,7 +33,7 @@ export function initPanes() {
     if (e.defaultPrevented || e.ctrlKey || !e.deltaY) return;
     if (state.view !== 'reader' || el.panes.hidden || el.panes.dataset.count !== '1') return;
     const t = e.target;
-    if (t.closest('.pane, .popover, .word-card, textarea')) return;   // these scroll (or are scrolled over) by themselves
+    if (t.closest('.pane, .popover, .word-card, textarea, .tab-grid, .chapter-list, .format-sheet')) return;   // these scroll (or are scrolled over) by themselves
     const list = t.closest('.tab-list');
     if (list && list.scrollHeight > list.clientHeight) return;
     const tab = activeTab();
