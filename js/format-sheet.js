@@ -3,7 +3,7 @@ import { showChrome } from './bottom-bar.js';
 import { onTierChange } from './viewport.js';
 import { hideWordCard } from './word-card.js';
 import { relayoutLineEnglish } from './english.js';
-import { prefersReducedMotion } from './motion.js';
+import { closingLayer } from './motion.js';
 
 /* ==========================================================
    FORMAT TEXT SHEET (phones and tablets): text options in the bottom half of the screen, Kindle-style, so the
@@ -15,24 +15,19 @@ import { prefersReducedMotion } from './motion.js';
    ========================================================== */
 const PANELS = () => [el.flyout, el.popupsFlyout];
 const CLOSE_DRAG = 60;   // px the grip must be pulled down to close the sheet
-const CLOSE_MS = 240;
 
 let home = null;   // where the panels live the rest of the time (the toolbar)
-let closeTimer = 0;
+let sheetLayer = null;   // made on first use: el is filled in at start-up
+// Once hidden, the panels go back to the toolbar
+const layer = () => (sheetLayer ??= closingLayer(el.formatSheet, () => {
+  if (home) for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
+}));
 
 export const formatSheetOpen = () => !el.formatSheet.hidden && !el.formatSheet.classList.contains('closing');
 
-function finishClose() {
-  clearTimeout(closeTimer);
-  closeTimer = 0;
-  el.formatSheet.classList.remove('closing');
-  el.formatSheet.hidden = true;
-  if (home) for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
-}
-
 export function openFormatSheet() {
   if (formatSheetOpen()) return;
-  if (closeTimer) { clearTimeout(closeTimer); closeTimer = 0; el.formatSheet.classList.remove('closing'); }
+  layer().cancel();
   hideWordCard();   // one sheet at a time
   home ??= el.flyout.parentElement;
   for (const p of PANELS()) { p.classList.add('in-sheet'); el.fsBody.append(p); }
@@ -47,9 +42,7 @@ export function closeFormatSheet({ instant = false } = {}) {
   root.classList.remove('sheet-open');
   relayoutLineEnglish();
   showChrome();
-  if (instant || prefersReducedMotion()) { finishClose(); return; }
-  el.formatSheet.classList.add('closing');
-  closeTimer = setTimeout(finishClose, CLOSE_MS);
+  layer().close({ instant });
 }
 
 /* Pulling a sheet's grip (or whatever `handles` matches) down drags the sheet with it; far enough and it closes.

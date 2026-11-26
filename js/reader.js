@@ -1,7 +1,7 @@
 import { ROMANS, WORKS, bookLabel } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
 import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js';
-import { loadBook } from './book-data.js';
+import { bookKey, loadBook } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks, syncLayout } from './chunks.js';
@@ -162,7 +162,7 @@ export function renderReader(tab) {
 
 export function renderPassage(tab) {
   const ui = tab.ui;
-  const key = `${tab.work}:${tab.book}`;
+  const key = bookKey(tab.work, tab.book);
   if (ui.renderedKey === key) return ui.ready;
   ui.renderedKey = key;
   tab.range = null;   // the old book's lines; set again once this one is on screen (showRange in chunks.js)

@@ -2,7 +2,6 @@ import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
 import { activeTab, isNotebook, isText, markUsed, readingTabs, shared, state } from './state.js';
 import { visibleLines } from './chunks.js';
-import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
 import { renderAll } from './layout.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
@@ -49,7 +48,7 @@ function labelFor(tab) {
       sub: lines ? `Lines ${lines[0]}${lines[1] !== lines[0] ? RANGE_DASH + lines[1] : ''}` : ''
     };
   }
-  if (isNotebook(tab)) return { title: 'Notebook', sub: countLabel() };
+  if (isNotebook(tab)) return { title: 'Notebook', sub: '' };   // the counts are on the Notebook page itself
   return { title: 'Home', sub: 'Choose a Work' };
 }
 

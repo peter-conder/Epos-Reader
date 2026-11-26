@@ -10,9 +10,16 @@ const bookCache = new Map();
 const lexiconPromises = new Map();
 const LEX = {};              // language -> { 'lemma:pos': { head, pos, def } }
 
+/* One Book of one Work, as the cache (and a reader's rendered passage) knows it */
+export const bookKey = (work, book) => `${work}:${book}`;
+
+function fetchJson(url) {
+  return fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+}
+
 function pruneBookCache() {
   if (bookCache.size <= MAX_CACHED_BOOKS) return;
-  const openKeys = new Set(state.tabs.filter(isText).map((t) => `${t.work}:${t.book}`));
+  const openKeys = new Set(state.tabs.filter(isText).map((t) => bookKey(t.work, t.book)));
   for (const k of bookCache.keys()) {
     if (bookCache.size <= MAX_CACHED_BOOKS) break;
     if (!openKeys.has(k)) bookCache.delete(k);
@@ -21,8 +28,7 @@ function pruneBookCache() {
 
 export function loadLexicon(lang) {
   if (!lexiconPromises.has(lang)) {
-    const p = fetch(`${DATA_ROOT}/lexicon/${lang}.json`)
-      .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    const p = fetchJson(`${DATA_ROOT}/lexicon/${lang}.json`)
       .then((lex) => { LEX[lang] = lex; })
       // Forget the failure so the next call fetches again, and fail the Book with it: a Book cached without its
       // Lexicon would show "No definition yet." for every word until a reload
@@ -34,7 +40,7 @@ export function loadLexicon(lang) {
 
 /* The book's data, or null when the fetch fails or there is no file for it */
 export function loadBook(work, book) {
-  const key = `${work}:${book}`;
+  const key = bookKey(work, book);
   if (bookCache.has(key)) {
     // Refresh LRU recency
     const existing = bookCache.get(key);
@@ -44,7 +50,7 @@ export function loadBook(work, book) {
   }
   const num = String(ROMANS.indexOf(book) + 1).padStart(2, '0');
   const p = Promise.all([
-    fetch(`${DATA_ROOT}/${work}/${num}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
+    fetchJson(`${DATA_ROOT}/${work}/${num}.json`),
     loadLexicon(WORKS[work].lexicon)
   ]).then(([data]) => {
     data.byLine = new Map(data.lines.map((l) => [l.n, l]));

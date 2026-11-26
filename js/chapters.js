@@ -5,7 +5,7 @@ import { activateTab, addTab } from './tabs.js';
 import { openWorkInTab } from './home.js';
 import { closeTabGrid } from './tab-grid.js';
 import { showChrome } from './bottom-bar.js';
-import { prefersReducedMotion } from './motion.js';
+import { closingLayer } from './motion.js';
 
 /* ==========================================================
    CHAPTER LIST (phones and tablets): every book of every work that has data, grouped by work.
@@ -33,11 +33,10 @@ export function availableWorks() {
   return available;
 }
 
-const CLOSE_MS = 220;
-
 let target = null;   // the Home tab the list was opened from, if any
 let opener = null;   // what had focus when the list opened, for focus to go back to on Escape
-let closeTimer = 0;
+let listLayer = null;   // made on first use: el is filled in at start-up
+const layer = () => (listLayer ??= closingLayer(el.chapterList));
 
 export const chapterListOpen = () => !el.chapterList.hidden && !el.chapterList.classList.contains('closing');
 
@@ -72,9 +71,7 @@ async function fillChapterList(only) {
 
 /* only: list just this work. into: the Home tab to open the chosen book in. */
 export async function openChapterList({ only = null, into = null } = {}) {
-  clearTimeout(closeTimer);
-  closeTimer = 0;
-  el.chapterList.classList.remove('closing');
+  layer().cancel();
   target = into;
   if (!chapterListOpen()) opener = document.activeElement;
   // Swiped in from the bottom bar: it is already on screen and filled (see peekChapterList)
@@ -92,9 +89,7 @@ export async function openChapterList({ only = null, into = null } = {}) {
    The caller moves it; endPeekChapterList hides it again, or openChapterList keeps it. */
 export function peekChapterList() {
   if (chapterListOpen()) return null;
-  clearTimeout(closeTimer);
-  closeTimer = 0;
-  el.chapterList.classList.remove('closing');
+  layer().cancel();
   target = null;
   el.chapterList.classList.add('peek');
   el.chapterList.hidden = false;
@@ -116,19 +111,7 @@ export function closeChapterList({ instant = false, restoreFocus = false } = {})
   opener = null;
   showChrome();
   el.chapterList.classList.remove('open', 'from-peek');
-  if (instant || prefersReducedMotion()) {
-    clearTimeout(closeTimer);
-    closeTimer = 0;
-    el.chapterList.classList.remove('closing');
-    el.chapterList.hidden = true;
-    return;
-  }
-  el.chapterList.classList.add('closing');
-  closeTimer = setTimeout(() => {
-    closeTimer = 0;
-    el.chapterList.classList.remove('closing');
-    el.chapterList.hidden = true;
-  }, CLOSE_MS);
+  layer().close({ instant });
 }
 
 function choose(work, book) {

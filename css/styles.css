@@ -47,8 +47,6 @@
        --ease-emphasized: smooth Emphasized decelerate (no bounce) for structural movement */
     --ease-spatial: cubic-bezier(0.2, 0.9, 0.3, 1.12);
     --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
-    --ease-spring: var(--ease-spatial);
-    --ease-bouncy: var(--ease-spatial);
     --chrome-ease: var(--ease-emphasized);
 
     --shadow-pop:    0 12px 36px rgba(0, 0, 0, 0.1);
@@ -186,7 +184,7 @@
     border-radius: var(--radius-full);
     display: grid; place-items: center;
     color: var(--on-primary-container);
-    transition: background-color 120ms ease, transform 150ms var(--ease-spring);
+    transition: background-color 120ms ease, transform 150ms var(--ease-spatial);
   }
   @media (hover: hover) { .btn-close:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.1); } }
   .btn-close .icon { width: 16px; height: 16px; }
@@ -466,6 +464,7 @@
   }
   .hover-cite { font-size: 13px; font-weight: 700; letter-spacing: -0.2px; }
   .hover-desc { font-size: 11px; line-height: 1.2; opacity: 0.72; }
+  .hover-desc:empty { display: none; }
   .btn-hover-switch {
     display: flex; align-items: center; justify-content: center; gap: 6px;
     width: 100%; height: 28px;

@@ -28,14 +28,6 @@ export function findWordNote(c) {
     && n.line === c.line && n.wordIdx === c.wordIdx);
 }
 
-export function countLabel() {
-  const n = state.notes.filter((x) => !x.draft).length;
-  const b = state.bookmarks.length;
-  const notesText = `${n} ${n === 1 ? 'Note' : 'Notes'}`;
-  const bmText = `${b} ${b === 1 ? 'Bookmark' : 'Bookmarks'}`;
-  return b ? `${notesText} · ${bmText}` : notesText;
-}
-
 export const noteSource = (n) => `${bookTitle(n.work, n.book)} · Line ${n.line}`;
 
 /* Everything that has to refresh after any change to the notes.
@@ -69,7 +61,8 @@ export function openNotebook() {
 export function updateNotebookHeader() {
   const n = state.notes.filter((x) => !x.draft).length;
   const b = state.bookmarks.length;
-  el.nbCount.textContent = `${n} ${n === 1 ? 'Note' : 'Notes'} · ${b} ${b === 1 ? 'Bookmark' : 'Bookmarks'}`;
+  const count = (k, one) => `${k} ${one}${k === 1 ? '' : 's'}`;
+  el.nbCount.textContent = `${count(n, 'Note')} · ${count(b, 'Bookmark')}`;
   el.nbBmCount.textContent = String(b);
   el.nbEmpty.hidden = state.notes.length > 0;
   el.noteGrid.hidden = state.notes.length === 0;

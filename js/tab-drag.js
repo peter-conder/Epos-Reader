@@ -169,7 +169,7 @@ export function landDraggedTab(d) {
   const r = dest.getBoundingClientRect();
   dest.style.visibility = 'hidden';
   const c = d.clone;
-  c.style.transition = 'transform 220ms var(--ease-spatial), width 220ms var(--ease-emphasized)';
+  c.style.transition = 'transform 220ms var(--ease-emphasized), width 220ms var(--ease-emphasized)';   // landing in its slot is structural: no overshoot
   c.style.width = `${r.width}px`;
   c.style.transform = `translate(${r.left - d.left}px, ${r.top - d.top}px) scale(1)`;
   setTimeout(() => { c.remove(); dest.style.visibility = ''; }, 240);

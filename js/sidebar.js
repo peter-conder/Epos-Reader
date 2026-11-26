@@ -5,7 +5,7 @@ import { alignProgress, closePopovers, renderAll, setOpen } from './layout.js';
 import { fitAll } from './fit.js';
 import { renderReader } from './reader.js';
 import { addNewTab } from './home.js';
-import { countLabel, openNotebook } from './notes.js';
+import { openNotebook } from './notes.js';
 import { canHover } from './viewport.js';
 import { prefersReducedMotion } from './motion.js';
 import { scheduleSessionSave } from './session.js';
@@ -27,7 +27,7 @@ export function showHoverCard(pill) {
   el.hoverSwitch.hidden = !text;
   if (isNotebook(tab)) {
     el.hoverCite.textContent = 'Notebook';
-    el.hoverDesc.textContent = countLabel();
+    el.hoverDesc.textContent = '';   // the counts are on the Notebook page itself
   } else if (!text) {
     el.hoverCite.textContent = 'Home';
     el.hoverDesc.textContent = 'Choose a Work to open';
