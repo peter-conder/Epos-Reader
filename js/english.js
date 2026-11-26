@@ -1,8 +1,8 @@
 import { WORKS } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
-import { activeTab, getTab, isText, state, workOf } from './state.js';
+import { activeTab, getTab, isText, partnerOf, state, workOf } from './state.js';
 import { anchorIndex, jumpToIndex, syncLayout } from './chunks.js';
-import { toggleSplit } from './reader.js';
+import { applySplit, toggleSplit } from './reader.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { isMarked, toggleBookmark } from './bookmarks.js';
@@ -245,6 +245,9 @@ export function initEnglish() {
     closeLineMenu();
     // The swap is a phone thing: wider screens show the original (with the Parallel translation if that's on)
     if (tier() !== 'compact') for (const t of state.tabs) if (t.lang === 'en') setLang(t, 'la');
+    // A tablet lets half of a Split turn on its Parallel translation (the Split isn't shown there). Desktop shows the
+    // Split again and can't hold both in one pane, so the Parallel translation goes
+    if (tier() === 'desktop') for (const t of state.tabs) if (t.split && partnerOf(t)) { t.split = false; if (t.ui) applySplit(t); }
     syncLangButton();
   });
 }

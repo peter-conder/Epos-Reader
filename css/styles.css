@@ -1960,6 +1960,11 @@
       transition: transform 260ms var(--chrome-ease);
       animation: sheetUp 260ms var(--chrome-ease);
     }
+    /* Dark mode: the sheet's shadow barely shows on a dark page, so lift its surface a step and draw its top edge */
+    :root[data-theme="dark"] .format-sheet {
+      background: color-mix(in srgb, var(--surface) 90%, #fff);
+      border-top-color: var(--gray-300);
+    }
     .format-sheet[hidden] { display: none; }
     .format-sheet.closing { animation: sheetDown 240ms var(--chrome-ease) forwards; pointer-events: none; }
     .fs-grip { display: grid; place-items: center; height: 22px; flex-shrink: 0; touch-action: none; cursor: grab; }
@@ -2115,6 +2120,7 @@
 
     /* The dots down the right edge: flush-right 24px hit strip so dots never steal taps from words */
     .sb-rail { width: 24px; transition: opacity 260ms ease; }
+    .pane-original { padding-right: max(var(--reading-padding), 28px); }   /* Compact Pane Margins (20px) would put words under the dots */
     .chrome-hidden .sb-rail { opacity: 0; }
     .chrome-hidden .sb-rail .bm-dot { pointer-events: none; }
     .bm-dot { width: 24px; height: 40px; }
@@ -2226,6 +2232,7 @@
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      animation-delay: 0ms !important;   /* staggered entrances (fill: backwards) would otherwise sit invisible */
       transition-duration: 0.01ms !important;
       transition-delay: 0ms !important;
       scroll-behavior: auto !important;

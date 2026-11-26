@@ -63,6 +63,7 @@ export function bubbleTabs() {
 }
 
 let sidebarTimer = 0;
+let sidebarWidthEnd = null;   // the running toggle's transitionend listener, so a new toggle can drop it
 export function setSidebarCollapsed(collapsed) {
   hideHoverCard();
   const changed = el.sidebar.classList.contains('collapsed') !== collapsed;
@@ -70,13 +71,18 @@ export function setSidebarCollapsed(collapsed) {
   if (changed && !prefersReducedMotion()) {
     el.sidebar.classList.add('animating');
     clearTimeout(sidebarTimer);
+    if (sidebarWidthEnd) el.sidebar.removeEventListener('transitionend', sidebarWidthEnd);
     const finish = () => {
       clearTimeout(sidebarTimer);
+      el.sidebar.removeEventListener('transitionend', sidebarWidthEnd);
+      sidebarWidthEnd = null;
       el.sidebar.classList.remove('animating');
       alignProgress();
       fitAll();
     };
-    el.sidebar.addEventListener('transitionend', (e) => { if (e.target === el.sidebar && e.propertyName === 'width') finish(); }, { once: true });
+    // Not { once: true }: other properties (and children's transitions) end first, and only the width's end counts
+    sidebarWidthEnd = (e) => { if (e.target === el.sidebar && e.propertyName === 'width') finish(); };
+    el.sidebar.addEventListener('transitionend', sidebarWidthEnd);
     sidebarTimer = setTimeout(finish, 420);
   }
   el.sidebar.classList.toggle('collapsed', collapsed);

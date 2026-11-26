@@ -89,6 +89,23 @@ def read_scansion(work):
     return books
 
 
+def merge_punctuation(ws):
+    """Standalone punctuation (",", "·" left over after an elision mark) is joined onto the word before it, so it is
+    never its own clickable word. Its marks (a Caesura after the comma) move onto that word's last syllable."""
+    out = []
+    for w in ws:
+        if out and not letters(w['f']):
+            prev = out[-1]
+            prev['f'] += w['f']
+            last = prev['s'][-1]
+            last[0] += w['f']
+            extra = ''.join(m for s in w['s'] for m in (s[2] if len(s) > 2 else '') if m not in last[2])
+            last[2] += extra
+        else:
+            out.append(w)
+    return out
+
+
 def scansion_words(sylls):
     """A Line's syllables as display words: [{'f': text, 's': [[text, q, marks]]}]. Words joined by elision in the
     Scansion (δ’ἀνθρώπων) are split after the elision mark; the elided consonant becomes its own Elided syllable."""
@@ -113,6 +130,7 @@ def scansion_words(sylls):
             marks = ('f' if starts_foot and k == spoken[0] else '') + ('c' if caesura and k == len(pieces) - 1 else '')
             out[-1]['f'] += piece
             out[-1]['s'].append([piece, quantity if k in spoken else 'E', marks])
+    out = merge_punctuation(out)
     if not scanned:
         for w in out:
             w['s'] = None
@@ -123,7 +141,7 @@ def scansion_words(sylls):
 BETA_FIX = {'ει´κω': 'εἴκω', '"': '', '???': ''}
 
 
-def fix_lemma(lemma):
+def fix_lemma(lemma, tag='-'):
     if lemma is None:
         return ''
     lemma = ud.normalize('NFC', lemma.strip())
@@ -133,10 +151,11 @@ def fix_lemma(lemma):
     if '~' in lemma:
         lemma = ud.normalize('NFC', ud.normalize('NFD', lemma).replace('~', '\u0342'))
         lemma = ud.normalize('NFC', re.sub(r'([\u0313\u0314])\u0342', '\\1\u0342', ud.normalize('NFD', lemma)))
-    # "῎ἄρης", "̓ἀχιλλεύς", "ʽἑρμῆς": a capital's breathing and accent written before it
+    # "῎ἄρης", "̓ἀχιλλεύς", "ʽἑρμῆς": a capital's breathing and accent written before it. Only names (nouns, and
+    # adjectives like Ἀχαιός) take the capital back; "ʽὡς" (adverb) and "̓ἐνψύω" (verb) were just capitalised in the text
     if lemma[:1] in '\u02BC\u02BD\u0313\u0314\u1FCD\u1FCE\u1FCF\u1FDD\u1FDE\u1FDF\u1FBF\u1FFE':
         rest = lemma[1:]
-        lemma = rest[:1].upper() + rest[1:]
+        lemma = rest[:1].upper() + rest[1:] if tag[:1] in 'na' else rest
     if not any(ud.category(c).startswith('L') for c in lemma):
         return ''
     return lemma
@@ -155,7 +174,7 @@ def read_treebank(work):
             continue
         m = re.search(r':(\d+)\.(\d+)$', w.get('cite') or '')
         book, line = (int(m[1]), int(m[2])) if m else (toks[-1]['book'], toks[-1]['line']) if toks else (1, 1)
-        toks.append({'form': form, 'lemma': fix_lemma(w.get('lemma')), 'raw_lemma': w.get('lemma') or '',
+        toks.append({'form': form, 'lemma': fix_lemma(w.get('lemma'), tag), 'raw_lemma': w.get('lemma') or '',
                      'postag': tag.ljust(9, '-'), 'book': book, 'line': line})
     # The file does not keep the Books in order (the Iliad's runs 1…19, 2…, 24, 3…): sort by Book, stably
     return sorted(toks, key=lambda t: t['book'])

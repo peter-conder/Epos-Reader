@@ -24,7 +24,9 @@ export function loadLexicon(lang) {
     const p = fetch(`${DATA_ROOT}/lexicon/${lang}.json`)
       .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then((lex) => { LEX[lang] = lex; })
-      .catch(() => { lexiconPromises.delete(lang); });
+      // Forget the failure so the next call fetches again, and fail the Book with it: a Book cached without its
+      // Lexicon would show "No definition yet." for every word until a reload
+      .catch((err) => { lexiconPromises.delete(lang); throw err; });
     lexiconPromises.set(lang, p);
   }
   return lexiconPromises.get(lang);

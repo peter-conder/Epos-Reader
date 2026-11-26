@@ -27,10 +27,11 @@ export const tabGridOpen = () => !el.tabGrid.hidden && !el.tabGrid.classList.con
 function readingSpot(tab) {
   const data = tab.bookData;
   if (!data) {
-    // Unloaded tab restored from a previous session: show its saved Line rather than Book I's opening lines
-    if (tab.restoreAt) return { line: tab.restoreAt.line ?? 1, lines: [] };
-    if (tab.book !== 'I') return { line: 1, lines: [] };
-    return { line: 1, lines: (WORKS[tab.work]?.lines ?? []).slice(0, SNIPPET_LINES) };
+    // Not loaded yet (restored from a previous session) or failed to load: its saved Line, and a snippet only where
+    // the sample Lines really are this Book's (they are Book I's opening)
+    const line = tab.restoreAt?.line ?? 1;
+    const sample = tab.book === 'I' ? (WORKS[tab.work]?.lines ?? []).slice(line - 1, line - 1 + SNIPPET_LINES) : [];
+    return { line, lines: sample };
   }
   const ch = tab.ui?.chunkers?.[0];
   const i = anchorIndex(ch);
