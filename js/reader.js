@@ -2,6 +2,7 @@ import { ROMANS, WORKS, bookLabel } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
 import { activeTab, isText, shared, shownPartner, state, workOf } from './state.js';
 import { bookKey, loadBook } from './book-data.js';
+import { bindWordKeys } from './word-keys.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks, syncLayout } from './chunks.js';
@@ -55,6 +56,7 @@ export function createReader(tab) {
 /* Events that belong to one reader: word clicks/keys, scrolling, and its translation divider */
 export function bindReader(tab) {
   const ui = tab.ui;
+  bindWordKeys(tab);   // arrows between words, one Tab stop for the text
 
   ui.passage.addEventListener('click', (e) => {
     const mark = e.target.closest('.verse-bm');
@@ -216,13 +218,14 @@ export function renderPassage(tab) {
 
 export function verseHtml({ n, words }) {
   const html = words.map((w, j) =>
-    `<span class="word" tabindex="0" role="button" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
+    `<span class="word" tabindex="-1" role="button" data-i="${j}"${w.s?.at(-1)?.[2]?.includes('c') ? ' data-caesura' : ''}>${wordHtml(w)}</span>`
   ).join('');
   // --nd (digits in the line number) places the bookmark glyph to the left of the number; the glyph is the first
   // child, so the row's last child stays the words (see lineWidth in fit.js)
   const numbered = n === 1 || n % 5 === 0;
   return `<div class="verse" data-line="${n}"${numbered ? ` style="--nd:${String(n).length}"` : ''}>`
-    + `<button class="verse-bm bm-glyph" type="button" aria-label="Bookmark Line ${n}" data-tip="Bookmark this Line"></button>`
+    // Out of the Tab order (one per Line would be hundreds of stops): keyboard users bookmark from the Word card
+    + `<button class="verse-bm bm-glyph" type="button" tabindex="-1" aria-label="Bookmark Line ${n}" data-tip="Bookmark this Line"></button>`
     + `<span class="verse-num" data-n="${n}">${numbered ? n : ''}</span><span class="verse-words">${html}</span></div>`;
 }
 

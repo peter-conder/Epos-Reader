@@ -6,6 +6,7 @@ import { hideWordCard } from './word-card.js';
 import { markNotes } from './notes.js';
 import { markBookmarks, renderRail } from './bookmarks.js';
 import { refreshBottomBar } from './bottom-bar.js';
+import { ensureRover } from './word-keys.js';
 
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
@@ -241,7 +242,7 @@ export function showWindow(ch, c) {
   }
   measureChunks(ch);
   sizeSpacers(ch);
-  if (ch.container === ch.tab.ui.passage) showRange(ch);
+  if (ch.container === ch.tab.ui.passage) { showRange(ch); ensureRover(ch.tab); }
 }
 
 /* The sidebar tab names the 25 lines of the middle chunk (the other two chunks are the 75 in the page). This runs
