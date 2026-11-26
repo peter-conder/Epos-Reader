@@ -1,6 +1,6 @@
 # Phase 5: Cleanup, scope review, and design calls
 
-Status: ready-for-agent
+Status: resolved
 
 Follow-up to the two-axis review (Standards and Spec) of Phases 1–4. Bugs, Spec gaps and hard Standards violations were fixed on the phase branches. This phase covers the decisions taken after that review, one by one with the user.
 
@@ -66,3 +66,17 @@ These are the big refactors, left out by decision:
   - keyboard focus on a word
 
 ## Comments
+
+**2026-11-26:** Resolved. Everything under What is done.
+- There is a new `js/word-keys.js` for the roving tabindex.
+- The new `closingLayer()` in `js/motion.js` times each layer's exit from its own CSS animation.
+- `TIER_QUERIES.mobile` stays a single `max-width: 1024px` query. That keeps the fix from Phase 4 for the sub-pixel gap between 599.98px and 600px.
+- Also changed: the margin Bookmark buttons left the Tab order, because one per Line would undo the single Tab stop. Keyboard users bookmark a Line from the Word card.
+- Not changed: on phones the Notebook opens as a page, not a tab, so it has no Tab Grid card there.
+- Checks:
+  - `node --check` passes on every module.
+  - In headless Chromium at 390×844, 768×1024 and 1280×800 there were no page errors.
+  - Keyboard: Tab gives one stop for the text. ←/→/↑/↓/Home/End move as specified, including 120 Lines past the loaded chunks and back. Enter opens the Word card, and Escape returns focus to the word.
+  - A failed Lexicon load fails its Book, and the retry succeeds.
+  - Iliad 3.173 `ὡς` shows "how".
+  - 27 screenshots were sent to the user.
