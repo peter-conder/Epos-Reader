@@ -1,5 +1,5 @@
 import { el, root } from './dom.js';
-import { activeTab, isText, state } from './state.js';
+import { activeTab, readingText, state } from './state.js';
 import { jumpToIndex, readableRange } from './chunks.js';
 import { flashLine, isMarked, toggleBookmark } from './bookmarks.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
@@ -20,7 +20,7 @@ let back = null;        // { tab, i, frac, line, landed, timer }: where a dot ju
 /* The reader the ribbon works on, with its Latin chunker, or null */
 function current() {
   const tab = activeTab();
-  if (!isMobileTier() || state.view !== 'reader' || !isText(tab) || (tab.lang === 'en' && tier() === 'compact')) return null;
+  if (!isMobileTier() || !readingText(tab) || (tab.lang === 'en' && tier() === 'compact')) return null;
   const ch = tab.ui?.chunkers?.[0];
   return ch?.lineNums ? { tab, ch } : null;
 }

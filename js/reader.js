@@ -1,6 +1,6 @@
 import { ROMANS, WORKS, bookLabel } from './data.js';
 import { clamp, el, esc, root } from './dom.js';
-import { activeTab, isText, partnerOf, shared, state, workOf } from './state.js';
+import { activeTab, isText, shared, shownPartner, state, workOf } from './state.js';
 import { bookKey, loadBook } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
@@ -272,7 +272,7 @@ export function applySplit(tab) {
 
 export function toggleSplit() {
   const tab = activeTab();
-  if (!isText(tab) || (!isMobileTier() && partnerOf(tab))) return;
+  if (!isText(tab) || shownPartner(tab)) return;
   if (tab.split) { closeTranslation(tab); return; }
   tab.split = true;
   if (tab.splitPct > 75 || tab.splitPct < 25) tab.splitPct = 50;

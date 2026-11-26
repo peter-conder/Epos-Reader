@@ -1,6 +1,6 @@
 import { ROMANS, bookLabel } from './data.js';
 import { $, clamp, el, root } from './dom.js';
-import { activeTab, groupOf, isText, partnerOf, shared, state, workOf } from './state.js';
+import { activeTab, groupOf, isText, readingText, shared, shownPartner, state, workOf } from './state.js';
 import { beginSplitOpen, isMorphing, playPop, settleMorph } from './motion.js';
 import { renderTabs, undoClose } from './tabs.js';
 import { renderPassage, setBookTitles } from './reader.js';
@@ -139,8 +139,8 @@ export function setView(view) {
 /* Toolbar reflects the active tab */
 export function syncToolbar() {
   const tab = activeTab();
-  const text = state.view === 'reader' && isText(tab);
-  const paired = text && !!partnerOf(tab);
+  const text = readingText(tab);
+  const paired = text && !!shownPartner(tab);
   const disabled = !text || paired;
   const on = text && !!tab.split && !paired;
   el.splitBtn.classList.toggle('active', on);
@@ -153,7 +153,7 @@ export function syncToolbar() {
 /* The name in the top bar ("Epos Reader") writes Epos in Greek while a Greek text is the open tab */
 export function renderBrand() {
   const tab = activeTab();
-  const greek = state.view === 'reader' && isText(tab) && workOf(tab).shortLanguage === 'Greek';
+  const greek = readingText(tab) && workOf(tab).langCode === 'GR';
   el.brandTitle.textContent = greek ? '\u0395\u03C0\u03BF\u03C2 Reader' : 'Epos Reader';
   el.brandTitle.lang = greek ? 'grc' : 'en';
 }

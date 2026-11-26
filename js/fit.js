@@ -1,5 +1,5 @@
 import { clamp, el, MIN_FONT } from './dom.js';
-import { isText, partnerOf, state } from './state.js';
+import { isText, shownPartner, state } from './state.js';
 import { syncLayout } from './chunks.js';
 import { isMobileTier, tier } from './viewport.js';
 
@@ -72,7 +72,7 @@ export function fitReader(tab, verify = true) {
     return;
   }
   // Two windows share the width, so the text sits a step smaller than in a single window
-  const twoUp = (!isMobileTier() && !!partnerOf(tab)) || !!tab.split;
+  const twoUp = !!shownPartner(tab) || !!tab.split;
   const max = state.fontRem * (twoUp ? TWO_UP_SCALE : 1);
   const min = Math.min(max, MIN_FONT);
   const panes = tab.split && ui.paneTranslation.clientWidth ? [ui.paneOriginal, ui.paneTranslation] : [ui.paneOriginal];
