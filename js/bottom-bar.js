@@ -1,7 +1,7 @@
 import { RANGE_DASH, citation } from './data.js';
 import { clamp, el, root } from './dom.js';
 import { activeTab, isNotebook, isText, markUsed, readingTabs, shared, state, workOf } from './state.js';
-import { visibleLines } from './chunks.js';
+import { visibleLines, visibleRows } from './chunks.js';
 import { countLabel } from './notes.js';
 import { activateTab } from './tabs.js';
 import { renderAll } from './layout.js';
@@ -39,9 +39,18 @@ const IDLE_MS = 3000;      // no touch or scroll for this long while reading and
 /* What the pill says for a tab */
 const showingEnglish = (tab) => tab.lang === 'en' && tier() === 'compact';
 
+/* The Lines the English on screen translates: from the first passage's first Line to the last passage's last */
+function englishLines(tab) {
+  const ui = tab.ui;
+  const rows = ui?.englishSpans && visibleRows(ui.chunkers[1]);
+  if (!rows) return null;
+  const nums = ui.chunkers[0].lineNums;
+  return [nums[ui.englishSpans[rows[0]].start], nums[ui.englishSpans[rows[1]].end - 1]];
+}
+
 function labelFor(tab) {
   if (isText(tab)) {
-    const lines = visibleLines(tab.ui?.chunkers?.[showingEnglish(tab) ? 1 : 0]);
+    const lines = showingEnglish(tab) ? englishLines(tab) : visibleLines(tab.ui?.chunkers?.[0]);
     return {
       title: citation(tab.work, tab.book, '', { short: true }),
       sub: lines ? `Lines ${lines[0]}${lines[1] !== lines[0] ? RANGE_DASH + lines[1] : ''}` : ''

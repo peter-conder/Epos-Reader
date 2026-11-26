@@ -112,12 +112,18 @@ export function lineCenter(ch, i) {
 /* The first and last line numbers on screen, not counting what the bottom padding (under the phone's
    bottom bar) covers. Null before the book has loaded. */
 export function visibleLines(ch) {
+  const rows = visibleRows(ch);
+  return rows && [ch.lineNums[rows[0]], ch.lineNums[rows[1]]];
+}
+
+/* The same, as row indices (for the English, whose rows are passages rather than Lines) */
+export function visibleRows(ch) {
   if (!ch?.pitch || !ch.lineNums?.length || !ch.pane.clientHeight) return null;
   const pad = parseFloat(getComputedStyle(ch.pane).paddingBottom) || 0;
   const top = ch.pane.scrollTop - textTop(ch);
   const bottom = top + ch.pane.clientHeight - pad;
   const last = ch.rows.length - 1;
-  return [ch.lineNums[clamp(lineAt(ch, Math.max(0, top)), 0, last)], ch.lineNums[clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)]];
+  return [clamp(lineAt(ch, Math.max(0, top)), 0, last), clamp(lineAt(ch, Math.max(0, bottom - 1)), 0, last)];
 }
 
 /* Indices of the first and last lines you can read: from just below the top padding (on a phone, clear of the

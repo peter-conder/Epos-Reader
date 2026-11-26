@@ -230,6 +230,8 @@ export function showEnglish(tab) {
     const ch = makeChunker(tab, ui.translation, ui.paneTranslation, en.blocks.map((b) => blockHtml(b, verse)), [], ui.chunkers[1]?.pitch);
     ch.lineNums = en.blocks.map((b) => b.from);
     ui.englishSpans = blockRows(ui.chunkers[0].lineNums, en.blocks);
+    ui.englishBlocks = en.blocks;
+    ui.englishForm = en.form;
     ui.chunkers[1] = ch;
     mountChunker(ch);
     tab.fitModel?.delete(ui.paneTranslation);
@@ -240,7 +242,7 @@ export function showEnglish(tab) {
 }
 
 /* One English block: Williams keeps his verse lines, Murray is prose */
-function blockHtml(b, verse) {
+export function blockHtml(b, verse) {
   const inner = verse
     ? b.text.split('\n').map((l) => `<div class="trans-l">${esc(l)}</div>`).join('')
     : b.text.split('\n\n').map((p) => `<p>${esc(p)}</p>`).join('');

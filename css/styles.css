@@ -1730,11 +1730,13 @@
     padding-left: 44px;
     font-family: var(--reading-font);
     font-size: var(--reading-trans-font-size);
-    font-style: italic;
     line-height: 1.4;
     color: var(--secondary);
     animation: itemIn 260ms var(--ease-bouncy);
   }
+  /* The passage's Lines over its English: the passage is longer than the Line that was tapped */
+  .line-en-head { margin-bottom: 4px; font-family: 'Roboto', system-ui, sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em; color: var(--gray-600); }
+  .line-en .trans-block { padding: 0; font-size: inherit; }
   .sheet-open .line-en { display: none; }
   .card-grip { display: none; }
 

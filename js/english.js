@@ -1,8 +1,9 @@
-import { WORKS } from './data.js';
+import { RANGE_DASH } from './data.js';
 import { clamp, el, esc, icon } from './dom.js';
 import { activeTab, getTab, isText, partnerOf, state } from './state.js';
-import { anchorIndex, jumpToIndex, syncLayout } from './chunks.js';
-import { showEnglish, toggleSplit } from './reader.js';
+import { jumpToIndex, syncLayout } from './chunks.js';
+import { blockHtml, showEnglish, toggleSplit } from './reader.js';
+import { blockOfRow, toEnglish, toOriginal } from './parallel.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { isMobileTier, onTierChange, tier } from './viewport.js';
 import { isMarked, toggleBookmark } from './bookmarks.js';
@@ -11,12 +12,13 @@ import { findWordNote } from './notes.js';
 
 /* ==========================================================
    ENGLISH AND LINE ACTIONS (phones and tablets)
-   - The EN button on the bottom bar. On a phone it swaps the whole view between the Latin and the English,
-     keeping your place (the line at the top stays at the top). On a tablet it opens the English beside the
-     Latin, as the desktop's Parallel English does.
-   - Tapping a line number bookmarks the line, or, with "Show its English" chosen in Settings, opens that
-     line's English under it (hidden while the Format Text sheet is open, so you can see the text you are
-     formatting).
+   - The EN button on the bottom bar. On a phone it swaps the whole view between the original and the English,
+     keeping your place: the English is one block per passage, so the Line at the top maps to its block, as far
+     into the block as the Line is through the block's Lines, and back (see parallel.js). On a tablet it opens
+     the English beside the original, as the desktop's Parallel translation does.
+   - Tapping a line number bookmarks the line, or, with "Show its English" chosen in Settings, opens the
+     passage of English that Line is in under it, headed with the passage's Lines (hidden while the Format Text
+     sheet is open, so you can see the text you are formatting). Only one is open at a time.
    - A long press on a line opens a menu: bookmark it, add a note, copy it.
    ========================================================== */
 const LINE_TAP_KEY = 'epos.linetap.v1';
@@ -26,10 +28,10 @@ const PRESS_SLOP = 10;   // px a finger may wander before the press stops counti
 export const lineTapMode = () => state.lineTap;
 const tabOf = (node) => getTab(node.closest('.tab-view')?.dataset.tabId);
 const lineIndex = (tab, line) => tab.ui?.chunkers?.[0]?.lineNums?.indexOf(line) ?? -1;
-const englishFor = (tab, line) => {
-  const i = lineIndex(tab, line);
-  return tab.book === 'I' && i >= 0 ? WORKS[tab.work]?.translations?.[i] ?? null : null;
-};
+/* Whether the open Book's Translation is in the English pane */
+const englishLoaded = (tab) => !!tab.ui?.englishSpans && tab.ui.englishKey === tab.ui.renderedKey;
+/* Anchors are compared with a little slack: a jump can land a hair off where it was aimed */
+const sameAnchor = (a, b) => (!a && !b) || (!!a && !!b && a.i === b.i && Math.abs(a.frac - b.frac) < 0.01);
 
 /* ---------- Swap (phone) / side by side (tablet) ---------- */
 export function syncLangButton() {
@@ -50,26 +52,28 @@ export function setLang(tab, lang) {
   if (!isText(tab) || !tab.ui?.chunkers) return;
   if ((tab.lang ?? 'la') === lang) return;
   // The English is fetched the first time it is shown; swap once it is in the pane
-  if (lang === 'en' && tab.ui.englishKey !== tab.ui.renderedKey) {
-    showEnglish(tab).then(() => { if (tab.ui.englishSpans) setLang(tab, lang); });
+  if (lang === 'en' && !englishLoaded(tab)) {
+    showEnglish(tab).then(() => { if (englishLoaded(tab)) setLang(tab, lang); });
     return;
   }
   const [la, en] = tab.ui.chunkers;
   const [from, to] = lang === 'en' ? [la, en] : [en, la];
-  const at = from.anchor ? anchorIndex(from) : null;   // null: still at the top, title showing
+  const at = from.anchor ? { ...from.anchor } : null;   // null: still at the top, title showing
   tab.lang = lang;
   tab.ui.root.dataset.lang = lang;
   hideWordCard();
   syncLayout(tab);                                       // the pane just shown may never have been laid out
   // Back to the Latin without having moved in the English: return exactly where you were. (Past the end of
   // the English, the English can only show its last lines, which would otherwise send you back to them.)
-  if (lang === 'la' && tab.swapBack && anchorIndex(en) === tab.swapBack.enAt) {
+  if (lang === 'la' && tab.swapBack && sameAnchor(en.anchor, tab.swapBack.enAt)) {
     const saved = tab.swapBack.la;
     tab.swapBack = null;
     jumpToIndex(la, saved ? saved.i : null, saved?.frac ?? 0);
   } else {
-    jumpToIndex(to, at == null ? null : Math.min(at, to.rows.length - 1));
-    tab.swapBack = lang === 'en' ? { la: la.anchor && { ...la.anchor }, enAt: anchorIndex(en) } : null;
+    const spans = tab.ui.englishSpans;
+    const target = at && (lang === 'en' ? toEnglish(spans, at) : toOriginal(spans, at));
+    jumpToIndex(to, target ? target.i : null, target?.frac ?? 0);
+    tab.swapBack = lang === 'en' ? { la: la.anchor && { ...la.anchor }, enAt: en.anchor && { ...en.anchor } } : null;
   }
   syncLangButton();
   refreshBottomBar(tab);
@@ -84,12 +88,35 @@ function toggleEnglish() {
 }
 
 /* ---------- Tapping a line number ---------- */
+/* The passage of English a Line is in, headed with the passage's first and last Lines (in reading order) */
+function passageHtml(tab, line) {
+  const ui = tab.ui;
+  const nums = ui.chunkers[0].lineNums;
+  const b = blockOfRow(ui.englishSpans, lineIndex(tab, line));
+  const { start, end } = ui.englishSpans[b];
+  const [first, last] = [nums[start], nums[end - 1]];
+  const head = first === last ? `Line ${first}` : `Lines ${first}${RANGE_DASH}${last}`;
+  return `<div class="line-en-head">${head}</div>${blockHtml(ui.englishBlocks[b], ui.englishForm === 'verse')}`;
+}
+
 function toggleLineEnglish(tab, verse) {
   const open = verse.querySelector('.line-en');
-  if (open) open.remove();
-  else {
-    const en = englishFor(tab, +verse.dataset.line);
-    verse.insertAdjacentHTML('beforeend', `<div class="line-en">${en ? esc(en) : '<em>No English for this line yet.</em>'}</div>`);
+  tab.ui.passage.querySelectorAll('.line-en').forEach((n) => n.remove());   // one open at a time
+  if (!open) {
+    if (!englishLoaded(tab)) {
+      // Fetched the first time any English is shown; open it once it is here (if the Line is still on screen)
+      showEnglish(tab).then(() => {
+        if (verse.isConnected && !verse.querySelector('.line-en')) {
+          if (englishLoaded(tab)) toggleLineEnglish(tab, verse);
+          else {
+            verse.insertAdjacentHTML('beforeend', '<div class="line-en"><em>Couldn\u2019t load the English. Tap the number to try again.</em></div>');
+            syncLayout(tab);
+          }
+        }
+      });
+      return;
+    }
+    verse.insertAdjacentHTML('beforeend', `<div class="line-en">${passageHtml(tab, +verse.dataset.line)}</div>`);
   }
   syncLayout(tab);   // the line is taller or shorter now
 }
