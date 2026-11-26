@@ -27,7 +27,7 @@ function readingSpot(tab) {
   const data = tab.bookData;
   const lines = data
     ? data.lines.slice(i, i + SNIPPET_LINES).map((l) => l.w.map((w) => w.f).join(' '))
-    : (WORKS[tab.work]?.lines ?? []).slice(i, i + SNIPPET_LINES);
+    : tab.book === 'I' ? (WORKS[tab.work]?.lines ?? []).slice(i, i + SNIPPET_LINES) : [];   // the sample Lines are Book I's
   return { line: n, lines };
 }
 

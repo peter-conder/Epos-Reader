@@ -93,4 +93,4 @@ onTierChange(() => {
 initSession();
 if (!restoreSession()) addNewTab();   // reopen the last reading session, or start on a New Tab
 const open = activeTab();
-loadLexicon(isText(open) ? workOf(open).lexicon : 'latin');
+loadLexicon(isText(open) ? workOf(open).lexicon : 'latin').catch(() => {});   // a failure is retried by loadBook

@@ -18,7 +18,8 @@ import { syncRibbon } from './mobile-bookmarks.js';
 /* The start of the line, kept with the bookmark so the Notebook can show it without opening the book */
 export function lineSnippet(tab, line) {
   const l = tab.bookData?.byLine.get(line);
-  const words = l ? l.w.map((w) => w.f) : (WORKS[tab.work]?.lines?.[line - 1] ?? '').trim().split(/\s+/).filter(Boolean);
+  const sample = tab.book === 'I' ? WORKS[tab.work]?.lines?.[line - 1] : null;   // the sample Lines are Book I's
+  const words = l ? l.w.map((w) => w.f) : (sample ?? '').trim().split(/\s+/).filter(Boolean);
   return words.slice(0, 7).join(' ') + (words.length > 7 ? '…' : '');
 }
 
