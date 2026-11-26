@@ -23,7 +23,11 @@ export function availableWorks() {
     fetch(`${DATA_ROOT}/${key}/01.json`, { method: 'HEAD' })
       .then((r) => (r.ok ? key : null))
       .catch(() => null)
-  )).then((keys) => keys.filter(Boolean));
+  )).then((keys) => {
+    const ok = keys.filter(Boolean);
+    if (!ok.length) available = null;   // transient offline failure: retry next time
+    return ok;
+  });
   return available;
 }
 

@@ -160,10 +160,19 @@ export function renderPassage(tab) {
   ui.ready = loadBook(tab.work, tab.book).then((data) => {
     if (ui.renderedKey !== key) return;   // the tab moved on while this loaded
     tab.bookData = data;
+    if (!data) {
+      ui.chunkers = null;
+      ui.passage.innerHTML = `<div class="load-error"><p>Couldn\u2019t load Book ${esc(bookLabel(tab.work, tab.book))}.</p><button class="load-retry" type="button">Try again</button></div>`;
+      ui.passage.querySelector('.load-retry').addEventListener('click', () => {
+        ui.renderedKey = null;
+        renderPassage(tab);
+      });
+      ui.translation.innerHTML = '';
+      if (ui.transMore) ui.transMore.textContent = '';
+      return;
+    }
     const work = WORKS[tab.work];
-    const lines = data
-      ? data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }))
-      : work.lines.map((t, i) => ({ n: i + 1, words: t.trim().split(/\s+/).map((f) => ({ f })) }));
+    const lines = data.lines.map((l) => ({ n: l.n, words: l.w.map((w) => ({ f: w.f, s: w.s })) }));
     // The sample translation is of Book I's opening lines; other books have none yet (it used to be shown for every book)
     const trans = tab.book === 'I' ? work.translations ?? [] : [];
 

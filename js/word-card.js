@@ -1,4 +1,3 @@
-import { LEXICON } from './data.js';
 import { clamp, el } from './dom.js';
 import { getTab, shared, state, workOf } from './state.js';
 import { wordInfo } from './book-data.js';
@@ -35,10 +34,10 @@ export function showWordCard(word) {
     line: +word.closest('.verse').dataset.line, wordIdx: +word.dataset.i, word: clean
   };
 
-  const info = wordInfo(tab, shared.wordCtx.line, shared.wordCtx.wordIdx) ?? LEXICON[clean.toLowerCase()] ?? {
+  const info = wordInfo(tab, shared.wordCtx.line, shared.wordCtx.wordIdx) ?? {
     lemma: clean,
     morph: workOf(tab).formLabel,
-    def: `Epic gloss and grammatical analysis for “${clean}”.`
+    def: 'No analysis for this word yet.'
   };
   el.cardLemma.textContent = info.lemma;
   el.cardMorph.textContent = info.morph;

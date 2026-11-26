@@ -1,5 +1,5 @@
 import { el } from './dom.js';
-import { shared } from './state.js';
+import { activeTab, isText, shared, workOf } from './state.js';
 import { loadLexicon } from './book-data.js';
 import { closePopovers, initLayout, setOpen } from './layout.js';
 import { initTabs } from './tabs.js';
@@ -27,7 +27,6 @@ import { initSession, restoreSession } from './session.js';
 
 /* Epos Reader: the entry point. Each module sets up its own listeners in its init function;
    they run here in the order the page needs them. */
-loadLexicon('latin');   // start the big Lexicon download now rather than when the first book opens (Greek loads with its first Book)
 initViewport();   // layout tier first: later modules may ask which one they're in
 initLayout();
 initFit();
@@ -93,3 +92,5 @@ onTierChange(() => {
 
 initSession();
 if (!restoreSession()) addNewTab();   // reopen the last reading session, or start on a New Tab
+const open = activeTab();
+loadLexicon(isText(open) ? workOf(open).lexicon : 'latin');
