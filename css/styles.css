@@ -886,6 +886,10 @@
      The gap must match .verses and ROW_GAP in chunks.js. */
   .verse-chunk { display: flex; flex-direction: column; gap: 3px; }
   .chunk-spacer { flex: none; }
+  /* Beside the English, the original breaks where each passage of the Translation starts (markBlockStarts in
+     reader.js), by about three quarters of a Line. A margin inside the chunk, so the chunker measures it as part
+     of the chunk. */
+  .reader[data-split="on"] .passage .verse.block-start { margin-top: calc(var(--reading-font-size) * var(--reading-line-height) * 0.75); }
 
   .verse {
     position: relative;

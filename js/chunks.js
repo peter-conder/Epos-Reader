@@ -7,6 +7,7 @@ import { markNotes } from './notes.js';
 import { markBookmarks, renderRail } from './bookmarks.js';
 import { refreshBottomBar } from './bottom-bar.js';
 import { relinkIfNeeded } from './parallel.js';
+import { markBlockStarts } from './reader.js';
 
 /* ==========================================================
    CHUNKS: a book is split into 25-line chunks and only three are in the page at
@@ -240,7 +241,7 @@ export function showWindow(ch, c) {
       node = document.createElement('div');
       node.className = 'verse-chunk';
       node.innerHTML = ch.rows.slice(k * CHUNK, (k + 1) * CHUNK).join('');
-      if (ch.container === ch.tab.ui.passage) { markNotes(ch.tab, node); markBookmarks(ch.tab, node); }
+      if (ch.container === ch.tab.ui.passage) { markNotes(ch.tab, node); markBookmarks(ch.tab, node); markBlockStarts(ch.tab, node); }
       ch.container.insertBefore(node, next);
       ch.nodes.set(k, node);
     }
