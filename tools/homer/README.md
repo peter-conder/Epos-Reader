@@ -31,11 +31,11 @@ python3 tools/homer/check_homer.py
 3. **Treebank alignment.** Treebank words are matched to the printed words Book by Book. The match runs word by word, falling back to letter by letter where word division or readings differ (for example, `οὐδέ` is one printed word but two treebank words, so it gets two analyses). The treebank's own Line numbers aren't used: they slip at sentence boundaries. Its Books are also stored out of order.
 4. **Morphology** is spelled out from the treebank's 9-character `postag` in the Aeneid's style (`Aor. Act. Ind. 3rd Sing.`, `Pres. Mid./Pass. Part. Masc. Sing. Nom.`, `Fem. Du. Acc.`).
 5. **Lexicon keys** are `lemma:pos`, as in `latin.json`. A capitalised noun is `propn`. Lemmas left as betacode in the treebank (`πα~ς`, `῎ἄρης`) are repaired first.
-6. **Definitions.** The hand gloss is used first, then the LSJ gloss with LSJ's trailing punctuation trimmed. Anything still without a gloss shows **"Coming soon."** and is listed in `hand_glosses_todo.csv`.
+6. **Definitions.** The hand gloss is used first, then the LSJ gloss with LSJ's trailing punctuation trimmed. Anything still without a gloss is stored as `null` (shown as **"Proper name."** for proper nouns or **"No definition yet."** otherwise, matching `latin.json`) and listed in `hand_glosses_todo.csv`.
 
 ## Outputs to look at
 
-- `hand_glosses_todo.csv` lists every Lemma still showing "Coming soon.", by how often it occurs, with an LSJ hint where one was found. To add a gloss, copy the row's `lemma` and your gloss into `input/hand_glosses.csv` and rebuild.
+- `hand_glosses_todo.csv` lists every Lemma still without a gloss, by how often it occurs, with an LSJ hint where one was found. To add a gloss, copy the row's `lemma` and your gloss into `input/hand_glosses.csv` and rebuild.
 - `data2/<work>/NN.mismatches.txt` lists, for each Book:
   - Lemmas without a definition;
   - words the treebank leaves unanalysed;

@@ -22,8 +22,13 @@ export function availableWorks() {
   available ??= Promise.all(Object.keys(WORKS).map((key) =>
     fetch(`${DATA_ROOT}/${key}/01.json`, { method: 'HEAD' })
       .then((r) => (r.ok ? key : null))
-      .catch(() => null)
-  )).then((keys) => keys.filter(Boolean));
+      .catch(() => undefined)
+  )).then((keys) => {
+    // A Work whose check failed (offline, a network blip) is asked again next time rather than left out for good;
+    // a Work whose file is missing (404) is a real answer and is remembered
+    if (keys.includes(undefined)) available = null;
+    return keys.filter(Boolean);
+  });
   return available;
 }
 

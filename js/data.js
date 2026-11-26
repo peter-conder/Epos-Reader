@@ -5,55 +5,6 @@ export const ROMANS = [
 const GREEK_UPPER = [...'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ'];   // Iliad Books
 const GREEK_LOWER = [...'αβγδεζηθικλμνξοπρστυφχψω'];   // Odyssey Books
 
-export const LEXICON = {
-  'arma': { lemma: 'arma, -ōrum (n. pl.)', morph: 'Neut. Pl. Acc.', def: 'Arms, weapons of war; warfare, armed deeds.' },
-  'virumque': { lemma: 'vir, virī (m.) + -que', morph: 'Masc. Sing. Acc. + conj.', def: 'And the hero / man (Aeneas).' },
-  'cano': { lemma: 'canō, canere, cecinī, cantus', morph: 'Pres. Act. Ind. 1st Sing.', def: 'I sing of, celebrate in poetic verse, chant.' },
-  'troiae': { lemma: 'Trōia, Trōiae (f.)', morph: 'Fem. Sing. Gen.', def: 'Of Troy (the ancient fortress city of Priam).' },
-  'qui': { lemma: 'quī, quae, quod', morph: 'Rel. Pron. Masc. Sing. Nom.', def: 'Who (referring back to virum).' },
-  'primus': { lemma: 'prīmus, -a, -um', morph: 'Adj. Masc. Sing. Nom.', def: 'First, foremost; first in succession.' },
-  'ab': { lemma: 'ab / ā (prep. + abl.)', morph: 'Preposition', def: 'From, away from, off the shores of.' },
-  'oris': { lemma: 'ōra, ōrae (f.)', morph: 'Fem. Pl. Abl.', def: 'Borders, coasts, margins, shores.' },
-  'italiam': { lemma: 'Ītalia, Ītaliae (f.)', morph: 'Fem. Sing. Acc.', def: 'To Italy (terminal accusative of motion).' },
-  'fato': { lemma: 'fātum, fātī (n.)', morph: 'Neut. Sing. Abl. of Means', def: 'By fate, divine destiny, decree of the gods.' },
-  'profugus': { lemma: 'profugus, -a, -um', morph: 'Adj. Masc. Sing. Nom.', def: 'Exiled, driven as a fugitive, roaming.' },
-  'laviniaque': { lemma: 'Lāvīnius, -a, -um + -que', morph: 'Adj. Neut. Pl. Acc. + conj.', def: 'And the Lavinian (coastal region of Latium).' },
-  'venit': { lemma: 'veniō, venīre, vēnī, ventum', morph: 'Perf. Act. Ind. 3rd Sing.', def: 'He came, arrived, reached.' },
-  'litora': { lemma: 'lītus, lītoris (n.)', morph: 'Neut. Pl. Acc. of Motion', def: 'Shores, strands, coasts.' },
-  'multum': { lemma: 'multum (adv.)', morph: 'Adverb', def: 'Much, greatly, abundantly tossed.' },
-  'ille': { lemma: 'ille, illa, illud', morph: 'Demonstr. Masc. Sing. Nom.', def: 'He, that renowned man.' },
-  'et': { lemma: 'et (coord. conj.)', morph: 'Conjunction', def: 'Both... and; even, also.' },
-  'terris': { lemma: 'terra, terrae (f.)', morph: 'Fem. Pl. Abl. of Place', def: 'On the lands, over terra firma.' },
-  'iactatus': { lemma: 'iactō, iactāre, iactāvī, iactātus', morph: 'Perf. Pass. Part. Masc. Sing. Nom.', def: 'Harassed, buffeted, tossed to and fro.' },
-  'alto': { lemma: 'altum, altī (n.)', morph: 'Neut. Sing. Abl. of Place', def: 'On the high sea, upon the deep ocean.' },
-  'vi': { lemma: 'vīs, vīs (f.)', morph: 'Fem. Sing. Abl. of Means', def: 'By the force, might, violence.' },
-  'superum': { lemma: 'superī, -ōrum (m. pl.)', morph: 'Masc. Pl. Gen. (syncope for superōrum)', def: 'Of the gods above, heavenly powers.' },
-  'saevae': { lemma: 'saevus, -a, -um', morph: 'Adj. Fem. Sing. Gen.', def: 'Of savage, ruthless, unrelenting.' },
-  'memorem': { lemma: 'memor, memoris', morph: 'Adj. Fem. Sing. Acc.', def: 'Mindful, unforgetting, brooding.' },
-  'iunonis': { lemma: 'Iūnō, Iūnōnis (f.)', morph: 'Fem. Sing. Gen.', def: 'Of Juno (queen of heaven, enemy of Troy).' },
-  'ob': { lemma: 'ob (prep. + acc.)', morph: 'Preposition', def: 'On account of, because of.' },
-  'iram': { lemma: 'īra, īrae (f.)', morph: 'Fem. Sing. Acc.', def: 'Anger, wrath, indignation.' },
-  'multa': { lemma: 'multus, -a, -um', morph: 'Adj. Neut. Pl. Acc.', def: 'Many things, many hardships.' },
-  'quoque': { lemma: 'quoque (adv.)', morph: 'Adverb', def: 'Also, likewise, moreover.' },
-  'bello': { lemma: 'bellum, bellī (n.)', morph: 'Neut. Sing. Abl. of Place', def: 'In warfare, in armed conflict.' },
-  'passus': { lemma: 'patior, patī, passus sum', morph: 'Deponent Perf. Part. Masc. Sing. Nom.', def: 'Having endured, having suffered.' },
-  'dum': { lemma: 'dum (subord. conj.)', morph: 'Conjunction', def: 'Until, while, so long as.' },
-  'conderet': { lemma: 'condō, condere, condidī, conditus', morph: 'Imperf. Subj. Act. 3rd Sing.', def: 'He could found, build, establish.' },
-  'urbem': { lemma: 'urbs, urbis (f.)', morph: 'Fem. Sing. Acc.', def: 'The city (Lavinium).' },
-  'inferretque': { lemma: 'inferō, inferre + -que', morph: 'Imperf. Subj. Act. 3rd Sing. + conj.', def: 'And bring into, introduce.' },
-  'deos': { lemma: 'deus, deī (m.)', morph: 'Masc. Pl. Acc.', def: 'His gods (the household Penates of Troy).' },
-  'latio': { lemma: 'Latium, Latiī (n.)', morph: 'Neut. Sing. Dat. / Abl.', def: 'Into Latium (region of central Italy).' },
-  'genus': { lemma: 'genus, generis (n.)', morph: 'Neut. Sing. Nom.', def: 'The race, clan, ancestral stock.' },
-  'unde': { lemma: 'unde (adv.)', morph: 'Relative Adverb', def: 'Whence, from which source.' },
-  'latinum': { lemma: 'Latīnus, -a, -um', morph: 'Adj. Neut. Sing. Nom.', def: 'The Latin race.' },
-  'albanique': { lemma: 'Albānus, -a, -um + -que', morph: 'Adj. Masc. Pl. Nom. + conj.', def: 'And the Alban fathers / lords.' },
-  'patres': { lemma: 'pater, patris (m.)', morph: 'Masc. Pl. Nom.', def: 'Fathers, forebears, patriarchs.' },
-  'atque': { lemma: 'atque (conj.)', morph: 'Conjunction', def: 'And also, and indeed.' },
-  'altae': { lemma: 'altus, -a, -um', morph: 'Adj. Fem. Sing. Gen.', def: 'Of lofty, high-towered.' },
-  'moenia': { lemma: 'moenia, moenium (n. pl.)', morph: 'Neut. Pl. Nom.', def: 'The ramparts, city walls.' },
-  'romae': { lemma: 'Rōma, Rōmae (f.)', morph: 'Fem. Sing. Gen.', def: 'Of Rome.' }
-};
-
 
 
 export const WORKS = {

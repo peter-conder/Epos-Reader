@@ -4,7 +4,7 @@ Read the great classical epics in the original language: Vergil's **Aeneid**, an
 
 Epos Reader is for students reading epic with a class, self-taught readers reading for pleasure, and the author's own study. It is free, it's a plain website (no accounts, no build step), and it credits every Source it draws on.
 
-> **Status:** All three Works are in, with Lemmas, Morphology and Scansion: the Aeneid (12 Books, 9,896 Lines), the Iliad (24 Books, 15,682 Lines) and the Odyssey (24 Books, 12,110 Lines). About 2,100 Homeric Lemmas still show "Coming soon." in place of a definition. The Translation covers Aeneid I.1–16 so far.
+> **Status:** All three Works are in, with Lemmas, Morphology and Scansion: the Aeneid (12 Books, 9,896 Lines), the Iliad (24 Books, 15,682 Lines) and the Odyssey (24 Books, 12,110 Lines). Proper nouns without a gloss show "Proper name.", and other Homeric Lemmas still awaiting a gloss show "No definition yet." The Translation covers Aeneid I.1–16 so far.
 
 ## What you can do
 

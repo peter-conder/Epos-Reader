@@ -32,7 +32,6 @@ INPUT = os.path.join(HERE, 'input')
 SOURCES = os.path.join(HERE, 'sources')
 DATA = os.path.join(REPO, 'data2')
 
-COMING_SOON = 'Coming soon.'
 APOS = '\u1FBD'   # ᾽ Greek koronis, the elision mark used in the printed text
 SOURCES_FIELD = {
     'text': 'Hypotactic.com, David Chamberlain; checked against the Perseus Digital Library text in the Ancient Greek Dependency Treebank 2.1',
@@ -90,6 +89,23 @@ def read_scansion(work):
     return books
 
 
+def merge_punctuation(ws):
+    """Standalone punctuation (",", "·" left over after an elision mark) is joined onto the word before it, so it is
+    never its own clickable word. Its marks (a Caesura after the comma) move onto that word's last syllable."""
+    out = []
+    for w in ws:
+        if out and not letters(w['f']):
+            prev = out[-1]
+            prev['f'] += w['f']
+            last = prev['s'][-1]
+            last[0] += w['f']
+            extra = ''.join(m for s in w['s'] for m in (s[2] if len(s) > 2 else '') if m not in last[2])
+            last[2] += extra
+        else:
+            out.append(w)
+    return out
+
+
 def scansion_words(sylls):
     """A Line's syllables as display words: [{'f': text, 's': [[text, q, marks]]}]. Words joined by elision in the
     Scansion (δ’ἀνθρώπων) are split after the elision mark; the elided consonant becomes its own Elided syllable."""
@@ -105,7 +121,7 @@ def scansion_words(sylls):
         if not text:
             continue
         quantity = 'L' if q.startswith('l') else 'S'
-        pieces = [p for p in re.split(f'(?<={APOS})(?=\\S)', text) if p]
+        pieces = [p for p in re.split(f'(?<=\\w{APOS})(?=\\w)', text) if p]
         spoken = [k for k, p in enumerate(pieces) if has_vowel(p)] or [len(pieces) - 1]
         for k, piece in enumerate(pieces):
             if wn != prev_word or k > 0:
@@ -114,6 +130,7 @@ def scansion_words(sylls):
             marks = ('f' if starts_foot and k == spoken[0] else '') + ('c' if caesura and k == len(pieces) - 1 else '')
             out[-1]['f'] += piece
             out[-1]['s'].append([piece, quantity if k in spoken else 'E', marks])
+    out = merge_punctuation(out)
     if not scanned:
         for w in out:
             w['s'] = None
@@ -124,7 +141,7 @@ def scansion_words(sylls):
 BETA_FIX = {'ει´κω': 'εἴκω', '"': '', '???': ''}
 
 
-def fix_lemma(lemma):
+def fix_lemma(lemma, tag='-'):
     if lemma is None:
         return ''
     lemma = ud.normalize('NFC', lemma.strip())
@@ -134,10 +151,11 @@ def fix_lemma(lemma):
     if '~' in lemma:
         lemma = ud.normalize('NFC', ud.normalize('NFD', lemma).replace('~', '\u0342'))
         lemma = ud.normalize('NFC', re.sub(r'([\u0313\u0314])\u0342', '\\1\u0342', ud.normalize('NFD', lemma)))
-    # "῎ἄρης": a capital's breathing and accent written before it
-    if lemma[:1] in '\u1FCD\u1FCE\u1FCF\u1FDD\u1FDE\u1FDF\u1FBF\u1FFE':
+    # "῎ἄρης", "̓ἀχιλλεύς", "ʽἑρμῆς": a capital's breathing and accent written before it. Only names (nouns, and
+    # adjectives like Ἀχαιός) take the capital back; "ʽὡς" (adverb) and "̓ἐνψύω" (verb) were just capitalised in the text
+    if lemma[:1] in '\u02BC\u02BD\u0313\u0314\u1FCD\u1FCE\u1FCF\u1FDD\u1FDE\u1FDF\u1FBF\u1FFE':
         rest = lemma[1:]
-        lemma = rest[:1].upper() + rest[1:]
+        lemma = rest[:1].upper() + rest[1:] if tag[:1] in 'na' else rest
     if not any(ud.category(c).startswith('L') for c in lemma):
         return ''
     return lemma
@@ -156,7 +174,7 @@ def read_treebank(work):
             continue
         m = re.search(r':(\d+)\.(\d+)$', w.get('cite') or '')
         book, line = (int(m[1]), int(m[2])) if m else (toks[-1]['book'], toks[-1]['line']) if toks else (1, 1)
-        toks.append({'form': form, 'lemma': fix_lemma(w.get('lemma')), 'raw_lemma': w.get('lemma') or '',
+        toks.append({'form': form, 'lemma': fix_lemma(w.get('lemma'), tag), 'raw_lemma': w.get('lemma') or '',
                      'postag': tag.ljust(9, '-'), 'book': book, 'line': line})
     # The file does not keep the Books in order (the Iliad's runs 1…19, 2…, 24, 3…): sort by Book, stably
     return sorted(toks, key=lambda t: t['book'])
@@ -406,14 +424,14 @@ def build_work(work, glosses, hand, lex, missing):
                             row = glosses.get(t['lemma']) or glosses.get(ud.normalize('NFC', t['raw_lemma']))
                             gloss = hand.get(t['lemma']) or lsj_gloss(row)
                             lex[key] = {'head': t['lemma'], 'pos': 'proper noun' if key.endswith(':propn')
-                                        else POS.get(t['postag'][0], POS['-'])[1], 'def': gloss or COMING_SOON}
+                                        else POS.get(t['postag'][0], POS['-'])[1], 'def': gloss or None}
                             if not gloss:
                                 missing[t['lemma']]['flags'] = (row or {}).get('flags', 'not in CSV')
-                        if lex[key]['def'] == COMING_SOON:
+                        if lex[key]['def'] is None:
                             missing[t['lemma']]['count'] += 1
                             report['missing'].append(key)
                     stats['analysed'] += 1
-                    if all(lex[a['l']]['def'] != COMING_SOON for a in w['a']):
+                    if all(lex[a['l']]['def'] is not None for a in w['a']):
                         stats['defined'] += 1
                 else:
                     report['unanalysed'].append(f'{n}: {x["f"]}')
@@ -440,8 +458,8 @@ def build_work(work, glosses, hand, lex, missing):
                 f.write(f'{title}\n')
                 f.writelines(f'{x}\n' for x in items)
                 f.write('\n')
-            section(f'Lemmas with no definition yet (shown as "{COMING_SOON}"; add them to '
-                    'tools/homer/input/hand_glosses.csv):', sorted(set(report['missing'])))
+            section('Lemmas with no definition yet (add them to tools/homer/input/hand_glosses.csv):',
+                    sorted(set(report['missing'])))
             section('Words the treebank does not analyse (Line: word):', report['unanalysed'])
             section('Treebank words with no match in the Scansion text (cited Line: words):', unplaced)
             section('Words matched to a treebank word spelled differently (Line: printed = treebank):', report['respelt'])
@@ -466,8 +484,8 @@ def main():
               f'{s["defined"]} with a definition ({100 * s["defined"] / max(1, s["analysed"]):.1f}% of analysed); '
               f'treebank tokens placed {s["tokens_placed"]}/{s["tokens"]}, {s["respelt"]} words matched to a different spelling')
     with open(os.path.join(DATA, 'lexicon', 'greek.json'), 'w', encoding='utf-8') as f:
-        json.dump(dict(sorted(lex.items())), f, ensure_ascii=False, indent=0)
-    print(f'greek.json: {len(lex)} entries, {sum(v["def"] == COMING_SOON for v in lex.values())} "{COMING_SOON}"')
+        json.dump(dict(sorted(lex.items())), f, ensure_ascii=False, separators=(',', ':'))
+    print(f'greek.json: {len(lex)} entries, {sum(v["def"] is None for v in lex.values())} missing definitions')
 
     todo = sorted(missing.items(), key=lambda kv: (-kv[1]['count'], kv[0]))
     hints = lsj_hints([k for k, _ in todo]) if glob.glob(os.path.join(SOURCES, 'lsj', '*.xml')) else {}
