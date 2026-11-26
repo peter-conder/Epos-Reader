@@ -6,7 +6,7 @@ import { isMobileTier, onTierChange, tier } from './viewport.js';
 
 /* ==========================================================
    BOOKMARKS ON PHONES AND TABLETS, Kindle-style
-   - A ribbon hangs in the top-right corner. Tap it to bookmark the first Line you can read at the top of the
+   - A ribbon hangs from the top edge at the top right. Tap it to bookmark the first Line you can read at the top of the
      screen. It is filled while any Bookmarked Line is on screen; tapping it then removes the topmost one.
      Empty, it fades with the menu button and bottom bar; filled, it stays while you read.
    - The strip down the right edge (see scrollbar.js) shows a dot per Bookmark; tapping one puts its Line at

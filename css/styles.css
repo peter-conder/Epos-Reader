@@ -2028,27 +2028,39 @@
     @media (pointer: coarse) { .pane-original { -webkit-user-select: none; user-select: none; } }
 
     /* ---- Bookmarks, Kindle-style (see mobile-bookmarks.js) ---- */
-    /* The ribbon sits at the top right, level with the menu button and, like it, below iOS's edge blur (see
-       --chrome-top). Empty it is an outline that fades with the other floating controls; filled (a Bookmarked
-       line on screen) it is solid and stays while you read. */
+    /* The ribbon hangs from the top edge at the top right, down to the foot of the menu button. Its top runs
+       through iOS's edge blur in the Home Screen app, but the notched end sits below it with the menu button
+       (see --chrome-top). Empty it is an outline that fades with the other floating controls; filled (a
+       Bookmarked line on screen) it is solid and stays while you read.
+       Drawn with clip-paths rather than an SVG so it can be any length without stretching the notch: the
+       shape is filled with the outline colour, and ::after, inset by the outline's width, fills the inside. */
     .bm-ribbon {
       position: fixed; z-index: 58;
-      top: var(--chrome-top); right: calc(12px + env(safe-area-inset-right));
-      width: 44px; height: 48px;   /* as tall as the menu button, so the two line up */
-      display: flex; justify-content: center; align-items: center;
+      top: 0; right: calc(12px + env(safe-area-inset-right));
+      width: 44px; height: calc(var(--chrome-top) + 48px);
+      display: flex; justify-content: center; align-items: flex-start;
       color: var(--primary);
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
       transition: opacity 260ms ease;
     }
     .bm-ribbon[hidden] { display: none; }
-    .bm-ribbon svg { width: 26px; height: 32px; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18)); }
-    .bm-ribbon path {
-      fill: color-mix(in srgb, var(--surface) 70%, transparent);
-      stroke: currentColor; stroke-width: 2.5; stroke-linejoin: round;
-      transition: fill 160ms ease;
+    .bm-shape {
+      position: relative;
+      width: 26px; height: 100%;
+      background: currentColor;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 8px), 0 100%);
+      transform-origin: 50% 0;
     }
-    .bm-ribbon.filled path { fill: currentColor; }
-    .bm-ribbon.drop svg { animation: ribbonDrop 360ms var(--ease-bouncy); transform-origin: 50% 0; }
-    @keyframes ribbonDrop { from { transform: scaleY(0.6); } }
+    /* Open at the top, so it reads as running on up off the screen */
+    .bm-shape::after {
+      content: ''; position: absolute; inset: 0;
+      background: var(--surface);
+      clip-path: polygon(2.5px 0, calc(100% - 2.5px) 0, calc(100% - 2.5px) calc(100% - 4.5px), 50% calc(100% - 11px), 2.5px calc(100% - 4.5px));
+      transition: opacity 160ms ease;
+    }
+    .bm-ribbon.filled .bm-shape::after { opacity: 0; }
+    .bm-ribbon.drop .bm-shape { animation: ribbonDrop 360ms var(--ease-bouncy); }
+    @keyframes ribbonDrop { from { transform: scaleY(0.8); } }
     .chrome-hidden .bm-ribbon:not(.filled) { opacity: 0; pointer-events: none; }
     :is(.grid-open, .chapters-open, .note-pinned) .bm-ribbon { opacity: 0; pointer-events: none; }
 
