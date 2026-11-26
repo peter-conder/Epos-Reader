@@ -141,7 +141,7 @@ The app also uses:
 | Aeneid card on Home | *Aeneas Carrying Anchises*, Carle van Loo, 1729, Musée du Louvre, Paris ([Louvre listing on Smartify](https://smartify.org/artworks/charles-andre-known-as-carle-vanloo-aeneas-carrying-anchises)) |
 | Iliad card on Home | *Priam Begging Achilles for the Return of Hector's Body*, Alexander Ivanov, 1824 ([Ivanov on Wikipedia](https://en.wikipedia.org/wiki/A._A._Ivanov)) |
 | Odyssey card on Home | *Ulysses deriding Polyphemus – Homer's Odyssey*, J. M. W. Turner, 1829, The National Gallery, London ([NG508](https://www.nationalgallery.org.uk/paintings/joseph-mallord-william-turner-ulysses-deriding-polyphemus-homer-s-odyssey)) |
-| Fonts | [Gentium Plus](https://software.sil.org/gentium/) (SIL International) and [Roboto](https://fonts.google.com/specimen/Roboto), loaded from Google Fonts |
+| Fonts | [Roboto](https://fonts.google.com/specimen/Roboto) (interface & default reading) and [Gentium Plus](https://software.sil.org/gentium/) (optional serif reading font, SIL International), loaded from Google Fonts |
 | Hand-written glosses | Short glosses for some Homeric Lemmas, written by the author (`tools/homer/input/hand_glosses.csv`). Where there is one, it is shown in place of the LSJ definition |
 
 These lists are copied from `SOURCES` and `CREDITS` in `js/data.js`, which the Settings & Sources page shows. Change both together.

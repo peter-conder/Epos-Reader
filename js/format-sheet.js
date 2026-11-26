@@ -3,10 +3,11 @@ import { showChrome } from './bottom-bar.js';
 import { onTierChange } from './viewport.js';
 import { hideWordCard } from './word-card.js';
 import { relayoutLineEnglish } from './english.js';
+import { prefersReducedMotion } from './motion.js';
 
 /* ==========================================================
    FORMAT TEXT SHEET (phones and tablets): text options in the bottom half of the screen, Kindle-style, so the
-   text you are changing stays in view above it. Opened from the menu.
+   text you are changing stays in view above it. Opened from the bottom bar.
    The toolbar's own panels (Text Appearance: size, font, spacing, margins; View Options: the popup and
    scansion switches) are moved in while it is open and back out when it closes, so every control exists
    once and keeps its listeners. A scansion switch stands in for the toolbar's scansion button.
@@ -14,13 +15,24 @@ import { relayoutLineEnglish } from './english.js';
    ========================================================== */
 const PANELS = () => [el.flyout, el.popupsFlyout];
 const CLOSE_DRAG = 60;   // px the grip must be pulled down to close the sheet
+const CLOSE_MS = 240;
 
 let home = null;   // where the panels live the rest of the time (the toolbar)
+let closeTimer = 0;
 
-export const formatSheetOpen = () => !el.formatSheet.hidden;
+export const formatSheetOpen = () => !el.formatSheet.hidden && !el.formatSheet.classList.contains('closing');
+
+function finishClose() {
+  clearTimeout(closeTimer);
+  closeTimer = 0;
+  el.formatSheet.classList.remove('closing');
+  el.formatSheet.hidden = true;
+  if (home) for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
+}
 
 export function openFormatSheet() {
   if (formatSheetOpen()) return;
+  if (closeTimer) { clearTimeout(closeTimer); closeTimer = 0; el.formatSheet.classList.remove('closing'); }
   hideWordCard();   // one sheet at a time
   home ??= el.flyout.parentElement;
   for (const p of PANELS()) { p.classList.add('in-sheet'); el.fsBody.append(p); }
@@ -30,13 +42,14 @@ export function openFormatSheet() {
   el.fsBody.scrollTop = 0;
 }
 
-export function closeFormatSheet() {
+export function closeFormatSheet({ instant = false } = {}) {
   if (!formatSheetOpen()) return;
-  el.formatSheet.hidden = true;
   root.classList.remove('sheet-open');
   relayoutLineEnglish();
-  for (const p of PANELS()) { p.classList.remove('in-sheet'); home.append(p); }
   showChrome();
+  if (instant || prefersReducedMotion()) { finishClose(); return; }
+  el.formatSheet.classList.add('closing');
+  closeTimer = setTimeout(finishClose, CLOSE_MS);
 }
 
 /* Pulling a sheet's grip (or whatever `handles` matches) down drags the sheet with it; far enough and it closes.
@@ -67,9 +80,9 @@ export function bindSheetDrag(sheet, handles, onClose, enabled = () => true) {
 }
 
 export function initFormatSheet() {
-  el.fsClose.addEventListener('click', closeFormatSheet);
-  bindSheetDrag(el.formatSheet, '#fs-grip, .fs-header', closeFormatSheet);
+  el.fsClose.addEventListener('click', () => closeFormatSheet());
+  bindSheetDrag(el.formatSheet, '#fs-grip, .fs-header', () => closeFormatSheet());
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeFormatSheet(); });
-  // Back on a desktop-wide screen the panels go home to the toolbar
-  onTierChange(closeFormatSheet);
+  // Back on a desktop-wide screen the panels go home to the toolbar immediately
+  onTierChange(() => closeFormatSheet({ instant: true }));
 }

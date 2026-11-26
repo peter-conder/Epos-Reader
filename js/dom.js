@@ -20,7 +20,7 @@ export const el = {
   licenceNotes: $('licence-notes'), sourcesHeading: $('settings-sources'),
   splitBtn: $('btn-split'), meterBtn: $('btn-meter'), textBtn: $('btn-text'),
   popupsBtn: $('btn-popups'), themeBtn: $('btn-theme'), popupsFlyout: $('popups-flyout'), swWords: $('sw-words'), swNotes: $('sw-notes'),
-  swCaesura: $('sw-caesura'), swSynizesis: $('sw-synizesis'),
+  swCaesura: $('sw-caesura'), swRareScansion: $('sw-rare-scansion'),
   flyout: $('flyout'), fontSlider: $('font-size'), sizeSlider: $('size-slider'),
   picker: $('picker'), pickerTitle: $('picker-title'), workList: $('work-list'),
   bookPicker: $('book-picker'), booksGrid: $('books-grid'), backBtn: $('btn-back'),

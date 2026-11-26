@@ -72,6 +72,13 @@ let currentPalette = 'bluegray';
 
 const rolesOf = (pal) => pal[state.theme] ?? pal.light;
 
+function syncThemeColor() {
+  const meta = document.getElementById('meta-theme-color');
+  if (!meta) return;
+  const bg = getComputedStyle(document.body).backgroundColor;
+  if (bg) meta.setAttribute('content', bg);
+}
+
 export function applyPalette(key) {
   const paletteKey = PALETTES[key] ? key : 'bluegray';
   currentPalette = paletteKey;
@@ -86,12 +93,17 @@ export function applyPalette(key) {
     it.classList.toggle('active', on);
     it.setAttribute('aria-checked', String(on));
   }
+  syncThemeColor();
   return paletteKey;
 }
 
 export function choosePalette(key) {
-  const saved = applyPalette(key);
-  try { localStorage.setItem(PALETTE_KEY, saved); } catch { /* storage unavailable */ }
+  const next = PALETTES[key] ? key : 'bluegray';
+  if (next === currentPalette) return;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (document.startViewTransition && !still) document.startViewTransition(() => applyPalette(next));
+  else applyPalette(next);
+  try { localStorage.setItem(PALETTE_KEY, next); } catch { /* storage unavailable */ }
 }
 
 /* The menus' swatches show the colours of the mode that is on, so what you pick is what you get */
