@@ -1,3 +1,5 @@
+import { motionToken } from './motion.js';
+
 /* ==========================================================
    LOADING INDICATOR (Material 3 Expressive style): one solid shape with no track,
    spinning clockwise while it morphs through a scalloped badge, a pentagon, an
@@ -13,7 +15,7 @@ const LOADER_SHAPES = [            // [lobes, depth] terms of r(θ) = 1 + Σ dep
   [[10, 0.15], [20, -0.02]]        // deep 10-point starburst
 ];
 export const LOADER_N = 144;       // points around each shape
-const LOADER_STEP = 800;           // ms per shape: a 4-second cycle
+const LOADER_STEP = 650;           // ms per shape (M3E): a 3.25-second cycle
 export const LOADER_RADII =LOADER_SHAPES.map((terms) => Array.from({ length: LOADER_N }, (_, i) => {
   const t = (i / LOADER_N) * Math.PI * 2;
   return 1 + terms.reduce((s, [n, a]) => s + a * Math.cos(n * t), 0);
@@ -32,8 +34,10 @@ export function cubicBezier(x1, y1, x2, y2) {
     return bz(t, y1, y2);
   };
 }
-export const MORPH_EASE = cubicBezier(0.2, 0, 0, 1);         // fast in, long settle
-const SPIN_EASE = cubicBezier(0.34, 1.4, 0.64, 1);     // the spin burst overshoots a little as the shape lands
+/* The morph and the spin burst run on the M3E springs, read from the CSS tokens (see motionToken) so the two can't
+   drift apart: the morph on the default spatial spring, overshooting a touch past each shape before it settles; the
+   quarter-turn burst on the fast one. Under Reduce Motion the tokens point at the effects curves, which don't. */
+const springOf = (name) => cubicBezier(...motionToken(name).easing.match(/-?[\d.]+/g).map(Number));
 
 /* A closed path through the points, smoothed into cubic Béziers (Catmull-Rom) */
 export function loaderPath(radii, R) {
@@ -59,6 +63,7 @@ export function createLoader() {
   wrap.innerHTML = '<svg viewBox="-50 -50 100 100" aria-hidden="true"><path/></svg>';
   const path = wrap.querySelector('path');
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MORPH_EASE = springOf('m3e-default-spatial'), SPIN_EASE = springOf('m3e-fast-spatial');
   const R = 40;   // the deepest shape reaches about 47 of the 50 units around the centre
   let t0 = 0;
   const frame = (now) => {

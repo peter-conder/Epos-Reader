@@ -149,17 +149,22 @@ export function initToolbar() {
   // Text size: each reader sets its own size when it fits its text, so only the chosen size is stored here.
   // Lines never wrap, so the pane's width limit grows with the size; otherwise the text would stop
   // growing once the widest line filled the pane (it still stops when the pane fills the window).
+  // The value pill shown while dragging: the size as a share of the default (the slider's starting value)
+  const sizeValue = $('size-value'), defaultSize = parseFloat(el.fontSlider.defaultValue);
+  const showSize = (val) => { sizeValue.textContent = `${Math.round((val / defaultSize) * 100)}%`; };
+  showSize(parseFloat(el.fontSlider.value));
   el.fontSlider.addEventListener('input', () => {
     const val = parseFloat(el.fontSlider.value);
     const max = parseFloat(el.fontSlider.max);
     el.sizeSlider.style.setProperty('--pct', ((val - MIN_FONT) / (max - MIN_FONT)).toFixed(4));
+    showSize(val);
     state.fontRem = val;
     root.style.setProperty('--reader-max', `${Math.round(BASE_READER_MAX * Math.max(1, val / BASE_FIT_REM))}px`);
     alignProgress();   // the book bar is as wide as the pane; the main area didn't resize, so nothing else tells it
     fitAll();
   });
 
-  // Handle squeezes while shared.dragging, then bounces back
+  // While dragging, the handle thins and the value pill shows (see .m3-slider.dragging)
   const endSliderDrag = () => {
     el.sizeSlider.classList.remove('dragging');
     root.classList.remove('resizing-text');

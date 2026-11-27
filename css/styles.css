@@ -260,10 +260,10 @@
     width: 32px; height: 32px;
     border-radius: var(--radius-full);
     display: grid; place-items: center;
-    color: var(--on-primary-container);
+    color: inherit;   /* the text colour of whatever it sits on: menus, sheets, the note box */
     transition: background-color var(--fx-fast), transform var(--sp-fast);
   }
-  @media (hover: hover) { .btn-close:hover { background: color-mix(in srgb, var(--on-primary-container) 12%, transparent); transform: scale(1.1); } }
+  @media (hover: hover) { .btn-close:hover { background: color-mix(in srgb, currentColor 12%, transparent); transform: scale(1.1); } }
   .btn-close .icon { width: 16px; height: 16px; }
 
   /* ==========================================================
@@ -655,23 +655,28 @@
   .switch-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .switch-title { font-size: 16px; font-weight: 500; }
   .switch-sub { font-size: 12px; line-height: 1.25; opacity: 0.72; }
+  /* M3E switch: a 52×32 track, outlined when off. The thumb is one 28px circle, scaled to 16px off, 24px on and
+     its full 28px while pressed, so the size change runs on the GPU like the slide; both on the fast spatial spring. */
   .switch {
     position: relative; flex-shrink: 0;
-    width: 44px; height: 26px;
-    border-radius: var(--radius-full);
-    background: color-mix(in srgb, var(--secondary) 40%, var(--primary-container));
-    transition: background-color var(--fx-fast);
+    width: 52px; height: 32px;
+    border: 2px solid var(--outline);
+    border-radius: 16px;
+    background: var(--surface-container-highest);
+    transition: background-color var(--fx-fast), border-color var(--fx-fast);
   }
   .switch::after {
-    content: ''; position: absolute; top: 3px; left: 3px;
-    width: 20px; height: 20px;
-    border-radius: var(--radius-full);
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-    transition: transform var(--sp-fast);
+    content: ''; position: absolute; top: 0; left: 0;   /* inside the 2px border: centred 14px in, 14px down */
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--outline);
+    transform: scale(calc(16 / 28));
+    transition: transform var(--sp-fast), background-color var(--fx-fast);
   }
-  .switch-row[aria-checked="true"] .switch { background: var(--primary); }
-  .switch-row[aria-checked="true"] .switch::after { transform: translateX(18px); }
+  .switch-row:active .switch::after { transform: scale(1); }
+  .switch-row[aria-checked="true"] .switch { background: var(--primary); border-color: var(--primary); }
+  .switch-row[aria-checked="true"] .switch::after { background: var(--on-primary); transform: translateX(20px) scale(calc(24 / 28)); }
+  .switch-row[aria-checked="true"]:active .switch::after { transform: translateX(20px) scale(1); }
 
   /* Connected button group: outer ends round, inner corners tight, the selected one morphs into a full pill */
   .pill-group { display: flex; gap: 3px; }
@@ -703,7 +708,11 @@
   .size-row { display: flex; align-items: center; gap: 10px; }
   .size-icon.sm { width: 16px; height: 16px; }
   .size-icon.lg { width: 28px; height: 28px; }
-  .m3-slider { --hw: 4px; --gap: 6px; position: relative; flex: 1; min-width: 0; height: 44px; }
+  /* --hw is registered as a length so the handle can thin by its width while dragging, instead of a squashing
+     scale(); the tracks either side follow it */
+  @property --hw { syntax: '<length>'; inherits: true; initial-value: 4px; }
+  .m3-slider { --hw: 4px; --gap: 6px; position: relative; flex: 1; min-width: 0; height: 44px; transition: --hw var(--sp-fast); }
+  .m3-slider.dragging { --hw: 2px; }
   .ms-input {
     position: absolute; inset: 0; z-index: 2;
     width: 100%; height: 100%; margin: 0;
@@ -737,10 +746,21 @@
     width: var(--hw); height: 36px; margin-top: -18px;
     border-radius: 3px;
     background: var(--primary);
-    transition: left 100ms var(--m3e-fast-effects), transform var(--sp-fast);
+    transition: left 100ms var(--m3e-fast-effects);
   }
-  @media (hover: hover) { .m3-slider:hover .ms-handle { transform: scaleY(1.1); } }
-  .m3-slider.dragging .ms-handle { transform: scale(0.7, 1.25); }
+  /* The value, in an inverse-surface pill above the handle while it is dragged (or moved from the keyboard) */
+  .ms-value {
+    position: absolute; bottom: calc(100% + 2px);
+    left: calc((100% - var(--hw)) * var(--pct) + var(--hw) / 2);
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: var(--inverse-surface); color: var(--inverse-on-surface);
+    font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transform: translate(-50%, 4px) scale(0.8); transform-origin: 50% 100%;
+    transition: left 100ms var(--m3e-fast-effects), opacity var(--fx-fast), transform var(--sp-fast);
+  }
+  .m3-slider.dragging .ms-value, .ms-input:focus-visible ~ .ms-value { opacity: 1; transform: translate(-50%, 0); }
   .ms-input:focus-visible ~ .ms-handle { outline: 2px solid var(--primary); outline-offset: 3px; }
 
   /* ==========================================================
@@ -773,14 +793,21 @@
   .empty-state > .home-title, .empty-state > .home-carousel { transition: opacity var(--fx-fast); }
   .empty-state.loading > .home-title, .empty-state.loading > .home-carousel { opacity: 0; pointer-events: none; }
 
-  /* Loading indicator: one solid morphing shape, no track or container (drawn by createLoader in app.js) */
+  /* Loading indicator: one solid morphing shape (drawn by createLoader in loader.js). It only ever shows over Home's
+     carousel cards, so it is always M3E's contained variant: the shape on a 48px primary-container circle. */
   .m3-loader {
     position: absolute; inset: 0;
     display: grid; place-items: center;
     pointer-events: none;
     animation: loader-in var(--fx-fast) both;
   }
-  .m3-loader svg { width: 48px; height: 48px; fill: var(--primary); overflow: visible; }
+  .m3-loader::before {
+    content: ''; grid-area: 1 / 1;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--primary-container);
+  }
+  .m3-loader svg { grid-area: 1 / 1; width: 38px; height: 38px; fill: var(--on-primary-container); overflow: visible; }
   @keyframes loader-in { from { opacity: 0; transform: scale(0.6); } }
 
   /* Home screen: Material 3 Expressive multi-browse carousel (large, medium and small items).
@@ -2011,7 +2038,7 @@
     }
     .drawer-swatch[aria-checked="true"] { box-shadow: 0 0 0 2px var(--primary-container), 0 0 0 4px var(--on-primary-container); }
     .drawer-swatch:active { transform: scale(0.9); }
-    .sw-check { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(0, 0, 0, 0.35); color: #fff; opacity: 0; }
+    .sw-check { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(0, 0, 0, 0.55); color: #fff; opacity: 0; }
     .sw-check .icon { width: 14px; height: 14px; stroke-width: 3; }
     .drawer-swatch[aria-checked="true"] .sw-check { opacity: 1; }
     .drawer-theme { padding: 14px 20px; border-radius: 4px 4px 20px 20px; background: var(--segment); }
