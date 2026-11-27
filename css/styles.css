@@ -2,42 +2,44 @@
      1. TOKENS
      ========================================================== */
   :root {
-    /* Theme tokens (Material 3 roles). The values here are Slate's; settings.js sets the chosen palette's
-       roles on the root (each palette has a light and a dark set, generated as M3E Vibrant). */
-    --primary: #005BAE;
-    --on-primary: #EFF2FF;
-    --primary-container: #5FA2FF;
-    --on-primary-container: #002349;
-    --secondary: #2A56B7;
-    --on-secondary: #F1F2FF;
-    --secondary-container: #C2D0FF;
-    --on-secondary-container: #0640A2;
+    /* Theme tokens (Material 3 roles). The values here are Slate's (the default); settings.js sets the chosen palette's
+       roles on the root (each palette has a light and a dark set, generated as M3E Vibrant; Slate as Neutral). */
+    --primary: #565F6B;
+    --on-primary: #F5F8FF;
+    --primary-container: #DBE3F1;
+    --on-primary-container: #4A525E;
+    --secondary: #5C5F64;
+    --on-secondary: #F7F9FF;
+    --secondary-container: #E1E2E8;
+    --on-secondary-container: #4F5257;
     /* Tertiary: Note and Bookmark chrome only */
-    --tertiary: #833D99;
-    --on-tertiary: #FFEDFE;
-    --tertiary-container: #EA9BFF;
-    --on-tertiary-container: #5A1171;
+    --tertiary: #4F5B92;
+    --on-tertiary: #FBF8FF;
+    --tertiary-container: #D9DEFF;
+    --on-tertiary-container: #404D83;
 
     /* Chrome surfaces: the page behind the panes, the tonal containers that menus, lists and sheets sit on,
        and the tinted neutrals for borders and quiet text */
-    --page: #F6F6FF;
-    --on-surface: #202D51;
-    --on-surface-variant: #4D5A81;
-    --outline: #69769E;
-    --outline-variant: #9FACD7;
+    --page: #FCF8F9;
+    --on-surface: #313234;
+    --on-surface-variant: #5E5F61;
+    --outline: #7A7A7D;
+    --outline-variant: #B2B1B4;
     --surface-container-lowest: #FFFFFF;
-    --surface-container-low: #EEF0FF;
-    --surface-container: #E2E7FF;
-    --surface-container-high: #DAE2FF;
-    --surface-container-highest: #D2DCFF;
+    --surface-container-low: #F6F3F4;
+    --surface-container: #EFEDEF;
+    --surface-container-high: #E9E7E9;
+    --surface-container-highest: #E3E2E4;
 
     /* The reading text stays calm: a set of its own, generated as M3 TonalSpot from the same seed */
     --read-surface: #F9F9FE;    /* the pane the text sits on */
-    --read-text: #2F323A;
-    --read-hl: #D9E3F8;         /* long syllables, Word hover, a Line flashed or pressed */
-    --read-mk: #565F72;         /* short-syllable bars and the other Scansion marks */
-    --read-sel: #45608A;        /* a selected Word */
-    --on-read-sel: #F8F8FF;
+    --read-text: #2E333A;
+    --read-hl: #D6E4F7;         /* long syllables, Word hover, a Line flashed or pressed */
+    --read-mk: #536071;         /* short-syllable bars and the other Scansion marks */
+    --read-sel: #3D6288;        /* a selected Word */
+    --on-read-sel: #F7F9FF;
+    --read-c: #DBE3F1;       /* the Word card: a calm primary container */
+    --on-read-c: #4A525E;
 
     --hover-shade: #000000;     /* what hovers shade toward */
     --bg: var(--page);
@@ -150,36 +152,38 @@
      below are Slate's, so the page is right before the script runs. */
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --primary: #7BAFFF;
-    --on-primary: #002E5D;
-    --primary-container: #5FA2FF;
-    --on-primary-container: #002349;
-    --secondary: #749AFF;
-    --on-secondary: #001C52;
-    --secondary-container: #194AAB;
-    --on-secondary-container: #D6DEFF;
-    --tertiary: #F0B0FF;
-    --on-tertiary: #651F7B;
-    --tertiary-container: #EA9BFF;
-    --on-tertiary-container: #5A1171;
+    --primary: #BFC7D5;
+    --on-primary: #38414C;
+    --primary-container: #3F4753;
+    --on-primary-container: #C8D1DF;
+    --secondary: #9B9EA3;
+    --on-secondary: #1D2025;
+    --secondary-container: #393C40;
+    --on-secondary-container: #BDBFC5;
+    --tertiary: #ECECFF;
+    --on-tertiary: #47548A;
+    --tertiary-container: #D9DEFF;
+    --on-tertiary-container: #404D83;
 
-    --page: #000C2D;
-    --on-surface: #DEE4FF;
-    --on-surface-variant: #9DAAD5;
-    --outline: #67749C;
-    --outline-variant: #3A476C;
+    --page: #0E0E0F;
+    --on-surface: #E6E5E7;
+    --on-surface-variant: #ABABAD;
+    --outline: #757577;
+    --outline-variant: #47484A;
     --surface-container-lowest: #000000;
-    --surface-container-low: #001037;
-    --surface-container: #021742;
-    --surface-container-high: #061D4B;
-    --surface-container-highest: #0A2355;
+    --surface-container-low: #131314;
+    --surface-container: #191A1B;
+    --surface-container-high: #1F2021;
+    --surface-container-highest: #252628;
 
     --read-surface: #0C0E12;
-    --read-text: #E2E5EF;
-    --read-hl: #323C4D;
-    --read-mk: #BDC7DC;
-    --read-sel: #B3C7ED;
-    --on-read-sel: #2D4160;
+    --read-text: #E1E6EF;
+    --read-hl: #303C4C;
+    --read-mk: #BAC8DB;
+    --read-sel: #AEC9EB;
+    --on-read-sel: #27425E;
+    --read-c: #3F4753;
+    --on-read-c: #C8D1DF;
 
     --hover-shade: #ffffff;
     --segment: var(--surface-container-highest);   /* in dark mode the higher containers are the lighter ones */
@@ -1156,6 +1160,10 @@
 
   /* Word definition card (the gloss) */
   .word-card {
+    /* Toned down: the card takes the calm reading set's container (--read-c) in place of the Vibrant one, so
+       everything inside that is drawn in the primary-container roles follows it */
+    --primary-container: var(--read-c);
+    --on-primary-container: var(--on-read-c);
     position: fixed;
     z-index: 250;
     width: 320px;
