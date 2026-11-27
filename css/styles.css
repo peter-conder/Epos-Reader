@@ -123,12 +123,13 @@
     /* Widest a lone reading pane gets; the book bar above it is held to the same width */
     --reader-max: 860px;
 
-    /* Bookmark glyph shapes, used as masks (see .bm-glyph): closed outline, solid, and the outline with its
-       top-right corner opened up for the "+" that pops in when a bookmark is about to be added */
-    --bookmark-outline-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.5 3.5h11v17L12 16.6l-5.5 3.9Z' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
-    --bookmark-add-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.5 3.5h-6v17l5.5-3.9 5.5 3.9V12' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    --bookmark-plus-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17.5 4.2v4.6M15.2 6.5h4.6' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-    --bookmark-fill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.5 3.5h11v17L12 16.6l-5.5 3.9Z' fill='black' stroke='black' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E");
+    /* Bookmark glyph shapes, used as masks (see .bm-glyph), from Material Symbols Rounded: bookmark, its filled
+       version, and bookmark_add split in two: the outline with its top-right corner opened up, and the "+" that
+       pops in there when a bookmark is about to be added */
+    --bookmark-outline-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m480-240-196 84q-30 13-57-4.76-27-17.75-27-50.24v-574q0-24 18-42t42-18h440q24 0 42 18t18 42v574q0 32.49-27 50.24Q706-143 676-156l-196-84Zm0-64 220 93v-574H260v574l220-93Zm0-481H260h440-220Z'/%3E%3C/svg%3E");
+    --bookmark-add-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m480-240-196 84q-30 13-57-4.76-27-17.75-27-50.24v-574q0-24 18-42t42-18h260q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H260v574l220-93 220 93v-304q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v304q0 32.49-27 50.24Q706-143 676-156l-196-84Zm0-545H260h290-70Z'/%3E%3C/svg%3E");
+    --bookmark-plus-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M700-695h-60q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h60v-60q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v60h60q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5h-60v60q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37v-60Z'/%3E%3C/svg%3E");
+    --bookmark-fill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m480-240-196 84q-30 13-57-5t-27-50v-574q0-24 18-42t42-18h440q24 0 42 18t18 42v574q0 32-27 50t-57 5l-196-84Z'/%3E%3C/svg%3E");
     --snippet-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5,19H19V9.82L14.18,5H5V19Zm0,2q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H15l6,6V19q0,0.82-0.59,1.41T19,21H5Zm2-4H17V15H7v2Zm0-4H17V11H7v2ZM7,9h7V7H7V9ZM5,19V5V9.82V19Z'/%3E%3C/svg%3E");
   }
   /* Reduce Motion: every spatial spring takes its effects curve, so nothing overshoots. Durations stay. */
@@ -229,6 +230,9 @@
     fill: none; stroke: currentColor; stroke-width: 2;
     stroke-linecap: round; stroke-linejoin: round;
   }
+  /* Active icons show their filled Material Symbol. A two-state symbol in icons.svg draws its outline when
+     --icon-o is unset and its filled shape when --icon-f is set; custom properties reach into the <use> copy. */
+  :is(.active, [aria-pressed="true"], [aria-expanded="true"], .has-note) > .icon { --icon-o: none; --icon-f: inline; }
 
   /* Shared popover behaviour: hidden until .open, bounces in from --from */
   .popover {
@@ -635,7 +639,7 @@
   .flyout-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 4px 8px 0 12px;
-    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary);   /* M3E header: sentence case, in the primary colour */
   }
   .flyout-group { display: flex; flex-direction: column; gap: 8px; padding: 0 8px; }
   .flyout-label { font-size: 15px; font-weight: 600; padding-left: 4px; }
@@ -836,7 +840,7 @@
     z-index: 260;
   }
   .panel-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 8px 6px 18px; }
-  .panel-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .panel-title { font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary); }
 
   /* Segmented list (see the drawer): the list clips the outer corners round */
   #work-list { display: flex; flex-direction: column; gap: 2px; border-radius: 20px; overflow: hidden; }
@@ -1019,7 +1023,7 @@
   .bm-glyph::after {
     -webkit-mask: var(--bookmark-plus-icon) center / contain no-repeat;
             mask: var(--bookmark-plus-icon) center / contain no-repeat;
-    transform: scale(0); transform-origin: 73% 27%;
+    transform: scale(0); transform-origin: 76% 24%;   /* the centre of bookmark_add's plus */
     transition: transform var(--sp-fast);
   }
 
@@ -1240,8 +1244,7 @@
   .settings-subtitle { font-size: 14.5px; color: var(--text-muted); margin-bottom: 28px; }
   .settings-section-title {
     margin: 36px 0 16px;
-    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    color: var(--on-surface);
+    font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary);
   }
   .settings-chips { display: flex; flex-wrap: wrap; gap: 10px; }
   .settings-chip {
@@ -1401,11 +1404,10 @@
   .nb-divider {
     display: flex; align-items: center; gap: 14px;
     margin: 40px 0 20px;
-    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
-    color: var(--on-surface);
+    font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary);
   }
   .nb-divider::after { content: ''; order: 1; flex: 1; height: 2px; border-radius: 2px; background: var(--secondary-container); }
-  .nb-divider-count { order: 2; font-weight: 500; letter-spacing: 0.2px; text-transform: none; color: var(--text-muted); }
+  .nb-divider-count { order: 2; font-weight: 500; letter-spacing: 0.2px; color: var(--text-muted); }
 
   .bm-card {
     position: relative;
@@ -1795,7 +1797,7 @@
     transition: opacity var(--fx-fast), transform var(--sp-fast);
   }
   .load-retry:active { transform: scale(0.96); }
-  .settings-section-note { margin-left: 6px; font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.7; }
+  .settings-section-note { margin-left: 6px; font-weight: 500; letter-spacing: 0; color: var(--on-surface-variant); }
 
   /* Line menu (long press on a line, phones and tablets) */
   .line-menu {
@@ -1808,7 +1810,7 @@
     color: var(--on-surface);
     z-index: 290;
   }
-  .lm-title { padding: 8px 14px 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0.75; }
+  .lm-title { padding: 8px 14px 6px; font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary); }
   .lm-item {
     display: grid; grid-template-columns: 24px 1fr; column-gap: 14px; align-items: center;
     width: 100%; min-height: 48px;
@@ -1962,10 +1964,9 @@
     .cl-work-title {
       display: flex; align-items: baseline; gap: 8px;
       margin: 8px 4px 10px;
-      font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
-      color: var(--secondary);
+      font-size: 14px; font-weight: 700; letter-spacing: 0.1px; color: var(--primary);
     }
-    .cl-poet { font-weight: 500; text-transform: none; letter-spacing: 0; opacity: 0.8; }
+    .cl-poet { font-weight: 500; letter-spacing: 0; color: var(--on-surface-variant); }
     .cl-rows { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 2px; border-radius: 20px; overflow: hidden; }   /* segmented, see the drawer */
     .cl-row {
       min-height: 52px;
@@ -1983,7 +1984,7 @@
       padding: 3px 9px;
       border-radius: var(--radius-full);
       background: var(--primary); color: var(--on-primary);
-      font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.1px;
     }
     .cl-empty { padding: 40px 8px; text-align: center; color: var(--on-surface-variant); }
 

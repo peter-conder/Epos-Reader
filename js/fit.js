@@ -160,7 +160,17 @@ export function fitAll(remeasure = false) {
   });
 }
 
+/* Only the faces the Lines are set in change their width: Gentium Plus and Roboto at 400 and 700 (italic too).
+   The chrome-only weights (500, 600, 800: menus, headers, the Line numbers in the gutter) must never refit the
+   Book when one of them first appears mid-read. */
+const TEXT_WEIGHTS = new Set(['400', '700', 'normal', 'bold']);
+const setsText = (face) => /Gentium Plus|Roboto/.test(face.family) && TEXT_WEIGHTS.has(String(face.weight));
+
 export function initFit() {
   // A web font arriving after the text was measured changes its width
-  document.fonts?.addEventListener('loadingdone', () => fitAll(true));
+  document.fonts?.addEventListener('loadingdone', (e) => {
+    if (!e.fontfaces?.length || e.fontfaces.some(setsText)) fitAll(true);
+  });
+  // The two weights only a few places use load now, on the Home screen, rather than when they first appear
+  for (const weight of [600, 800]) document.fonts?.load(`${weight} 1em Roboto`).catch(() => {});
 }
