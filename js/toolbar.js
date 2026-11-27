@@ -9,6 +9,8 @@ import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
 import { openFormatSheet } from './format-sheet.js';
 
+const SCAN_MARKS_KEY = 'epos.scanmarks.v1';   // which optional Scansion marks are shown
+
 /* ==========================================================
    TOP BAR, TOOLBAR & TEXT OPTIONS
    ========================================================== */
@@ -109,8 +111,23 @@ export function initToolbar() {
   }
   bindSwitch(el.swWords, 'words');
   bindSwitch(el.swNotes, 'notes');
-  bindSwitch(el.swCaesura, 'caesura', (on) => { root.dataset.caesura = on ? 'on' : 'off'; });
-  bindSwitch(el.swSynizesis, 'synizesis', (on) => { root.dataset.synizesis = on ? 'on' : 'off'; });
+  // The Scansion mark switches are remembered between visits (the popup ones are not)
+  const marks = [[el.swCaesura, 'caesura'], [el.swSynizesis, 'synizesis'], [el.swLengthened, 'lengthened']];
+  try {
+    const saved = JSON.parse(localStorage.getItem(SCAN_MARKS_KEY) || '{}');
+    for (const [, key] of marks) if (typeof saved[key] === 'boolean') state.popups[key] = saved[key];
+  } catch { /* storage unavailable or unreadable: keep the defaults */ }
+  for (const [btn, key] of marks) {
+    const show = (on) => { root.dataset[key] = on ? 'on' : 'off'; };
+    btn.setAttribute('aria-checked', String(state.popups[key]));
+    show(state.popups[key]);
+    bindSwitch(btn, key, (on) => {
+      show(on);
+      try {
+        localStorage.setItem(SCAN_MARKS_KEY, JSON.stringify(Object.fromEntries(marks.map(([, k]) => [k, state.popups[k]]))));
+      } catch { /* storage unavailable */ }
+    });
+  }
 
   // Close buttons inside popovers
   document.querySelectorAll('[data-close]').forEach((btn) =>

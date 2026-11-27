@@ -5,7 +5,7 @@ import { loadBook, loadEnglish } from './book-data.js';
 import { beginTranslationClose, playPop } from './motion.js';
 import { syncToolbar } from './layout.js';
 import { jumpToIndex, makeChunker, mountChunker, scrollToLine, syncChunks } from './chunks.js';
-import { scheduleFit } from './fit.js';
+import { fitAll, scheduleFit } from './fit.js';
 import { hideWordCard, showWordCard } from './word-card.js';
 import { refreshNoteMarks } from './notes.js';
 import { flashLine, refreshBookmarkMarks, renderRail, toggleBookmark } from './bookmarks.js';
@@ -266,8 +266,8 @@ export function verseHtml({ n, words }) {
    d lengthened syllable, m hypermetric (elided into the next line). */
 const SCAN_NOTES = { h: 'hiatus', z: 'synizesis', r: 'consonantal i', d: 'lengthened syllable', m: 'hypermetric' };
 
-/* A word's text, split into syllable spans when it has scansion (the spans add no width,
-   so the marks can be shown or hidden without refitting the text) */
+/* A word's text, split into syllable spans when it has scansion. The spans add no width of their own, but with
+   Scansion on the feet inside a word are spaced apart (see the Scansion CSS), so toggling it refits the text. */
 export function wordHtml(w) {
   const s = w.s;
   if (!s?.length || s.map((x) => x[0]).join('') !== w.f) return esc(w.f);
@@ -337,4 +337,5 @@ export function toggleScansion() {
   el.meterBtn.classList.toggle('active', state.scansion);
   el.meterBtn.setAttribute('aria-pressed', String(state.scansion));
   el.swScansion.setAttribute('aria-checked', String(state.scansion));
+  fitAll(true);   // the space between feet makes a scanned line wider
 }

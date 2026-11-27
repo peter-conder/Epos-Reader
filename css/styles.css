@@ -58,6 +58,8 @@
     --reading-font-size: 1.45rem;
     --reading-trans-font-size: 1.25rem;
     --reading-line-height: 1.3;
+    --word-pad: 6px;      /* a word's side padding, and the gap between words (the scansion marks read both) */
+    --word-gap: 0.45em;
     --reading-padding: 36px;
     --reading-font: 'Roboto', system-ui, sans-serif;
     /* One gap between any two windows (tab split and English side by side) */
@@ -904,7 +906,7 @@
     text-align: right;
     user-select: none;
   }
-  .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: 0.45em; }
+  .verse-words { flex: 1; display: inline-flex; flex-wrap: nowrap; column-gap: var(--word-gap); }
 
   /* A pane too narrow for the widest Line even at the smallest size (beside the English, or in a Split): its Lines
      wrap with a hanging indent, as on a phone (see COMPACT below), instead of running out of the pane. fit.js sets
@@ -971,7 +973,7 @@
   .word {
     position: relative;
     display: inline-block;
-    padding: 2px 6px;
+    padding: 2px var(--word-pad);
     margin: 1px 0;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -1001,72 +1003,63 @@
   .word.selected.has-note::after { background: var(--on-primary); }
 
   /* Scansion. Each scanned word is split into .syl spans (data-q: L long, S short, E elided;
-     data-x: flags, see SCAN_NOTES in app.js). Every mark is absolutely positioned, so turning
-     scansion on or off never changes a line's width.
-       .syl::before   quantity mark above the syllable (bar = long, dot = short)
-       .syl::after    foot boundary, before a syllable that starts a foot
-       .word::before  caesura, in the gap after the word (caesuras always fall at word ends) */
+     data-x: flags, see SCAN_NOTES in reader.js). The marks sit on the letters, not above them:
+       long syllable     highlighted in the palette's secondary container
+       short syllable    a bar just below the letters in its secondary colour; two shorts in a row show a break
+       elided syllable   dimmed, unmarked
+       foot boundary     a bold line in the text colour (.syl::after). Inside a word the feet are spaced apart,
+                         so a scanned Line is wider than an unscanned one: toggling Scansion refits the text.
+     Off by default, each with its own switch in View Options (the Format Text sheet on phones and tablets):
+       caesura           a double line in the palette's primary colour, in the gap after the word (.word::before)
+       synizesis / consonantal i   a dotted line along the top of the syllable
+     On by default, with a switch:
+       lengthened syllable         a long one with a line along its top
+     Every mark is a background or an absolutely positioned pseudo-element, except the foot spacing. The
+     highlight, the bars and the lines inside a selected word all switch to the selected word's text colour. */
   .syl { position: relative; }
 
-  [data-scansion="on"] .syl::before {
-    content: '';
-    position: absolute; top: -8px; height: 6px;
-    pointer-events: none;
-    --m-color: var(--gray-900);
+  [data-scansion="on"] .syl {
+    --hl: var(--secondary-container);   /* long highlight */
+    --mk: var(--secondary);             /* short bar, lengthened bar, synizesis */
+    background-image: var(--len-bar, none), var(--long-hl, none), var(--short-bar, none);
+    background-size: calc(100% - 2px) 2px, calc(100% - 2px) 100%, calc(100% - 3px) 2px;
+    background-position: center top, center, center bottom;
+    background-repeat: no-repeat;
   }
-  [data-scansion="on"] .syl[data-q="L"]::before {
-    left: 50%; width: 10px;
-    transform: translateX(-50%);
-    background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat;
-  }
-  /* breve: the bottom half of a ring */
-  [data-scansion="on"] .syl[data-q="S"]::before {
-    left: 50%; top: -9px; width: 7px; height: 4px;
-    transform: translateX(-50%);
-    box-sizing: border-box;
-    --m-color: var(--secondary);
-    border: 1.5px solid var(--m-color); border-top: 0;
-    border-radius: 0 0 4px 4px;
-  }
-  /* a normally short syllable lengthened by the poet */
-  [data-scansion="on"] .syl[data-x*="d"]::before {
-    background: linear-gradient(var(--m-color), var(--m-color)) center / 100% 2px no-repeat,
-                linear-gradient(var(--m-color), var(--m-color)) center 0 / 100% 1px no-repeat;
-  }
-  /* elided: not sounded, so dimmed and unmarked */
+  /* inset from each side, so two long syllables in a row read as two blocks, and two shorts as two bars */
+  [data-scansion="on"] .syl[data-q="L"] { --long-hl: linear-gradient(var(--hl), var(--hl)); border-radius: 3px; }
+  [data-scansion="on"] .syl[data-q="S"] { --short-bar: linear-gradient(var(--mk), var(--mk)); }
+  [data-scansion="on"]:not([data-lengthened="off"]) .syl[data-x*="d"] { --len-bar: linear-gradient(var(--mk), var(--mk)); }
   [data-scansion="on"] .syl[data-q="E"] { opacity: 0.45; }
-  /* synizesis or consonantal i: two vowels run together into one syllable */
-  [data-scansion="on"] .syl[data-x*="z"],
-  [data-scansion="on"] .syl[data-x*="r"] {
-    text-decoration: underline dotted var(--secondary);
-    text-underline-offset: 3px;
+  [data-scansion="on"][data-synizesis="on"] .syl:is([data-x*="z"], [data-x*="r"]) {
+    text-decoration: overline dotted 2px var(--mk);
   }
+  [data-scansion="on"] .word.selected .syl { --hl: color-mix(in srgb, var(--on-primary) 28%, transparent); --mk: var(--on-primary); }
 
-  /* foot boundary: inside the word, or in the gap before it (half the column-gap plus the word padding) */
+  /* Foot boundary. Inside a word: 7px of room, the line in the middle of it. In the gap before a word: the middle
+     of the gap (half the column-gap plus the word's side padding). Runs a little above and below the letters. */
+  [data-scansion="on"] .syl[data-x*="f"]:not(:first-child) { margin-left: 7px; }
   [data-scansion="on"] .syl[data-x*="f"]::after {
     content: '';
-    position: absolute; left: -0.5px; top: 12%; bottom: 8%;
-    width: 1px;
-    background: color-mix(in srgb, var(--secondary) 45%, transparent);
+    position: absolute; top: -0.24em; bottom: -0.2em; left: calc(-3.5px - 1px);
+    width: 2px; border-radius: 1px;
+    background: var(--text);
     pointer-events: none;
   }
-  [data-scansion="on"] .syl[data-x*="f"]:first-child::after { left: calc(-6px - 0.225em - 0.5px); }
+  [data-scansion="on"] .syl[data-x*="f"]:first-child::after { left: calc(-1 * var(--word-pad) - var(--word-gap) / 2 - 1px); }
+  [data-scansion="on"] .word.selected .syl[data-x*="f"]:not(:first-child)::after { background: var(--on-primary); }
   [data-scansion="on"] .verse-words > .word:first-child > .syl:first-child::after { display: none; }
 
-  [data-scansion="on"] .word[data-caesura]::before {
+  /* Caesura, when switched on. Where it falls at a foot boundary too (a diaeresis), it stands in for the foot line. */
+  [data-scansion="on"][data-caesura="on"] .word[data-caesura]::before {
     content: '';
-    position: absolute; right: calc(-0.225em - 2px); top: 8%; bottom: 4%;
-    width: 4px;
-    border-inline: 1px solid var(--primary);
+    position: absolute; top: calc(2px - 0.24em); bottom: calc(2px - 0.2em);
+    right: calc(-1 * var(--word-gap) / 2 - 3px);
+    width: 6px;
+    border-inline: 1.5px solid var(--primary);
     pointer-events: none;
   }
-
-  /* View Options can hide the caesura and synizesis / consonantal i marks */
-  [data-caesura="off"] .word[data-caesura]::before { display: none; }
-  [data-synizesis="off"] .syl[data-x] { text-decoration: none; }
-
-  /* keep the marks visible on a selected word's filled background */
-  [data-scansion="on"] .word.selected .syl::before { --m-color: var(--on-primary); }
+  [data-scansion="on"][data-caesura="on"] .word[data-caesura] + .word > .syl:first-child::after { display: none; }
 
   /* Off-screen copy of a few lines, used to measure them at other text sizes */
   .fit-probe {
@@ -2127,7 +2120,7 @@
      13. COMPACT (phones: below 600px, as in js/viewport.js)
      ========================================================== */
   @media (max-width: 599.98px) {
-    :root { --reading-padding: 16px; --hang: 1.25em; }
+    :root { --reading-padding: 16px; --hang: 1.25em; --word-pad: 4px; --word-gap: 0.25em; }
 
     /* Long lines wrap instead of shrinking (fit.js leaves compact alone). The words' box is pulled
        --hang to the left of the padding, so the first row starts flush and every row after it is
@@ -2135,8 +2128,7 @@
        always a whole number of rows. */
     .verses { width: auto; }
     .verse-num { width: 34px; padding-right: 10px; }
-    .verse-words { flex-wrap: wrap; row-gap: 0; column-gap: 0.25em; min-width: 0; padding-left: var(--hang); }
-    .word { padding-inline: 4px; }
+    .verse-words { flex-wrap: wrap; row-gap: 0; min-width: 0; padding-left: var(--hang); }
     .verse-words > .word:first-child { margin-left: calc(-1 * var(--hang)); }
 
     /* No room beside the text for the English: the EN button swaps the whole view to it instead */
