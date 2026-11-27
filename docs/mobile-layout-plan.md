@@ -77,7 +77,7 @@ Reading first: one chapter on screen at a time, with scansion, word cards, trans
 
 - **Tap a line number:** shows its English when line-tap mode is on; otherwise toggles the bookmark. Settings says which.
 - **Long press a line:** action menu (bookmark, note, copy).
-- **Corner ribbon (Kindle-style):** a ribbon tab hangs at the top right. Tap it to bookmark the first line you can read at the top of the screen; it is filled while any bookmarked line is on screen, and tapping it then removes the topmost one. Empty, it fades with the other controls; filled, it stays. Not shown while the English is swapped in.
+- **Corner ribbon (Kindle-style):** a ribbon tab hangs at the top right. Tap it to bookmark the first line you can read at the top of the screen; it shows only while any bookmarked line is on screen, and tapping it then removes the topmost one. With none on screen it is tucked up out of view, but its spot still takes a tap at any time while reading. Adding drops it in; removing dips it, then springs it up out of view. Out of the way under the Word card, sheets, the tab grid, the Book list and a pinned Note. Not shown while the English is swapped in.
 - **Bookmark dots** run down the right edge with the controls; tapping one puts its line at the top of the screen, and a "Back to line N" chip above the bottom bar returns you (it goes after a screen of scrolling or 8 seconds).
 - A bookmarked line shows its number in the primary colour (even lines that don't usually show one) and a ribbon in the margin; the desktop's margin bookmark marker is hidden below desktop.
 - Tooltips are dropped on touch devices; menu items get visible text labels instead.
