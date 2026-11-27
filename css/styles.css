@@ -1818,7 +1818,7 @@
       background: var(--bg);
       overflow-y: auto; overscroll-behavior: contain;
       padding: calc(var(--chrome-top) - 10px) 0 var(--bar-room);   /* below iOS's edge blur, as the menu button is */
-      animation: gridIn var(--sp-default);
+      animation: gridIn 240ms var(--m3e-default-spatial);   /* shorter than the token: a full-screen layer paints every frame */
     }
     .tab-grid[hidden] { display: none; }
     @keyframes gridIn { from { opacity: 0; transform: scale(1.04); } }
@@ -1852,7 +1852,7 @@
       border-radius: 22px;
       box-shadow: var(--shadow-1);
       touch-action: pan-y;   /* the list still scrolls; a sideways drag closes the card */
-      animation: itemIn var(--sp-default) backwards;
+      animation: itemIn 360ms var(--m3e-default-spatial) backwards;
     }
     .tg-card.is-active { outline: 3px solid var(--primary); outline-offset: 2px; }
     .tg-open {
@@ -2126,7 +2126,7 @@
       transition: transform var(--sp-default);
     }
     .bm-ribbon.filled .bm-shape { transform: none; }
-    .bm-ribbon.drop-in .bm-shape { animation: ribbonIn var(--sp-default); }
+    .bm-ribbon.drop-in .bm-shape { animation: ribbonIn 420ms var(--m3e-default-spatial); }
     .bm-ribbon.spring-out .bm-shape { animation: ribbonOut 440ms; }
     @keyframes ribbonIn { from { transform: translateY(-105%); } }
     @keyframes ribbonOut {

@@ -9,6 +9,9 @@ import { canHover } from './viewport.js';
 import { openNotebook } from './notes.js';
 import { openFormatSheet } from './format-sheet.js';
 
+/* How far a toolbar toggle's shape morph gets before the work it starts begins (ms) */
+const MORPH_LEAD = 150;
+
 const SCAN_MARKS_KEY = 'epos.scanmarks.v1';   // which optional Scansion marks are shown
 
 /* ==========================================================
@@ -88,8 +91,18 @@ export function initToolbar() {
     if (toolBar.classList.contains('open') && !e.target.closest('#tool-bar, #flyout, #popups-flyout')) setTools(false);
   });
 
-  el.splitBtn.addEventListener('click', toggleSplit);
-  el.meterBtn.addEventListener('click', toggleScansion);
+  // These two buttons morph into their selected shape on the main thread, and the work they start (laying out the
+  // English, restyling every Line for Scansion) would stall that morph. So the button takes its new state at once
+  // and the work follows once the morph is mostly done. The toggle itself sets the same state again, so a quick
+  // second click still ends with the button matching the text.
+  const afterMorph = (btn, on, work) => () => {
+    if (btn.classList.contains('disabled')) { work(); return; }
+    btn.classList.toggle('active', on());
+    btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
+    setTimeout(work, MORPH_LEAD);
+  };
+  el.splitBtn.addEventListener('click', afterMorph(el.splitBtn, () => !el.splitBtn.classList.contains('active'), toggleSplit));
+  el.meterBtn.addEventListener('click', afterMorph(el.meterBtn, () => !el.meterBtn.classList.contains('active'), toggleScansion));
   el.themeBtn.addEventListener('click', toggleTheme);
   for (const [btn, flyout] of [[el.textBtn, el.flyout], [el.popupsBtn, el.popupsFlyout]]) {
     btn.addEventListener('click', () => {

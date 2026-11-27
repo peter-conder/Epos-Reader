@@ -100,7 +100,27 @@ function runMorph(views, anims, done) {
 }
 
 // The staying pane's resting flex (renderView keeps it in data-flex while the pane is morphing)
-const restoreStay = (view) => Object.assign(view.style, { flex: view.dataset.flex ?? '', width: '', marginLeft: '' });
+const restoreStay = (view) => {
+  Object.assign(view.style, { flex: view.dataset.flex ?? '', width: '', marginLeft: '' });
+  releaseColumn(view.querySelector('.pane-original'));
+};
+
+/* The staying pane's text column takes its final width at once, so its Lines wrap once instead of on every frame
+   (reflowing a Book's worth of Lines each frame is what made Splits stutter). Only the card around it is animated,
+   so the pane's edges and corners still glide, and the column, centred inside, moves with them. On a layer of its
+   own the column is then only moved each frame, not repainted. */
+const held = new WeakMap();
+function holdColumn(pane, w) {
+  if (!pane) return;
+  held.set(pane, { width: pane.style.width, maxWidth: pane.style.maxWidth, willChange: pane.style.willChange });
+  Object.assign(pane.style, { width: `${w}px`, maxWidth: 'none', willChange: 'transform' });
+}
+function releaseColumn(pane) {
+  const was = pane && held.get(pane);
+  if (!was) return;
+  Object.assign(pane.style, was);
+  held.delete(pane);
+}
 
 /* Single → split. Call before the layout changes (it records where the open pane is now); the returned
    function is called once the pair is laid out, with the joining view and its side (-1 left, 1 right). */
@@ -128,7 +148,7 @@ export function beginSplitOpen(stay) {
       joined.animate({ transform: [`translateX(${dir * (jr.width + dr.width)}px)`, 'none'] }, { ...opts, easing: motionToken('motion-pane-trailing').easing }),
       dv.animate({ opacity: [0, 1] }, { duration: duration * 0.45, delay: duration * 0.55, easing: fade, fill: 'both' })
     ];
-    if (pane) anims.push(pane.animate({ maxWidth: [`${from.pw}px`, `${to.pw}px`] }, opts));
+    holdColumn(pane, to.pw);
     runMorph([stay, joined], anims, () => {
       for (const n of [joined, dv]) Object.assign(n.style, { position: '', top: '', left: '', width: '', height: '' });
       restoreStay(stay);
@@ -176,7 +196,7 @@ export function beginSplitClose(tab, ghostRect) {
     if (live) {
       Object.assign(stay.style, { flex: 'none', marginLeft: dir < 0 ? 'auto' : '' });   // the far edge stays anchored
       anims.push(stay.animate({ width: [`${from.w}px`, `${to.w}px`] }, opts));
-      if (pane) anims.push(pane.animate({ maxWidth: [`${from.pw}px`, `${to.pw}px`] }, opts));
+      holdColumn(pane, to.pw);
     }
     runMorph(live ? [stay] : [], anims, () => {
       ghost.remove();
