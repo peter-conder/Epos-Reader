@@ -20,16 +20,16 @@
 
     /* Chrome surfaces: the page behind the panes, the tonal containers that menus, lists and sheets sit on,
        and the tinted neutrals for borders and quiet text */
-    --page: #FCF8F9;
-    --on-surface: #313234;
-    --on-surface-variant: #5E5F61;
-    --outline: #7A7A7D;
-    --outline-variant: #B2B1B4;
+    --page: #F9F9FE;
+    --on-surface: #2E333A;
+    --on-surface-variant: #5A5F67;
+    --outline: #767B83;
+    --outline-variant: #ADB2BB;
     --surface-container-lowest: #FFFFFF;
-    --surface-container-low: #F6F3F4;
-    --surface-container: #EFEDEF;
-    --surface-container-high: #E9E7E9;
-    --surface-container-highest: #E3E2E4;
+    --surface-container-low: #F2F3FA;
+    --surface-container: #EBEEF5;
+    --surface-container-high: #E5E8F0;
+    --surface-container-highest: #DEE3EC;
 
     /* The reading text stays calm: a set of its own, generated as M3 TonalSpot from the same seed */
     --read-surface: #F9F9FE;    /* the pane the text sits on */
@@ -165,16 +165,16 @@
     --tertiary-container: #D9DEFF;
     --on-tertiary-container: #404D83;
 
-    --page: #0E0E0F;
-    --on-surface: #E6E5E7;
-    --on-surface-variant: #ABABAD;
-    --outline: #757577;
-    --outline-variant: #47484A;
+    --page: #0C0E12;
+    --on-surface: #E1E6EF;
+    --on-surface-variant: #A6ABB4;
+    --outline: #71767E;
+    --outline-variant: #434850;
     --surface-container-lowest: #000000;
-    --surface-container-low: #131314;
-    --surface-container: #191A1B;
-    --surface-container-high: #1F2021;
-    --surface-container-highest: #252628;
+    --surface-container-low: #101418;
+    --surface-container: #161A1F;
+    --surface-container-high: #1C2026;
+    --surface-container-highest: #21262D;
 
     --read-surface: #0C0E12;
     --read-text: #E1E6EF;
@@ -413,7 +413,7 @@
   @media (hover: hover) { .sub-item:hover { background: color-mix(in srgb, var(--text) 8%, transparent); } }
   .sub-item.active { background: var(--secondary-container); color: var(--on-secondary-container); }
   .sub-lead { width: 24px; height: 24px; flex-shrink: 0; display: grid; place-items: center; }
-  .sub-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }
+  .sub-dot { width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); }   /* two-tone, like the phone's swatches */
   .sub-check { display: none; width: 22px; height: 22px; }
   .sub-item.active .sub-check { display: block; }
   .sub-item.active .sub-dot { display: none; }

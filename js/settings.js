@@ -82,20 +82,21 @@ const PALETTES = {
       c0: '#000000', c1: '#2C0509', c2: '#36090E', c3: '#3F0E13', c4: '#491218',
       rbg: '#130D0B', ron: '#F9E0DB', rhl: '#51342E', rmk: '#E7BDB4', rsel: '#F9B7A9', ronsel: '#61342A', rc: '#76453B', ronc: '#FFDBD4' }
   },
-  // Slate: neutral grey-blue. SchemeNeutral (2025), not Vibrant, which would make any seed a saturated blue.
+  // Slate: neutral grey-blue. SchemeNeutral (2025), not Vibrant, which would make any seed a saturated blue. Its
+  // surfaces, outlines and quiet text come from SchemeTonalSpot on the same seed: Neutral's are warm (a cream page).
   // Tertiary hand-set: the scheme's hue (276°) at chroma 36, so Notes stand apart from the grey primary.
   slate: { name: 'Slate', seed: '#5B6B7F',
     light: {
       p: '#565F6B', on: '#F5F8FF', c: '#DBE3F1', onc: '#4A525E', s: '#5C5F64', ons: '#F7F9FF', sc: '#E1E2E8', onsc: '#4F5257',
       t: '#4F5B92', ont: '#FBF8FF', tc: '#D9DEFF', ontc: '#404D83',
-      bg: '#FCF8F9', onbg: '#313234', onv: '#5E5F61', ol: '#7A7A7D', olv: '#B2B1B4',
-      c0: '#FFFFFF', c1: '#F6F3F4', c2: '#EFEDEF', c3: '#E9E7E9', c4: '#E3E2E4',
+      bg: '#F9F9FE', onbg: '#2E333A', onv: '#5A5F67', ol: '#767B83', olv: '#ADB2BB',
+      c0: '#FFFFFF', c1: '#F2F3FA', c2: '#EBEEF5', c3: '#E5E8F0', c4: '#DEE3EC',
       rbg: '#F9F9FE', ron: '#2E333A', rhl: '#D6E4F7', rmk: '#536071', rsel: '#3D6288', ronsel: '#F7F9FF', rc: '#DBE3F1', ronc: '#4A525E' },
     dark: {
       p: '#BFC7D5', on: '#38414C', c: '#3F4753', onc: '#C8D1DF', s: '#9B9EA3', ons: '#1D2025', sc: '#393C40', onsc: '#BDBFC5',
       t: '#ECECFF', ont: '#47548A', tc: '#D9DEFF', ontc: '#404D83',
-      bg: '#0E0E0F', onbg: '#E6E5E7', onv: '#ABABAD', ol: '#757577', olv: '#47484A',
-      c0: '#000000', c1: '#131314', c2: '#191A1B', c3: '#1F2021', c4: '#252628',
+      bg: '#0C0E12', onbg: '#E1E6EF', onv: '#A6ABB4', ol: '#71767E', olv: '#434850',
+      c0: '#000000', c1: '#101418', c2: '#161A1F', c3: '#1C2026', c4: '#21262D',
       rbg: '#0C0E12', ron: '#E1E6EF', rhl: '#303C4C', rmk: '#BAC8DB', rsel: '#AEC9EB', ronsel: '#27425E', rc: '#3F4753', ronc: '#C8D1DF' }
   },
   bluegray: { name: 'Sapphire', seed: '#4A5C7A',   // was Slate; the key stays so saved choices keep their colours
@@ -191,7 +192,7 @@ export function choosePalette(key) {
 
 /* The menus' swatches show the colours of the mode that is on, so what you pick is what you get */
 function renderPaletteChoices() {
-  // The phone menu's row of swatches: each the palette's primary over its container colour
+  // The swatches, on the phone menu and the desktop submenu alike: each the palette's primary over its container colour
   el.drawerSwatches.innerHTML = Object.entries(PALETTES).map(([key, p]) => {
     const pal = rolesOf(p);
     return `<button class="drawer-swatch" data-palette="${key}" role="radio" aria-checked="false" aria-label="${esc(p.name)}"
@@ -199,7 +200,7 @@ function renderPaletteChoices() {
   }).join('');
   el.paletteMenu.innerHTML = Object.entries(PALETTES).map(([key, p]) => `
     <button class="sub-item" data-palette="${key}" role="menuitemradio" aria-checked="false">
-      <span class="sub-lead"><span class="sub-dot" style="background:${rolesOf(p).p}"></span><svg class="icon sub-check"><use href="assets/icons.svg#i-check"/></svg></span>
+      <span class="sub-lead"><span class="sub-dot" style="--sw-a:${rolesOf(p).p}; --sw-b:${rolesOf(p).c}"></span><svg class="icon sub-check"><use href="assets/icons.svg#i-check"/></svg></span>
       <span>${esc(p.name)}</span>
     </button>`).join('');
 }
