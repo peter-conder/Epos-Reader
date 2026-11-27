@@ -206,7 +206,7 @@ function startPeek(tab, near) {
     W, pages,
     move(at, ms = 0) {
       for (const p of pages) {
-        p.view.style.transition = ms ? `transform ${ms}ms cubic-bezier(0.2, 0, 0, 1)` : 'none';
+        p.view.style.transition = ms ? `transform ${ms}ms var(--motion-pane)` : 'none';
         p.view.style.transform = `translateX(${at + p.side * (W + PAGE_GAP)}px)`;
       }
     },
@@ -233,7 +233,7 @@ function bindSwipe() {
   let g = null;   // the drag in progress
 
   const place = (dx, animate) => {
-    track.style.transition = animate ? `transform ${SETTLE_MS}ms cubic-bezier(0.2, 0, 0, 1)` : 'none';
+    track.style.transition = animate ? `transform ${SETTLE_MS}ms var(--motion-pane)` : 'none';
     track.style.transform = `translateX(${dx}px)`;
   };
   // The pages move the same share of their width as the pill's labels do of theirs

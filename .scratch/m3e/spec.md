@@ -12,7 +12,7 @@ Agreed in a design review on 2026-11-27, starting from an external comparison of
 ## Decisions
 
 1. **Tokens are replaced, not added alongside.** The M3E motion springs and corner scale replace `--ease-spring`, `--ease-bouncy`, `--ease-springy`, `--chrome-ease` and the hardcoded curves and radii. Each old name is deleted in the phase that stops using it. The JS constants in `js/motion.js` take the same values.
-2. **Splits never overshoot.** Opening and closing a Split uses M3's Standard (non-Expressive) default spatial curve, so the two panes don't bounce into each other.
+2. **Edges never overshoot.** Opening and closing a Split, and swiped pages, use `--motion-pane` (the old `cubic-bezier(0.2, 0, 0, 1)`), so panes don't bounce into each other or off the screen's edge. M3's Standard curve was rejected because it still overshoots slightly. The same goes for anything that reflows the text (the reading pane's padding and width) and for full-page sheets.
 3. **Reduce Motion.** One global rule swaps every spatial spring for its effects (non-overshoot) curve, on desktop and mobile.
 4. **Surfaces.** Five tonal surface containers plus `--outline` and `--outline-variant`. The Zinc `--gray-*` scale is removed. Menus, flyouts, the picker and sheets move off `--primary-container` onto calm surfaces. The tool bar, `.add-split`, the word card and note cards stay Vibrant.
 5. **Tertiary.** Hand-tuned per palette, generated with `@material/material-color-utilities` and approved from a swatch sheet first. Used only on Note and Bookmark chrome. Noted Words in the text stay icon-only (see `ec05a60`).

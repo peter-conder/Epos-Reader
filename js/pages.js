@@ -97,7 +97,7 @@ function bindEdgeSwipe() {
   const W = () => innerWidth;
   const place = (dx, ms = 0) => {
     const p = Math.max(0, dx) / W();
-    const ease = ms ? `${ms}ms cubic-bezier(0.2, 0, 0, 1)` : '';
+    const ease = ms ? `${ms}ms var(--motion-pane)` : '';   // a page meets the screen's edge: never overshoots
     g.t.page.style.transition = ms ? `transform ${ease}` : 'none';
     g.t.page.style.transform = `translateX(${Math.max(0, dx)}px)`;
     if (g.t.under) {

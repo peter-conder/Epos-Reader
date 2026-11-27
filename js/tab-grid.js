@@ -86,7 +86,7 @@ export const toggleTabGrid = () => (tabGridOpen() ? closeTabGrid() : openTabGrid
 
 /* A card slides out sideways and the tab closes */
 function flingClose(card, dir) {
-  card.style.transition = 'transform 200ms ease-in, opacity 200ms ease-in';
+  card.style.transition = 'transform 200ms var(--motion-accelerate), opacity 200ms var(--m3e-fast-effects)';
   card.style.transform = `translateX(${dir * 110}%)`;
   card.style.opacity = '0';
   setTimeout(() => closeTab(card.dataset.tabId, { skipExit: true }), 180);
@@ -120,7 +120,7 @@ function bindCardSwipe() {
     if (d.axis !== 'x') return;
     d.card.dataset.swiped = '1';   // the click that ends the drag doesn't open it
     if (Math.abs(d.dx) > d.w * FLING) { flingClose(d.card, Math.sign(d.dx)); return; }
-    d.card.style.transition = 'transform 220ms var(--ease-spring), opacity 220ms ease';
+    d.card.style.transition = 'transform var(--sp-fast), opacity var(--fx-default)';
     d.card.style.transform = '';
     d.card.style.opacity = '';
   };

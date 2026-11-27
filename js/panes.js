@@ -1,7 +1,7 @@
 import { $, clamp, el } from './dom.js';
 import { activeTab, getTab, groupOf, isNotebook, isText, partnerOf, state } from './state.js';
 import { closeTranslation } from './reader.js';
-import { SPRING } from './motion.js';
+import { motionToken } from './motion.js';
 import { renderAll } from './layout.js';
 import { activateTab, closeTab } from './tabs.js';
 import { hideWordCard } from './word-card.js';
@@ -104,13 +104,10 @@ export function initPanes() {
     const SWAP = 0.28, DISMISS = 0.55, DIVIDER = 16;
     let d = null;
     const rotFor = (dx, w) => clamp(dx / w, -1, 1) * 2.4;
-    const springFrames = (from, rot, lift) => [
-      { transform: `translateX(${from}px) rotate(${rot}deg) scale(${lift})`, offset: 0, easing: SPRING },
-      { transform: `translateX(${-from * 0.18}px) rotate(${-rot * 0.3}deg) scale(0.996)`, offset: 0.34, easing: SPRING },
-      { transform: `translateX(${from * 0.08}px) rotate(${rot * 0.1}deg) scale(1)`, offset: 0.56, easing: SPRING },
-      { transform: `translateX(${-from * 0.03}px)`, offset: 0.76, easing: SPRING },
-      { transform: 'translateX(0px) rotate(0deg) scale(1)', offset: 1 }
-    ];
+    // A dropped pane springs home (M3E slow spatial: one overshoot past its place, then it settles)
+    const springFrames = (from, rot, lift) => ({
+      transform: [`translateX(${from}px) rotate(${rot}deg) scale(${lift})`, 'translateX(0px) rotate(0deg) scale(1)']
+    });
 
     el.panes.addEventListener('pointerdown', (e) => {
       if (e.button !== 0 || el.panes.dataset.count !== '2' || state.view !== 'reader') return;
@@ -166,7 +163,7 @@ export function initPanes() {
       s.view.style.transform = '';
       s.partner.view.style.transform = '';
       if (Math.abs(s.dx) < 1) { s.view.classList.remove('drag-live'); return; }
-      const a = s.view.animate(springFrames(s.dx, rotFor(s.dx, s.w), 1.015), { duration: 780, easing: 'linear' });
+      const a = s.view.animate(springFrames(s.dx, rotFor(s.dx, s.w), 1.015), motionToken('m3e-slow-spatial'));
       a.onfinish = a.oncancel = () => s.view.classList.remove('drag-live');
     }
 
@@ -183,9 +180,9 @@ export function initPanes() {
       const nl = s.view.getBoundingClientRect().left;       // forces layout
       const npl = s.partner.view.getBoundingClientRect().left;
       el.panes.classList.remove('instant');
-      const a = s.view.animate(springFrames(dragVisual - nl, rotFor(s.dx, s.w), 1.015), { duration: 820, easing: 'linear' });
+      const a = s.view.animate(springFrames(dragVisual - nl, rotFor(s.dx, s.w), 1.015), motionToken('m3e-slow-spatial'));
       a.onfinish = a.oncancel = () => s.view.classList.remove('drag-live');
-      s.partner.view.animate(springFrames(partnerVisual - npl, 0, 1), { duration: 780, easing: 'linear' });
+      s.partner.view.animate(springFrames(partnerVisual - npl, 0, 1), motionToken('m3e-slow-spatial'));
     }
 
     // Slides on out from where it was dropped, while its neighbour widens to fill the room
