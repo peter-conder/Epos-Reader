@@ -1990,10 +1990,12 @@
     /* ---- Menu: Settings, Notebook, Format Text, palette swatches, light/dark ---- */
     #drawer { width: min(300px, calc(100vw - 20px)); }
     #drawer .mobile-only { display: flex; }
+    #drawer .drawer-swatches { display: grid; }
     #drawer .desktop-only { display: none; }
     .drawer-item { padding-block: 14px; min-height: 52px; }
+    /* Seven palettes don't fit one row at 36px, so they sit in two even rows (four, then three) */
     .drawer-swatches {
-      flex-wrap: wrap; justify-content: space-between; gap: 8px;
+      grid-template-columns: repeat(4, 36px); justify-content: space-evenly; gap: 10px 8px;
       padding: 10px 14px 12px;
       border-radius: 4px;
       background: var(--segment);
