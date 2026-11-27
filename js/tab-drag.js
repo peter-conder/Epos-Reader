@@ -169,7 +169,7 @@ export function landDraggedTab(d) {
   const r = dest.getBoundingClientRect();
   dest.style.visibility = 'hidden';
   const c = d.clone;
-  c.style.transition = 'transform 240ms var(--ease-spring), width 240ms ease';
+  c.style.transition = 'transform 240ms var(--m3e-fast-spatial), width 240ms var(--m3e-fast-effects)';   // removed at 260ms below
   c.style.width = `${r.width}px`;
   c.style.transform = `translate(${r.left - d.left}px, ${r.top - d.top}px) scale(1)`;
   setTimeout(() => { c.remove(); dest.style.visibility = ''; }, 260);

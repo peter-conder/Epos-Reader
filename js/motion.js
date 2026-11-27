@@ -1,22 +1,44 @@
 import { $, el } from './dom.js';
 import { groupOf } from './state.js';
 
-/* ---- Pane motion helpers ---- */
-export const SPRING = 'cubic-bezier(0.3, 0.7, 0.4, 1)';
+/* ---- M3E motion tokens ----
+   The curves and durations are defined once, as custom properties on :root in css/styles.css, and read from
+   there so the CSS and the Web Animations below can't drift apart. Each token is { easing, duration } with the
+   duration in ms. The two curve-only tokens have no duration of their own: the trailing pane shares
+   --motion-pane-dur, and --motion-accelerate is timed by each caller, so they give { easing } only (passing one
+   whole to animate() would then fail loudly rather than run with a NaN duration). Read lazily (on first use),
+   after the stylesheet has applied, and read again when Reduce Motion changes, since it swaps the curves. */
+const TIMED_TOKENS = [
+  'm3e-fast-spatial', 'm3e-default-spatial', 'm3e-slow-spatial',
+  'm3e-fast-effects', 'm3e-default-effects', 'm3e-slow-effects',
+  'motion-pane'
+];
+const CURVE_TOKENS = ['motion-pane-trailing', 'motion-accelerate'];
+let tokens = null;
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => { tokens = null; });
+export function motionToken(name) {
+  if (!tokens) {
+    const css = getComputedStyle(document.documentElement);
+    const curve = (n) => css.getPropertyValue(`--${n}`).trim();
+    tokens = Object.fromEntries([
+      ...TIMED_TOKENS.map((n) => [n, { easing: curve(n), duration: parseFloat(css.getPropertyValue(`--${n}-dur`)) }]),
+      ...CURVE_TOKENS.map((n) => [n, { easing: curve(n) }])
+    ]);
+  }
+  return tokens[name];
+}
 
-/* Split open/close: flat, side-to-side motion with no scaling, tilt or shadow. Fast out of the gate with a long,
-   cushioned settle and no overshoot. Every part shares one duration so the panes land on the same frame. */
-export const EMPHASIZED = 'cubic-bezier(0.2, 0, 0, 1)';
-const TRAILING = 'cubic-bezier(0.3, 0, 0, 1)';   // the entering pane starts a touch later, so it trails the edge
-export const PANE_DUR = 500;
+/* ---- Pane motion helpers ----
+   Split open/close: flat, side-to-side motion with no scaling, tilt or shadow, on --motion-pane: fast out of the
+   gate with a long, cushioned settle and no overshoot (the panes must not bounce into each other). The entering
+   pane takes --motion-pane-trailing so it trails the edge. Every part shares one duration so the panes land on the
+   same frame. */
 
+/* A pane arriving: rises into place on the M3E default spatial spring while it fades in */
 export function playPop(view) {
-  view.animate([
-    { opacity: 0, transform: 'translateY(12px) scale(0.93)', offset: 0, easing: SPRING },
-    { opacity: 1, transform: 'translateY(-3px) scale(1.02)', offset: 0.5, easing: SPRING },
-    { transform: 'scale(0.994)', offset: 0.76, easing: SPRING },
-    { transform: 'none', offset: 1 }
-  ], { duration: 470, easing: 'linear' });
+  const sp = motionToken('m3e-default-spatial'), fx = motionToken('m3e-default-effects');
+  view.animate({ transform: ['translateY(12px) scale(0.93)', 'none'] }, sp);
+  view.animate({ opacity: [0, 1] }, fx);
 }
 
 /* A frozen copy of a pane, clipped inside the main area, so it can animate out after its tab is gone */
@@ -48,10 +70,12 @@ export function makeGhost(view, rect) {
 /* A lone pane closing: a small swell, then it bouncily shrinks away (dir: -1 left edge, 1 right edge, 0 centre) */
 export function shrinkAway(ghost, dir) {
   ghost.style.transformOrigin = dir < 0 ? 'left center' : dir > 0 ? 'right center' : 'center';
+  const swell = motionToken('m3e-fast-effects').easing, fall = motionToken('motion-accelerate').easing;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;   // Reduce Motion: no swell past its size
   ghost.animate([
-    { transform: 'scale(1)', opacity: 1, offset: 0, easing: SPRING },
-    { transform: 'scale(1.045)', opacity: 1, offset: 0.24, easing: 'cubic-bezier(0.55, 0, 0.85, 0.4)' },
-    { transform: 'scale(0.5)', opacity: 1, offset: 0.7, easing: 'ease-in' },
+    { transform: 'scale(1)', opacity: 1, offset: 0, easing: swell },
+    { transform: `scale(${still ? 1 : 1.045})`, opacity: 1, offset: 0.24, easing: fall },
+    { transform: 'scale(0.5)', opacity: 1, offset: 0.7, easing: fall },
     { transform: 'scale(0)', opacity: 0, offset: 1 }
   ], { duration: 520, easing: 'linear' }).onfinish = () => ghost.remove();
 }
@@ -83,7 +107,27 @@ function runMorph(views, anims, done) {
 }
 
 // The staying pane's resting flex (renderView keeps it in data-flex while the pane is morphing)
-const restoreStay = (view) => Object.assign(view.style, { flex: view.dataset.flex ?? '', width: '', marginLeft: '' });
+const restoreStay = (view) => {
+  Object.assign(view.style, { flex: view.dataset.flex ?? '', width: '', marginLeft: '' });
+  releaseColumn(view.querySelector('.pane-original'));
+};
+
+/* The staying pane's text column takes its final width at once, so its Lines wrap once instead of on every frame
+   (reflowing a Book's worth of Lines each frame is what made Splits stutter). Only the card around it is animated,
+   so the pane's edges and corners still glide, and the column, centred inside, moves with them. On a layer of its
+   own the column is then only moved each frame, not repainted. */
+const held = new WeakMap();
+function holdColumn(pane, w) {
+  if (!pane) return;
+  held.set(pane, { width: pane.style.width, maxWidth: pane.style.maxWidth, willChange: pane.style.willChange });
+  Object.assign(pane.style, { width: `${w}px`, maxWidth: 'none', willChange: 'transform' });
+}
+function releaseColumn(pane) {
+  const was = pane && held.get(pane);
+  if (!was) return;
+  Object.assign(pane.style, was);
+  held.delete(pane);
+}
 
 /* Single → split. Call before the layout changes (it records where the open pane is now); the returned
    function is called once the pair is laid out, with the joining view and its side (-1 left, 1 right). */
@@ -104,13 +148,14 @@ export function beginSplitOpen(stay) {
     pin(dv, dr);
     Object.assign(stay.style, { flex: 'none', marginLeft: dir < 0 ? 'auto' : '' });   // on the right, its right edge stays put
 
-    const opts = { duration: PANE_DUR, easing: EMPHASIZED, fill: 'both' };
+    const { duration, easing } = motionToken('motion-pane'), fade = motionToken('m3e-default-effects').easing;
+    const opts = { duration, easing, fill: 'both' };
     const anims = [
       stay.animate({ width: [`${from.w}px`, `${to.w}px`] }, opts),
-      joined.animate({ transform: [`translateX(${dir * (jr.width + dr.width)}px)`, 'none'] }, { ...opts, easing: TRAILING }),
-      dv.animate({ opacity: [0, 1] }, { duration: PANE_DUR * 0.45, delay: PANE_DUR * 0.55, easing: 'ease-out', fill: 'both' })
+      joined.animate({ transform: [`translateX(${dir * (jr.width + dr.width)}px)`, 'none'] }, { ...opts, easing: motionToken('motion-pane-trailing').easing }),
+      dv.animate({ opacity: [0, 1] }, { duration: duration * 0.45, delay: duration * 0.55, easing: fade, fill: 'both' })
     ];
-    if (pane) anims.push(pane.animate({ maxWidth: [`${from.pw}px`, `${to.pw}px`] }, opts));
+    holdColumn(pane, to.pw);
     runMorph([stay, joined], anims, () => {
       for (const n of [joined, dv]) Object.assign(n.style, { position: '', top: '', left: '', width: '', height: '' });
       restoreStay(stay);
@@ -147,17 +192,18 @@ export function beginSplitClose(tab, ghostRect) {
     const off = dir > 0 ? m.right - r.left : r.right - m.left;
     const travel = dir * Math.max(to.w - from.w, off);
 
-    const opts = { duration: PANE_DUR, easing: EMPHASIZED, fill: 'both' };
+    const { duration, easing } = motionToken('motion-pane'), fade = motionToken('m3e-default-effects').easing;
+    const opts = { duration, easing, fill: 'both' };
     const slide = { transform: ['none', `translateX(${travel}px)`] };
     const anims = [
       ghost.animate(slide, opts),
       dvGhost.animate(slide, opts),
-      dvGhost.animate({ opacity: [1, 0] }, { duration: PANE_DUR * 0.4, easing: 'ease-out', fill: 'both' })
+      dvGhost.animate({ opacity: [1, 0] }, { duration: duration * 0.4, easing: fade, fill: 'both' })
     ];
     if (live) {
       Object.assign(stay.style, { flex: 'none', marginLeft: dir < 0 ? 'auto' : '' });   // the far edge stays anchored
       anims.push(stay.animate({ width: [`${from.w}px`, `${to.w}px`] }, opts));
-      if (pane) anims.push(pane.animate({ maxWidth: [`${from.pw}px`, `${to.pw}px`] }, opts));
+      holdColumn(pane, to.pw);
     }
     runMorph(live ? [stay] : [], anims, () => {
       ghost.remove();
@@ -206,12 +252,13 @@ export function beginTranslationClose(tab) {
     // The leaving pane moves as far as the staying edge does, or at least far enough to be gone
     const travel = Math.max(to.left + to.w - (from.left + from.w), m.right - r.left);
 
-    const opts = { duration: PANE_DUR, easing: EMPHASIZED, fill: 'both' };
+    const { duration, easing } = motionToken('motion-pane'), fade = motionToken('m3e-default-effects').easing;
+    const opts = { duration, easing, fill: 'both' };
     const slide = { transform: ['none', `translateX(${travel}px)`] };
     const anims = [
       ghost.animate(slide, opts),
       dvGhost.animate(slide, opts),
-      dvGhost.animate({ opacity: [1, 0] }, { duration: PANE_DUR * 0.4, easing: 'ease-out', fill: 'both' }),
+      dvGhost.animate({ opacity: [1, 0] }, { duration: duration * 0.4, easing: fade, fill: 'both' }),
       orig.animate({
         width: [`${from.w}px`, `${to.w}px`],
         maxWidth: [`${from.w}px`, `${to.w}px`],

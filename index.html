@@ -6,7 +6,7 @@
 <title>Epos Reader - Classical Poetry Reader</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <!-- Home Screen app. The status bar keeps iOS's own style: "black-translucent" let the text run behind it, but
@@ -132,7 +132,7 @@
       <div class="settings-page">
         <h1 class="settings-title">Settings &amp; Sources</h1>
         <p class="settings-subtitle">How Epos Reader behaves, and the projects it's built on.</p>
-        <div class="settings-section-title">Tapping a Line Number <span class="settings-section-note">on phones and tablets</span></div>
+        <div class="settings-section-title">Tapping a Line number <span class="settings-section-note">on phones and tablets</span></div>
         <div class="settings-chips" id="linetap-chips"></div>
         <h2 class="settings-section-title" id="settings-sources">Sources</h2>
         <p class="settings-lead">Every project Epos Reader takes its text, Translation, Lemmas, definitions or Scansion from.</p>
@@ -171,7 +171,7 @@
 
     <div class="popover flyout" id="popups-flyout">
       <div class="flyout-header">
-        <span>View Options</span>
+        <span>View options</span>
         <button class="btn-close" data-close="popups-flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
       </div>
       <button class="switch-row" id="sw-words" role="switch" aria-checked="true">
@@ -198,7 +198,7 @@
 
     <div class="popover flyout" id="flyout">
       <div class="flyout-header">
-        <span>Text Appearance</span>
+        <span>Text appearance</span>
         <button class="btn-close" data-close="flyout" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
       </div>
       <div class="flyout-group">
@@ -209,6 +209,7 @@
             <span class="ms-track ms-left"></span>
             <span class="ms-track ms-right"></span>
             <span class="ms-handle"></span>
+            <span class="ms-value" id="size-value" aria-hidden="true">100%</span>
           </div>
           <svg class="icon size-icon lg" aria-hidden="true"><use href="assets/icons.svg#i-textsize"/></svg>
         </div>
@@ -244,7 +245,7 @@
 <!-- SWITCH WORK PICKER -->
 <div class="popover picker" id="picker" role="dialog" aria-labelledby="picker-title">
   <div class="panel-header">
-    <span class="panel-title" id="picker-title">Switch Tab Work</span>
+    <span class="panel-title" id="picker-title">Switch this tab's Work</span>
     <button class="btn-close" data-close="picker" aria-label="Close"><svg class="icon"><use href="assets/icons.svg#i-close"/></svg></button>
   </div>
   <div id="work-list"></div>

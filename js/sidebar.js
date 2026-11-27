@@ -81,7 +81,7 @@ export function highlightWork(workKey) {
 }
 
 export function showWorkList() {
-  el.pickerTitle.textContent = 'Switch Tab Work';
+  el.pickerTitle.textContent = "Switch this tab's Work";
   el.workList.hidden = false;
   el.bookPicker.hidden = true;
 }
