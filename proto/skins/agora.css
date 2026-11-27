@@ -1,0 +1,102 @@
+/* PROTOTYPE skin "Agora": Epos Reader as a bright, modern study tool.
+   Cool white and Aegean blue, with terracotta as the second voice. A screen serif for the text (Literata) and a
+   neutral sans for the interface (Inter), both with polytonic Greek. Big soft corners, real elevation, and the
+   springy motion kept. Dark mode is deep night-sea navy.
+
+   The palette menu and the Font pill set some of these tokens inline on <html>; the skin outranks them with
+   !important while it is on, so the six palettes and the Font choice do nothing under it. */
+
+:root[data-skin="agora"] {
+  --primary: #1D5FC4 !important;                 /* Aegean blue */
+  --on-primary: #FFFFFF !important;
+  --primary-container: #DCE7FB !important;
+  --on-primary-container: #0A2350 !important;
+  --secondary: #A4512D !important;               /* terracotta: Line numbers, accents */
+  --on-secondary: #FFFFFF !important;
+  --secondary-container: #E9EEF6 !important;
+  --on-secondary-container: #16233A !important;
+
+  --mix-base: #FFFFFF;
+  --bg: #F4F6FA;
+  --surface: #FFFFFF;
+  --text: #121826;
+  --text-muted: #5B6478;
+  --soft: #EEF2F8;
+  --inverse-surface: #121826;
+  --inverse-on-surface: #FFFFFF;
+
+  --radius-sm: 10px;
+  --radius-md: 20px;
+  --radius-lg: 26px;
+  --radius-xl: 32px;
+
+  --shadow-pop:  0 18px 48px rgba(16, 32, 72, 0.16), 0 2px 6px rgba(16, 32, 72, 0.06);
+  --shadow-pane: 0 1px 2px rgba(16, 32, 72, 0.05), 0 8px 24px rgba(16, 32, 72, 0.05);
+  --shadow-1: 0 2px 6px rgba(16, 32, 72, 0.10), 0 1px 2px rgba(16, 32, 72, 0.08);
+  --shadow-3: 0 12px 28px rgba(16, 32, 72, 0.18), 0 2px 6px rgba(16, 32, 72, 0.10);
+
+  --ui-font: 'Inter', system-ui, sans-serif;
+  --reading-font: 'Literata', 'Gentium Plus', Georgia, serif !important;
+}
+
+:root[data-skin="agora"][data-theme="dark"] {
+  --primary: #8DB4FF !important;
+  --on-primary: #06204D !important;
+  --primary-container: #1C3360 !important;
+  --on-primary-container: #DCE7FB !important;
+  --secondary: #F0A27E !important;
+  --on-secondary: #4A1C08 !important;
+  --secondary-container: #1A2436 !important;
+  --on-secondary-container: #DCE5F5 !important;
+
+  --mix-base: #0B111C;
+  --bg: #0A0F19;
+  --surface: #121A28;
+  --text: #E7ECF5;
+  --text-muted: #8D97AB;
+  --soft: #182235;
+  --inverse-surface: #E7ECF5;
+  --inverse-on-surface: #121A28;
+
+  --shadow-pop:  0 18px 48px rgba(0, 0, 0, 0.55);
+  --shadow-pane: 0 0 0 1px rgba(141, 180, 255, 0.06);
+  --shadow-1: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-3: 0 12px 28px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Type ---- */
+[data-skin="agora"] body { font-family: var(--ui-font); }
+[data-skin="agora"] .brand-title { font-weight: 700; letter-spacing: -0.4px; }
+[data-skin="agora"] .book-title { font-weight: 700; letter-spacing: -0.8px; }
+[data-skin="agora"] .verse-num { font-family: var(--ui-font); font-variant-numeric: tabular-nums; font-weight: 600; font-size: 0.72rem; opacity: 0.85; }
+[data-skin="agora"] :is(.flyout-label, .line-en-head) { font-family: var(--ui-font); text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; font-weight: 700; }
+
+/* ---- Words ---- */
+[data-skin="agora"] .word { border-radius: 999px; }
+[data-skin="agora"] .word.selected { box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 35%, transparent); }
+[data-skin="agora"] .word.has-note { background: color-mix(in srgb, var(--secondary) 14%, transparent); }
+[data-skin="agora"] .word.selected.has-note { background: var(--primary); }
+
+/* ---- Word card: a white card that floats ---- */
+[data-skin="agora"] .word-card {
+  background: var(--surface); color: var(--text);
+  box-shadow: var(--shadow-pop);
+  border: 1px solid color-mix(in srgb, var(--primary) 10%, transparent);
+}
+[data-skin="agora"] .card-lemma { font-family: var(--reading-font); font-size: 1.6rem; }
+[data-skin="agora"] .card-morph {
+  display: inline-block; opacity: 1; font-weight: 600; font-size: 11.5px;
+  padding: 4px 10px; border-radius: 999px;
+  background: var(--primary-container); color: var(--on-primary-container);
+}
+[data-skin="agora"] .card-scan { color: var(--secondary); }
+
+/* ---- Chrome: soft and elevated ---- */
+@media (min-width: 1025px) { [data-skin="agora"] .top-bar { background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); } }
+[data-skin="agora"] .segment { height: 8px; }
+[data-skin="agora"] .segment.active { border-radius: 12px; box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 35%, transparent); }
+[data-skin="agora"] .tab { border-color: transparent; box-shadow: var(--shadow-1); }
+[data-skin="agora"] .tab.active { box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 35%, transparent); }
+[data-skin="agora"] .popover { border-color: transparent; }
+[data-skin="agora"] .tool-bar { box-shadow: var(--shadow-1); }
+[data-skin="agora"] .note-card { background: var(--surface); color: var(--text); box-shadow: var(--shadow-1); }

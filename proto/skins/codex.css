@@ -1,0 +1,129 @@
+/* PROTOTYPE skin "Codex": Epos Reader as a printed scholarly edition.
+   Laid paper and iron-gall ink, rubrication in oxblood, one book face (EB Garamond, polytonic Greek included),
+   hairline rules instead of shadows, nearly square corners, and motion that settles without overshoot.
+   Dark mode is "lamplight": warm brown paper, cream ink, a lighter rubric.
+
+   The palette menu and the Font pill set some of these tokens inline on <html>; the skin outranks them with
+   !important while it is on, so the six palettes and the Font choice do nothing under it. */
+
+:root[data-skin="codex"] {
+  --primary: #8A2A1E !important;                 /* rubric */
+  --on-primary: #FBF6EC !important;
+  --primary-container: #EFE3CF !important;       /* parchment */
+  --on-primary-container: #2A211B !important;
+  --secondary: #6B5A48 !important;               /* faded ink: Line numbers, the English */
+  --on-secondary: #FBF6EC !important;
+  --secondary-container: #E8DCC6 !important;
+  --on-secondary-container: #2A211B !important;
+
+  --mix-base: #F6F0E4;
+  --bg: #F3ECDD;
+  --surface: #FBF7EF;
+  --text: #241D17;
+  --text-muted: #7A6A58;
+  --soft: #EFE6D4;
+  --inverse-surface: #2A211B;
+  --inverse-on-surface: #F6F0E4;
+
+  --gray-100: #EFE7D8;
+  --gray-200: #E2D6C1;
+  --gray-300: #CFC0A6;
+  --gray-400: #A8977E;
+  --gray-500: #85745F;
+  --gray-600: #685A48;
+
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
+
+  /* No overshoot anywhere: every spring becomes a plain decelerate */
+  --ease-spring: cubic-bezier(0.2, 0, 0, 1);
+  --ease-bouncy: cubic-bezier(0.2, 0, 0, 1);
+  --ease-springy: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Elevation is a ruled edge, not a shadow */
+  --shadow-pop: 0 0 0 1px #CFC0A6, 0 6px 18px rgba(60, 40, 20, 0.08);
+  --shadow-pane: none;
+  --shadow-1: 0 0 0 1px #CFC0A6;
+  --shadow-3: 0 0 0 1px #A8977E, 0 6px 16px rgba(60, 40, 20, 0.12);
+
+  --ui-font: 'EB Garamond', 'Gentium Plus', Georgia, serif;
+  --reading-font: 'EB Garamond', 'Gentium Plus', Georgia, serif !important;
+}
+
+:root[data-skin="codex"][data-theme="dark"] {
+  --primary: #E09A82 !important;
+  --on-primary: #2A1610 !important;
+  --primary-container: #3A2F25 !important;
+  --on-primary-container: #EFE3CF !important;
+  --secondary: #BBA88E !important;
+  --on-secondary: #241D17 !important;
+  --secondary-container: #352B22 !important;
+  --on-secondary-container: #EFE3CF !important;
+
+  --mix-base: #1B1611;
+  --bg: #17130F;
+  --surface: #201A14;
+  --text: #EAE0CE;
+  --text-muted: #A8977E;
+  --soft: #2B231B;
+  --inverse-surface: #EAE0CE;
+  --inverse-on-surface: #201A14;
+
+  --gray-100: #251F18;
+  --gray-200: #33291F;
+  --gray-300: #4A3D2F;
+  --gray-400: #6E5E4B;
+  --gray-500: #A08E76;
+  --gray-600: #BCAA90;
+
+  --shadow-pop: 0 0 0 1px #4A3D2F, 0 8px 22px rgba(0, 0, 0, 0.45);
+  --shadow-1: 0 0 0 1px #4A3D2F;
+  --shadow-3: 0 0 0 1px #6E5E4B, 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- Type ---- */
+[data-skin="codex"] body { font-family: var(--ui-font); font-size: 17px; }
+[data-skin="codex"] .brand-title { font-weight: 500; font-variant: small-caps; letter-spacing: 0.04em; font-size: 22px; white-space: nowrap; }
+[data-skin="codex"] .book-title { font-weight: 500; font-variant: small-caps; letter-spacing: 0.08em; }
+[data-skin="codex"] .verse-num { font-variant-numeric: oldstyle-nums; font-style: italic; font-weight: 400; color: var(--primary); }
+[data-skin="codex"] .trans-block { font-style: normal; color: var(--secondary); }
+[data-skin="codex"] :is(.flyout-label, .line-en-head, .src-group-title) {
+  font-family: var(--ui-font); font-variant: small-caps; letter-spacing: 0.06em; font-weight: 500;
+}
+[data-skin="codex"] .tab-title, [data-skin="codex"] .tab.active { font-weight: 500; }
+
+/* ---- Words ---- */
+[data-skin="codex"] .word.selected {
+  background: transparent; color: var(--primary);
+  box-shadow: inset 0 -2px 0 var(--primary);
+  text-shadow: none; transform: none;
+}
+@media (hover: hover) { [data-skin="codex"] .word:hover { transform: none; } }
+[data-skin="codex"] .word.has-note { background: transparent; box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--primary) 55%, transparent); }
+
+/* ---- Word card: a slip of paper with a ruled edge ---- */
+[data-skin="codex"] .word-card {
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--gray-300);
+  box-shadow: 0 8px 24px rgba(60, 40, 20, 0.10);
+}
+[data-skin="codex"] .card-lemma { font-style: italic; font-weight: 500; font-size: 1.55rem; }
+[data-skin="codex"] .card-morph { font-variant: small-caps; letter-spacing: 0.05em; font-size: 14px; opacity: 1; color: var(--secondary); }
+[data-skin="codex"] .card-def { font-size: 16px; border-top: 1px solid var(--gray-200); padding-top: 10px; }
+
+/* ---- Chrome: flat, ruled ---- */
+[data-skin="codex"] .top-bar { border-bottom: 1px solid var(--gray-200); }
+[data-skin="codex"] .segment { height: 4px; border-radius: 0; }
+[data-skin="codex"] .segment.active { height: 22px; border-radius: 2px; box-shadow: none; font-variant: small-caps; }
+[data-skin="codex"] .tab { border-radius: var(--radius-sm); }
+[data-skin="codex"] .tab.active { box-shadow: none; }
+[data-skin="codex"] .tool-bar, [data-skin="codex"] .flyout { border-radius: var(--radius-lg); border: 1px solid var(--gray-300); }
+[data-skin="codex"] .home-card, [data-skin="codex"] .home-card[data-rank] { border-radius: var(--radius-lg); }
+[data-skin="codex"] .note-card { border-color: var(--gray-300); }
+[data-skin="codex"] .bb-piece { border-radius: var(--radius-lg); border-color: var(--gray-300); }
+@media (max-width: 1024px) {
+  [data-skin="codex"] .top-bar { border-bottom: 0; }
+  [data-skin="codex"] .word-card { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+}
