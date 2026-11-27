@@ -30,3 +30,10 @@ Fix it without changing what is seen: same curves, durations and overshoot. Only
 - Ribbon (390×844, touch): cheap in both, no long tasks.
 
 So Chromium doesn't reproduce a regression. Open question to the user: which browser (Safari on macOS/iOS is likely, given the Home Screen app), and is the lag a stutter (dropped frames) or a slow response (the motion feels late or drawn out)?
+
+**2026-11-27:** The user's browsers are Chrome on a Mac and Safari on an iPhone, and the lag is a stutter "throughout, though not all of it". A sweep of desktop (1512×982 at 2×) and phone (390×844, CPU 4×) interactions, `HEAD` against `1a8acd0`, counting incomplete and dropped frames in Chromium traces:
+
+- Cause 1, fixed: ticket 02 swapped `transform: scale()` presses (run by the GPU) for corner-radius morphs and press widening (run on the main thread every frame). Each morphing control now gets its own layer (`will-change: transform`), and the rows whose pills widen (`.add-split`, `.pill-group`, `.segments`) get `contain: layout`. Pressing "Open new tab": 56 incomplete frames → 0. Word card layout time is back to `1a8acd0`'s. Screenshots in Amber, light and dark, at both sizes: only anti-aliasing differs, which macOS and iOS don't use.
+- Cause 2, open: a corner morph still stutters when the same press starts heavy work on the main thread (Scansion re-renders the text: 20–41 incomplete frames vs 8–9 before). Neither `border-radius` nor `clip-path` runs on the GPU in Chromium 158 (tested), so no change of technique fixes it without the user's decision.
+- Cause 3, open: some animations got longer in 02, so more frames are drawn: the phone tab grid 240 → 500ms (paint 227ms vs 76ms, 23 incomplete frames vs 3–4), its cards 360 → 500ms, the ribbon drop 420 → 500ms.
+- Splits: the stutter there predates 02 (the staying pane's width reflows the text every frame).

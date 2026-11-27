@@ -122,6 +122,14 @@
     }
   }
 
+  /* Keeping the M3E shape morphs cheap. A corner-radius morph can't run on the GPU the way a transform can: the
+     main thread repaints the control every frame, and a press that widens it lays out its row every frame. So
+     each morphing control gets a layer of its own (a frame repaints only that control, not the area under it),
+     and each row whose pills widen keeps its layout inside itself. Nothing here changes what is drawn. */
+  :is(.icon-button, .tool-toggle, .tool-btn, .card-note, .card-bookmark, .btn-new-note,
+      .bb-format, .bb-tabs, .bb-lang, .pill-opt, .add-half, .segment) { will-change: transform; }
+  :is(.add-split, .pill-group, .segments) { contain: layout; }
+
   /* Dark mode. The palette roles themselves come from settings.js (each palette has a dark set); the values
      below are Slate's, so the page is right before the script runs. The grey scale is turned around, so
      everything drawn in --gray-* (borders, muted text, tracks) keeps its meaning. The page and the panes are
