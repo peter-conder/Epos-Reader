@@ -990,6 +990,9 @@
 
   /* Words that carry a note: tinted like the book bar, with the note icon in the selected-book colour */
   .word.has-note { background: var(--primary-container); }
+  /* With Scansion on, the long highlights cover most of the tint (and in some palettes, Slate above all, are close
+     to it in colour), so the word is also outlined in the primary colour */
+  [data-scansion="on"] .word.has-note:not(.selected) { box-shadow: inset 0 0 0 1.5px var(--primary); }
   @media (hover: hover) { .word.has-note:hover { background: color-mix(in srgb, var(--primary-container) 88%, var(--primary)); } }
   .word.selected.has-note { background: var(--primary); }
   .word.has-note::after {
