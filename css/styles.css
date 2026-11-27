@@ -458,7 +458,7 @@
     font-size: 14.5px; font-weight: 500;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--fx-fast), color var(--fx-fast), border-color var(--fx-fast);
+    transition: background-color var(--fx-fast), color var(--fx-fast), border-color var(--fx-fast), height var(--sp-slow);
   }
   @media (hover: hover) { .tab:hover { background: var(--surface-container); color: var(--text); border-color: var(--outline); } }
   .tab.active {
@@ -509,12 +509,24 @@
   /* Collapse: the tab list and the buttons fold into one round button that opens them again */
   .collapse-btn .icon { grid-area: 1 / 1; transition: opacity var(--fx-fast), transform var(--sp-slow); }
   .collapse-btn .icon-list { opacity: 0; transform: rotate(-90deg) scale(0.5); }
-  .sidebar.collapsed { width: 76px; overflow: hidden; }
-  .sidebar.collapsed .tab-list {
-    opacity: 0; visibility: hidden; pointer-events: none; height: 0; overflow: hidden;
-    transition: opacity var(--fx-fast), visibility 0s linear 200ms, height 0s linear 200ms;
-  }
-  .sidebar.collapsed .add-split + .tab-list { margin-top: 0; }
+  .sidebar.collapsed { width: 76px; overflow: hidden auto; scrollbar-width: none; }
+
+  /* Collapsed, the tabs stay as an M3E rail: each a 56×44 pill with its Book's numeral (or the Notebook's icon).
+     The pills already fill the sidebar, so they morph between the two widths on the sidebar's own spring. The
+     active tab keeps its filled pill as the selected indicator; a Split's two tabs stack as one segmented pill. */
+  .tab-rail { display: none; }
+  .sidebar.collapsed .tab-list { gap: 6px; }
+  .sidebar.collapsed .tab { height: 44px; padding: 0; justify-content: center; }
+  .sidebar.collapsed .tab :is(.tab-left, .tab-close) { display: none; }
+  .sidebar.collapsed .tab-rail { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .tr-work { font-size: 10px; font-weight: 600; font-style: italic; opacity: 0.8; }
+  .tr-book { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .tab-rail .icon { width: 20px; height: 20px; }
+  .tab.active .tab-rail .icon { --icon-o: none; --icon-f: inline; }   /* the active tab's icon is filled */
+  .sidebar.collapsed .tab-group { flex-direction: column; gap: 2px; }
+  .sidebar.collapsed .tab-half { flex: none; padding: 0; }
+  .sidebar.collapsed .tab-half:first-child { border-radius: 22px 22px 8px 8px; }
+  .sidebar.collapsed .tab-half:last-child  { border-radius: 8px 8px 22px 22px; }
   .sidebar.collapsed .add-split { gap: 0; }
   .sidebar.collapsed .add-half:not(.collapse-btn) { flex-grow: 0.0001; opacity: 0; pointer-events: none; }
   .sidebar.collapsed .collapse-btn { height: 56px; border-radius: 28px; }

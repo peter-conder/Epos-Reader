@@ -1,4 +1,4 @@
-import { bookTitle } from './data.js';
+import { bookLabel, bookTitle } from './data.js';
 import { el, esc, icon } from './dom.js';
 import { activeTab, getTab, readingTabs, groupOf, isNotebook, isText, markUsed, newTabId, partnerOf, shared, state, tabRef, workOf } from './state.js';
 import { beginSplitClose } from './motion.js';
@@ -20,6 +20,12 @@ const labelHtml = (tab) => (isText(tab)
   ? `<span class="tab-title tab-title-work"><em class="tab-work">${esc(workOf(tab).abbr)}</em><span class="tab-ref">${esc(tabRef(tab))}</span></span>`
   : `<span class="tab-title">${tabName(tab)}</span>`);
 
+/* The tab as a rail pill (the collapsed sidebar): the Book's numeral under the Work's abbreviation, or the
+   Notebook's icon, or the app's icon for a New Tab */
+const railHtml = (tab) => (isText(tab)
+  ? `<span class="tr-work">${esc(workOf(tab).abbr)}</span><span class="tr-book">${esc(bookLabel(tab.work, tab.book))}</span>`
+  : icon(isNotebook(tab) ? 'notebook' : 'logo'));
+
 export function tabHtml(tab, { compact = false, extra = '' } = {}) {
   const text = isText(tab);
   const active = tab.id === state.activeId;
@@ -29,6 +35,7 @@ export function tabHtml(tab, { compact = false, extra = '' } = {}) {
       <span class="tab-left">
         ${labelHtml(tab)}
       </span>
+      <span class="tab-rail" aria-hidden="true">${railHtml(tab)}</span>
       <button class="tab-close" data-tip="Close Tab" data-tip-side="bottom" aria-label="Close tab">${icon('close')}</button>
     </div>`;
 }
