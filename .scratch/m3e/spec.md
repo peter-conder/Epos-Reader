@@ -16,7 +16,7 @@ Agreed in a design review on 2026-11-27, starting from an external comparison of
 3. **Reduce Motion.** One global rule swaps every spatial spring for its effects (non-overshoot) curve, on desktop and mobile.
 4. **Surfaces.** Five tonal surface containers plus `--outline` and `--outline-variant`. The Zinc `--gray-*` scale is removed. Menus, flyouts, the picker and sheets move off `--primary-container` onto calm surfaces. The tool bar, `.add-split`, the word card and note cards stay Vibrant.
 5. **Tertiary.** Hand-tuned per palette, generated with `@material/material-color-utilities` and approved from a swatch sheet first. Used only on Note and Bookmark chrome. Noted Words in the text stay icon-only (see `ec05a60`).
-11. **Palettes.** All six regenerated with `@material/material-color-utilities` as SchemeVibrant on the 2025 colour spec (Fidelity has no 2025 version), seeded from the earlier light primaries; Coral takes a warmer seed (hue 30°). The chrome is Vibrant. The reading text (pane, text, Scansion, Word hover and selection) takes a calm set generated as SchemeTonalSpot from the same seed. Nothing on a primary container is drawn in primary: under Vibrant dark they are the same tone.
+11. **Palettes.** Seven: the six earlier ones regenerated with `@material/material-color-utilities` as SchemeVibrant on the 2025 colour spec (Fidelity has no 2025 version), seeded from the earlier light primaries, with Coral on a warmer seed (hue 30°); the old Slate is renamed Sapphire (its key stays `bluegray`). A new Slate, the default, is SchemeNeutral with its surfaces from SchemeTonalSpot. The chrome is Vibrant. The reading text (pane, text, Scansion, Word hover and selection) takes a calm set generated as SchemeTonalSpot from the same seed. Nothing on a primary container is drawn in primary: under Vibrant dark they are the same tone.
 6. **Type.** Stay on static Roboto and add the 600 and 800 weights. Roboto Flex is dropped: it has no `greek-ext` subset (U+1F00–1FFF), and the Iliad and Odyssey use polytonic Greek. Selected Words keep the `text-shadow` thickening. The 7 uppercase headers become sentence case, 14px bold, in `--primary`.
 7. **Icons.** Only the stroked Lucide icons are replaced with Material Symbols Rounded. Active icons switch to filled.
 8. **Lists.** Settings `.src-list`, `#drawer`, the work picker and the chapter list become M3E segmented lists.
@@ -25,7 +25,7 @@ Agreed in a design review on 2026-11-27, starting from an external comparison of
 
 ## Checking
 
-- **Screenshots** at 390×844, 768×1024 and 1280×800, in Slate and Amber, light and dark, before and after.
+- **Screenshots** at 390×844, 768×1024 and 1280×800, in Slate and Amber, light and dark, before and after. (Ticket 01's checks were in the old Slate, now Sapphire.)
 - **By hand on a phone:** pull the branch, run `python3 -m http.server 8000 --bind 0.0.0.0`, and open it on the computer's LAN IP. Each ticket ends with a feel checklist, since springs can't be judged from screenshots.
 
 ## Corrections to the source comparison

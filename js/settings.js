@@ -158,12 +158,13 @@ const PALETTES = {
 };
 const PALETTE_KEY = 'epos.palette.v1';
 const THEME_KEY = 'epos.theme.v1';
-let currentPalette = 'slate';
+const DEFAULT_PALETTE = 'slate';
+let currentPalette = DEFAULT_PALETTE;
 
 const rolesOf = (pal) => pal[state.theme] ?? pal.light;
 
 export function applyPalette(key) {
-  const paletteKey = PALETTES[key] ? key : 'slate';
+  const paletteKey = PALETTES[key] ? key : DEFAULT_PALETTE;
   currentPalette = paletteKey;
   const pal = rolesOf(PALETTES[paletteKey]);
   const vars = {
@@ -246,7 +247,7 @@ export function initSettings() {
     savedPalette = localStorage.getItem(PALETTE_KEY);
     savedTheme = localStorage.getItem(THEME_KEY);
   } catch { /* storage unavailable */ }
-  currentPalette = PALETTES[savedPalette] ? savedPalette : 'slate';
+  currentPalette = PALETTES[savedPalette] ? savedPalette : DEFAULT_PALETTE;
   // With no choice saved yet, start in the system's mode
   applyTheme(savedTheme ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 }

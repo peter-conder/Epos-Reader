@@ -4,20 +4,26 @@ import { groupOf } from './state.js';
 /* ---- M3E motion tokens ----
    The curves and durations are defined once, as custom properties on :root in css/styles.css, and read from
    there so the CSS and the Web Animations below can't drift apart. Each token is { easing, duration } with the
-   duration in ms. Read lazily (on first use), after the stylesheet has applied. */
-const TOKEN_NAMES = [
+   duration in ms. The two curve-only tokens have no duration of their own: the trailing pane shares
+   --motion-pane-dur, and --motion-accelerate is timed by each caller, so they give { easing } only (passing one
+   whole to animate() would then fail loudly rather than run with a NaN duration). Read lazily (on first use),
+   after the stylesheet has applied, and read again when Reduce Motion changes, since it swaps the curves. */
+const TIMED_TOKENS = [
   'm3e-fast-spatial', 'm3e-default-spatial', 'm3e-slow-spatial',
   'm3e-fast-effects', 'm3e-default-effects', 'm3e-slow-effects',
-  'motion-pane', 'motion-pane-trailing', 'motion-accelerate'
+  'motion-pane'
 ];
+const CURVE_TOKENS = ['motion-pane-trailing', 'motion-accelerate'];
 let tokens = null;
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => { tokens = null; });
 export function motionToken(name) {
   if (!tokens) {
     const css = getComputedStyle(document.documentElement);
-    tokens = Object.fromEntries(TOKEN_NAMES.map((n) => [n, {
-      easing: css.getPropertyValue(`--${n}`).trim(),
-      duration: parseFloat(css.getPropertyValue(`--${n}-dur`))
-    }]));
+    const curve = (n) => css.getPropertyValue(`--${n}`).trim();
+    tokens = Object.fromEntries([
+      ...TIMED_TOKENS.map((n) => [n, { easing: curve(n), duration: parseFloat(css.getPropertyValue(`--${n}-dur`)) }]),
+      ...CURVE_TOKENS.map((n) => [n, { easing: curve(n) }])
+    ]);
   }
   return tokens[name];
 }
@@ -65,9 +71,10 @@ export function makeGhost(view, rect) {
 export function shrinkAway(ghost, dir) {
   ghost.style.transformOrigin = dir < 0 ? 'left center' : dir > 0 ? 'right center' : 'center';
   const swell = motionToken('m3e-fast-effects').easing, fall = motionToken('motion-accelerate').easing;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;   // Reduce Motion: no swell past its size
   ghost.animate([
     { transform: 'scale(1)', opacity: 1, offset: 0, easing: swell },
-    { transform: 'scale(1.045)', opacity: 1, offset: 0.24, easing: fall },
+    { transform: `scale(${still ? 1 : 1.045})`, opacity: 1, offset: 0.24, easing: fall },
     { transform: 'scale(0.5)', opacity: 1, offset: 0.7, easing: fall },
     { transform: 'scale(0)', opacity: 0, offset: 1 }
   ], { duration: 520, easing: 'linear' }).onfinish = () => ghost.remove();

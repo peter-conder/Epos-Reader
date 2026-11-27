@@ -132,7 +132,9 @@
     --bookmark-fill-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m480-240-196 84q-30 13-57-5t-27-50v-574q0-24 18-42t42-18h440q24 0 42 18t18 42v574q0 32-27 50t-57 5l-196-84Z'/%3E%3C/svg%3E");
     --snippet-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5,19H19V9.82L14.18,5H5V19Zm0,2q-0.83,0-1.41-0.59T3,19V5Q3,4.17 3.59,3.59T5,3H15l6,6V19q0,0.82-0.59,1.41T19,21H5Zm2-4H17V15H7v2Zm0-4H17V11H7v2ZM7,9h7V7H7V9ZM5,19V5V9.82V19Z'/%3E%3C/svg%3E");
   }
-  /* Reduce Motion: every spatial spring takes its effects curve, so nothing overshoots. Durations stay. */
+  /* Reduce Motion: every spatial spring takes its effects curve, so nothing overshoots. Durations stay. The
+     overshoots written into keyframes are taken out too: the Book pills' pop and shove are dropped, and the Word
+     card fades in without swelling past its size (see after popBounce; shrinkAway in motion.js skips its swell). */
   @media (prefers-reduced-motion: reduce) {
     :root {
       --m3e-fast-spatial: var(--m3e-fast-effects);
@@ -219,7 +221,9 @@
   button { background: none; border: 0; cursor: pointer; }
 
   :focus { outline: none; }
-  :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  :focus-visible { outline: 2px solid var(--focus-ring, var(--primary)); outline-offset: 2px; }
+  /* On a primary container the ring can't be primary: under Vibrant dark they are the same tone */
+  :is(.tool-bar, .bb-piece, .word-card, .note-box, .hover-card) { --focus-ring: var(--on-primary-container); }
 
   [hidden] { display: none !important; }
 
@@ -309,7 +313,7 @@
     display: flex; align-items: center; gap: 6px;
     width: 100%;
   }
-  /* The pills spring between sizes (--ease-springy overshoots, then settles). There are no keyframes on the
+  /* The pills spring between sizes (--sp-default overshoots, then settles). There are no keyframes on the
      active pill: the transitions carry on from wherever it is, hover scale included, so a click never jumps. */
   .segment {
     flex: 1;
@@ -969,7 +973,7 @@
   .pane-original {
     width: 100%; max-width: var(--reader-max); margin: 0 auto; flex-shrink: 0;
     /* max-width eases between its two values when a second tab opens or closes (see the split-tabs rule below) */
-    transition: padding var(--fx-default), max-width var(--grow-dur, 520ms) var(--motion-pane);
+    transition: padding var(--fx-default), max-width var(--motion-pane-dur) var(--motion-pane);
   }
   /* While the text-size slider is dragged the pane follows --reader-max at once instead of easing after it */
   .resizing-text .pane-original { transition: padding var(--fx-default); }
@@ -1225,6 +1229,12 @@
     0%   { transform: scale(0.85); opacity: 0; }
     70%  { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
+  }
+  /* Reduce Motion (see the rule on :root): the keyframe overshoots go. A later @keyframes of the same name wins. */
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes bookPop { from, to { transform: none; } }
+    @keyframes bookShove { from, to { transform: none; } }
+    @keyframes popBounce { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
   }
   .card-lemma { font-size: 1.35rem; font-weight: 700; margin-bottom: 4px; padding-right: 80px; }
   .card-morph { font-size: 12px; opacity: 0.7; margin-bottom: 10px; }
@@ -1560,10 +1570,10 @@
   .tab-view {
     position: relative;
     flex: 1 1 0; min-width: 0; height: 100%;
-    /* Panes spring between sizes; the bounce comes from the overshooting curve */
-    transition: flex-grow var(--grow-dur, 520ms) var(--m3e-slow-spatial), transform var(--sp-slow);
+    /* Panes change size on --motion-pane: their edges meet, so they never overshoot (spec decision 2) */
+    transition: flex-grow var(--motion-pane-dur) var(--motion-pane), transform var(--sp-slow);
   }
-  .tab-view.drag-live { transition: flex-grow var(--sp-slow); position: relative; z-index: 5; filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.2)); }
+  .tab-view.drag-live { transition: flex-grow var(--motion-pane-dur) var(--motion-pane); position: relative; z-index: 5; filter: drop-shadow(0 16px 26px rgba(0, 0, 0, 0.2)); }
   .panes.live .tab-view { transition: transform var(--sp-default); }
   .panes.instant .tab-view { transition: none !important; }
   .panes[data-count="2"] .tab-view.is-active .pane,
@@ -2019,6 +2029,7 @@
     .cl-row:active { transform: scale(0.97); background: var(--primary-container); }
     .cl-book { font-family: var(--reading-font); font-size: 16px; font-weight: 600; }
     .cl-row.is-open { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .cl-row.is-open:active { outline-color: var(--on-primary-container); }
     .cl-badge {
       padding: 3px 9px;
       border-radius: var(--radius-full);
@@ -2250,8 +2261,8 @@
 
     /* While the grid or list is up, the menu button steps aside (and the list covers the bottom bar) */
     :is(.grid-open, .chapters-open) #btn-menu { opacity: 0; pointer-events: none; }
-    .bb-tabs[aria-expanded="true"] { background: var(--primary); color: var(--on-primary); border-radius: var(--shape-corner-large); }
-    .bb-slot-new .bb-title { color: var(--primary); }
+    .bb-tabs[aria-expanded="true"] { background: var(--on-primary-container); color: var(--primary-container); border-radius: var(--shape-corner-large); }
+    .bb-slot-new .bb-title { color: var(--on-primary-container); }
   }
 
   @media (max-width: 1024px) and (prefers-reduced-motion: reduce) {

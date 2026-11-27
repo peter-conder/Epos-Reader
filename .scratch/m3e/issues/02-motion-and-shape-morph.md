@@ -44,3 +44,7 @@ A global `prefers-reduced-motion: reduce` rule swaps spatial springs for effects
   - Phone 390×844: `#btn-format` goes 28px → 12px pressed, and the Format sheet opens. Sampled while rising, the word card's bottom edge went 998 → 842 → 844.
   - The static grid (3 sizes × Slate/Amber × light/dark) matches `HEAD` apart from image-scaling noise in the Home carousel.
 - Not touched: `js/loader.js` still has its own JS curves (`MORPH_EASE`, `SPIN_EASE`). Left for ticket 05.
+- Review fixes (after the pass):
+  - `motionToken` no longer reports a NaN duration. `motion-pane-trailing` and `motion-accelerate` have no `-dur` of their own, so they give `{ easing }` only. The tokens are read again when Reduce Motion changes.
+  - Pane widths (`.tab-view` flex-grow, and `drag-live`) now move on `--motion-pane` / `--motion-pane-dur`, not the overshooting `--m3e-slow-spatial`. Before, only the scripted Split open and close were overshoot-free (decision 2). The never-set `--grow-dur` is gone.
+  - Reduce Motion now covers the overshoots written into keyframes. `bookPop` and `bookShove` are emptied, `popBounce` loses its 1.05 swell, and `shrinkAway` skips its 1.045 swell. Checked in Chromium at 390×844: sampled mid-animation, popBounce is 0.955 with no overshoot, and bookPop is `none`.

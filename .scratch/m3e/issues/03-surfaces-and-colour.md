@@ -43,3 +43,10 @@ Open (asked as Q21): in the app, Vibrant makes the Scansion tints and the light 
 - Segmented lists (2px apart, 4px inner corners, 20px outer): the drawer (first and last rows by layout), `#work-list`, `.src-list` and `.cl-rows`, the last three clipping their outer corners. `.cl-row.is-open` became an inset outline.
 - Contrast. Under Vibrant dark, primary is the same tone as primary-container (1.1–1.5:1), so nothing on a primary container may be drawn in primary: the selected tool button is now `--on-primary-container` on `--primary-container` inverted, inactive Book pills moved to `--secondary-container`, and the word card's Scansion line, its note icon, the tab count and the EN circle use `--on-primary-container`. A scripted audit of every visible text run (6 palettes × light/dark × desktop/phone: Home, Book list, reading, word card, Text options or Format sheet, drawer) finds nothing under WCAG AA except the Home card titles, white on darkened paintings, which the script can't see behind (checked by eye).
 - Not done here: the Home cards' flat fallback colour (`--primary`, shown only before a painting loads) is light in dark mode under white titles.
+- Review fixes (after the pass), more primary-on-primary-container:
+  - The focus ring takes `--focus-ring`, which is `--on-primary-container` inside the tool bar, bottom-bar pieces, Word card, note box and hover card.
+  - The expanded `.bb-tabs` is inverted the way the selected tool button is.
+  - "New Book" in the bottom bar is `--on-primary-container`.
+  - A pressed `.cl-row.is-open` outlines in `--on-primary-container`.
+  - Checked in Pine dark at 390×844: the ring and the expanded tabs button resolve to `#003E19` on `#15D165`. Screenshot looked at, no page errors on phone or desktop.
+- Not changed: Slate's dark `tc` matches its light one. That is how every palette comes out of the 2025 scheme (bright tertiary containers in both modes), so it isn't a Slate bug.
