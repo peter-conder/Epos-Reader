@@ -18,7 +18,7 @@ export const state = {
   pickerTabId: null,     // the tab the Switch Work picker is changing
   pairPct: 50,           // width share of the left pane in a split pair
   fontRem: 1.45,         // text size chosen in the editor
-  popups: { words: true, notes: true, caesura: true, synizesis: true }   // View Options settings
+  popups: { words: true, notes: true, caesura: false, synizesis: false, lengthened: true }   // View Options settings
 };
 
 /* Values that several modules read and write. They live on one object because a module

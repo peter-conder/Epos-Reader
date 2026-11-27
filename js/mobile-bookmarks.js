@@ -6,9 +6,10 @@ import { isMobileTier, onTierChange, tier } from './viewport.js';
 
 /* ==========================================================
    BOOKMARKS ON PHONES AND TABLETS, Kindle-style
-   - A ribbon hangs from the top edge at the top right. Tap it to bookmark the first Line you can read at the top of the
-     screen. It is filled while any Bookmarked Line is on screen; tapping it then removes the topmost one.
-     Empty, it fades with the menu button and bottom bar; filled, it stays while you read.
+   - A ribbon hangs from the top edge at the top right, shown only while any Bookmarked Line is on screen; tapping it
+     then removes the topmost one. With none on screen the ribbon is tucked up out of view, but its spot still takes a
+     tap, at any time while reading: that bookmarks the first Line you can read at the top of the screen. It is out
+     of the way (and takes no taps) while the Word card, a sheet, the tab grid, the Book list or a pinned Note is up.
    - The strip down the right edge (see scrollbar.js) shows a dot per Bookmark; tapping one puts its Line at
      the top of the screen, where the ribbon reads from, and offers "Back to line N" above the bottom bar.
    These are the same Bookmarks as everywhere else (one Line each). Only on the Latin: not while the English
@@ -52,15 +53,20 @@ export function syncRibbon() {
 function tapRibbon() {
   const cur = current();
   if (!cur) return;
+  const wasFilled = el.bmRibbon.classList.contains('filled');
   const [top] = onScreen(cur.tab, cur.ch);
   if (top) toggleBookmark(cur.tab, top.b.line);   // removes the topmost one on screen
   else {
     const r = readableRange(cur.ch);
     if (r) toggleBookmark(cur.tab, cur.ch.lineNums[r[0]]);
   }
-  el.bmRibbon.classList.remove('drop');
+  // Drops in as it fills; dips, then springs up out of view as it empties. If another Bookmark is still on
+  // screen it stays where it is and drops in again, so the tap still shows.
+  const filled = el.bmRibbon.classList.contains('filled');
+  el.bmRibbon.classList.remove('drop-in', 'spring-out');
   void el.bmRibbon.offsetWidth;
-  el.bmRibbon.classList.add('drop');   // a little drop as it fills or empties
+  if (filled) el.bmRibbon.classList.add('drop-in');
+  else if (wasFilled) el.bmRibbon.classList.add('spring-out');
 }
 
 /* ---- Jumping from a dot, and back ---- */
@@ -101,6 +107,8 @@ export function initMobileBookmarks() {
   el.bmRibbon.addEventListener('click', tapRibbon);
   el.backChip.addEventListener('click', goBack);
   onTierChange(syncRibbon);
-  root.addEventListener('animationend', (e) => { if (e.target === el.bmRibbon) el.bmRibbon.classList.remove('drop'); });
+  root.addEventListener('animationend', (e) => {
+    if (el.bmRibbon.contains(e.target)) el.bmRibbon.classList.remove('drop-in', 'spring-out');
+  });
   syncRibbon();
 }

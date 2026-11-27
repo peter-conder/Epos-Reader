@@ -182,12 +182,16 @@
         <span class="switch-text"><span class="switch-title">Notes in popups</span><span class="switch-sub">Show the note button and saved notes in the gloss</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
-      <button class="switch-row" id="sw-caesura" role="switch" aria-checked="true">
+      <button class="switch-row" id="sw-caesura" role="switch" aria-checked="false">
         <span class="switch-text"><span class="switch-title">Caesurae</span><span class="switch-sub">Mark each caesura with ‖ when scansion is on</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
-      <button class="switch-row" id="sw-synizesis" role="switch" aria-checked="true">
-        <span class="switch-text"><span class="switch-title">Synizesis &amp; consonantal i</span><span class="switch-sub">Underline vowels run together into one syllable</span></span>
+      <button class="switch-row" id="sw-synizesis" role="switch" aria-checked="false">
+        <span class="switch-text"><span class="switch-title">Synizesis &amp; consonantal i</span><span class="switch-sub">A dotted line over vowels run together into one syllable</span></span>
+        <span class="switch" aria-hidden="true"></span>
+      </button>
+      <button class="switch-row" id="sw-lengthened" role="switch" aria-checked="true">
+        <span class="switch-text"><span class="switch-title">Lengthened syllables</span><span class="switch-sub">A line along the top of a short syllable the poet makes long</span></span>
         <span class="switch" aria-hidden="true"></span>
       </button>
     </div>
@@ -219,10 +223,10 @@
       <div class="flyout-group">
         <span class="flyout-label">Line Spacing</span>
         <div class="pill-group" data-var="--reading-line-height">
-          <button class="pill-opt" data-value="1.3" data-tip="Tight" aria-label="Tight line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls1"/></svg></button>
-          <button class="pill-opt active" data-value="1.45" data-tip="Normal" aria-label="Normal line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls2"/></svg></button>
-          <button class="pill-opt" data-value="1.8" data-tip="Relaxed" aria-label="Relaxed line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls3"/></svg></button>
-          <button class="pill-opt" data-value="2.2" data-tip="Loose" aria-label="Loose line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls4"/></svg></button>
+          <button class="pill-opt" data-value="1.15" data-tip="Tight" aria-label="Tight line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls1"/></svg></button>
+          <button class="pill-opt active" data-value="1.3" data-tip="Normal" aria-label="Normal line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls2"/></svg></button>
+          <button class="pill-opt" data-value="1.6" data-tip="Relaxed" aria-label="Relaxed line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls3"/></svg></button>
+          <button class="pill-opt" data-value="2.0" data-tip="Loose" aria-label="Loose line spacing"><svg class="icon"><use href="assets/icons.svg#i-ls4"/></svg></button>
         </div>
       </div>
       <div class="flyout-group">
@@ -346,7 +350,8 @@
   </button>
 </nav>
 
-<!-- BOOKMARK RIBBON (phones and tablets): bookmarks the top line, Kindle-style (see mobile-bookmarks.js) -->
+<!-- BOOKMARK RIBBON (phones and tablets): bookmarks the top line, Kindle-style (see mobile-bookmarks.js).
+     Shown only while a Bookmarked Line is on screen; otherwise an invisible target in the same spot. -->
 <button class="bm-ribbon" id="bm-ribbon" aria-pressed="false" aria-label="Bookmark the top line" hidden>
   <span class="bm-shape" aria-hidden="true"></span>
 </button>
