@@ -42,6 +42,38 @@
     --radius-xl: 24px;
     --radius-full: 9999px;
 
+    /* M3E corner scale. Morphing elements use these explicit values: a radius only animates between lengths,
+       so a transition to or from --shape-corner-full jumps. */
+    --shape-corner-none: 0;
+    --shape-corner-extra-small: 4px;
+    --shape-corner-small: 8px;
+    --shape-corner-medium: 12px;
+    --shape-corner-large: 16px;
+    --shape-corner-large-increased: 20px;
+    --shape-corner-extra-large: 28px;
+    --shape-corner-extra-large-increased: 32px;
+    --shape-corner-extra-extra-large: 48px;
+    --shape-corner-full: 9999px;
+
+    /* M3E motion, the web curves for the Expressive spring scheme. Spatial springs (position, size, scale,
+       rotation, corners) overshoot; effects springs (colour, opacity, shadow) never do. Fast is for small
+       controls, default for menus, sheets and bars, slow for full-screen moves. js/motion.js reads these. */
+    --m3e-fast-spatial: cubic-bezier(0.42, 1.67, 0.21, 0.9);
+    --m3e-fast-spatial-dur: 350ms;
+    --m3e-default-spatial: cubic-bezier(0.38, 1.21, 0.22, 1);
+    --m3e-default-spatial-dur: 500ms;
+    --m3e-slow-spatial: cubic-bezier(0.39, 1.29, 0.35, 0.98);
+    --m3e-slow-spatial-dur: 650ms;
+    --m3e-fast-effects: cubic-bezier(0.31, 0.94, 0.34, 1);
+    --m3e-fast-effects-dur: 150ms;
+    --m3e-default-effects: cubic-bezier(0.34, 0.8, 0.34, 1);
+    --m3e-default-effects-dur: 200ms;
+    --m3e-slow-effects: cubic-bezier(0.34, 0.88, 0.34, 1);
+    --m3e-slow-effects-dur: 300ms;
+    /* M3 Standard (non-Expressive) default spatial spring: a far smaller overshoot than the Expressive ones */
+    --m3-standard-default-spatial: cubic-bezier(0.27, 1.06, 0.18, 1);
+    --m3-standard-default-spatial-dur: 500ms;
+
     /* Easing curves only — durations are set per transition. */
     --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
     --ease-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);

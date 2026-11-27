@@ -1,6 +1,27 @@
 import { $, el } from './dom.js';
 import { groupOf } from './state.js';
 
+/* ---- M3E motion tokens ----
+   The curves and durations are defined once, as custom properties on :root in css/styles.css, and read from
+   there so the CSS and the Web Animations below can't drift apart. Each token is { easing, duration } with the
+   duration in ms. Read lazily (on first use), after the stylesheet has applied. */
+const TOKEN_NAMES = [
+  'm3e-fast-spatial', 'm3e-default-spatial', 'm3e-slow-spatial',
+  'm3e-fast-effects', 'm3e-default-effects', 'm3e-slow-effects',
+  'm3-standard-default-spatial'
+];
+let tokens = null;
+export function motionToken(name) {
+  if (!tokens) {
+    const css = getComputedStyle(document.documentElement);
+    tokens = Object.fromEntries(TOKEN_NAMES.map((n) => [n, {
+      easing: css.getPropertyValue(`--${n}`).trim(),
+      duration: parseFloat(css.getPropertyValue(`--${n}-dur`))
+    }]));
+  }
+  return tokens[name];
+}
+
 /* ---- Pane motion helpers ---- */
 export const SPRING = 'cubic-bezier(0.3, 0.7, 0.4, 1)';
 
