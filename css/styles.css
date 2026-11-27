@@ -54,12 +54,6 @@
     --inverse-surface: #18181b;
     --inverse-on-surface: #ffffff;
 
-    --radius-sm: 8px;
-    --radius-md: 16px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
-    --radius-full: 9999px;
-
     /* M3E corner scale. Morphing elements use these explicit values: a radius only animates between lengths,
        so a transition to or from --shape-corner-full jumps. */
     --shape-corner-none: 0;
@@ -262,7 +256,7 @@
   /* Small round close buttons (picker, flyouts) */
   .btn-close {
     width: 32px; height: 32px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     display: grid; place-items: center;
     color: inherit;   /* the text colour of whatever it sits on: menus, sheets, the note box */
     transition: background-color var(--fx-fast), transform var(--sp-fast);
@@ -442,7 +436,7 @@
     width: 215px; flex-shrink: 0;
     height: calc(100% - 12px);
     padding: 14px 10px;
-    border-radius: var(--radius-xl);
+    border-radius: var(--shape-corner-extra-large);
     overflow-y: auto;
     z-index: 30;
     transition: width var(--sp-slow);
@@ -455,7 +449,7 @@
     display: flex; align-items: center; justify-content: space-between;
     height: 48px;
     padding: 0 14px 0 16px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     background: var(--surface-container-low);
     border: 1px solid var(--outline-variant);
     color: var(--text-muted);
@@ -480,7 +474,7 @@
   .tab-ref { flex: none; font-variant-numeric: tabular-nums; }
   .tab-close {
     width: 22px; height: 22px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     display: grid; place-items: center;
     opacity: 0.65;
     flex-shrink: 0;
@@ -572,7 +566,7 @@
     width: 100%; height: 28px;
     background: var(--soft);
     color: var(--on-secondary-container);
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     font-size: 11.5px; font-weight: 600;
     transition: background-color var(--fx-fast), color var(--fx-fast);
   }
@@ -787,7 +781,7 @@
     height: calc(100% - 12px);
     position: relative;
     overflow: hidden;
-    border-radius: var(--radius-xl);
+    border-radius: var(--shape-corner-extra-large);
   }
   .view { height: 100%; overflow-y: auto; }
   .view-reader, .view-notebook { overflow: hidden; }
@@ -798,7 +792,7 @@
     padding: 32px clamp(16px, 4vw, 48px);
     background: var(--surface);
     border: 1px solid var(--outline-variant);
-    border-radius: var(--radius-xl);
+    border-radius: var(--shape-corner-extra-large);
     box-shadow: var(--shadow-pane);
     user-select: none;
     position: relative;
@@ -957,7 +951,7 @@
     background: var(--surface);
     color: var(--read-text);
     border: 1px solid var(--outline-variant);
-    border-radius: var(--radius-xl);
+    border-radius: var(--shape-corner-extra-large);
     box-shadow: var(--shadow-pane);
     overflow: hidden auto;
     overscroll-behavior: contain;
@@ -1005,7 +999,7 @@
   .divider-pill, .pair-divider-pill {
     width: 4px; height: 48px;
     background: var(--outline-variant);
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     pointer-events: none;
     transition: background-color var(--fx-fast), transform var(--sp-fast), height var(--sp-fast);
   }
@@ -1114,7 +1108,7 @@
     display: inline-block;
     padding: 2px var(--word-pad);
     margin: 1px 0;
-    border-radius: var(--radius-sm);
+    border-radius: var(--shape-corner-small);
     cursor: pointer;
     transition: background-color var(--fx-fast), color var(--fx-fast), transform var(--sp-fast);
   }
@@ -1217,7 +1211,7 @@
     padding: 20px;
     background: var(--primary-container);
     color: var(--on-primary-container);
-    border-radius: var(--radius-lg);
+    border-radius: var(--shape-corner-large-increased);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
     opacity: 0;
     pointer-events: none;
@@ -1276,7 +1270,7 @@
     margin-top: 12px; padding: 10px 12px;
     background: var(--soft);
     color: var(--on-secondary-container);
-    border-radius: var(--radius-md);
+    border-radius: var(--shape-corner-large);
     font-size: 13.5px; line-height: 1.4;
     cursor: pointer;
     transition: background-color var(--fx-fast);
@@ -1300,7 +1294,7 @@
     flex: 1; min-width: 140px;
     display: flex; flex-direction: column; gap: 4px;
     padding: 14px 18px;
-    border-radius: var(--radius-md);
+    border-radius: var(--shape-corner-large);
     background: var(--surface);
     border: 1px solid var(--outline-variant);
     text-align: left;
@@ -1320,7 +1314,7 @@
   .src-list {
     list-style: none;
     display: flex; flex-direction: column; gap: 2px;
-    border-radius: var(--radius-md); overflow: hidden;
+    border-radius: var(--shape-corner-large); overflow: hidden;
   }
   .src-item { display: grid; grid-template-columns: 11rem 1fr; gap: 4px 16px; padding: 12px 18px; border-radius: 4px; background: var(--surface-container-low); }
   .src-what { font-size: 13px; font-weight: 700; color: var(--on-surface); padding-top: 1px; }
@@ -1345,7 +1339,7 @@
     padding: 6px 6px 6px 22px;
     background: var(--inverse-surface);
     color: var(--inverse-on-surface);
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     font-size: 13.5px; font-weight: 500;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
     opacity: 0;
@@ -1357,7 +1351,7 @@
   .toast.show { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%); transition-delay: 0s; }
   .toast-undo {
     height: 34px; padding: 0 18px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     background: var(--primary);
     color: var(--on-primary);
     font-size: 13.5px; font-weight: 600;
@@ -1397,7 +1391,7 @@
     background: var(--primary-container);
     color: var(--on-primary-container);
     border-color: transparent;
-    border-radius: var(--radius-lg);
+    border-radius: var(--shape-corner-large-increased);
     z-index: 265;
     display: flex; flex-direction: column; gap: 10px;
     visibility: hidden;
@@ -1417,7 +1411,7 @@
     background: var(--soft);
     color: var(--on-secondary-container);
     border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--shape-corner-large);
     font-size: 14.5px; line-height: 1.45;
     resize: none;
   }
@@ -1464,7 +1458,7 @@
     padding: 14px 44px 14px 16px;
     background: var(--soft);
     color: var(--on-secondary-container);
-    border-radius: var(--radius-md);
+    border-radius: var(--shape-corner-large);
     text-align: left;
     cursor: pointer;
     transition: background-color var(--fx-fast), box-shadow var(--fx-default);
@@ -1485,7 +1479,7 @@
     background: var(--tertiary-container);
     color: var(--on-tertiary-container);
     border: 1px solid transparent;
-    border-radius: var(--radius-md);
+    border-radius: var(--shape-corner-large);
     cursor: grab;
     user-select: none;
     transition: background-color var(--fx-fast), border-color var(--fx-fast), box-shadow var(--fx-default);
@@ -1546,7 +1540,7 @@
   .note-del {
     position: absolute; right: 10px; bottom: 10px;
     width: 30px; height: 30px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     display: grid; place-items: center;
     opacity: 0;
     transition: opacity var(--fx-fast), background-color var(--fx-fast), color var(--fx-fast);
@@ -1591,7 +1585,7 @@
     position: absolute; top: 14px; right: 24px;
     z-index: 7;
     width: 32px; height: 32px;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     display: none; place-items: center;
     color: var(--on-surface-variant);
     transition: background-color var(--fx-fast), color var(--fx-fast), transform var(--sp-fast);
@@ -1627,7 +1621,7 @@
   body > .tab-drag {
     position: fixed; margin: 0;
     z-index: 600;
-    border-radius: var(--radius-full);
+    border-radius: var(--shape-corner-full);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
     pointer-events: none;
     overflow: hidden;
@@ -1646,7 +1640,7 @@
     z-index: 20;
     display: flex; align-items: center; justify-content: center;
     border: 2px dashed var(--secondary);
-    border-radius: var(--radius-xl);
+    border-radius: var(--shape-corner-extra-large);
     background: color-mix(in srgb, var(--secondary-container) 50%, transparent);
     color: var(--on-secondary-container);
     font-size: 14px; font-weight: 600;
@@ -1806,7 +1800,7 @@
     .bb-pill {
       flex: 1; min-width: 0; height: 100%;
       overflow: hidden;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       touch-action: none;
       cursor: grab;
       user-select: none; -webkit-user-select: none;
@@ -1841,7 +1835,7 @@
   /* Where the English stops short of the Latin */
   .load-error { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 16px; text-align: center; color: var(--text-muted); font-size: 15px; }
   .load-retry {
-    height: 40px; padding: 0 20px; border-radius: var(--radius-full);
+    height: 40px; padding: 0 20px; border-radius: var(--shape-corner-full);
     background: var(--primary); color: var(--on-primary); font-size: 14px; font-weight: 500;
     transition: opacity var(--fx-fast), transform var(--sp-fast);
   }
@@ -1925,7 +1919,7 @@
     .tg-count { flex: 1; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
     .tg-new, .tg-done {
       height: 44px; display: grid; place-items: center;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: var(--primary-container); color: var(--on-primary-container);
       font-weight: 600; font-size: 15px;
       transition: transform var(--sp-fast), background-color var(--fx-fast);
@@ -1978,7 +1972,7 @@
       position: absolute; top: 8px; right: 8px;
       width: 30px; height: 30px;
       display: grid; place-items: center;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: color-mix(in srgb, var(--text) 8%, transparent);
     }
     .tg-close .icon { width: 16px; height: 16px; }
@@ -2002,7 +1996,7 @@
     .cl-title { flex: 1; font-size: 1.4rem; font-weight: 700; letter-spacing: -0.3px; }
     .cl-close {
       width: 44px; height: 44px; display: grid; place-items: center;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: var(--primary-container); color: var(--on-primary-container);
     }
     .cl-body {
@@ -2032,7 +2026,7 @@
     .cl-row.is-open:active { outline-color: var(--on-primary-container); }
     .cl-badge {
       padding: 3px 9px;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: var(--primary); color: var(--on-primary);
       font-size: 12px; font-weight: 700; letter-spacing: 0.1px;
     }
@@ -2054,7 +2048,7 @@
     .drawer-swatch {
       width: 36px; height: 36px;
       display: grid; place-items: center;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: linear-gradient(135deg, var(--sw-a) 50%, var(--sw-b) 50%);
       box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
       transition: transform var(--sp-fast), box-shadow var(--fx-fast);
@@ -2086,7 +2080,7 @@
     .fs-grip > span { width: 36px; height: 4px; border-radius: 2px; background: var(--outline); }
     .fs-header { display: flex; align-items: center; padding: 0 12px 6px 24px; touch-action: none; }
     .fs-title { flex: 1; font-size: 1.15rem; font-weight: 700; }
-    .fs-close { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--radius-full); }
+    .fs-close { width: 44px; height: 44px; display: grid; place-items: center; border-radius: var(--shape-corner-full); }
     .fs-close:active { background: var(--surface-container-highest); }
     .fs-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 12px 16px; }
     .fs-body > #sw-scansion { background: var(--primary-container); color: var(--on-primary-container); }
@@ -2149,7 +2143,7 @@
     .note-box.pinned .note-done {
       display: grid; place-items: center; flex-shrink: 0;
       width: 44px; height: 44px;
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       background: var(--on-primary-container); color: var(--primary-container);   /* on the primary-container box */
       transition: transform var(--sp-fast);
     }
@@ -2192,7 +2186,7 @@
       background: var(--tertiary);
     }
     .passage { -webkit-touch-callout: none; }
-    .verse.pressed { background: var(--read-hl); border-radius: var(--radius-sm); transition: background-color var(--fx-default); }
+    .verse.pressed { background: var(--read-hl); border-radius: var(--shape-corner-small); transition: background-color var(--fx-default); }
     @media (pointer: coarse) { .pane-original { -webkit-user-select: none; user-select: none; } }
 
     /* ---- Bookmarks, Kindle-style (see mobile-bookmarks.js) ---- */
@@ -2247,7 +2241,7 @@
       display: flex; align-items: center; gap: 8px;
       min-height: 40px; padding: 0 18px 0 14px;
       background: var(--inverse-surface); color: var(--inverse-on-surface);
-      border-radius: var(--radius-full);
+      border-radius: var(--shape-corner-full);
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
       font-size: 13.5px; font-weight: 600;
       animation: chipIn var(--sp-fast);
